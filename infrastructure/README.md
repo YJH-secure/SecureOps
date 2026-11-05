@@ -40,7 +40,7 @@
 
 | 구분 | 내용 | 적용 시점 |
 | --- | --- | --- |
-| 검증 증거 | 6장 체크리스트의 테스트 증거 캡처 및 완료 처리 | 증거 캡처 후 |
+| 검증 증거 | 6장 체크리스트 중 미완료 항목(sudo 권한·차단, SSH 별칭 접속) 증거 캡처 | 증거 캡처 후 |
 | SSH 설정 | root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 정책 확정 후 |
 | 조치 계정 권한 | `secureops-fix`에 승인된 조치용 sudo 명령 부여 | 진단·조치 정책 확정 후 |
 | 진단 계정 권한 | `secureops-scan`의 읽기 권한 범위 (`sshd -T`, `/etc/shadow` 등) | 진단·조치 정책 확정 후 |
@@ -364,31 +364,33 @@ done
 
 | 테스트 | 결과 |
 | --- | --- |
-| `secureops-scan`, `secureops-fix` × `ubuntu-a`, `rocky-b` 키 접속 (4개 조합) | 2026-11-05 동작 확인 (증거 캡처 예정) |
+| `secureops-scan`, `secureops-fix` × `ubuntu-a`, `rocky-b` 키 접속 (4개 조합) | 2026-11-05 확인 (`central-mgmt-sshkey-261105.png`) |
 | `~/.ssh/config` 별칭 접속 (`ssh ubuntu-a` 등 4개) | 2026-11-05 동작 확인 (증거 캡처 예정) |
-| 진단 계정 읽기 권한 테스트 (위 명령) | 2026-11-05 확인, 4) 표에 반영 (증거 캡처 예정) |
+| 진단 계정 읽기 권한 테스트 (위 명령) | 2026-11-05 확인, 4) 표에 반영 (`central-mgmt-scan-read-test-261105.png`) |
 
 ## 6. 검증 체크리스트
 
-모든 항목은 **실제 테스트와 증거 캡처를 마친 뒤** 완료(`[v]`)로 표시한다. 1장 적용 현황의 "적용 완료"는 설정이 적용된 상태를 뜻하며, 이 체크리스트의 완료는 증거까지 확보된 상태를 뜻한다. 결과 화면은 `evidence/`에 `<서버 식별자>-<항목>-YYMMDD.png` 형식으로 저장한다.
+모든 항목은 **실제 테스트와 증거 캡처를 마친 뒤** 완료(`[v]`)로 표시한다. 1장 적용 현황의 "적용 완료"는 설정이 적용된 상태를 뜻하며, 이 체크리스트의 완료는 증거까지 확보된 상태를 뜻한다.
 
-| 상태 | 확인 항목 | 명령어 | 정상 기준 |
-| --- | --- | --- | --- |
-| [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 |
-| [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 |
-| [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 |
-| [v] | 기본 경로 | `ip route` | `default via 192.168.10.2` |
-| [v] | 시간대 | `timedatectl` | `Asia/Seoul` (3대 모두) |
-| [v] | 외부 통신 | `ping 8.8.8.8`, `ping google.com` | 응답 수신 |
-| [v] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 |
-| [v] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 |
-| [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 |
-| [v] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 |
-| [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 (정책 확정 후 허용 명령 추가) |
-| [v] | sudo 차단 | 5-6의 차단 확인 명령 | 두 계정 모두 sudo 실행 거부 |
-| [v] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 |
-| [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 |
-| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 생성 확인 |
+증거는 서버별 폴더에 `evidence/<서버 식별자>/<서버 식별자>-<항목>-YYMMDD.png` 형식으로 저장한다. 중앙 관리 서버에서 실행해 진단 대상을 함께 확인한 캡처(VM 간 통신, SSH 키 접속, 읽기 권한 테스트)는 `central-mgmt/`에 둔다. 아래 증거 열의 `<id>`는 `central-mgmt`, `ubuntu-a`, `rocky-b`를 뜻한다.
+
+| 상태 | 확인 항목 | 명령어 | 정상 기준 | 증거 (2026-11-05) |
+| --- | --- | --- | --- | --- |
+| [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 | `<id>-os-261105.png` (3대) |
+| [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 | `<id>-hostname-261105.png` (3대) |
+| [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 | `<id>-ip-261105.png` (3대) |
+| [v] | 기본 경로 | `ip route` | `default via 192.168.10.2` | `<id>-route-261105.png` (3대) |
+| [v] | 시간대 | `timedatectl` | `Asia/Seoul` (3대 모두) | `<id>-timedate-261105.png` (3대) |
+| [v] | 외부 통신 | `ping 8.8.8.8`, `ping google.com` | 응답 수신 | `<id>-outerping-261105.png` (3대) |
+| [v] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 | `central-mgmt-innerping-261105.png` |
+| [v] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 | `central-mgmt-sshkey-261105.png` |
+| [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 | `<id>-pkg-261105.png` (3대) |
+| [ ] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 | — |
+| [ ] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 (정책 확정 후 허용 명령 추가) | — |
+| [ ] | sudo 차단 | 5-6의 차단 확인 명령 | 두 계정 모두 sudo 실행 거부 | — |
+| [ ] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 | — |
+| [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261105.png` |
+| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 생성 확인 | `<id>-snapshot-261105.png` (3대) |
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -429,6 +431,9 @@ infrastructure/
 │   ├── rocky-ssh-setup.sh        # Rocky: 패키지 업데이트, 시간대, sshd 실행
 │   └── ssh-key-setup.sh          # 전용 계정(secureops-scan/fix) 생성, Ed25519 키 생성 및 공개키 등록
 └── evidence/                     # 검증 캡처 (<서버 식별자>-<항목>-YYMMDD.png)
+    ├── central-mgmt/             # 중앙 관리 서버 확인 + 진단 대상 원격 확인(VM 간 통신, SSH 키, 읽기 권한)
+    ├── ubuntu-a/                 # 진단 대상 A 확인 캡처
+    └── rocky-b/                  # 진단 대상 B 확인 캡처
 ```
 
 설정 파일과 스크립트는 구축을 진행하며 순차적으로 추가한다.
