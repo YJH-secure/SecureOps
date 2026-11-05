@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from datetime import datetime
 
 class DiagnosisAggregator:
@@ -17,6 +18,9 @@ class DiagnosisAggregator:
         except json.JSONDecodeError as e:
             raise ValueError(f"JSON 파일 형식이 올바르지 않습니다 (디코딩 오류): {e}")
 
+        if not isinstance(data, dict):
+            raise ValueError("JSON 데이터 최상위 포맷은 객체(Object) 형태여야 합니다.")
+
         if "results" not in data or not isinstance(data["results"], list):
             raise KeyError("JSON 데이터 내 필수 항목인 'results' 리스트가 누락되었거나 형식 오류입니다.")
             
@@ -30,17 +34,29 @@ class DiagnosisAggregator:
         vulnerable_count = 0
         error_count = 0
         na_count = 0
+        needs_review_count = 0
         
         severity_breakdown = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
         category_breakdown = {}
 
-        for item in results:
+        valid_statuses = {"pass", "vulnerable", "error", "not_applicable", "needs_review"}
+
+        for idx, item in enumerate(results):
+            if not isinstance(item, dict):
+                raise ValueError(f"results[{idx}] 항목이 올바른 JSON 객체 형태가 아닙니다.")
+            
+            if "check_id" not in item:
+                raise KeyError(f"results[{idx}] 항목에 필수 필드 'check_id'가 누락되었습니다.")
+
             status = str(item.get("status", "")).lower()
             severity = str(item.get("severity", "LOW")).upper()
             category = item.get("category", "기타")
 
+            if status not in valid_statuses:
+                raise ValueError(f"results[{idx}] ('{item.get('check_id')}')에 유효하지 않은 상태값('{status}')이 입력되었습니다.")
+
             if category not in category_breakdown:
-                category_breakdown[category] = {"PASS": 0, "VULNERABLE": 0, "ERROR": 0, "N/A": 0}
+                category_breakdown[category] = {"PASS": 0, "VULNERABLE": 0, "ERROR": 0, "N/A": 0, "REVIEW": 0}
 
             if status == "pass":
                 pass_count += 1
@@ -56,11 +72,12 @@ class DiagnosisAggregator:
             elif status == "not_applicable":
                 na_count += 1
                 category_breakdown[category]["N/A"] += 1
+            elif status == "needs_review":
+                needs_review_count += 1
+                category_breakdown[category]["REVIEW"] += 1
 
-        # 판정 완료 항목 수 (양호 + 취약)
         evaluable_items = pass_count + vulnerable_count
         
-        # 0건일 경우 예외 처리 및 이행률 소수점 첫째 자리 계산 적용
         if evaluable_items > 0:
             pass_rate_value = round((pass_count / evaluable_items) * 100, 1)
             pass_rate_str = f"{pass_rate_value}%"
@@ -69,10 +86,10 @@ class DiagnosisAggregator:
 
         summary = {
             "target_info": {
-                "hostname": self.data.get("hostname", "Unknown"),
+                "target_id": self.data.get("target_id", "Unknown"),
                 "ip_address": self.data.get("ip_address", "Unknown"),
                 "os_type": self.data.get("os_type", "Unknown"),
-                "scan_time": self.data.get("scan_time", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                "scanned_at": self.data.get("scanned_at", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             },
             "metrics": {
                 "total_items": total_items,
@@ -81,6 +98,7 @@ class DiagnosisAggregator:
                 "vulnerable_count": vulnerable_count,
                 "error_count": error_count,
                 "na_count": na_count,
+                "needs_review_count": needs_review_count,
                 "pass_rate": pass_rate_str
             },
             "severity_breakdown": severity_breakdown,
@@ -95,13 +113,13 @@ class DiagnosisAggregator:
         severity = summary["severity_breakdown"]
         category = summary["category_breakdown"]
 
-        print("=" * 65)
+        print("=" * 70)
         print("          Linux 서버 보안 진단 결과 통합 집계 보고서          ")
-        print("=" * 65)
-        print(f"■ 대상 서버 : {target['hostname']} ({target['ip_address']})")
+        print("=" * 70)
+        print(f"■ 대상 서버 : {target['target_id']} ({target['ip_address']})")
         print(f"■ 운영 체제 : {target['os_type'].upper()}")
-        print(f"■ 진단 일시 : {target['scan_time']}")
-        print("-" * 65)
+        print(f"■ 진단 일시 : {target['scanned_at']}")
+        print("-" * 70)
         print("■ 전체 집계 현황")
         print(f"  - 전체 항목 수      : {metrics['total_items']} 건")
         print(f"  - 판정 완료 항목 수 : {metrics['evaluable_items']} 건 (양호 + 취약)")
@@ -109,20 +127,24 @@ class DiagnosisAggregator:
         print(f"  - 취약 (VULN) 건수  : {metrics['vulnerable_count']} 건")
         print(f"  - 진단 오류 (ERROR) : {metrics['error_count']} 건")
         print(f"  - 해당 없음 (N/A)   : {metrics['na_count']} 건")
+        print(f"  - 검토 필요 (REVIEW): {metrics['needs_review_count']} 건")
         print(f"  - SecureOps 이행률  : {metrics['pass_rate']}")
-        print("-" * 65)
+        print("-" * 70)
         print("■ 취약(VULNERABLE) 항목 심각도별 세부 집계")
         print(f"  - HIGH   (상) : {severity['HIGH']} 건")
         print(f"  - MEDIUM (중) : {severity['MEDIUM']} 건")
         print(f"  - LOW    (하) : {severity['LOW']} 건")
-        print("-" * 65)
+        print("-" * 70)
         print("■ 카테고리별 진단 현황")
         for cat_name, counts in category.items():
-            print(f"  - {cat_name:<10} : 양호 {counts['PASS']} / 취약 {counts['VULNERABLE']} / 오류 {counts['ERROR']} / N/A {counts['N/A']}")
-        print("=" * 65)
+            print(f"  - {cat_name:<10} : 양호 {counts['PASS']} / 취약 {counts['VULNERABLE']} / 오류 {counts['ERROR']} / N/A {counts['N/A']} / 검토 {counts['REVIEW']}")
+        print("=" * 70)
 
 if __name__ == "__main__":
-    json_path = "sample_diagnosis.json"
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    default_json_path = os.path.join(base_dir, "tests", "fixtures", "sample_diagnosis.json")
+    
+    json_path = sys.argv[1] if len(sys.argv) > 1 else default_json_path
     
     try:
         aggregator = DiagnosisAggregator(json_path)
