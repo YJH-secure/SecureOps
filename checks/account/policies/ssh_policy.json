@@ -1,0 +1,17 @@
+{
+  "policy_version": "1.0",
+  "policies": [
+    {
+      "check_id": "SSH-01",
+      "description": "SSH root 계정 직접 로그인 허용 여부",
+      "severity": "high",
+      "applies_to": ["ubuntu", "rocky"],
+      "criteria": {
+        "type": "sshd_effective_setting",
+        "setting": "permitrootlogin",
+        "operator": "equals",
+        "expected": "no"
+      }
+    }
+  ]
+}
