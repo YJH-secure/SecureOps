@@ -36,24 +36,36 @@ class DiagnosisAggregator:
         na_count = 0
         needs_review_count = 0
         
-        severity_breakdown = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
+        # CRITICAL 심각도 추가
+        severity_breakdown = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
         category_breakdown = {}
 
         valid_statuses = {"pass", "vulnerable", "error", "not_applicable", "needs_review"}
+        valid_severities = {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
+        required_fields = ["check_id", "status", "severity", "evidence"]
 
         for idx, item in enumerate(results):
             if not isinstance(item, dict):
                 raise ValueError(f"results[{idx}] 항목이 올바른 JSON 객체 형태가 아닙니다.")
             
-            if "check_id" not in item:
-                raise KeyError(f"results[{idx}] 항목에 필수 필드 'check_id'가 누락되었습니다.")
+            # 필수 필드 누락 및 자료형(문자열) 검증
+            for field in required_fields:
+                if field not in item or item[field] is None:
+                    raise KeyError(f"results[{idx}] 항목에 필수 필드 '{field}'가 누락되었습니다.")
+                if not isinstance(item[field], str):
+                    raise TypeError(f"results[{idx}] 항목의 '{field}' 필드는 문자열(str) 타입이어야 합니다.")
 
-            status = str(item.get("status", "")).lower()
-            severity = str(item.get("severity", "LOW")).upper()
-            category = item.get("category", "기타")
+            status = item["status"].strip().lower()
+            severity = item["severity"].strip().upper()
+            category = str(item.get("category", "기타")).strip()
 
+            # 유효하지 않은 상태값 검증
             if status not in valid_statuses:
-                raise ValueError(f"results[{idx}] ('{item.get('check_id')}')에 유효하지 않은 상태값('{status}')이 입력되었습니다.")
+                raise ValueError(f"results[{idx}] ('{item['check_id']}')에 유효하지 않은 상태값('{status}')이 입력되었습니다.")
+
+            # 유효하지 않은 위험도(severity) 값 검증
+            if severity not in valid_severities:
+                raise ValueError(f"results[{idx}] ('{item['check_id']}')에 유효하지 않은 위험도 값('{severity}')이 입력되었습니다.")
 
             if category not in category_breakdown:
                 category_breakdown[category] = {"PASS": 0, "VULNERABLE": 0, "ERROR": 0, "N/A": 0, "REVIEW": 0}
@@ -64,8 +76,7 @@ class DiagnosisAggregator:
             elif status == "vulnerable":
                 vulnerable_count += 1
                 category_breakdown[category]["VULNERABLE"] += 1
-                if severity in severity_breakdown:
-                    severity_breakdown[severity] += 1
+                severity_breakdown[severity] += 1
             elif status == "error":
                 error_count += 1
                 category_breakdown[category]["ERROR"] += 1
@@ -85,11 +96,12 @@ class DiagnosisAggregator:
             pass_rate_str = "N/A(계산 불가)"
 
         summary = {
+            "schema_version": self.data.get("schema_version", "Unknown"),
             "target_info": {
                 "target_id": self.data.get("target_id", "Unknown"),
                 "ip_address": self.data.get("ip_address", "Unknown"),
                 "os_type": self.data.get("os_type", "Unknown"),
-                "scanned_at": self.data.get("scanned_at", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                "scanned_at": self.data.get("scanned_at", datetime.now().isoformat())
             },
             "metrics": {
                 "total_items": total_items,
@@ -116,6 +128,7 @@ class DiagnosisAggregator:
         print("=" * 70)
         print("          Linux 서버 보안 진단 결과 통합 집계 보고서          ")
         print("=" * 70)
+        print(f"■ 규격 버전 : v{summary['schema_version']}")
         print(f"■ 대상 서버 : {target['target_id']} ({target['ip_address']})")
         print(f"■ 운영 체제 : {target['os_type'].upper()}")
         print(f"■ 진단 일시 : {target['scanned_at']}")
@@ -131,9 +144,10 @@ class DiagnosisAggregator:
         print(f"  - SecureOps 이행률  : {metrics['pass_rate']}")
         print("-" * 70)
         print("■ 취약(VULNERABLE) 항목 심각도별 세부 집계")
-        print(f"  - HIGH   (상) : {severity['HIGH']} 건")
-        print(f"  - MEDIUM (중) : {severity['MEDIUM']} 건")
-        print(f"  - LOW    (하) : {severity['LOW']} 건")
+        print(f"  - CRITICAL (위험) : {severity['CRITICAL']} 건")
+        print(f"  - HIGH     (상)   : {severity['HIGH']} 건")
+        print(f"  - MEDIUM   (중)   : {severity['MEDIUM']} 건")
+        print(f"  - LOW      (하)   : {severity['LOW']} 건")
         print("-" * 70)
         print("■ 카테고리별 진단 현황")
         for cat_name, counts in category.items():

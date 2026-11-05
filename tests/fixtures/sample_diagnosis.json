@@ -1,20 +1,21 @@
 {
+  "schema_version": "1.0",
   "target_id": "target-ubuntu [MOCK]",
   "ip_address": "192.168.10.111 (Test Target)",
   "os_type": "ubuntu",
-  "scanned_at": "2026-11-05 14:00:00",
+  "scanned_at": "2026-11-05T14:00:00+09:00",
   "results": [
     {
-      "check_id": "U-01",
+      "check_id": "U-01 (MOCK)",
       "category": "계정 관리",
       "title": "root 계정 원격 접속 제한",
       "status": "vulnerable",
-      "severity": "HIGH",
+      "severity": "CRITICAL",
       "evidence": "PermitRootLogin yes",
       "guide": "/etc/ssh/sshd_config 파일의 PermitRootLogin을 no로 변경해야 함"
     },
     {
-      "check_id": "U-02",
+      "check_id": "U-02 (MOCK)",
       "category": "계정 관리",
       "title": "비밀번호 최소 길이 설정",
       "status": "pass",
@@ -23,7 +24,7 @@
       "guide": "정상 설정됨"
     },
     {
-      "check_id": "U-03",
+      "check_id": "U-03 (MOCK)",
       "category": "서비스 관리",
       "title": "불필요한 Telnet 서비스 활성화",
       "status": "vulnerable",
@@ -32,7 +33,7 @@
       "guide": "Telnet 서비스 중지 및 비활성화 필요"
     },
     {
-      "check_id": "U-04",
+      "check_id": "U-04 (MOCK)",
       "category": "서비스 관리",
       "title": "Anonymous FTP 비활성화",
       "status": "pass",
@@ -41,7 +42,7 @@
       "guide": "정상 설정됨"
     },
     {
-      "check_id": "U-05",
+      "check_id": "U-05 (MOCK)",
       "category": "파일 권한",
       "title": "/etc/passwd 파일 권한 및 소유자 설정",
       "status": "vulnerable",
@@ -50,7 +51,7 @@
       "guide": "/etc/passwd 파일 권한을 644 이하로 변경해야 함"
     },
     {
-      "check_id": "U-06",
+      "check_id": "U-06 (MOCK)",
       "category": "서비스 관리",
       "title": "IIS 서비스 점검",
       "status": "not_applicable",
@@ -59,7 +60,7 @@
       "guide": "윈도우 전용 서비스로 리눅스 환경 해당 없음"
     },
     {
-      "check_id": "U-07",
+      "check_id": "U-07 (MOCK)",
       "category": "계정 관리",
       "title": "PAM 모듈 설정 검사",
       "status": "error",
@@ -68,7 +69,7 @@
       "guide": "진단 스크립트 실행 권한 부족으로 수집 실패"
     },
     {
-      "check_id": "U-08",
+      "check_id": "U-08 (MOCK)",
       "category": "서비스 관리",
       "title": "SSH 포트 변경 여부",
       "status": "needs_review",
