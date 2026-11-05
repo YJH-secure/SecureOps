@@ -4,7 +4,7 @@
 
 **담당:** 김민우 (A · 서버·네트워크 인프라)  
 **관련 문서:** [시스템 아키텍처 설계서](../docs/architecture/system-architecture.md) · [프로젝트 README](../README.md)  
-**상태:** 서버 3대 OS 설치 및 IP 적용 완료, SSH 연결·스냅샷 검증 진행 중 — 검증 상태는 6장 체크리스트와 `evidence/` 캡처로 표시한다.
+**상태:** 서버·네트워크 구성, 전용 계정, SSH 키 인증, `01-ssh-security-configured` 스냅샷 적용 완료 / 세부 권한 정책 및 검증 증거 확보 예정 — 적용 현황은 1장, 검증 상태는 6장 참고
 
 ## 1. 개요
 
@@ -16,11 +16,42 @@
 | 6장 통합 테스트 | T-01~T-04를 위한 접속 경로, 조치 전 스냅샷, OS 버전 정보 |
 | 7장 확인 목록 | 실제 VM 버전·네트워크가 문서와 일치하는지 확인 |
 
+### 적용 현황
+
+이 문서의 내용은 **실제 서버에 적용 완료된 설정**과 **추후 적용·검증 예정인 설정**으로 구분한다.
+
+**적용 완료** — 실제 서버에 설정됨
+
+| 구분 | 내용 | 관련 장 |
+| --- | --- | --- |
+| 서버 | 3대 OS 설치 (Ubuntu 24.04.5 LTS Server/Desktop, Rocky Linux 9.8 Desktop) | 2장 |
+| 서버 식별자 | `central-mgmt`, `ubuntu-a`, `rocky-b` 확정 | 2장 |
+| 호스트명 | Central-Management-Ubuntu, Target-Ubuntu, Target-Rocky 설정 | 2장 |
+| 네트워크 | VMnet8 NAT, `192.168.10.0/24` 고정 IP, 게이트웨이·DNS `192.168.10.2` | 3장 |
+| 시간대 | 3대 모두 `Asia/Seoul` | 5-3 |
+| SSH 서버 | 진단 대상 A/B에서 OpenSSH 서버 실행 | 5-4 |
+| 비밀번호 정책 | 서버·계정별 서로 다른 16자 이상 비밀번호 | 5-5 |
+| 계정 분리 | 진단 대상 A/B에 `secureops-scan`, `secureops-fix` 생성 | 5-5 |
+| sudo 권한 | 두 전용 계정 모두 sudo 미부여 (sudoers 설정 없음) — 모든 sudo 명령 차단 | 5-6 |
+| SSH 키 인증 | Ed25519 키 계정별 분리 생성, 공개키 등록, 4개 조합 키 접속 동작 확인 | 5-5 |
+| 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태) 생성 | 7장 |
+
+**추후 적용·검증 예정** — 아직 서버에 적용되지 않음
+
+| 구분 | 내용 | 적용 시점 |
+| --- | --- | --- |
+| 검증 증거 | 6장 체크리스트의 테스트 증거 캡처 및 완료 처리 | 증거 캡처 후 |
+| SSH 설정 | root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 정책 확정 후 |
+| 조치 계정 권한 | `secureops-fix`에 승인된 조치용 sudo 명령 부여 | 진단·조치 정책 확정 후 |
+| 진단 계정 권한 | `secureops-scan`의 읽기 권한 범위 (`sshd -T`, `/etc/shadow` 등) | 진단·조치 정책 확정 후 |
+| 스냅샷 | `02-vuln-baseline` 이후 단계 | 진단 항목 확정 후 |
+| 설정 파일 | `network/`, `setup/` 스크립트 작성 | 구축 진행에 따라 |
+
 ## 2. 서버 구성
 
 | 구분 | 서버 식별자 | 호스트명 | OS | 에디션 | IP | 커널 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 중앙 관리 서버 | (미정) | Central-Management-Ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-147-generic |
+| 중앙 관리 서버 | `central-mgmt` | Central-Management-Ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-147-generic |
 | 진단 대상 A | `ubuntu-a` | Target-Ubuntu | Ubuntu 24.04.5 LTS | Desktop | `192.168.10.20` | 7.0.0-42-generic |
 | 진단 대상 B | `rocky-b` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) | Desktop | `192.168.10.30` | 5.14.0-687.65.1.el9_8.x86_64 |
 
@@ -51,7 +82,7 @@
 | --- | --- |
 | `192.168.10.1` | 호스트 PC의 VMnet8 가상 어댑터 (게이트웨이로 사용하지 않음) |
 | `192.168.10.2` | VMware NAT 게이트웨이 및 DNS |
-| `192.168.10.10` | 중앙 관리 서버 |
+| `192.168.10.10` | 중앙 관리 서버 (`central-mgmt`) |
 | `192.168.10.20` | 진단 대상 A (`ubuntu-a`) |
 | `192.168.10.30` | 진단 대상 B (`rocky-b`) |
 
@@ -135,27 +166,28 @@ sudo systemctl enable --now sshd
 
 ### 5-5. 계정 및 SSH 키 인증
 
-**SSH 인증 방식 (확정)**
-- 중앙 관리 서버에서 진단 대상(`ubuntu-a`, `rocky-b`)으로 접속할 때 **SSH 공개키 인증(Ed25519)**을 사용한다.
-- root 직접 SSH 로그인은 제한하고, 진단·조치는 전용 계정으로 수행한다.
-- 전체 관리자 권한 대신 **최소 권한 원칙**을 적용한다.
+**SSH 인증 및 권한 원칙 (확정)**
+- 중앙 관리 서버(`central-mgmt`)에서 진단 대상(`ubuntu-a`, `rocky-b`)으로 접속할 때 **SSH 공개키 인증(Ed25519)**을 사용한다. — **적용 완료**
+- 진단·조치는 전용 계정(`secureops-scan`, `secureops-fix`)으로 분리해 수행한다. — **적용 완료**
+- 전체 관리자 권한 대신 **최소 권한 원칙**을 적용한다. 실제 진단·조치 기능에 필요한 세부 권한은 정책 확정 후 적용한다. — **적용 예정**
+- root 직접 SSH 로그인은 제한한다. — **적용 예정** (정책 확정 후)
 
 **계정 구성**
 
-| 계정 | 용도 | 권한 | 위치 |
-| --- | --- | --- | --- |
-| `user1` | 서버 관리용 | 관리자(sudo) | 3대 공통 |
-| `secureops-scan` | 취약점 진단용 | 기본 읽기 권한 | 진단 대상 A/B |
-| `secureops-fix` | 보안 조치용 | 승인된 조치에 한해 제한적 sudo (정책 확정 후 부여) | 진단 대상 A/B |
-| `root` | 시스템 관리자 | 직접 SSH 로그인 제한 (정책 확정 후 적용) | 3대 공통 |
+| 계정 | 용도 | 위치 | 현재 상태 (적용 완료) | 추후 적용 예정 |
+| --- | --- | --- | --- | --- |
+| `user1` | 서버 관리용 | 3대 공통 | 관리자(sudo) | — |
+| `secureops-scan` | 취약점 진단용 | 진단 대상 A/B | 계정·SSH 키 등록, sudo 없음 (일반 사용자 읽기 권한) | 진단에 필요한 읽기 권한 범위 |
+| `secureops-fix` | 보안 조치용 | 진단 대상 A/B | 계정·SSH 키 등록, sudo 없음 | 승인된 조치에 한한 제한적 sudo |
+| `root` | 시스템 관리자 | 3대 공통 | 기본 설정 유지 | 직접 SSH 로그인 제한 |
 
 **적용 시점**
 
-| 작업 | 시점 |
+| 작업 | 상태 |
 | --- | --- |
-| 스냅샷 생성, 전용 계정 생성, SSH 키 등록 | 지금 준비 |
-| root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 기능 및 정책 최종 확정 후 |
-| `secureops-fix`의 sudo 권한 부여 | 진단·조치 기능 및 정책 최종 확정 후 |
+| 전용 계정 생성, SSH 키 생성·등록, 키 접속 확인 | 적용 완료 |
+| root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 기능 및 정책 확정 후 적용 |
+| `secureops-scan`, `secureops-fix`의 세부 권한 부여 | 진단·조치 기능 및 정책 확정 후 적용 |
 
 **비밀번호 정책**
 - 서버별로 서로 다른 비밀번호를 사용하고, 같은 서버의 `user1`과 `root`도 각각 다르게 설정한다.
@@ -203,20 +235,160 @@ ssh -i ~/.ssh/id_ed25519_fix  secureops-fix@192.168.10.20
 
 > 개인키(`~/.ssh/id_ed25519_scan`, `~/.ssh/id_ed25519_fix`)는 중앙 관리 서버 밖으로 복사하지 않으며 이 저장소에 커밋하지 않는다.
 
+### 5-6. 계정 권한 및 sudo 설정 현황
+
+현재 두 전용 계정에는 **sudo 권한을 부여하지 않았다.** `/etc/sudoers`와 `/etc/sudoers.d/`에 두 계정 관련 설정이 없으며, `sudo`·`wheel` 그룹에도 속하지 않는다. 진단·조치 기능별 세부 권한은 정책 확정 후 필요한 명령만 추가한다.
+
+| 계정 | 그룹 | sudo 허용 명령 | 실제 적용한 sudoers 설정 |
+| --- | --- | --- | --- |
+| `secureops-scan` | 본인 그룹만 | 없음 | 없음 |
+| `secureops-fix` | 본인 그룹만 | 없음 | 없음 |
+
+**확인 명령** — 진단 대상 A/B에서 `user1`로 실행
+
+```bash
+id secureops-scan; id secureops-fix          # sudo/wheel 그룹 미포함 확인
+sudo -l -U secureops-scan                    # "not allowed to run sudo" 확인
+sudo -l -U secureops-fix
+sudo grep -rn "secureops" /etc/sudoers /etc/sudoers.d/   # 출력 없음 확인
+```
+
+**sudo 차단 확인** — 중앙 관리 서버에서 실행
+
+```bash
+for ip in 192.168.10.20 192.168.10.30; do
+  for u in scan fix; do
+    echo "=== secureops-$u@$ip ==="
+    ssh -i ~/.ssh/id_ed25519_$u -o BatchMode=yes secureops-$u@$ip 'sudo -n id 2>&1 || echo "sudo 차단됨"'
+  done
+done
+```
+
+4개 조합 모두 `sudo 차단됨`이 출력되면 정상이다.
+
+### 5-7. 공통 SSH 모듈 연동 정보
+
+`common/ssh_client.py`(양지혁 담당) 연동을 위한 접속 정보이다. **개인키 파일, 개인키 내용, 비밀번호는 이 저장소에 올리지 않는다.**
+
+**1) 인증 방식**
+
+| 항목 | 내용 |
+| --- | --- |
+| 방식 | OpenSSH 공개키 인증 (Ed25519) |
+| 비밀번호 인증 | 전용 계정은 비밀번호가 없어 키로만 접속 가능 |
+| 키 구성 | 계정별 분리 — `secureops-scan`용 키, `secureops-fix`용 키 |
+| 키 비밀번호(passphrase) | 없음 (자동 진단용) |
+| OpenSSH 기본 키와의 차이 | 키 파일명이 기본값(`id_ed25519`)이 아니므로, 중앙 관리 서버의 `~/.ssh/config`에서 대상별 키를 지정한다. 이 설정이 있으면 `ssh ubuntu-a`처럼 별칭만으로 접속되며, SSH agent 사용 시에는 `ssh-add`로 두 키를 등록한다. |
+
+**2) 개인키 경로**
+
+실제 경로는 환경마다 다를 수 있으므로 아래는 예시이며, 구체적인 경로는 중앙 관리 서버의 `~/.ssh/config`로 관리한다 (Git에 올리지 않음).
+
+| 용도 | 경로 예시 (중앙 관리 서버 `user1`) |
+| --- | --- |
+| 진단용 | `~/.ssh/id_ed25519_scan` |
+| 조치용 | `~/.ssh/id_ed25519_fix` |
+
+```bash
+# 실제 키 파일 확인
+ls -l ~/.ssh/
+# 별칭별로 실제 사용되는 키·계정·주소 확인
+ssh -G ubuntu-a | grep -Ei "^(hostname|user|port|identityfile) "
+```
+
+`~/.ssh/config` 예시 (경로만 포함하며 비밀정보 없음):
+
+```text
+Host ubuntu-a
+    HostName 192.168.10.20
+    User secureops-scan
+    IdentityFile ~/.ssh/id_ed25519_scan
+    IdentitiesOnly yes
+
+Host rocky-b
+    HostName 192.168.10.30
+    User secureops-scan
+    IdentityFile ~/.ssh/id_ed25519_scan
+    IdentitiesOnly yes
+
+Host ubuntu-a-fix
+    HostName 192.168.10.20
+    User secureops-fix
+    IdentityFile ~/.ssh/id_ed25519_fix
+    IdentitiesOnly yes
+
+Host rocky-b-fix
+    HostName 192.168.10.30
+    User secureops-fix
+    IdentityFile ~/.ssh/id_ed25519_fix
+    IdentitiesOnly yes
+```
+
+**3) 진단 대상 접속 정보**
+
+| 서버 식별자 | IP | 포트 | 진단 계정 | 조치 계정 | SSH 별칭 (진단 / 조치) |
+| --- | --- | --- | --- | --- | --- |
+| `ubuntu-a` | `192.168.10.20` | 22 | `secureops-scan` | `secureops-fix` | `ubuntu-a` / `ubuntu-a-fix` |
+| `rocky-b` | `192.168.10.30` | 22 | `secureops-scan` | `secureops-fix` | `rocky-b` / `rocky-b-fix` |
+
+**4) 진단 계정 권한 범위**
+
+- `secureops-scan`, `secureops-fix` 모두 **sudo 권한 없음** (5-6 참고).
+- 실행 가능한 명령을 목록으로 제한하지는 않았으며, **일반 사용자 권한으로 읽을 수 있는 범위**에서만 동작한다.
+- 따라서 root 권한이 필요한 점검은 현재 계정으로 수행할 수 없다. "확인 방법" 열이 **테스트**인 항목은 2026-11-05 아래 테스트 명령으로 실제 확인한 결과이고, **예상**인 항목은 배포판 기본 권한 기준이며 추후 확인한다.
+
+| 점검 대상 | Ubuntu (`ubuntu-a`) | Rocky (`rocky-b`) | 확인 방법 | 관련 항목 |
+| --- | --- | --- | --- | --- |
+| `/etc/passwd` 읽기 | 가능 | 가능 | 테스트 | ACC-01, FILE-01 |
+| PAM 설정 읽기 (`common-auth` / `system-auth`) | 가능 | 가능 | 테스트 | ACC-01, ACC-02 |
+| `/etc/security/pwquality.conf` 읽기 | 가능 | 가능 | 테스트 | ACC-01 |
+| `/etc/ssh/sshd_config` 읽기 | 가능 | **불가** | 테스트 | SSH-01, SSH-02 |
+| `/etc/shadow` 읽기 | **불가** | **불가** | 테스트 | FILE-01 (권한 확인은 `stat`으로 가능) |
+| 인증 로그 (`/var/log/auth.log` / `/var/log/secure`) | **불가** | **불가** | 테스트 | LOG-01 |
+| `sshd -T` (유효 설정 확인) | **불가** (root 필요) | **불가** (root 필요) | 예상 | SSH-01, SSH-02 |
+| `stat`으로 파일 소유자·권한 확인 | 가능 | 가능 | 예상 | FILE-01 |
+| `systemctl list-units`, `ss -lntu` | 가능 (`ss -p` 프로세스 정보는 제한) | 가능 (동일) | 예상 | SVC-01 |
+| 방화벽 규칙 조회 (`ufw status`, `nft list ruleset`, `firewall-cmd`) | **불가** (root 필요) | 확인 필요 | 예상 | FW-01 |
+
+> 진단 담당 참고: Rocky는 `sshd_config` 자체를 읽을 수 없어 SSH-01·SSH-02는 현재 진단 계정으로 판정할 수 없다. 기준표 원칙에 따라 권한 부족은 임의로 양호 처리하지 않고 `error`로 기록하며, 필요한 읽기 권한은 정책 확정 시 검토한다.
+
+```bash
+# 중앙 관리 서버에서 실행 — 진단 계정의 파일 읽기 권한 확인
+for h in ubuntu-a rocky-b; do
+  echo "=== $h ==="
+  ssh $h 'for f in /etc/passwd /etc/shadow /etc/ssh/sshd_config /etc/pam.d/common-auth /etc/pam.d/system-auth /etc/security/pwquality.conf /var/log/auth.log /var/log/secure; do [ -e "$f" ] && { [ -r "$f" ] && echo "읽기 가능: $f" || echo "읽기 불가: $f"; }; done'
+done
+```
+
+**5) SSH 접속 테스트**
+
+| 테스트 | 결과 |
+| --- | --- |
+| `secureops-scan`, `secureops-fix` × `ubuntu-a`, `rocky-b` 키 접속 (4개 조합) | 2026-11-05 동작 확인 (증거 캡처 예정) |
+| `~/.ssh/config` 별칭 접속 (`ssh ubuntu-a` 등 4개) | 2026-11-05 동작 확인 (증거 캡처 예정) |
+| 진단 계정 읽기 권한 테스트 (위 명령) | 2026-11-05 확인, 4) 표에 반영 (증거 캡처 예정) |
+
 ## 6. 검증 체크리스트
 
-결과 화면은 `evidence/`에 `<서버 식별자>-<항목>-YYMMDD.png` 형식으로 저장한다.
+모든 항목은 **실제 테스트와 증거 캡처를 마친 뒤** 완료(`[v]`)로 표시한다. 1장 적용 현황의 "적용 완료"는 설정이 적용된 상태를 뜻하며, 이 체크리스트의 완료는 증거까지 확보된 상태를 뜻한다. 결과 화면은 `evidence/`에 `<서버 식별자>-<항목>-YYMMDD.png` 형식으로 저장한다.
 
 | 상태 | 확인 항목 | 명령어 | 정상 기준 |
 | --- | --- | --- | --- |
-| [ ] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 |
-| [ ] | IP 할당 | `ip -4 a` | 2장 IP와 일치 |
-| [ ] | 기본 경로 | `ip route` | `default via 192.168.10.2` |
-| [ ] | 외부 통신 | `ping 8.8.8.8`, `ping google.com` | 응답 수신 |
-| [ ] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 |
-| [ ] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 |
-| [ ] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 |
-| [ ] | 스냅샷 | Snapshot Manager | `00-initial-setup` 생성 및 복구 확인 |
+| [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 |
+| [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 |
+| [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 |
+| [v] | 기본 경로 | `ip route` | `default via 192.168.10.2` |
+| [v] | 시간대 | `timedatectl` | `Asia/Seoul` (3대 모두) |
+| [v] | 외부 통신 | `ping 8.8.8.8`, `ping google.com` | 응답 수신 |
+| [v] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 |
+| [v] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 |
+| [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 |
+| [v] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 |
+| [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 (정책 확정 후 허용 명령 추가) |
+| [v] | sudo 차단 | 5-6의 차단 확인 명령 | 두 계정 모두 sudo 실행 거부 |
+| [v] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 |
+| [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 |
+| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 생성 확인 |
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -230,15 +402,16 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 
 | 이름 | 대상 | 생성 시점 | 상태 |
 | --- | --- | --- | --- |
-| `00-initial-setup` | 3대 공통 | 기본 설정, 비밀번호 설정, 네트워크 연결 확인 완료 후 (전용 계정·SSH 키 등록 전) | **확정** |
-| `01-mgmt-ready` | 중앙 관리 서버 | Python 3.12, Git 등 개발 도구 설치 후 | 제안 |
-| `01-vuln-baseline` | 진단 대상 A/B | 진단 담당과 협의한 취약 설정 적용 후 | 제안 |
-| `02-pre-remediation-YYMMDD` | 진단 대상 A/B | 관리자 승인 후 조치 직전 (T-03) | 제안 |
-| `03-post-remediation-YYMMDD` | 진단 대상 A/B | 조치·재진단 완료 후 (선택) | 제안 |
+| `00-initial-setup` | 3대 공통 | 기본 설정, 비밀번호 설정, 네트워크 연결 확인 완료 후 — 초기 환경 복구용으로 유지 | **확정** |
+| `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정 및 권한 검증 완료 후 | **확정** |
+| `02-mgmt-ready` | 중앙 관리 서버 | Python 3.12, Git 등 개발 도구 설치 후 | 제안 |
+| `02-vuln-baseline` | 진단 대상 A/B | 진단 담당과 협의한 취약 설정 적용 후 | 제안 |
+| `03-pre-remediation-YYMMDD` | 진단 대상 A/B | 관리자 승인 후 조치 직전 (T-03) | 제안 |
+| `04-post-remediation-YYMMDD` | 진단 대상 A/B | 조치·재진단 완료 후 (선택) | 제안 |
 
-- 반복될 수 있는 단계(02, 03)에만 날짜를 붙이고, 같은 날 두 번 생성 시 `-2`를 붙인다.
+- 반복될 수 있는 단계(03, 04)에만 날짜를 붙이고, 같은 날 두 번 생성 시 `-2`를 붙인다.
 - Description에 날짜, 작업자, 작업 내용을 기록한다. 예: `261105 김민우 / 기본 설정, 비밀번호 설정, 연결 확인 완료`
-- 기준점 스냅샷(00, 01)은 `sudo poweroff`로 정상 종료한 뒤 생성한다.
+- 기준점 스냅샷(00, 01, 02)은 `sudo poweroff`로 정상 종료한 뒤 생성한다.
 - 스냅샷은 VM 폴더 안에 저장되므로 백업이 아니다. 중요한 시점에는 VM 폴더 전체를 외부 저장소에 복사한다.
 - 복구는 Snapshot Manager → Go To로 하며, 복구 후 6장 체크리스트를 다시 확인한다.
 
@@ -248,7 +421,7 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 infrastructure/
 ├── README.md                     # 인프라 구성·구축 절차·검증 기준 문서 (이 문서)
 ├── network/                      # 서버별 고정 IP 설정 파일
-│   ├── netplan-central.yaml      # 중앙 관리 서버 netplan 설정 (192.168.10.10)
+│   ├── netplan-central-mgmt.yaml # 중앙 관리 서버 netplan 설정 (192.168.10.10)
 │   ├── netplan-ubuntu-a.yaml     # 진단 대상 A netplan 설정 (192.168.10.20)
 │   └── nmcli-rocky-b.sh          # 진단 대상 B nmcli 설정 명령 (192.168.10.30)
 ├── setup/                        # 기본 설정 자동화 스크립트 (비밀번호 설정 제외)
@@ -266,22 +439,23 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 
 ## 10. 팀 협의 필요 사항
 
-- [ ] 중앙 관리 서버의 서버 식별자 및 호스트명
-- [ ] 진단 대상 호스트명을 서버 식별자(`ubuntu-a`, `rocky-b`)와 맞출지 여부
-- [ ] 스냅샷 `01` 이후 단계 이름 확정
+- [x] 중앙 관리 서버의 서버 식별자 및 호스트명 (`central-mgmt` / Central-Management-Ubuntu)
+- [x] 진단 대상 호스트명을 서버 식별자(`ubuntu-a`, `rocky-b`)와 맞출지 여부 (호스트명은 Target-Ubuntu, Target-Rocky 유지)
+- [x] 전용 계정·SSH 키 등록 이후 스냅샷 이름 (`01-ssh-security-configured`)
+- [ ] 스냅샷 `02` 이후 단계 이름 확정
 - [ ] JSON 필드명 `target_id` / `server_id` 통일 (D · 조효민)
 - [ ] `secureops-fix`에 허용할 sudo 명령 범위 (정책 확정 후 적용)
 - [ ] `secureops-scan`으로 읽을 수 없는 점검 대상 파일(예: `/etc/shadow`) 처리 방식
 - [ ] root 직접 SSH 로그인 제한 등 `sshd_config` 변경 적용 시점
 - [ ] 계정별 SSH 키 분리 방식 (`id_ed25519_scan`, `id_ed25519_fix`) 확정
-- [ ] `01-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
+- [ ] `02-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
 - [ ] 진단 대상 Desktop의 자동 업데이트 사용 여부 (재검증 일관성)
 
 ## 11. 변경 이력
 
 | 버전 | 일자 | 변경 사항 |
 | --- | --- | --- |
-| v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준) |
+| v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가) |
 
 ---
 
