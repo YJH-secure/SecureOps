@@ -91,6 +91,8 @@ SecureOps/
 
 - [팀원 AI — 점검 정책 검토 가이드](docs/security-policy/AI_SECURITY_POLICY_REVIEW_GUIDE_v1.1.md) — 팀원별 AI 코드 점검 요청문과 정책·결과 스키마 적용 범위
 
+- [팀원 AI 정책 검토 가이드](docs/security-policy/AI_SECURITY_POLICY_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 공통 프롬프트 및 담당별 점검 기준
+
 **판정 기준표 v1.1은 공통 JSON 결과 규격 v1.1과 별개의 정책 문서**입니다. 판정 세부 기준 중 승인 대기 항목은 임의로 확정 처리하지 않습니다. SSH-01은 root 직접 SSH 접속 금지 정책을 적용하며, 유효 설정 확인에 실패한 경우 오류/검토 상태로 구분합니다.
 
 ## 7. GitHub 협업 규칙
