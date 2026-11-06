@@ -36,14 +36,14 @@ SecureOps는 Linux 서버의 보안 설정을 자동으로 진단하고, 취약�
 ## 4. 개발 환경 (초안)
 
 - 가상화: VMware Workstation
-- 중앙 관리 서버: Ubuntu Server 24.04 LTS
-- 진단 대상: Ubuntu Server 24.04 LTS / Rocky Linux 9 계열
+- 중앙 관리 서버 (실제 인프라 구축 기준): Ubuntu Server 24.04.5 LTS (`central-mgmt`)
+- 진단 대상 (실제 인프라 구축 기준): Ubuntu Desktop 24.04.5 LTS (`ubuntu-a`) / Rocky Linux 9.8 Desktop (`rocky-b`)
 - 개발 언어: Python 3.12 기준 / Bash
 - 개발 도구: VS Code
 - 협업: Git / GitHub
 - 데이터 형식: JSON
 
-※ 개발 환경은 실제 구축 및 호환성 검증 과정에서 조정될 수 있습니다.
+※ 실제 VM 종류와 OS 버전은 인프라 담당자가 2026-11-06 README에 기록한 구축 보고 기준입니다. 실환경 접근·통합 검증은 별도 단계입니다. Desktop 진단 대상은 Server와 기본 서비스 및 패키지 구성이 다를 수 있습니다.
 
 ## 5. 시스템 처리 흐름
 
@@ -83,6 +83,13 @@ SecureOps/
 - [AI 코드 점검 가이드 (팀원별 프롬프트 포함)](docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 점검 요청서
 
 **v1.1은 팀장 확정 개발 규격이며, B/C/D/E 코드 적용과 실제 VM 통합 테스트 완료를 의미하지 않습니다.** 기존 v1.0 문서나 개별 모듈 코드의 상충 필드보다 위 v1.1 결과 계약을 우선합니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
+
+## 취약점 점검 기준표 v1.1 (진단 정책 기준)
+
+- [취약점 점검 기준표 v1.1](docs/security-policy/vulnerability-checklist-v1.1.md) — 8개 검사 항목의 판정 원칙·초기 위험도·테스트 계획
+- [인프라 구축 문서](infrastructure/README.md) — 실제 서버·SSH·sudo 설정 및 검증 현황 (인프라 PR 병합 후 연결 가능)
+
+**판정 기준표 v1.1은 공통 JSON 결과 규격 v1.1과 별개의 정책 문서**입니다. 판정 세부 기준 중 승인 대기 항목은 임의로 확정 처리하지 않습니다. SSH-01은 root 직접 SSH 접속 금지 정책을 적용하며, 유효 설정 확인에 실패한 경우 오류/검토 상태로 구분합니다.
 
 ## 7. GitHub 협업 규칙
 
