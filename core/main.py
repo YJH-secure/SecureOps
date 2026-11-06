@@ -3,12 +3,47 @@ import os
 import sys
 import re
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
+from uuid import uuid4
 
 class DiagnosisAggregator:
     def __init__(self, filepath: str):
         self.filepath = filepath
         self.data = self._load_json()
+
+    @classmethod
+    def from_results(cls, account_results, system_results, *, target_id, os,
+                     scan_id=None, scanned_at=None):
+        """같은 서버·같은 실행의 B/C 결과 목록으로 새 보고서를 만든다.
+
+        실제 진단 함수를 호출하지 않는다. 개별 반환 객체는 [result]로 전달한다.
+        target_id와 os는 실행 계층에서 제공하며, None인 실행 ID/완료 시각만
+        새로 생성한다. 기존 보고서의 누락 정보를 보정하는 용도가 아니다.
+        """
+        for name, results in (("account_results", account_results),
+                              ("system_results", system_results)):
+            if not isinstance(results, list):
+                raise TypeError(f"{name}는 개별 결과 객체의 list여야 합니다.")
+        report = {
+            "schema_version": "1.1",
+            "scan_id": str(uuid4()) if scan_id is None else scan_id,
+            "target_id": target_id,
+            "os": os,
+            "scanned_at": (datetime.now(timezone.utc).isoformat()
+                           if scanned_at is None else scanned_at),
+            "results": deepcopy(account_results + system_results),
+        }
+        cls._validate_report(report)
+        # details까지 실제 JSON으로 전달 가능한 값인지 확인한다.
+        json.dumps(report, ensure_ascii=False, allow_nan=False)
+        aggregator = cls.__new__(cls)
+        aggregator.filepath = None
+        aggregator.data = report
+        return aggregator
+
+    def to_json(self) -> str:
+        """통계 요약을 섞지 않은 공통 v1.1 보고서를 JSON 문자열로 반환한다."""
+        return json.dumps(self.get_report(), ensure_ascii=False, indent=2, allow_nan=False)
 
     def _load_json(self) -> dict:
         if not os.path.exists(self.filepath):
