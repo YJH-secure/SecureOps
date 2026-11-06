@@ -4,7 +4,7 @@
 
 **담당:** 김민우 (A · 서버·네트워크 인프라)  
 **관련 문서:** [시스템 아키텍처 설계서](../docs/architecture/system-architecture.md) · [프로젝트 README](../README.md)  
-**상태:** 서버·네트워크 구성, 전용 계정, SSH 키 인증, `01-ssh-security-configured` 스냅샷 적용 완료 / 세부 권한 정책 및 검증 증거 확보 예정 — 적용 현황은 1장, 검증 상태는 6장 참고
+**상태:** 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷 적용 및 검증 증거 확보 완료 / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장 참고
 
 ## 1. 개요
 
@@ -32,18 +32,19 @@
 | SSH 서버 | 진단 대상 A/B에서 OpenSSH 서버 실행 | 5-4 |
 | 비밀번호 정책 | 서버·계정별 서로 다른 16자 이상 비밀번호 | 5-5 |
 | 계정 분리 | 진단 대상 A/B에 `secureops-scan`, `secureops-fix` 생성 | 5-5 |
-| sudo 권한 | 두 전용 계정 모두 sudo 미부여 (sudoers 설정 없음) — 모든 sudo 명령 차단 | 5-6 |
+| sudo 권한 | sudoers 초안 v0 적용 — scan은 읽기 보조 명령, fix는 승인된 SSH 설정 적용 명령만 허용 | 5-6 |
+| 관리 계정 | Rocky `user1`을 `wheel` 그룹에 추가해 3대 모두 `user1` sudo 사용 | 5-6 |
 | SSH 키 인증 | Ed25519 키 계정별 분리 생성, 공개키 등록, 4개 조합 키 접속 동작 확인 | 5-5 |
-| 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태) 생성 | 7장 |
+| 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태, 2026-11-06 재생성) | 7장 |
 
 **추후 적용·검증 예정** — 아직 서버에 적용되지 않음
 
 | 구분 | 내용 | 적용 시점 |
 | --- | --- | --- |
-| 검증 증거 | 6장 체크리스트 중 미완료 항목(sudo 권한·차단, SSH 별칭 접속) 증거 캡처 | 증거 캡처 후 |
 | SSH 설정 | root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 정책 확정 후 |
-| 조치 계정 권한 | `secureops-fix`에 승인된 조치용 sudo 명령 부여 | 진단·조치 정책 확정 후 |
-| 진단 계정 권한 | `secureops-scan`의 읽기 권한 범위 (`sshd -T`, `/etc/shadow` 등) | 진단·조치 정책 확정 후 |
+| sudo 권한 확정 | sudoers 초안 v0 팀장 검토 및 확정·조정 | 팀장 검토 후 |
+| 조치 권한 확장 | PAM·FILE-01·방화벽 등 SSH-01 외 항목의 조치 명령 | 조치 기능·정책 확정 후 |
+| 승인 파일 경로 | `/etc/secureops/approved/` 생성 및 승인 파일 관리 절차 | 조치 기능 개발 시 |
 | 스냅샷 | `02-vuln-baseline` 이후 단계 | 진단 항목 확정 후 |
 | 설정 파일 | `network/`, `setup/` 스크립트 작성 | 구축 진행에 따라 |
 
@@ -169,7 +170,7 @@ sudo systemctl enable --now sshd
 **SSH 인증 및 권한 원칙 (확정)**
 - 중앙 관리 서버(`central-mgmt`)에서 진단 대상(`ubuntu-a`, `rocky-b`)으로 접속할 때 **SSH 공개키 인증(Ed25519)**을 사용한다. — **적용 완료**
 - 진단·조치는 전용 계정(`secureops-scan`, `secureops-fix`)으로 분리해 수행한다. — **적용 완료**
-- 전체 관리자 권한 대신 **최소 권한 원칙**을 적용한다. 실제 진단·조치 기능에 필요한 세부 권한은 정책 확정 후 적용한다. — **적용 예정**
+- 전체 관리자 권한 대신 **최소 권한 원칙**을 적용한다. — **sudoers 초안 v0 적용**, 팀장 검토 후 확정 (5-6)
 - root 직접 SSH 로그인은 제한한다. — **적용 예정** (정책 확정 후)
 
 **계정 구성**
@@ -177,8 +178,8 @@ sudo systemctl enable --now sshd
 | 계정 | 용도 | 위치 | 현재 상태 (적용 완료) | 추후 적용 예정 |
 | --- | --- | --- | --- | --- |
 | `user1` | 서버 관리용 | 3대 공통 | 관리자(sudo) | — |
-| `secureops-scan` | 취약점 진단용 | 진단 대상 A/B | 계정·SSH 키 등록, sudo 없음 (일반 사용자 읽기 권한) | 진단에 필요한 읽기 권한 범위 |
-| `secureops-fix` | 보안 조치용 | 진단 대상 A/B | 계정·SSH 키 등록, sudo 없음 | 승인된 조치에 한한 제한적 sudo |
+| `secureops-scan` | 취약점 진단용 | 진단 대상 A/B | 계정·SSH 키 등록, 읽기 보조 sudo 명령 (초안 v0) | 팀장 검토 후 확정 |
+| `secureops-fix` | 보안 조치용 | 진단 대상 A/B | 계정·SSH 키 등록, 승인된 SSH 설정 적용 sudo 명령 (초안 v0) | SSH-01 외 조치 명령 추가 |
 | `root` | 시스템 관리자 | 3대 공통 | 기본 설정 유지 | 직접 SSH 로그인 제한 |
 
 **적용 시점**
@@ -187,7 +188,7 @@ sudo systemctl enable --now sshd
 | --- | --- |
 | 전용 계정 생성, SSH 키 생성·등록, 키 접속 확인 | 적용 완료 |
 | root 직접 SSH 로그인 제한 등 `sshd_config` 변경 | 진단·조치 기능 및 정책 확정 후 적용 |
-| `secureops-scan`, `secureops-fix`의 세부 권한 부여 | 진단·조치 기능 및 정책 확정 후 적용 |
+| `secureops-scan`, `secureops-fix`의 sudo 권한 | 초안 v0 적용 (2026-11-06), 팀장 검토 후 확정 |
 
 **비밀번호 정책**
 - 서버별로 서로 다른 비밀번호를 사용하고, 같은 서버의 `user1`과 `root`도 각각 다르게 설정한다.
@@ -235,36 +236,103 @@ ssh -i ~/.ssh/id_ed25519_fix  secureops-fix@192.168.10.20
 
 > 개인키(`~/.ssh/id_ed25519_scan`, `~/.ssh/id_ed25519_fix`)는 중앙 관리 서버 밖으로 복사하지 않으며 이 저장소에 커밋하지 않는다.
 
-### 5-6. 계정 권한 및 sudo 설정 현황
+### 5-6. 계정 권한 및 sudo 설정 현황 (sudoers 초안 v0)
 
-현재 두 전용 계정에는 **sudo 권한을 부여하지 않았다.** `/etc/sudoers`와 `/etc/sudoers.d/`에 두 계정 관련 설정이 없으며, `sudo`·`wheel` 그룹에도 속하지 않는다. 진단·조치 기능별 세부 권한은 정책 확정 후 필요한 명령만 추가한다.
+2026-11-06 팀장 요청에 따라 **sudoers 초안 v0**을 진단 대상 A/B에 적용했다. 기준표 v1.1의 8개 점검 항목 중 **일반 권한으로 불가능했던 확인만** 정확한 명령·인자 단위로 허용하며, 팀장 검토 후 확정·조정한다.
 
-| 계정 | 그룹 | sudo 허용 명령 | 실제 적용한 sudoers 설정 |
+**설계 원칙**
+- 일반 권한으로 가능한 확인(ACC-01·02, FILE-01의 `stat`/ACL 등)은 sudo를 부여하지 않는다.
+- 명령은 전체 경로와 인자를 고정하며 `*` 와일드카드를 사용하지 않는다 (임의 인자 추가 방지).
+- 셸 탈출이 가능한 명령(`journalctl`, `less`, `vi` 등)은 허용하지 않는다.
+- `/etc/shadow` 내용은 FILE-01에 필요하지 않으므로(소유자·권한만 확인) 허용하지 않는다.
+- `secureops-fix`는 설정 **내용**을 직접 작성할 수 없고, 관리자(`user1`)가 승인해 `/etc/secureops/approved/`에 둔 파일만 설치·제거할 수 있다. 현재는 SSH-01 조치 경로만 열려 있다.
+
+| 계정 | 그룹 | sudo 허용 명령 (초안 v0) | 설정 파일 |
 | --- | --- | --- | --- |
-| `secureops-scan` | 본인 그룹만 | 없음 | 없음 |
-| `secureops-fix` | 본인 그룹만 | 없음 | 없음 |
+| `secureops-scan` | 본인 그룹만 | `sshd -T`, `ss -lntup`, 방화벽 조회, `nft list ruleset`, 인증 로그 `tail -n 200`, (Rocky) `cat /etc/ssh/sshd_config` | `/etc/sudoers.d/secureops-scan` |
+| `secureops-fix` | 본인 그룹만 | `sshd -t`, 승인된 SSH drop-in 설치·제거, SSH 서비스 reload | `/etc/sudoers.d/secureops-fix` |
 
-**확인 명령** — 진단 대상 A/B에서 `user1`로 실행
+**진단 대상 A (Ubuntu) — 적용 내용**
 
-```bash
-id secureops-scan; id secureops-fix          # sudo/wheel 그룹 미포함 확인
-sudo -l -U secureops-scan                    # "not allowed to run sudo" 확인
-sudo -l -U secureops-fix
-sudo grep -rn "secureops" /etc/sudoers /etc/sudoers.d/   # 출력 없음 확인
+```text
+# /etc/sudoers.d/secureops-scan
+Cmnd_Alias SECUREOPS_SCAN = /usr/sbin/sshd -T, \
+                            /usr/bin/ss -lntup, \
+                            /usr/sbin/ufw status verbose, \
+                            /usr/sbin/nft list ruleset, \
+                            /usr/bin/tail -n 200 /var/log/auth.log
+secureops-scan ALL=(root) NOPASSWD: SECUREOPS_SCAN
+
+# /etc/sudoers.d/secureops-fix
+Cmnd_Alias SECUREOPS_FIX = /usr/sbin/sshd -t, \
+    /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, \
+    /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, \
+    /usr/bin/systemctl reload ssh
+secureops-fix ALL=(root) NOPASSWD: SECUREOPS_FIX
 ```
 
-**sudo 차단 확인** — 중앙 관리 서버에서 실행
+**진단 대상 B (Rocky) — 적용 내용**
+
+```text
+# /etc/sudoers.d/secureops-scan
+Cmnd_Alias SECUREOPS_SCAN = /usr/sbin/sshd -T, \
+                            /usr/bin/cat /etc/ssh/sshd_config, \
+                            /usr/sbin/ss -lntup, \
+                            /usr/bin/firewall-cmd --state, \
+                            /usr/bin/firewall-cmd --list-all, \
+                            /usr/sbin/nft list ruleset, \
+                            /usr/bin/tail -n 200 /var/log/secure
+secureops-scan ALL=(root) NOPASSWD: SECUREOPS_SCAN
+
+# /etc/sudoers.d/secureops-fix
+Cmnd_Alias SECUREOPS_FIX = /usr/sbin/sshd -t, \
+    /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, \
+    /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, \
+    /usr/bin/systemctl reload sshd
+secureops-fix ALL=(root) NOPASSWD: SECUREOPS_FIX
+```
+
+**적용 방법** — `visudo -cf`로 문법 검사 후 설치 (두 서버 `user1`로)
 
 ```bash
-for ip in 192.168.10.20 192.168.10.30; do
-  for u in scan fix; do
-    echo "=== secureops-$u@$ip ==="
-    ssh -i ~/.ssh/id_ed25519_$u -o BatchMode=yes secureops-$u@$ip 'sudo -n id 2>&1 || echo "sudo 차단됨"'
-  done
+sudo visudo -cf /tmp/secureops-scan && sudo visudo -cf /tmp/secureops-fix && \
+sudo install -m 0440 -o root -g root /tmp/secureops-scan /etc/sudoers.d/secureops-scan && \
+sudo install -m 0440 -o root -g root /tmp/secureops-fix /etc/sudoers.d/secureops-fix && \
+rm /tmp/secureops-scan /tmp/secureops-fix && sudo visudo -c
+sudo restorecon -v /etc/sudoers.d/secureops-*   # Rocky만
+```
+
+> 파일 권한 `0440`, 소유자 `root:root`, Rocky SELinux 문맥 `etc_t` 확인 완료. Rocky의 `user1`은 설치 시 관리자 미지정으로 `wheel` 그룹에 추가해 sudo를 사용하도록 맞췄다.
+
+**확인 명령**
+
+```bash
+# 진단 대상에서 user1로 — 허용 목록 확인
+sudo -l -U secureops-scan
+sudo -l -U secureops-fix
+
+# 중앙 관리 서버에서 — 허용 명령은 동작, 그 외는 차단
+for h in ubuntu-a rocky-b; do
+  echo "===== $h ====="
+  echo "[허용] sshd -T:"; ssh $h 'sudo -n /usr/sbin/sshd -T | grep -i permitrootlogin'
+  echo "[차단] shadow:";  ssh $h 'sudo -n cat /etc/shadow 2>&1 | head -1'
+  echo "[차단] id:";      ssh $h-fix 'sudo -n id 2>&1 | head -1'
+  echo "[허용] fix sshd -t:"; ssh $h-fix 'sudo -n /usr/sbin/sshd -t && echo OK'
 done
 ```
 
-4개 조합 모두 `sudo 차단됨`이 출력되면 정상이다.
+**확인 결과 (2026-11-06)** — 두 서버 동일
+
+| 테스트 | 결과 |
+| --- | --- |
+| `secureops-scan`: `sudo sshd -T` | 허용 — `permitrootlogin without-password` 출력 |
+| `secureops-scan`: `sudo cat /etc/shadow` | 차단 — "암호가 필요합니다" |
+| `secureops-fix`: `sudo id` | 차단 — "암호가 필요합니다" |
+| `secureops-fix`: `sudo sshd -t` | 허용 — OK |
+
+> SSH-01 참고: 두 서버 모두 `PermitRootLogin`이 배포판 기본값 `without-password`(`prohibit-password`)로, root의 비밀번호 로그인은 막혀 있으나 키 로그인은 허용되는 상태다. 이를 pass/vulnerable 중 무엇으로 볼지는 SSH-01 정책에서 정한다.
+
+> 미준비: `/etc/secureops/approved/` 디렉터리와 승인 파일은 아직 만들지 않았다. 따라서 `secureops-fix`의 설치 명령은 승인 파일이 준비되기 전까지 실제로 동작하지 않는다.
 
 ### 5-7. 공통 SSH 모듈 연동 정보
 
@@ -333,24 +401,23 @@ Host rocky-b-fix
 
 **4) 진단 계정 권한 범위**
 
-- `secureops-scan`, `secureops-fix` 모두 **sudo 권한 없음** (5-6 참고).
-- 실행 가능한 명령을 목록으로 제한하지는 않았으며, **일반 사용자 권한으로 읽을 수 있는 범위**에서만 동작한다.
-- 따라서 root 권한이 필요한 점검은 현재 계정으로 수행할 수 없다. "확인 방법" 열이 **테스트**인 항목은 2026-11-05 아래 테스트 명령으로 실제 확인한 결과이고, **예상**인 항목은 배포판 기본 권한 기준이며 추후 확인한다.
+- 아래 표의 Ubuntu·Rocky 열은 **일반 사용자 권한** 기준 결과이고, "sudo 초안 v0" 열은 5-6의 sudoers로 새로 가능해진 확인이다.
+- "확인 방법" 열이 **테스트**인 항목은 2026-11-05 실제 확인한 결과이고, **예상**인 항목은 배포판 기본 권한 기준이며 추후 확인한다.
 
-| 점검 대상 | Ubuntu (`ubuntu-a`) | Rocky (`rocky-b`) | 확인 방법 | 관련 항목 |
-| --- | --- | --- | --- | --- |
-| `/etc/passwd` 읽기 | 가능 | 가능 | 테스트 | ACC-01, FILE-01 |
-| PAM 설정 읽기 (`common-auth` / `system-auth`) | 가능 | 가능 | 테스트 | ACC-01, ACC-02 |
-| `/etc/security/pwquality.conf` 읽기 | 가능 | 가능 | 테스트 | ACC-01 |
-| `/etc/ssh/sshd_config` 읽기 | 가능 | **불가** | 테스트 | SSH-01, SSH-02 |
-| `/etc/shadow` 읽기 | **불가** | **불가** | 테스트 | FILE-01 (권한 확인은 `stat`으로 가능) |
-| 인증 로그 (`/var/log/auth.log` / `/var/log/secure`) | **불가** | **불가** | 테스트 | LOG-01 |
-| `sshd -T` (유효 설정 확인) | **불가** (root 필요) | **불가** (root 필요) | 예상 | SSH-01, SSH-02 |
-| `stat`으로 파일 소유자·권한 확인 | 가능 | 가능 | 예상 | FILE-01 |
-| `systemctl list-units`, `ss -lntu` | 가능 (`ss -p` 프로세스 정보는 제한) | 가능 (동일) | 예상 | SVC-01 |
-| 방화벽 규칙 조회 (`ufw status`, `nft list ruleset`, `firewall-cmd`) | **불가** (root 필요) | 확인 필요 | 예상 | FW-01 |
+| 점검 대상 | Ubuntu (`ubuntu-a`) | Rocky (`rocky-b`) | sudo 초안 v0 | 확인 방법 | 관련 항목 |
+| --- | --- | --- | --- | --- | --- |
+| `/etc/passwd` 읽기 | 가능 | 가능 | 불필요 | 테스트 | ACC-01, FILE-01 |
+| PAM 설정 읽기 (`common-auth` / `system-auth`) | 가능 | 가능 | 불필요 | 테스트 | ACC-01, ACC-02 |
+| `/etc/security/pwquality.conf` 읽기 | 가능 | 가능 | 불필요 | 테스트 | ACC-01 |
+| `/etc/ssh/sshd_config` 읽기 | 가능 | **불가** | Rocky `sudo cat` 허용 | 테스트 | SSH-01, SSH-02 |
+| `/etc/shadow` 읽기 | **불가** | **불가** | 허용 안 함 | 테스트 | FILE-01 (권한 확인은 `stat`으로 가능) |
+| 인증 로그 (`/var/log/auth.log` / `/var/log/secure`) | **불가** | **불가** | `sudo tail -n 200` 허용 | 테스트 | LOG-01 |
+| `sshd -T` (유효 설정 확인) | **불가** (root 필요) | **불가** (root 필요) | 허용 (2026-11-06 동작 확인) | 테스트 | SSH-01, SSH-02 |
+| `stat`으로 파일 소유자·권한 확인 | 가능 | 가능 | 불필요 | 예상 | FILE-01 |
+| `systemctl list-units`, `ss -lntu` | 가능 (`ss -p` 프로세스 정보는 제한) | 가능 (동일) | `sudo ss -lntup` 허용 | 예상 | SVC-01 |
+| 방화벽 규칙 조회 | **불가** (root 필요) | 확인 필요 | Ubuntu `ufw status verbose`, Rocky `firewall-cmd --state`/`--list-all`, 공통 `nft list ruleset` 허용 | 예상 | FW-01 |
 
-> 진단 담당 참고: Rocky는 `sshd_config` 자체를 읽을 수 없어 SSH-01·SSH-02는 현재 진단 계정으로 판정할 수 없다. 기준표 원칙에 따라 권한 부족은 임의로 양호 처리하지 않고 `error`로 기록하며, 필요한 읽기 권한은 정책 확정 시 검토한다.
+> 진단 담당 참고: 일반 권한으로 확인할 수 없는 항목은 sudo 초안 v0의 허용 명령을 사용한다. 허용 목록 밖의 확인이 필요하면 직접 우회하지 말고 권한 추가를 요청하며, 권한 부족으로 실패한 경우 기준표 원칙에 따라 임의로 양호 처리하지 않고 `error`로 기록한다.
 
 ```bash
 # 중앙 관리 서버에서 실행 — 진단 계정의 파일 읽기 권한 확인
@@ -365,7 +432,7 @@ done
 | 테스트 | 결과 |
 | --- | --- |
 | `secureops-scan`, `secureops-fix` × `ubuntu-a`, `rocky-b` 키 접속 (4개 조합) | 2026-11-05 확인 (`central-mgmt-sshkey-261105.png`) |
-| `~/.ssh/config` 별칭 접속 (`ssh ubuntu-a` 등 4개) | 2026-11-05 동작 확인 (증거 캡처 예정) |
+| `~/.ssh/config` 별칭 접속 (`ssh ubuntu-a` 등 4개) | 2026-11-05 동작 확인 (`central-mgmt-ssh-alias-261106.png`) |
 | 진단 계정 읽기 권한 테스트 (위 명령) | 2026-11-05 확인, 4) 표에 반영 (`central-mgmt-scan-read-test-261105.png`) |
 
 ## 6. 검증 체크리스트
@@ -385,12 +452,12 @@ done
 | [v] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 | `central-mgmt-innerping-261105.png` |
 | [v] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 | `central-mgmt-sshkey-261105.png` |
 | [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 | `<id>-pkg-261105.png` (3대) |
-| [ ] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 | — |
-| [ ] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | sudo 실행 권한 없음 (정책 확정 후 허용 명령 추가) | — |
-| [ ] | sudo 차단 | 5-6의 차단 확인 명령 | 두 계정 모두 sudo 실행 거부 | — |
-| [ ] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 | — |
+| [v] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-list-261106.png` (진단 대상 2대) |
+| [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-list-261106.png` (진단 대상 2대) |
+| [v] | sudo 허용·차단 | 5-6의 확인 명령 (중앙 관리 서버) | 허용 명령은 동작, 그 외는 거부 | `central-mgmt-sudo-test-261106.png` |
+| [v] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 | `central-mgmt-ssh-alias-261106.png` |
 | [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261105.png` |
-| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 생성 확인 | `<id>-snapshot-261105.png` (3대) |
+| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured`(재생성본) 확인 | `<id>-snapshot-261106.png` (3대) |
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -405,11 +472,13 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 | 이름 | 대상 | 생성 시점 | 상태 |
 | --- | --- | --- | --- |
 | `00-initial-setup` | 3대 공통 | 기본 설정, 비밀번호 설정, 네트워크 연결 확인 완료 후 — 초기 환경 복구용으로 유지 | **확정** |
-| `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정 및 권한 검증 완료 후 | **확정** |
+| `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정, sudoers 초안 v0 적용 및 권한 검증 완료 후 (2026-11-06 재생성) | **확정** |
 | `02-mgmt-ready` | 중앙 관리 서버 | Python 3.12, Git 등 개발 도구 설치 후 | 제안 |
 | `02-vuln-baseline` | 진단 대상 A/B | 진단 담당과 협의한 취약 설정 적용 후 | 제안 |
 | `03-pre-remediation-YYMMDD` | 진단 대상 A/B | 관리자 승인 후 조치 직전 (T-03) | 제안 |
 | `04-post-remediation-YYMMDD` | 진단 대상 A/B | 조치·재진단 완료 후 (선택) | 제안 |
+
+> **`01-ssh-security-configured` 재생성 (2026-11-06)** : 최초 생성본(2026-11-05)은 `rocky-b`의 `user1`이 sudoers(`wheel` 그룹)에 적용되지 않은 상태로 생성되었다. `user1`을 `wheel` 그룹에 추가한 뒤, 3대가 같은 시점의 상태를 갖도록 기존 `01`을 삭제하고 같은 이름으로 3대 모두 다시 생성했다. `00-initial-setup`은 그대로 유지한다.
 
 - 반복될 수 있는 단계(03, 04)에만 날짜를 붙이고, 같은 날 두 번 생성 시 `-2`를 붙인다.
 - Description에 날짜, 작업자, 작업 내용을 기록한다. 예: `261105 김민우 / 기본 설정, 비밀번호 설정, 연결 확인 완료`
@@ -449,8 +518,9 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 - [x] 전용 계정·SSH 키 등록 이후 스냅샷 이름 (`01-ssh-security-configured`)
 - [ ] 스냅샷 `02` 이후 단계 이름 확정
 - [ ] JSON 필드명 `target_id` / `server_id` 통일 (D · 조효민)
-- [ ] `secureops-fix`에 허용할 sudo 명령 범위 (정책 확정 후 적용)
-- [ ] `secureops-scan`으로 읽을 수 없는 점검 대상 파일(예: `/etc/shadow`) 처리 방식
+- [ ] sudoers 초안 v0 검토 및 확정 (과도·부족 권한 확인)
+- [ ] SSH-01 외 조치 항목의 `secureops-fix` 권한 및 `/etc/secureops/approved/` 승인 파일 관리 절차
+- [ ] SSH-01의 `PermitRootLogin without-password`(배포판 기본값) 판정 기준
 - [ ] root 직접 SSH 로그인 제한 등 `sshd_config` 변경 적용 시점
 - [ ] 계정별 SSH 키 분리 방식 (`id_ed25519_scan`, `id_ed25519_fix`) 확정
 - [ ] `02-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
@@ -460,7 +530,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 
 | 버전 | 일자 | 변경 사항 |
 | --- | --- | --- |
-| v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가) |
+| v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), sudoers 초안 v0 적용 내용 추가(2026-11-06), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가, `01` 스냅샷 재생성 반영(2026-11-06)) |
 
 ---
 
