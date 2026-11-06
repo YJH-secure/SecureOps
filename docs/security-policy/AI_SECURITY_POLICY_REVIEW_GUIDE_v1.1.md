@@ -6,9 +6,9 @@
 - JSON 계약: `docs/architecture/json-result-contract-v1.1.md`
 - JSON Schema: `docs/architecture/json-result-schema-v1.1.schema.json`
 - 기존 AI 규격 가이드: `docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md`
-- 인프라 README: `infrastructure/README.md` (PR #9 검토 중)
+- 인프라 README: `infrastructure/README.md` (PR #9의 `feature/kmw-infrastructure`, 병합 전에는 `main`에 없음)
 
-점검 기준표와 본 안내문은 PR #12가 main에 병합되기 전까지 `docs/security-policy-v1-1-alignment` 브랜치에 있다. 병합 이후에는 `main`을 참고한다.
+점검 기준표와 본 안내문은 `main` 브랜치를 공식 기준으로 참조한다. PR #12는 이 파일들을 최초 추가한 변경 이력이며, 병합 여부를 확인한 뒤 접근한다. 인프라 자료는 별도 PR #9가 병합되기 전까지 해당 작업 브랜치를 참조한다.
 
 ## AI 공통 요청문
 
