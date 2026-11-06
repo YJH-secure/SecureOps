@@ -87,7 +87,9 @@ SecureOps/
 ## 취약점 점검 기준표 v1.1 (진단 정책 기준)
 
 - [취약점 점검 기준표 v1.1](docs/security-policy/vulnerability-checklist-v1.1.md) — 8개 검사 항목의 판정 원칙·초기 위험도·테스트 계획
-- [인프라 구축 문서](infrastructure/README.md) — 실제 서버·SSH·sudo 설정 및 검증 현황 (인프라 PR 병합 후 연결 가능)
+- [인프라 구축 문서 PR #9](https://github.com/YJH-secure/SecureOps/pull/9) — 실제 서버·SSH·sudo 설정 및 검증 현황 (`infrastructure/README.md`, Merge 후 main 반영)
+
+- [팀원 AI — 점검 정책 검토 가이드](docs/security-policy/AI_SECURITY_POLICY_REVIEW_GUIDE_v1.1.md) — 팀원별 AI 코드 점검 요청문과 정책·결과 스키마 적용 범위
 
 **판정 기준표 v1.1은 공통 JSON 결과 규격 v1.1과 별개의 정책 문서**입니다. 판정 세부 기준 중 승인 대기 항목은 임의로 확정 처리하지 않습니다. SSH-01은 root 직접 SSH 접속 금지 정책을 적용하며, 유효 설정 확인에 실패한 경우 오류/검토 상태로 구분합니다.
 
