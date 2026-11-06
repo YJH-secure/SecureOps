@@ -72,6 +72,18 @@ SecureOps/
 └── .gitignore
 ```
 
+
+## 공통 JSON 결과 규격 v1.1 (2026-11-06 개발 기준선)
+
+팀원은 새 기능 개발 및 AI 코드 점검 전에 다음 파일을 **동일한 기준**으로 참고합니다.
+
+- [공통 JSON 결과 계약서](docs/architecture/json-result-contract-v1.1.md) — 필수 필드·상태값·위험도·이전 규칙
+- [JSON Schema](docs/architecture/json-result-schema-v1.1.schema.json) — JSON 자료형·필수 키 자동 검증
+- [MOCK 샘플 결과](tests/fixtures/sample-result-v1.1-MOCK.json) — 가상 데이터 테스트 예시
+- [AI 코드 점검 가이드 (팀원별 프롬프트 포함)](docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 점검 요청서
+
+**v1.1은 팀장 확정 개발 규격이며, B/C/D/E 코드 적용과 실제 VM 통합 테스트 완료를 의미하지 않습니다.** 기존 v1.0 문서나 개별 모듈 코드의 상충 필드보다 위 v1.1 결과 계약을 우선합니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
+
 ## 7. GitHub 협업 규칙
 
 - 각 담당자는 본인의 작업 영역을 기준으로 개발합니다.
