@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "scan_id": "scan-20261106-001",
+  "target_id": "ubuntu-a-mock",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-06T10:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "severity": "high",
+      "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+      "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+      "category": "계정·인증",
+      "title": "SSH root 원격 로그인 제한",
+      "checked_at": "2026-11-06T09:59:55+09:00"
+    },
+    {
+      "check_id": "FILE-01",
+      "status": "needs_review",
+      "severity": "high",
+      "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+      "recommendation": "OS별 승인 기준 확정 후 재판정",
+      "category": "시스템·파일",
+      "title": "중요 파일 소유자·권한 점검",
+      "details": {
+        "files": [
+          {
+            "path": "/etc/shadow",
+            "judgement": "needs_review"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 **KT 클라우드 사이버보안 부트캠프 | 6인 팀 프로젝트**
 
 개발 기간: 2026.11.04 ~ 2026.12.01  
-프로젝트 상태: 설계 및 개발 준비 단계
+프로젝트 상태: 인프라 구축 완료 보고 및 모듈 개발·통합 검증 진행 중
 
 ## 1. 프로젝트 소개
 
@@ -33,17 +33,17 @@ SecureOps는 Linux 서버의 보안 설정을 자동으로 진단하고, 취약�
 | 조효민 | 진단 자동화·위험도 평가 | Python 기반 진단 결과 통합 |
 | 박태준 | 보안 조치·재검증 | 승인 기반 조치 및 개선 결과 확인 |
 
-## 4. 개발 환경 (초안)
+## 4. 개발 환경 (실제 구축 보고 기준)
 
 - 가상화: VMware Workstation
-- 중앙 관리 서버: Ubuntu Server 24.04 LTS
-- 진단 대상: Ubuntu Server 24.04 LTS / Rocky Linux 9 계열
+- 중앙 관리 서버 (실제 인프라 구축 기준): Ubuntu Server 24.04.5 LTS (`central-mgmt`)
+- 진단 대상 (실제 인프라 구축 기준): Ubuntu Desktop 24.04.5 LTS (`ubuntu-a`) / Rocky Linux 9.8 Desktop (`rocky-b`)
 - 개발 언어: Python 3.12 기준 / Bash
 - 개발 도구: VS Code
 - 협업: Git / GitHub
 - 데이터 형식: JSON
 
-※ 개발 환경은 실제 구축 및 호환성 검증 과정에서 조정될 수 있습니다.
+※ 실제 VM 종류와 OS 버전은 인프라 담당자가 2026-11-06 README에 기록한 구축 보고 기준입니다. 실환경 접근·통합 검증은 별도 단계입니다. Desktop 진단 대상은 Server와 기본 서비스 및 패키지 구성이 다를 수 있습니다.
 
 ## 5. 시스템 처리 흐름
 
@@ -72,6 +72,27 @@ SecureOps/
 └── .gitignore
 ```
 
+
+## 공통 JSON 결과 규격 v1.1 (2026-11-06 개발 기준선)
+
+팀원은 새 기능 개발 및 AI 코드 점검 전에 다음 파일을 **동일한 기준**으로 참고합니다.
+
+- [공통 JSON 결과 계약서](docs/architecture/json-result-contract-v1.1.md) — 필수 필드·상태값·위험도·이전 규칙
+- [JSON Schema](docs/architecture/json-result-schema-v1.1.schema.json) — JSON 자료형·필수 키 자동 검증
+- [MOCK 샘플 결과](tests/fixtures/sample-result-v1.1-MOCK.json) — 가상 데이터 테스트 예시
+- [AI 코드 점검 가이드 (팀원별 프롬프트 포함)](docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 점검 요청서
+
+**v1.1은 팀장 확정 개발 규격이며, B/C/D/E 코드 적용과 실제 VM 통합 테스트 완료를 의미하지 않습니다.** 기존 v1.0 문서나 개별 모듈 코드의 상충 필드보다 위 v1.1 결과 계약을 우선합니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
+
+## 취약점 점검 기준표 v1.1 (진단 정책 기준)
+
+- [취약점 점검 기준표 v1.1](docs/security-policy/vulnerability-checklist-v1.1.md) — 8개 검사 항목의 판정 원칙·초기 위험도·테스트 계획
+- [인프라 구축 문서 PR #9](https://github.com/YJH-secure/SecureOps/pull/9) — 실제 서버·SSH·sudo 설정 및 검증 현황 (`infrastructure/README.md`, Merge 후 main 반영)
+
+- [팀원 AI 정책 검토 가이드](docs/security-policy/AI_SECURITY_POLICY_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 공통 프롬프트 및 담당별 점검 기준
+
+**판정 기준표 v1.1은 공통 JSON 결과 규격 v1.1과 별개의 정책 문서**입니다. 판정 세부 기준 중 승인 대기 항목은 임의로 확정 처리하지 않습니다. SSH-01은 root 직접 SSH 접속 금지 정책을 적용하며, 유효 설정 확인에 실패한 경우 오류/검토 상태로 구분합니다.
+
 ## 7. GitHub 협업 규칙
 
 - 각 담당자는 본인의 작업 영역을 기준으로 개발합니다.
@@ -86,9 +107,10 @@ SecureOps/
 - [x] 프로젝트 주제 확정
 - [x] 팀원별 역할 분담
 - [x] 시스템 아키텍처 초안 작성
-- [x] 취약점 점검 기준표 v1.0 작성
+- [x] 취약점 점검 기준표 v1.1 문서화 (세부 조건·검증 상태는 항목별 확인 필요)
 - [x] GitHub 저장소 및 디렉터리 초기화
-- [ ] 개발 환경 구축
+- [x] 가상머신 3대·기본 SSH 및 계정 인프라 구축 (인프라 담당자 검증 보고 기준)
+- [ ] 중앙 관리 기능과 각 담당 모듈의 실제 통합 환경 검증
 - [ ] 보안 진단 기능 구현
 - [ ] 결과 통합 및 위험도 평가
 - [ ] 승인 기반 보안 조치 및 재검증

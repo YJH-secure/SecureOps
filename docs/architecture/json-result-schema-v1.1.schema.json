@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SecureOps Scan Result Contract v1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scan_id",
+    "target_id",
+    "os",
+    "scanned_at",
+    "results"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "scan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "os": {
+      "type": "string",
+      "minLength": 1,
+      "description": "e.g. ubuntu-24.04, rocky-9.8"
+    },
+    "scanned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ip_address": {
+      "type": "string",
+      "minLength": 1,
+      "description": "optional, do not publish real internal details in demo fixtures"
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/checkResult"
+      }
+    }
+  },
+  "$defs": {
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check_id",
+        "status",
+        "severity",
+        "evidence",
+        "recommendation"
+      ],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "vulnerable",
+            "error",
+            "not_applicable",
+            "needs_review"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recommendation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "object",
+          "description": "Optional sanitized structured technical evidence"
+        }
+      }
+    }
+  }
+}
