@@ -9,7 +9,9 @@ python3 -m checks.system.service_check
 python3 -m unittest checks.system.tests.test_service_check -v
 ```
 
-`systemctl`과 `ss`가 동작하는 VM에서 실행합니다. 공통 JSON v1.1의 필수 5필드와 `details`를 갖는 개별 점검 결과를 표준 출력에 기록합니다. `details`에는 대상, 전체 인벤토리, 명시적 위반, 검토 사유 및 조회 오류가 들어갑니다. `error` 결과의 종료 코드는 2입니다.
+`systemctl`과 `ss`가 동작하는 VM에서 실행합니다. 공통 JSON v1.1의 필수 5필드와 `details`를 갖는 개별 점검 결과를 표준 출력에 기록합니다. `details`에는 대상, 전체 인벤토리, 명시적 위반, 검토 사유 및 조회 오류가 들어갑니다.
+
+진단 결과 JSON을 정상 출력하면 `status: error`를 포함해 종료 코드 `0`을 반환합니다. 진단 판정은 JSON의 `status`에서 확인합니다. 잘못된 실행 인자나 JSON 출력을 완료할 수 없는 프로그램 오류는 비정상 종료로 전달됩니다. D의 원격 결과 파서는 정상 종료된 JSON을 검증한 뒤 `error`와 `needs_review`를 각각 집계합니다.
 
 ## 정책 적용
 

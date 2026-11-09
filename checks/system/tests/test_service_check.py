@@ -1,6 +1,8 @@
 import json
+import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -181,6 +183,31 @@ class ServiceCheckTests(unittest.TestCase):
                 svc._read_command(svc.LISTENERS_COMMAND)
         self.assertTrue(run.call_args[1]['check'])
         self.assertEqual(run.call_args[1]['timeout'], 10)
+
+
+class ServiceCliTests(unittest.TestCase):
+    def run_cli(self, *args):
+        return subprocess.run(
+            [sys.executable, '-B', '-m', 'checks.system.service_check', *args],
+            cwd=Path(__file__).resolve().parents[3], capture_output=True,
+            encoding='utf-8', env=dict(os.environ, PYTHONIOENCODING='utf-8'), timeout=10,
+        )
+
+    def test_diagnostic_error_json_exits_successfully(self):
+        with tempfile.TemporaryDirectory() as folder:
+            missing = Path(folder) / 'missing-policy.json'
+            completed = self.run_cli('--policy', str(missing))
+        result = json.loads(completed.stdout)
+        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.stderr, '')
+        self.assertEqual(result['status'], 'error')
+        self.assertEqual(result['details']['errors'][0]['stage'], 'policy')
+
+    def test_invalid_invocation_exits_nonzero_without_diagnostic_json(self):
+        completed = self.run_cli('--unsupported-option')
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertEqual(completed.stdout, '')
+        self.assertIn('--unsupported-option', completed.stderr)
 
 
 if __name__ == '__main__':

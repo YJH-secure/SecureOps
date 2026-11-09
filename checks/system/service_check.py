@@ -291,8 +291,9 @@ def main():
     args = parser.parse_args()
     result = run_from_policy(args.policy, target_id=args.target_id, role=args.role,
                              network_context=args.network_context)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 2 if result['status'] == 'error' else 0
+    # The exit code reports delivery of the JSON. Its status reports the diagnosis.
+    print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False), flush=True)
+    return 0
 
 
 if __name__ == '__main__':
