@@ -1,0 +1,76 @@
+{
+  "policy_version": "file-01-v1.1-candidate-20261106",
+  "policy_metadata": {
+    "source_document": "SecureOps v1.1",
+    "source_section": "9.1-9.4, page 5",
+    "proposed_by": "양지혁",
+    "proposed_on": "2026-11-06",
+    "approval_status": "candidate",
+    "approved_by": null,
+    "approved_on": null,
+    "official_benchmark_edition": null,
+    "official_benchmark_clause": null,
+    "validation": "mock fixtures only; OS validation pending",
+    "prior_passwd_basis": "team message: UID 0 and 0644 subset; group pending"
+  },
+  "policies": [
+    {
+      "check_id": "FILE-01",
+      "description": "Read-only OS-specific file checks with approval gates",
+      "severity": "high",
+      "criteria": {
+        "files": [
+          {
+            "path": "/etc/passwd",
+            "expected_uid": 0,
+            "allowed_permission_bits": "0644",
+            "reference_gid": null,
+            "approval_status": "approved",
+            "allowed_groups": null,
+            "acl_policy": {
+              "approval_status": "pending",
+              "users": null,
+              "groups": null,
+              "other_max_bits": null
+            },
+            "link_policy": {
+              "approval_status": "pending",
+              "allowed_targets": null
+            }
+          },
+          {
+            "path": "/etc/shadow",
+            "expected_uid": 0,
+            "allowed_permission_bits": "0640",
+            "reference_gid": null,
+            "approval_status": "candidate",
+            "allowed_groups": [
+              {
+                "kind": "gid",
+                "value": 0
+              },
+              {
+                "kind": "name",
+                "value": "shadow"
+              }
+            ],
+            "acl_policy": {
+              "approval_status": "pending",
+              "users": null,
+              "groups": null,
+              "other_max_bits": null
+            },
+            "link_policy": {
+              "approval_status": "pending",
+              "allowed_targets": null
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "target_os": {
+    "id": "ubuntu",
+    "version_id": "24.04"
+  }
+}
