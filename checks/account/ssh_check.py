@@ -61,6 +61,16 @@ SUPPORTED_OPERATORS = {"equals"}                            # 이 코드가 처�
 # 세 값 모두 키를 이용한 root 접속 가능성이 있음
 REVIEW_VALUES = {"prohibit-password", "without-password", "forced-commands-only"}
 
+# 판정 결과별 안내 문구입니다.
+# 사람이 읽는 안내일 뿐, 이 문구로 서버 명령을 실행하지 않습니다.
+RECOMMENDATIONS = {
+    "pass": "현재 설정 유지",
+    "vulnerable": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+    "error": "오류 원인 해결 후 재실행",
+    "not_applicable": "해당 없음, 근거 확인",
+    "needs_review": "관리자가 유효 설정과 승인 정책을 비교해 최종 판정",
+}
+
 
 # ==================================================
 # 2. 결과 만들기
@@ -77,6 +87,7 @@ def make_result(status, severity, evidence):
         "status": status,       # 판정 결과
         "severity": severity,   # 항목의 위험도
         "evidence": evidence,   # 판정 근거
+        "recommendation": RECOMMENDATIONS[status],  # 판정별 안내 문구
     }
 
 
@@ -348,7 +359,7 @@ def run_check(policy_path=POLICY_FILE):
     # as e: 오류 내용을 e라는 이름으로 받습니다.
     except (OSError, ValueError) as e:
         # 정책에 문제가 있으면 점검하지 않고 error로 기록합니다.
-        return make_result("error", FALLBACK_SEVERITY, f"Policy load failed: {e}")
+        return make_result("error", FALLBACK_SEVERITY, f"Policy load failed: {type(e).__name__}")
 
     severity = policy["severity"]
 
