@@ -6,7 +6,7 @@
       "description": "SSH root 계정 직접 로그인 허용 여부",
       "severity": "high",
       "applies_to": ["ubuntu", "rocky"],
-      "reference": "취약점 점검 기준표 v1.1 SSH-01 (2026-11-09 팀장 판정 기준 승인)",
+      "reference": "판정 기준: 취약점 점검 기준표 v1.1 SSH-01 (2026-11-09 팀장 판정 기준 승인) / policy_version 1.0은 정책 파일 형식 버전",
       "criteria": {
         "type": "sshd_effective_setting",
         "setting": "permitrootlogin",

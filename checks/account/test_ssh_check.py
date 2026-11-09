@@ -121,6 +121,30 @@ class MatchRuleTest(unittest.TestCase):
         config = "PermitRootLogin no\nMatch User root\n    PermitRootLogin yes\n"
         self.assertEqual(judge("no", config)["status"], "needs_review")
 
+    def test_user_match_hidden_by_address_match_is_review(self):
+        # 회귀 테스트: 테스트 주소에서는 Address Match(no)가 먼저 적용되어 no로 보이지만,
+        # 다른 주소에서는 Match User root(yes)가 적용될 수 있으므로 pass가 되면 안 됨
+        config = (
+            "PermitRootLogin no\n"
+            "Match Address 192.0.2.10\n    PermitRootLogin no\n"
+            "Match User root\n    PermitRootLogin yes\n"
+        )
+        self.assertEqual(judge("no", config, root_value="no")["status"], "needs_review")
+
+    def test_host_match_that_may_allow_root_is_review(self):
+        # Host 조건도 Address와 같이 접속 조건으로 취급
+        config = "PermitRootLogin no\nMatch Host admin-pc\n    PermitRootLogin prohibit-password\n"
+        self.assertEqual(judge("no", config, root_value="no")["status"], "needs_review")
+
+    def test_conditional_match_never_wrong_pass(self):
+        # 회귀 테스트: 조건부 Match에서 root 허용 값이 하나라도 가능하면 pass가 나오면 안 됨
+        allowing = ("yes", "prohibit-password", "without-password", "forced-commands-only")
+        for keyword in ("Address 10.0.0.5", "Host admin-pc", "LocalPort 2222", "User root Address 10.0.0.5"):
+            for value in allowing:
+                with self.subTest(keyword=keyword, value=value):
+                    config = f"PermitRootLogin no\nMatch {keyword}\n    PermitRootLogin {value}\n"
+                    self.assertNotEqual(judge("no", config, root_value="no")["status"], "pass")
+
     def test_equals_sign_syntax(self):
         config = "PermitRootLogin=no\nMatch Address=10.0.0.5\n    PermitRootLogin=yes\n"
         self.assertEqual(judge("no", config, root_value="no")["status"], "needs_review")
@@ -170,12 +194,20 @@ class PolicyTest(unittest.TestCase):
             self.bad_policy(lambda p: p["criteria"]["vulnerable_values"].update(yes="")),
             self.bad_policy(lambda p: p["criteria"].pop("test_connection")),
             self.bad_policy(lambda p: p["criteria"]["test_connection"].update(addr="1.1.1.1,user=x")),
+            self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="cju")),
+            self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="ROOT")),
         ]
         for text in cases:
             with self.subTest(text=text[:60]):
                 result = self.run_with(text)
                 self.assertEqual(result["status"], "error")
                 self.assertEqual(set(result), V1_1_FIELDS)
+
+    def test_non_root_test_user_is_policy_error(self):
+        # SSH-01은 root 진단이므로 test_connection.user가 root가 아니면 정책 오류
+        result = self.run_with(self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="alice")))
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["evidence"], "Policy load failed: ValueError")
 
     def test_missing_policy_file_hides_path(self):
         result = ssh_check.run_check("/no/such/file.json")
@@ -197,6 +229,7 @@ class CollectTest(unittest.TestCase):
 
     def test_config_read_failed(self):
         with mock.patch.object(ssh_check, "find_sshd", return_value="/x"), \
+             mock.patch.object(ssh_check, "get_sshd_output", return_value="permitrootlogin no\n"), \
              mock.patch.object(ssh_check, "read_config_text", return_value=None):
             self.assertEqual(ssh_check.run_check()["status"], "error")
 
@@ -221,9 +254,32 @@ class CollectTest(unittest.TestCase):
 
     def test_connection_spec_comes_from_policy(self):
         self.assertEqual(
-            ssh_check.build_connection_spec(POLICY),
+            ssh_check.build_connection_spec(POLICY["criteria"]["test_connection"]),
             "user=root,host=secureops-check,addr=192.0.2.10",
         )
+
+    def run_with_override(self, **override):
+        # 실제 실행 대신 -C에 넘어가는 조건을 기록하는 가짜 함수
+        specs = []
+        def fake(sshd, connection_spec=None):
+            specs.append(connection_spec)
+            return "permitrootlogin no\n"
+        with mock.patch.object(ssh_check, "find_sshd", return_value="/x"), \
+             mock.patch.object(ssh_check, "get_sshd_output", side_effect=fake), \
+             mock.patch.object(ssh_check, "read_config_text", return_value=""):
+            result = ssh_check.run_check(**override)
+        return result, specs
+
+    def test_runtime_override_of_host_and_addr(self):
+        # 실제 환경에서는 실행할 때 host, addr를 따로 지정할 수 있음
+        result, specs = self.run_with_override(host="admin-pc", addr="10.0.0.5")
+        self.assertEqual(result["status"], "pass")
+        self.assertIn("user=root,host=admin-pc,addr=10.0.0.5", specs)
+
+    def test_invalid_override_is_error(self):
+        result, specs = self.run_with_override(addr="10.0.0.5,user=alice")
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(specs, [])
 
     def test_command_uses_dash_c(self):
         # 실제 실행되는 명령이 sshd -T -C <조건> 형식인지 확인 (명령은 실행하지 않음)
