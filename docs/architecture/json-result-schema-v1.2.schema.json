@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SecureOps Scan Result Contract v1.2 (CVSS v3.1 Base; DRAFT)",
+  "description": "Proposed next-version contract. v1.1 remains unchanged. CVSS numeric-vector consistency requires application-side validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scan_id",
+    "target_id",
+    "os",
+    "scanned_at",
+    "results"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2"
+    },
+    "scan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "os": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scanned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ip_address": {
+      "type": "string",
+      "minLength": 1
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/checkResult"
+      }
+    }
+  },
+  "$defs": {
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check_id",
+        "status",
+        "evidence",
+        "recommendation",
+        "cvss"
+      ],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "vulnerable",
+            "error",
+            "not_applicable",
+            "needs_review"
+          ]
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recommendation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "object"
+        },
+        "cvss": {
+          "$ref": "#/$defs/cvss"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "vulnerable"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "else": {
+            "properties": {
+              "cvss": {
+                "properties": {
+                  "assessment_status": {
+                    "const": "not_applicable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cvss": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessment_status",
+        "version",
+        "vector",
+        "base_score",
+        "rating",
+        "source",
+        "rationale"
+      ],
+      "properties": {
+        "assessment_status": {
+          "enum": [
+            "scored",
+            "pending",
+            "not_applicable"
+          ]
+        },
+        "version": {
+          "enum": [
+            "3.1",
+            null
+          ]
+        },
+        "vector": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "base_score": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rating": {
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "critical",
+            null
+          ]
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "assessment_status": {
+                "const": "scored"
+              }
+            },
+            "required": [
+              "assessment_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "version": {
+                "const": "3.1"
+              },
+              "vector": {
+                "type": "string",
+                "pattern": "^CVSS:3\\.1/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]/C:[NLH]/I:[NLH]/A:[NLH]$"
+              },
+              "base_score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "rating": {
+                "enum": [
+                  "none",
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "base_score": {
+                      "const": 0
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "rating": {
+                      "const": "none"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "base_score": {
+                      "exclusiveMinimum": 0,
+                      "maximum": 3.9
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "rating": {
+                      "const": "low"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "base_score": {
+                      "minimum": 4,
+                      "maximum": 6.9
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "rating": {
+                      "const": "medium"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "base_score": {
+                      "minimum": 7,
+                      "maximum": 8.9
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "rating": {
+                      "const": "high"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "base_score": {
+                      "minimum": 9,
+                      "maximum": 10
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "rating": {
+                      "const": "critical"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "else": {
+            "properties": {
+              "version": {
+                "type": "null"
+              },
+              "vector": {
+                "type": "null"
+              },
+              "base_score": {
+                "type": "null"
+              },
+              "rating": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
