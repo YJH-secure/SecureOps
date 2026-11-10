@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "SecureOps Scan Result Contract v1.2 (CVSS v3.1 Base; DRAFT)",
+  "title": "SecureOps Scan Result Contract v1.2 (CVSS v3.1 Base; Adopted Development Baseline)",
   "description": "Adopted SecureOps v1.2 development contract; implementation and real-server validation are pending. v1.1 remains unchanged. CVSS numeric-vector consistency requires application-side validation.",
   "type": "object",
   "additionalProperties": false,
