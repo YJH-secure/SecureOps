@@ -288,6 +288,152 @@ class CollectTest(unittest.TestCase):
             ssh_check.get_sshd_output("/usr/sbin/sshd", "user=root,host=h,addr=192.0.2.10")
         self.assertEqual(run.call_args[0][0], ["/usr/sbin/sshd", "-T", "-C", "user=root,host=h,addr=192.0.2.10"])
 
+class ResultV12Test(unittest.TestCase):
+    # JSON 결과 계약 v1.2 출력 검사 (판정은 v1.1과 같고 형식만 다름)
+
+    V1_2_FIELDS = {"check_id", "status", "evidence", "recommendation", "cvss"}
+    CVSS_FIELDS = {"assessment_status", "version", "vector", "base_score", "rating", "source", "rationale"}
+
+    def run_case(self, global_value="no", root_value="no", config="", result_version="1.2", policy_path=None):
+        # 수집 함수만 가짜로 바꿔 run_check 전체 흐름을 실행
+        def fake(sshd, connection_spec=None):
+            return f"permitrootlogin {root_value if connection_spec else global_value}\n"
+        kwargs = {"result_version": result_version}
+        if policy_path:
+            kwargs["policy_path"] = policy_path
+        with mock.patch.object(ssh_check, "find_sshd", return_value="/x"), \
+             mock.patch.object(ssh_check, "get_sshd_output", side_effect=fake), \
+             mock.patch.object(ssh_check, "read_config_text", return_value=config):
+            return ssh_check.run_check(**kwargs)
+
+    def assert_no_score(self, cvss):
+        self.assertEqual(set(cvss), self.CVSS_FIELDS)
+        for key in ("version", "vector", "base_score", "rating"):
+            self.assertIsNone(cvss[key], key)
+        self.assertTrue(cvss["rationale"])
+
+    def test_default_output_is_still_v1_1(self):
+        # 전환 기간: 옵션 없이 실행하면 기존 v1.1 형식 그대로
+        result = self.run_case(result_version="1.1")
+        self.assertEqual(set(result), V1_1_FIELDS)
+        with mock.patch.object(ssh_check, "find_sshd", return_value=None):
+            self.assertEqual(set(ssh_check.run_check()), V1_1_FIELDS)
+
+    def test_same_judgement_in_both_versions(self):
+        # 판정 로직은 공통: status, evidence, recommendation이 두 버전에서 같아야 함
+        cases = [("no", "no", ""), ("yes", "yes", ""), ("prohibit-password", "prohibit-password", ""),
+                 ("no", "no", "PermitRootLogin no\nMatch Address 10.0.0.5\n    PermitRootLogin yes\n"),
+                 ("strange", "strange", "")]
+        for global_value, root_value, config in cases:
+            with self.subTest(value=global_value, config=bool(config)):
+                old = self.run_case(global_value, root_value, config, result_version="1.1")
+                new = self.run_case(global_value, root_value, config, result_version="1.2")
+                for key in ("check_id", "status", "evidence", "recommendation"):
+                    self.assertEqual(old[key], new[key], key)
+
+    def test_v1_2_has_no_severity_and_has_cvss(self):
+        result = self.run_case("yes", "yes")
+        self.assertEqual(set(result) - {"details"}, self.V1_2_FIELDS)
+        self.assertNotIn("severity", result)
+        self.assert_no_score(result["cvss"])
+
+    def test_vulnerable_uses_policy_assessment_status(self):
+        # 정책의 cvss_assessment 설정(pending)을 따르고 점수·등급은 null
+        result = self.run_case("prohibit-password", "prohibit-password")
+        self.assertEqual(result["status"], "vulnerable")
+        self.assertEqual(result["cvss"]["assessment_status"],
+                         POLICY["cvss_assessment"]["vulnerable_assessment_status"])
+        self.assertEqual(result["cvss"]["rationale"], POLICY["cvss_assessment"]["rationale"])
+        self.assert_no_score(result["cvss"])
+
+    def test_vulnerable_can_be_marked_not_applicable_by_policy(self):
+        # 단순 정책 준수 위반으로 CVSS 대상이 아니라고 정책에 적으면 not_applicable
+        policy = copy.deepcopy(POLICY)
+        policy["cvss_assessment"] = {"vulnerable_assessment_status": "not_applicable",
+                                     "rationale": "MOCK: 정책 준수 위반, CVSS 평가 대상 아님"}
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, "policy.json")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"policy_version": "1.0", "policies": [policy]}, f)
+            result = self.run_case("yes", "yes", policy_path=path)
+        self.assertEqual(result["status"], "vulnerable")
+        self.assertEqual(result["cvss"]["assessment_status"], "not_applicable")
+        self.assert_no_score(result["cvss"])
+    def test_missing_cvss_assessment_defaults_to_pending(self):
+        # 정책에 설정이 없어도 점수를 만들지 않고 JSON 계약 6장 전환 규칙대로 pending
+        cvss = ssh_check.build_cvss("vulnerable", {"check_id": "SSH-01"})
+        self.assertEqual(cvss["assessment_status"], "pending")
+        self.assert_no_score(cvss)
+
+    def test_non_vulnerable_statuses_are_cvss_not_applicable(self):
+        for status in ("pass", "error", "not_applicable", "needs_review"):
+            with self.subTest(status=status):
+                cvss = ssh_check.build_cvss(status, POLICY)
+                self.assertEqual(cvss["assessment_status"], "not_applicable")
+                self.assert_no_score(cvss)
+        # 실제 흐름에서도 확인
+        self.assertEqual(self.run_case("no", "no")["cvss"]["assessment_status"], "not_applicable")
+        review = self.run_case("strange", "strange")
+        self.assertEqual(review["status"], "needs_review")
+        self.assertEqual(review["cvss"]["assessment_status"], "not_applicable")
+
+    def test_severity_is_not_converted_to_cvss_rating(self):
+        # 정책의 severity(high)는 레거시 우선순위이며 CVSS 등급으로 바꾸지 않음
+        self.assertEqual(POLICY["severity"], "high")
+        result = self.run_case("yes", "yes")
+        self.assertIsNone(result["cvss"]["rating"])
+        self.assertNotIn("high", json.dumps(result["cvss"]))
+
+    def test_details_keep_actual_values_and_match_evidence(self):
+        config = "PermitRootLogin no\nMatch Address 10.0.0.5\n    PermitRootLogin yes\n"
+        result = self.run_case("no", "no", config)
+        self.assertEqual(result["details"], {
+            "setting": "permitrootlogin",
+            "expected": "no",
+            "global_value": "no",
+            "root_value": "no",
+            "root_evaluation": "sshd -T -C user=root",
+            "match_rules": [{"conditions": ["address"], "value": "yes"}],
+        })
+
+    def test_details_do_not_include_test_connection_address_or_host(self):
+        def fake(sshd, connection_spec=None):
+            return "permitrootlogin no\n"
+        with mock.patch.object(ssh_check, "find_sshd", return_value="/x"), \
+             mock.patch.object(ssh_check, "get_sshd_output", side_effect=fake), \
+             mock.patch.object(ssh_check, "read_config_text", return_value=""):
+            result = ssh_check.run_check(host="admin-pc", addr="10.20.30.40", result_version="1.2")
+        text = json.dumps(result)
+        self.assertNotIn("10.20.30.40", text)
+        self.assertNotIn("admin-pc", text)
+        self.assertNotIn("192.0.2.10", text)
+
+    def test_errors_before_collection_have_no_details(self):
+        result = ssh_check.run_check("/no/such/file.json", result_version="1.2")
+        self.assertEqual(result["status"], "error")
+        self.assertNotIn("details", result)
+        self.assertEqual(result["cvss"]["assessment_status"], "not_applicable")
+        with mock.patch.object(ssh_check, "find_sshd", return_value=None):
+            result = ssh_check.run_check(result_version="1.2")
+        self.assertEqual(result["status"], "not_applicable")
+        self.assertNotIn("details", result)
+
+    def test_invalid_cvss_assessment_policy_is_error(self):
+        for value in ("scored", "", None):
+            with self.subTest(value=value):
+                policy = copy.deepcopy(POLICY)
+                policy["cvss_assessment"]["vulnerable_assessment_status"] = value
+                with self.assertRaises(ValueError):
+                    ssh_check.validate_policy(policy)
+        policy = copy.deepcopy(POLICY)
+        policy["cvss_assessment"]["rationale"] = ""
+        with self.assertRaises(ValueError):
+            ssh_check.validate_policy(policy)
+
+    def test_unsupported_result_version_is_rejected(self):
+        with self.assertRaises(ValueError):
+            ssh_check.run_check(result_version="2.0")
+
 
 if __name__ == "__main__":
     unittest.main()
