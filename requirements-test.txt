@@ -1,0 +1,2 @@
+# Runtime core uses only the standard library. Required for V12SchemaTests.
+jsonschema>=4.18,<5

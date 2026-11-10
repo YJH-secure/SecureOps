@@ -6,6 +6,9 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from uuid import uuid4
 
+if __name__ == "__main__" and not __package__:
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 class DiagnosisAggregator:
     def __init__(self, filepath: str):
         self.filepath = filepath
@@ -13,19 +16,20 @@ class DiagnosisAggregator:
 
     @classmethod
     def from_results(cls, account_results, system_results, *, target_id, os,
-                     scan_id=None, scanned_at=None):
+                     scan_id=None, scanned_at=None, schema_version="1.1"):
         """같은 서버·같은 실행의 B/C 결과 목록으로 새 보고서를 만든다.
 
         실제 진단 함수를 호출하지 않는다. 개별 반환 객체는 [result]로 전달한다.
         target_id와 os는 실행 계층에서 제공하며, None인 실행 ID/완료 시각만
         새로 생성한다. 기존 보고서의 누락 정보를 보정하는 용도가 아니다.
+        schema_version 기본값은 1.1이며 1.2는 호출자가 명시해야 한다.
         """
         for name, results in (("account_results", account_results),
                               ("system_results", system_results)):
             if not isinstance(results, list):
                 raise TypeError(f"{name}는 개별 결과 객체의 list여야 합니다.")
         report = {
-            "schema_version": "1.1",
+            "schema_version": schema_version,
             "scan_id": str(uuid4()) if scan_id is None else scan_id,
             "target_id": target_id,
             "os": os,
@@ -42,7 +46,7 @@ class DiagnosisAggregator:
         return aggregator
 
     def to_json(self) -> str:
-        """통계 요약을 섞지 않은 공통 v1.1 보고서를 JSON 문자열로 반환한다."""
+        """통계 요약을 섞지 않은 원본 계약 버전 보고서를 JSON 문자열로 반환한다."""
         return json.dumps(self.get_report(), ensure_ascii=False, indent=2, allow_nan=False)
 
     def _load_json(self) -> dict:
@@ -51,7 +55,8 @@ class DiagnosisAggregator:
 
         try:
             with open(self.filepath, "r", encoding="utf-8") as f:
-                data = json.load(f)
+                text = f.read()
+            data = json.loads(text)
         except json.JSONDecodeError as e:
             raise ValueError(f"JSON 파일 형식이 올바르지 않습니다 (디코딩 오류): {e}")
 
@@ -59,11 +64,14 @@ class DiagnosisAggregator:
             raise ValueError("JSON 데이터 최상위 포맷은 객체(Object) 형태여야 합니다.")
 
         self._validate_fields(data, {"schema_version": str}, {}, "report")
-        if data["schema_version"] != "1.1":
+        if data["schema_version"] not in {"1.1", "1.2"}:
             raise ValueError(
-                "지원 버전은 1.1입니다. v1.0은 자동 변환하지 않습니다. "
+                "지원 버전은 1.1 및 1.2입니다. v1.0은 자동 변환하지 않습니다. "
                 "별도 이전 시 scan_id, 버전이 포함된 os, 항목별 recommendation이 필요합니다."
             )
+        if data["schema_version"] == "1.2":
+            from core.cvss_validation import loads_strict
+            data = loads_strict(text)
         self._validate_report(data)
 
         return data
@@ -103,6 +111,14 @@ class DiagnosisAggregator:
 
     @classmethod
     def _validate_report(cls, data):
+        cls._validate_fields(data, {"schema_version": str}, {}, "report")
+        if data["schema_version"] == "1.2":
+            from core.cvss_validation import validate_report
+            return validate_report(data)
+        return cls._validate_report_v11(data)
+
+    @classmethod
+    def _validate_report_v11(cls, data):
         cls._validate_fields(data, {
             "schema_version": str, "scan_id": str, "target_id": str,
             "os": str, "scanned_at": str, "results": list,
@@ -131,7 +147,7 @@ class DiagnosisAggregator:
                 cls._validate_timestamp(item["checked_at"], f"{location}.checked_at")
 
     def get_report(self) -> dict:
-        """검증된 공통 v1.1 보고서를 통계 요약과 별도로 반환한다."""
+        """검증된 원본 계약 버전 보고서를 통계 요약과 별도로 반환한다."""
         self._validate_report(self.data)
         return deepcopy(self.data)
 
@@ -151,7 +167,7 @@ class DiagnosisAggregator:
 
         for item in results:
             status = item["status"]
-            severity = item["severity"]
+            severity = item.get("severity")
             category = str(item.get("category", "기타")).strip()
 
             if category not in category_breakdown:
@@ -163,7 +179,8 @@ class DiagnosisAggregator:
             elif status == "vulnerable":
                 vulnerable_count += 1
                 category_breakdown[category]["VULNERABLE"] += 1
-                severity_breakdown[severity] += 1
+                if self.data["schema_version"] == "1.1":
+                    severity_breakdown[severity] += 1
             elif status == "error":
                 error_count += 1
                 category_breakdown[category]["ERROR"] += 1
@@ -205,12 +222,23 @@ class DiagnosisAggregator:
             "category_breakdown": category_breakdown
         }
 
+        if self.data["schema_version"] == "1.2":
+            from core.cvss import RATINGS
+            summary.pop("severity_breakdown")
+            summary["cvss_rating_breakdown"] = dict.fromkeys(RATINGS, 0)
+            summary["cvss_assessment_breakdown"] = dict.fromkeys(
+                ("scored", "pending", "not_applicable"), 0)
+            for item in results:
+                cvss = item["cvss"]
+                summary["cvss_assessment_breakdown"][cvss["assessment_status"]] += 1
+                if item["status"] == "vulnerable" and cvss["assessment_status"] == "scored":
+                    summary["cvss_rating_breakdown"][cvss["rating"]] += 1
         return summary
 
     def print_summary(self, summary: dict):
         target = summary["target_info"]
         metrics = summary["metrics"]
-        severity = summary["severity_breakdown"]
+        severity = summary.get("severity_breakdown")
         category = summary["category_breakdown"]
 
         print("=" * 70)
@@ -232,11 +260,19 @@ class DiagnosisAggregator:
         print(f"  - 검토 필요 (REVIEW): {metrics['needs_review_count']} 건")
         print(f"  - SecureOps 이행률  : {metrics['pass_rate']}")
         print("-" * 70)
-        print("■ 취약(VULNERABLE) 항목 심각도별 세부 집계")
-        print(f"  - CRITICAL (위험) : {severity['critical']} 건")
-        print(f"  - HIGH     (상)   : {severity['high']} 건")
-        print(f"  - MEDIUM   (중)   : {severity['medium']} 건")
-        print(f"  - LOW      (하)   : {severity['low']} 건")
+        if severity is not None:
+            print("■ 취약(VULNERABLE) 항목 심각도별 세부 집계")
+            print(f"  - CRITICAL (위험) : {severity['critical']} 건")
+            print(f"  - HIGH     (상)   : {severity['high']} 건")
+            print(f"  - MEDIUM   (중)   : {severity['medium']} 건")
+            print(f"  - LOW      (하)   : {severity['low']} 건")
+        else:
+            print("■ CVSS v3.1 채점된 취약 항목 등급별 건수")
+            for name, count in summary["cvss_rating_breakdown"].items():
+                print(f"  - {name}: {count} 건")
+            print("■ CVSS 평가 상태별 건수")
+            for name, count in summary["cvss_assessment_breakdown"].items():
+                print(f"  - {name}: {count} 건")
         print("-" * 70)
         print("■ 카테고리별 진단 현황")
         for cat_name, counts in category.items():

@@ -1,0 +1,80 @@
+Started (KST): 2026-11-10T16:17:30+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_core*.py -v
+Mode: D worktree; synthetic inputs
+Exit code: 0
+
+test_checked_at_and_strict_timestamp (test_core.DiagnosisAggregatorTests.test_checked_at_and_strict_timestamp) ... ok
+test_cli_exit_codes (test_core.DiagnosisAggregatorTests.test_cli_exit_codes) ... ok
+test_duplicate_check_id (test_core.DiagnosisAggregatorTests.test_duplicate_check_id) ... ok
+test_empty_results (test_core.DiagnosisAggregatorTests.test_empty_results) ... ok
+test_empty_strings (test_core.DiagnosisAggregatorTests.test_empty_strings) ... ok
+test_extra_fields (test_core.DiagnosisAggregatorTests.test_extra_fields) ... ok
+test_five_statuses (test_core.DiagnosisAggregatorTests.test_five_statuses) ... ok
+test_invalid_result_types (test_core.DiagnosisAggregatorTests.test_invalid_result_types) ... ok
+test_invalid_scanned_at (test_core.DiagnosisAggregatorTests.test_invalid_scanned_at) ... ok
+test_invalid_top_level_types (test_core.DiagnosisAggregatorTests.test_invalid_top_level_types) ... ok
+test_json_syntax_error (test_core.DiagnosisAggregatorTests.test_json_syntax_error) ... ok
+test_legacy_rejected (test_core.DiagnosisAggregatorTests.test_legacy_rejected) ... ok
+test_missing_result_fields (test_core.DiagnosisAggregatorTests.test_missing_result_fields) ... ok
+test_missing_top_level_fields (test_core.DiagnosisAggregatorTests.test_missing_top_level_fields) ... ok
+test_mock_rate_and_severity (test_core.DiagnosisAggregatorTests.test_mock_rate_and_severity) ... ok
+test_no_evaluable_items (test_core.DiagnosisAggregatorTests.test_no_evaluable_items) ... ok
+test_official_mock (test_core.DiagnosisAggregatorTests.test_official_mock) ... ok
+test_optional_fields (test_core.DiagnosisAggregatorTests.test_optional_fields) ... ok
+test_report_copy_and_details (test_core.DiagnosisAggregatorTests.test_report_copy_and_details) ... ok
+test_status_case_and_whitespace_rejected (test_core.DiagnosisAggregatorTests.test_status_case_and_whitespace_rejected) ... ok
+test_terminal_report_and_existing_fields (test_core.DiagnosisAggregatorTests.test_terminal_report_and_existing_fields) ... ok
+test_unsupported_schema_version (test_core.DiagnosisAggregatorTests.test_unsupported_schema_version) ... ok
+test_unsupported_severity (test_core.DiagnosisAggregatorTests.test_unsupported_severity) ... ok
+test_unsupported_status (test_core.DiagnosisAggregatorTests.test_unsupported_status) ... ok
+test_uppercase_severity_rejected (test_core.DiagnosisAggregatorTests.test_uppercase_severity_rejected) ... ok
+test_utc_scanned_at (test_core.DiagnosisAggregatorTests.test_utc_scanned_at) ... ok
+test_combined_report_and_json_roundtrip (test_core_integration.ResultIntegrationTests.test_combined_report_and_json_roundtrip) ... ok
+test_details_and_input_are_independent (test_core_integration.ResultIntegrationTests.test_details_and_input_are_independent) ... ok
+test_duplicate_across_modules_rejected (test_core_integration.ResultIntegrationTests.test_duplicate_across_modules_rejected) ... ok
+test_empty_groups (test_core_integration.ResultIntegrationTests.test_empty_groups) ... ok
+test_error_and_review_never_become_pass (test_core_integration.ResultIntegrationTests.test_error_and_review_never_become_pass) ... ok
+test_generated_execution_metadata (test_core_integration.ResultIntegrationTests.test_generated_execution_metadata) ... ok
+test_invalid_groups (test_core_integration.ResultIntegrationTests.test_invalid_groups) ... ok
+test_invalid_items (test_core_integration.ResultIntegrationTests.test_invalid_items) ... ok
+test_invalid_metadata_not_replaced (test_core_integration.ResultIntegrationTests.test_invalid_metadata_not_replaced) ... ok
+test_non_json_details_rejected (test_core_integration.ResultIntegrationTests.test_non_json_details_rejected) ... ok
+test_all_field_conflicts_and_failure_preserves_input (test_core_legacy.LegacyNormalizationTests.test_all_field_conflicts_and_failure_preserves_input) ... ok
+test_equal_aliases_removed (test_core_legacy.LegacyNormalizationTests.test_equal_aliases_removed) ... ok
+test_final_validator_rejects_duplicate_extra_empty_and_naive_time (test_core_legacy.LegacyNormalizationTests.test_final_validator_rejects_duplicate_extra_empty_and_naive_time) ... ok
+test_missing_information (test_core_legacy.LegacyNormalizationTests.test_missing_information) ... ok
+test_modern_report_idempotent_and_unknown_version_rejected (test_core_legacy.LegacyNormalizationTests.test_modern_report_idempotent_and_unknown_version_rejected) ... ok
+test_normalization_and_existing_loader (test_core_legacy.LegacyNormalizationTests.test_normalization_and_existing_loader) ... ok
+test_original_preserved_and_nested_copy (test_core_legacy.LegacyNormalizationTests.test_original_preserved_and_nested_copy) ... ok
+test_os_version_not_invented (test_core_legacy.LegacyNormalizationTests.test_os_version_not_invented) ... ok
+test_severities_and_strict_final_validation (test_core_legacy.LegacyNormalizationTests.test_severities_and_strict_final_validation) ... ok
+test_states_unchanged_and_case_not_corrected (test_core_legacy.LegacyNormalizationTests.test_states_unchanged_and_case_not_corrected) ... ok
+test_wrong_types (test_core_legacy.LegacyNormalizationTests.test_wrong_types) ... ok
+test_bound_arguments_and_new_execution_ids (test_core_runner.RunnerTests.test_bound_arguments_and_new_execution_ids) ... ok
+test_duplicate_rejected_without_save (test_core_runner.RunnerTests.test_duplicate_rejected_without_save) ... ok
+test_duplicate_scan_preserves_saved_report (test_core_runner.RunnerTests.test_duplicate_scan_preserves_saved_report) ... ok
+test_empty_and_single_area (test_core_runner.RunnerTests.test_empty_and_single_area) ... ok
+test_error_status_preserved (test_core_runner.RunnerTests.test_error_status_preserved) ... ok
+test_failure_does_not_skip_later_calls (test_core_runner.RunnerTests.test_failure_does_not_skip_later_calls) ... ok
+test_invalid_return_values (test_core_runner.RunnerTests.test_invalid_return_values) ... ok
+test_original_preservation (test_core_runner.RunnerTests.test_original_preservation) ... ok
+test_partial_failure_on_either_area (test_core_runner.RunnerTests.test_partial_failure_on_either_area) ... ok
+test_real_and_invalid_configuration_rejected_before_calls (test_core_runner.RunnerTests.test_real_and_invalid_configuration_rejected_before_calls) ... ok
+test_storage_failure_propagated (test_core_runner.RunnerTests.test_storage_failure_propagated) ... ok
+test_success_saved_and_separated (test_core_runner.RunnerTests.test_success_saved_and_separated) ... ok
+test_bad_report_and_legacy_rejected_before_writes (test_core_storage.ReportStoreTests.test_bad_report_and_legacy_rejected_before_writes) ... ok
+test_concurrent_duplicate (test_core_storage.ReportStoreTests.test_concurrent_duplicate) ... ok
+test_duplicate_and_other_target_same_scan (test_core_storage.ReportStoreTests.test_duplicate_and_other_target_same_scan) ... ok
+test_file_collision (test_core_storage.ReportStoreTests.test_file_collision) ... ok
+test_history_and_matching (test_core_storage.ReportStoreTests.test_history_and_matching) ... ok
+test_missing_wrong_target_and_corruption (test_core_storage.ReportStoreTests.test_missing_wrong_target_and_corruption) ... ok
+test_path_injection_cannot_escape (test_core_storage.ReportStoreTests.test_path_injection_cannot_escape) ... ok
+test_roundtrip_and_original_preservation (test_core_storage.ReportStoreTests.test_roundtrip_and_original_preservation) ... ok
+test_sensitive_values_rejected_without_echo (test_core_storage.ReportStoreTests.test_sensitive_values_rejected_without_echo) ... ok
+test_write_and_publish_failures (test_core_storage.ReportStoreTests.test_write_and_publish_failures) ... ok
+test_wrong_filename_and_non_json_details (test_core_storage.ReportStoreTests.test_wrong_filename_and_non_json_details) ... ok
+
+----------------------------------------------------------------------
+Ran 70 tests in 0.601s
+
+OK

@@ -96,7 +96,11 @@ class ReportStore:
         if path.is_symlink() or not path.is_file():
             raise ValueError("보고서는 일반 파일이어야 합니다.")
         try:
-            report = json.loads(path.read_text(encoding="utf-8"))
+            text = path.read_text(encoding="utf-8")
+            report = json.loads(text)
+            if isinstance(report, dict) and report.get("schema_version") == "1.2":
+                from core.cvss_validation import loads_strict
+                report = loads_strict(text)
         except (ValueError, UnicodeError) as error:
             raise ValueError("저장된 보고서 JSON이 손상되었습니다.") from None
         self._validate(report)
@@ -128,10 +132,14 @@ class ReportStore:
         ))
 
     def match_results(self, target_id, before_scan_id, after_scan_id):
-        """동일 서버의 두 회차를 check_id로 연결한다. 판정·조치를 수행하지 않는다."""
+        """동일 서버·동일 계약의 두 회차를 연결한다. 버전 간 자동 이전은 하지 않는다."""
         if before_scan_id == after_scan_id:
             raise ValueError("서로 다른 scan_id가 필요합니다.")
-        before = {r["check_id"]: r for r in self.load(target_id, before_scan_id)["results"]}
-        after = {r["check_id"]: r for r in self.load(target_id, after_scan_id)["results"]}
+        before_report = self.load(target_id, before_scan_id)
+        after_report = self.load(target_id, after_scan_id)
+        if before_report["schema_version"] != after_report["schema_version"]:
+            raise ValueError("Cannot compare different schema versions without an explicit migration")
+        before = {r["check_id"]: r for r in before_report["results"]}
+        after = {r["check_id"]: r for r in after_report["results"]}
         return {check_id: {"before": before.get(check_id), "after": after.get(check_id)}
                 for check_id in sorted(before.keys() | after.keys())}

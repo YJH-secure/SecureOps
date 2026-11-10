@@ -28,8 +28,9 @@ def _reject_constant(value):
 
 
 def parse_result_json(stdout: str, *, exit_code: int,
-                      execution_succeeded: bool, max_bytes: int = 1024 * 1024) -> dict:
-    """성공적으로 종료된 응답의 개별 v1.1 결과 객체를 검증해 반환한다.
+                      execution_succeeded: bool, max_bytes: int = 1024 * 1024,
+                      schema_version="1.1") -> dict:
+    """명시한 계약(기본 v1.1)의 개별 결과 객체를 검증해 반환한다.
 
     stdout은 디코딩된 JSON 문서 하나여야 한다. 배열·보고서 envelope·로그를
     추측해 추출하지 않는다. timeout/연결 실패/종료 코드 미확인은 거부한다.
@@ -48,6 +49,8 @@ def parse_result_json(stdout: str, *, exit_code: int,
         raise TypeError("stdout은 디코딩된 JSON 문자열이어야 합니다.")
     if type(max_bytes) is not int or max_bytes <= 0:
         raise ValueError("max_bytes는 양의 정수여야 합니다.")
+    if schema_version not in ("1.1", "1.2"):
+        raise ValueError("schema_version must be 1.1 or 1.2")
     try:
         if len(stdout) > max_bytes or len(stdout.encode("utf-8")) > max_bytes:
             raise RemoteResultError("응답 크기가 허용 한도를 초과했습니다.")
@@ -64,8 +67,9 @@ def parse_result_json(stdout: str, *, exit_code: int,
         validated = DiagnosisAggregator.from_results(
             [item], [], target_id="validation-only", os="validation-only",
             scan_id="validation-only", scanned_at="2000-01-01T00:00:00Z",
+            schema_version=schema_version,
         ).get_report()["results"][0]
         json.dumps(validated, allow_nan=False)
     except (KeyError, TypeError, ValueError, RecursionError):
-        raise RemoteResultError("개별 진단 결과가 JSON v1.1 규격에 맞지 않습니다.") from None
+        raise RemoteResultError(f"개별 진단 결과가 JSON v{schema_version} 규격에 맞지 않습니다.") from None
     return validated

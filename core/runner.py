@@ -40,16 +40,19 @@ class RunResult:
 
 def run_target(*, account_checks: list[Callable], system_checks: list[Callable],
                target_id: str, os: str, output_root, mode: str,
-               scan_id=None, scanned_at=None) -> RunResult:
+               scan_id=None, scanned_at=None, schema_version="1.1") -> RunResult:
     """호출 → 개별 검증 → 통합 검증 → 저장. 이번 단계는 mode='mock'만 지원.
 
     각 호출 객체는 인자 없이 호출 가능하고 개별 v1.1 결과 dict를 반환한다.
     실제 함수의 인자는 향후 확인 후 호출자가 closure/partial로 묶는다.
     서로 다른 출처를 자동 판별할 수 없으므로 실제 VM 함수를 주입하지 않는다.
     실행 출처·저장 경로는 공통 JSON 바깥에서 관리한다.
+    schema_version은 명시한 동일 계약의 결과에만 적용하며 자동 변환하지 않는다.
     """
     if mode != "mock":
         raise ValueError("현재 MOCK 모드만 지원합니다. 실제 VM 인터페이스는 연결되지 않았습니다.")
+    if schema_version not in ("1.1", "1.2"):
+        raise ValueError("schema_version must be 1.1 or 1.2")
     for name, checks in (("account_checks", account_checks), ("system_checks", system_checks)):
         if not isinstance(checks, list) or any(not callable(check) for check in checks):
             raise TypeError(f"{name}: 호출 가능한 객체의 list가 필요합니다.")
@@ -72,6 +75,7 @@ def run_target(*, account_checks: list[Callable], system_checks: list[Callable],
                 validated = DiagnosisAggregator.from_results(
                     [item], [], target_id=target_id, os=os,
                     scan_id="mock-validation", scanned_at="2000-01-01T00:00:00Z",
+                    schema_version=schema_version,
                 ).get_report()["results"][0]
                 collected[area].append(validated)
             except Exception as error:
@@ -82,6 +86,7 @@ def run_target(*, account_checks: list[Callable], system_checks: list[Callable],
     aggregator = DiagnosisAggregator.from_results(
         collected["account"], collected["system"], target_id=target_id, os=os,
         scan_id=scan_id, scanned_at=scanned_at,
+        schema_version=schema_version,
     )
     report = aggregator.get_report()
     # 저장소 생성 전 최종 검증·민감정보 검사를 수행한다.

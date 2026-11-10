@@ -1,0 +1,23 @@
+Started (KST): 2026-11-10T16:17:30+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_cvss_assessment.py -v
+Mode: D worktree; synthetic inputs
+Exit code: 0
+
+test_assessments_to_runner_preserve_diagnosis_and_details (test_cvss_assessment.CVSSAssessmentTests.test_assessments_to_runner_preserve_diagnosis_and_details) ... ok
+test_empty_metric_reasons_remain_pending (test_cvss_assessment.CVSSAssessmentTests.test_empty_metric_reasons_remain_pending) ... ok
+test_every_missing_metric_reason_prevents_calculation (test_cvss_assessment.CVSSAssessmentTests.test_every_missing_metric_reason_prevents_calculation) ... ok
+test_invalid_classifications_and_evidence_are_rejected (test_cvss_assessment.CVSSAssessmentTests.test_invalid_classifications_and_evidence_are_rejected) ... ok
+test_malformed_supplied_vector_is_not_silently_downgraded (test_cvss_assessment.CVSSAssessmentTests.test_malformed_supplied_vector_is_not_silently_downgraded) ... ok
+test_missing_source_remains_pending (test_cvss_assessment.CVSSAssessmentTests.test_missing_source_remains_pending) ... ok
+test_missing_vector_does_not_infer_metrics (test_cvss_assessment.CVSSAssessmentTests.test_missing_vector_does_not_infer_metrics) ... ok
+test_no_evidence_and_no_metrics_still_valid_pending (test_cvss_assessment.CVSSAssessmentTests.test_no_evidence_and_no_metrics_still_valid_pending) ... ok
+test_nonapplicable_cannot_silently_discard_supplied_score_inputs (test_cvss_assessment.CVSSAssessmentTests.test_nonapplicable_cannot_silently_discard_supplied_score_inputs) ... ok
+test_policy_violation_and_nonvulnerable_states_are_not_applicable (test_cvss_assessment.CVSSAssessmentTests.test_policy_violation_and_nonvulnerable_states_are_not_applicable) ... ok
+test_present_text_does_not_imply_sufficient_evidence (test_cvss_assessment.CVSSAssessmentTests.test_present_text_does_not_imply_sufficient_evidence) ... ok
+test_reviewed_metrics_produce_official_score_and_preserve_evidence (test_cvss_assessment.CVSSAssessmentTests.test_reviewed_metrics_produce_official_score_and_preserve_evidence) ... ok
+test_scored_zero_is_distinct_from_unassessed_null (test_cvss_assessment.CVSSAssessmentTests.test_scored_zero_is_distinct_from_unassessed_null) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.026s
+
+OK
