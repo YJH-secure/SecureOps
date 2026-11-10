@@ -1,0 +1,169 @@
+{
+  "started_at_kst": "2026-11-09T14:54:07+09:00",
+  "branch": "feature/core-jhm",
+  "head": "4a48119bff1bad828390b9f612b0de1c77de3a72",
+  "initial_git_status": "## feature/core-jhm...origin/feature/core-jhm\n?? docs/evidence/\n?? tests/test_bc_offline_integration.py\n",
+  "python": "3.14.2",
+  "implementation": "CPython",
+  "os": "Windows",
+  "os_release": "11",
+  "architecture": "AMD64",
+  "unittest": "Python standard library",
+  "network_fetch": false,
+  "ssh_vm_executed": false,
+  "input_sha256_before": {
+    "core/legacy.py": "504afa8618a82e60da53850049405993f2a6d729b639ae975460d111cb6d6f9f",
+    "core/main.py": "cbe5107653e74d6d0d4388adde106f89eb2b241663782bbabb29f87d0d51d61c",
+    "core/remote_result.py": "2e201f7b792fdb787fb7230dcde87a0f0a62b34589e15c97562dddbc399d75ec",
+    "core/runner.py": "2702621159c8233884e28e858af878f6171b0141e2ee4398afa0806e2cc46228",
+    "core/storage.py": "269a1daa4f5d91aaca1b8ff22fe36ba46485d988ec29e76658b5cc6feb2ac62e",
+    "tests/fixtures/sample_diagnosis.json": "01ec4704772b82859ed8a1a14e17a88a8a8363f22432a01223241b5900bb42d2",
+    "tests/test_bc_offline_integration.py": "d78c516e704ba97f1782e6c5a302533536e035a122f93f242bc9d32f9b6d9059",
+    "tests/test_core.py": "9da108216dcb7f15cf7323930decedaf01ecd79dd957236959d1822a8218c0db",
+    "tests/test_core_integration.py": "38bb155ad3dfd68f2298d512c76cac09902e40cef0a43265f459ed555697af38",
+    "tests/test_core_legacy.py": "789641ca19cd81a96cbea1a20028f773696097402e835404f981b76679d53f5f",
+    "tests/test_core_runner.py": "baa21c8e312c46fb84599bd72c034a5dbdcc2bbc83c7e726b16e787dd7ca2ca3",
+    "tests/test_core_storage.py": "c481be46d4f9f71d15745a78ccf136e4868183443418fe09ade057edd23ade6b",
+    "tests/test_remote_result.py": "adaed27600f3f84370a5876b2136b87d03ff3a20e43bcbbf1ccadfd073a037f8"
+  },
+  "runs": [
+    {
+      "label": "01-mock-runner",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core_runner.py -v",
+      "started_at_kst": "2026-11-09T14:54:07+09:00",
+      "finished_at_kst": "2026-11-09T14:54:07+09:00",
+      "exit_code": 0,
+      "discovered": 12,
+      "seconds": 0.045,
+      "skipped": 0,
+      "log": "logs/01-mock-runner.log"
+    },
+    {
+      "label": "02-json-validation-aggregation",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core.py -v",
+      "started_at_kst": "2026-11-09T14:54:07+09:00",
+      "finished_at_kst": "2026-11-09T14:54:08+09:00",
+      "exit_code": 0,
+      "discovered": 26,
+      "seconds": 0.626,
+      "skipped": 0,
+      "log": "logs/02-json-validation-aggregation.log"
+    },
+    {
+      "label": "03-result-integration",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core_integration.py -v",
+      "started_at_kst": "2026-11-09T14:54:08+09:00",
+      "finished_at_kst": "2026-11-09T14:54:08+09:00",
+      "exit_code": 0,
+      "discovered": 10,
+      "seconds": 0.002,
+      "skipped": 0,
+      "log": "logs/03-result-integration.log"
+    },
+    {
+      "label": "04-storage",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core_storage.py -v",
+      "started_at_kst": "2026-11-09T14:54:08+09:00",
+      "finished_at_kst": "2026-11-09T14:54:08+09:00",
+      "exit_code": 0,
+      "discovered": 11,
+      "seconds": 0.093,
+      "skipped": 0,
+      "log": "logs/04-storage.log"
+    },
+    {
+      "label": "05-legacy",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core_legacy.py -v",
+      "started_at_kst": "2026-11-09T14:54:08+09:00",
+      "finished_at_kst": "2026-11-09T14:54:08+09:00",
+      "exit_code": 0,
+      "discovered": 11,
+      "seconds": 0.008,
+      "skipped": 0,
+      "log": "logs/05-legacy.log"
+    },
+    {
+      "label": "06-remote-json",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_remote_result.py -v",
+      "started_at_kst": "2026-11-09T14:54:08+09:00",
+      "finished_at_kst": "2026-11-09T14:54:09+09:00",
+      "exit_code": 0,
+      "discovered": 14,
+      "seconds": 0.022,
+      "skipped": 0,
+      "log": "logs/06-remote-json.log"
+    },
+    {
+      "label": "07-full-working-tree",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "started_at_kst": "2026-11-09T14:54:09+09:00",
+      "finished_at_kst": "2026-11-09T14:54:09+09:00",
+      "exit_code": 0,
+      "discovered": 87,
+      "seconds": 0.581,
+      "skipped": 3,
+      "log": "logs/07-full-working-tree.log"
+    },
+    {
+      "label": "08-bc-offline-integration",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_bc_offline_integration.py -v",
+      "started_at_kst": "2026-11-09T14:54:10+09:00",
+      "finished_at_kst": "2026-11-09T14:54:10+09:00",
+      "exit_code": 0,
+      "discovered": 3,
+      "seconds": 0.149,
+      "skipped": 0,
+      "log": "logs/08-bc-offline-integration.log"
+    },
+    {
+      "label": "09-full-bc-offline",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "started_at_kst": "2026-11-09T14:54:10+09:00",
+      "finished_at_kst": "2026-11-09T14:54:11+09:00",
+      "exit_code": 0,
+      "discovered": 87,
+      "seconds": 0.68,
+      "skipped": 0,
+      "log": "logs/09-full-bc-offline.log"
+    }
+  ],
+  "bc_sources": {
+    "B": {
+      "ref": "origin/feature/account-check-cjw",
+      "commit": "cfbd37b4dbd102ec894a2150d47f751ad5c74afa",
+      "sha256": {
+        "checks/account/ssh_check.py": "dafc0d51b2a3674367c372b64a4d15bd976f1ad7717b141f2462f44942132fff"
+      }
+    },
+    "C": {
+      "ref": "origin/feature/system-check-ksh",
+      "commit": "6bb330feccfc6541bc145db9b6e18f24b4bce394",
+      "sha256": {
+        "checks/system/file_check.py": "d0ff9979d233498dbe3f6e0358920c06a4d2415646cfba85219cce96d916844f",
+        "checks/system/common.py": "9759c210709734720312cd346d6590b923ae61316f36bec4c5e96d48eac483e9",
+        "checks/system/policy_rules.py": "1c031843bf7f27725e498d0500ba859a7bb89dce9b0062c776fde96f4bbf1909",
+        "checks/system/link_check.py": "4694d99799e3145fd51fe7ef64a8d2c2c6978735d533267c0f376a1eefbef898"
+      }
+    }
+  },
+  "official_mock_ref": "origin/main",
+  "official_mock_commit": "49e5d2dd1281a1b9af275f2efe080e66003f3ca5",
+  "input_sha256_after": {
+    "core/legacy.py": "504afa8618a82e60da53850049405993f2a6d729b639ae975460d111cb6d6f9f",
+    "core/main.py": "cbe5107653e74d6d0d4388adde106f89eb2b241663782bbabb29f87d0d51d61c",
+    "core/remote_result.py": "2e201f7b792fdb787fb7230dcde87a0f0a62b34589e15c97562dddbc399d75ec",
+    "core/runner.py": "2702621159c8233884e28e858af878f6171b0141e2ee4398afa0806e2cc46228",
+    "core/storage.py": "269a1daa4f5d91aaca1b8ff22fe36ba46485d988ec29e76658b5cc6feb2ac62e",
+    "tests/fixtures/sample_diagnosis.json": "01ec4704772b82859ed8a1a14e17a88a8a8363f22432a01223241b5900bb42d2",
+    "tests/test_bc_offline_integration.py": "d78c516e704ba97f1782e6c5a302533536e035a122f93f242bc9d32f9b6d9059",
+    "tests/test_core.py": "9da108216dcb7f15cf7323930decedaf01ecd79dd957236959d1822a8218c0db",
+    "tests/test_core_integration.py": "38bb155ad3dfd68f2298d512c76cac09902e40cef0a43265f459ed555697af38",
+    "tests/test_core_legacy.py": "789641ca19cd81a96cbea1a20028f773696097402e835404f981b76679d53f5f",
+    "tests/test_core_runner.py": "baa21c8e312c46fb84599bd72c034a5dbdcc2bbc83c7e726b16e787dd7ca2ca3",
+    "tests/test_core_storage.py": "c481be46d4f9f71d15745a78ccf136e4868183443418fe09ade057edd23ade6b",
+    "tests/test_remote_result.py": "adaed27600f3f84370a5876b2136b87d03ff3a20e43bcbbf1ccadfd073a037f8"
+  },
+  "feature_and_test_inputs_unchanged": true,
+  "finished_at_kst": "2026-11-09T14:54:11+09:00",
+  "final_git_status": "## feature/core-jhm...origin/feature/core-jhm\n?? docs/evidence/\n?? tests/test_bc_offline_integration.py\n"
+}
