@@ -143,7 +143,7 @@ callback(request, mock_state)의 입력:
 
 ## E 실행 이력과 D scan_id 연결 (추가 확정 사항)
 
-E의 반환 객체가 진단 보고서와 별개인 실행 이력이다. E에서 생성한 execution_id에 before_scan_id, after_scan_id, post_rollback_scan_id를 연결한다. D JSON v1.2와 ReportStore API는 변경하지 않는다. E 이력을 D의 진단 보고서로 저장하거나 새로운 영속 저장 규격을 추가하지 않는다.
+E에서 생성한 execution_id에 before_scan_id, after_scan_id, post_rollback_scan_id를 연결한다. 16b545c 시점에는 이력이 반환 객체에만 존재하여 별도 저장·조회 요구가 미충족이었다. 아래의 ExecutionHistoryStore 보완으로 E 전용 파일에 저장하고 독립 조회할 수 있다. D JSON v1.2와 ReportStore API는 변경하지 않으며 E 이력을 D 진단 보고서로 저장하지 않는다.
 
 새 연결은 remediation.recheck.MockRecheckAdapter(diagnose, store)를 run(..., recheck_adapter=adapter)에 전달한다. 기존 recheck_report 콜백과 동시에 사용하지 않는다. diagnose(request, mock_state)는 신뢰된 MOCK 코드이며 **아직 저장하지 않은 전체 D v1.2 보고서**를 반환한다. D 집계 함수로 보고서를 만들 수 있으나 store.save/load는 어댑터가 담당한다. 기존의 저장까지 수행하는 콜백을 그대로 중첩하면 안 된다. 저장 단계 전에 ID를 관찰할 수 없는 기존 불투명 콜백 대신 이 어댑터를 사용해야 한다.
 
@@ -170,7 +170,7 @@ save 성공 후 load 실패여도 after_scan_id는 유지한다. store.load(resu
     python -B -m unittest discover -s tests -p test_remediation_execution_history.py -v
 
 
-### 이번 추가 규격 검증 결과 (2026-11-11)
+### 16b545c 시점의 추가 규격 검증 결과 (과거 137개, 2026-11-11)
 
 기존 회귀 117개(24+18+19+52+4)와 신규 실행 이력 MOCK 테스트 20개를 구분해 실제 실행했으며 모두 통과했다. 실패·오류·건너뜀은 각각 0개다. 과거 PR #23의 117개 증거를 새 실행 로그로 재사용한 결과가 아니다. 기존 테스트 파일은 수정하지 않았다. 현재 origin/main 기준은 e4af8a6이며 Python 3.12.14, jsonschema[format] 4.26.0 환경을 사용했다.
 
@@ -182,3 +182,49 @@ save 성공 후 load 실패여도 after_scan_id는 유지한다. store.load(resu
     python -B -m unittest discover -s tests -p test_remediation_execution_history.py -v
 
 이 결과는 오프라인 MOCK 검증이다. 실제 SSH 실행 및 D 저장 API 변경은 없다. 이번 작업은 로컬까지만 반영하며 Push·PR 업데이트는 하지 않는다.
+
+
+## E 전용 ExecutionHistoryStore 저장·조회 보완
+
+반환 객체만으로는 프로세스 종료 후 조회할 수 없으므로 E 전용 파일 저장소를 추가했다. 저장소는 remediation/history.py에 있으며 from remediation import ExecutionHistoryStore로 사용한다. 기존 Remediator.run()의 입력·반환 결과·조치 흐름은 변경하지 않는다. 실행 후 호출 측에서 명시적으로 save(result)를 수행한다.
+
+```python
+from tempfile import TemporaryDirectory
+from remediation import ExecutionHistoryStore
+
+# result는 기존 Remediator.run(...)에서 반환받은 E 실행 결과
+with TemporaryDirectory(prefix="secureops-e-history-") as directory:
+    writer = ExecutionHistoryStore(directory)
+    writer.save(result)
+    execution_id = result["execution_id"]
+    # 새 인스턴스는 메모리 캐시가 아니라 디스크에서 독립 조회
+    reader = ExecutionHistoryStore(directory)
+    restored = reader.load(execution_id)
+```
+
+- save(result): E 실행 결과를 별도 JSON 파일에 추가하고 저장 경로 반환. 조회 키는 반환 경로가 아니라 result["execution_id"].
+- load(execution_id): 같은 디렉터리의 과거 실행 결과를 새 인스턴스·새 프로세스에서도 조회.
+- 동일 execution_id는 내용이 같아도 FileExistsError로 거부. 임시 파일 완성 후 배타적 하드링크 게시로 부분 파일 노출과 동시 덮어쓰기 방지.
+- E의 성공·실패·거부·제외·Dry-run, rollback 및 진단 ID 연결을 그대로 보존. 원본 반환 객체는 수정하지 않음.
+- Dry-run의 plan.actions tuple은 기존 CLI JSON과 같은 배열로 저장·조회. 새로 태그나 변환 규격을 D에 추가하지 않음.
+- 손상된 JSON, 중복 JSON 키, 파일 내용의 execution_id 불일치, D 진단 보고서의 직접 저장을 거부.
+- 저장·조회 오류는 예외로 호출 측에 전달. 저장 실패가 이미 완료된 보안 조치의 성공/실패를 바꾸지는 않으며, 조치 재실행이나 자동 롤백을 수행하지 않음.
+
+E 이력 디렉터리는 D ReportStore 디렉터리와 별도로 지정한다. 기존 E 반환값의 after_report/post_rollback_report 스냅샷이 E 파일에 포함될 수 있지만, D 보고서에 E 필드를 주입하거나 D 저장 API를 변경하지 않는다. 저장 오류가 발생하면 execution_id와 원래 결과를 보존하고 같은 ID를 우선 조회한 뒤 저장 재시도 여부를 판단한다. 게시 이후 정리 중 오류가 발생하면 최종 파일이 존재할 수도 있으므로 예외만으로 데이터가 없다고 단정하지 않는다.
+
+MOCK 테스트는 TemporaryDirectory만 사용한다. 디렉터리가 유지되는 동안 프로세스를 바꿔도 기록은 남지만, TemporaryDirectory 정리 후까지 보관되는 것은 아니다. 실제 유지 경로 사용 시 전용 접근 권한과 보관 정책을 별도로 정해야 한다. 로컬 하드링크를 지원하는 파일시스템이 필요하며, 암호화·서명 기반 변조 방지나 운영 감사 시스템을 구현한 것은 아니다.
+
+### 이번 저장소 보완의 실제 검증 (2026-11-11)
+
+- 기존 117개 회귀: 24+18+19+52+4 통과
+- 16b545c 실행 이력 테스트: 기존 20개 통과
+- 이번 신규 저장소 테스트: 18개 통과
+- 합계 155개 통과, 실패·오류·건너뜀 각각 0개
+
+신규 테스트는 tests/test_execution_history_store.py에 추가했다. 새 인스턴스·새 Python 프로세스 조회, 중복·동시 저장, 실패·롤백 이력 보존, 저장·조회 I/O 오류, D 조회 실패의 scan_id 연결 보존을 확인한다. 초기 검증에서 Dry-run tuple을 과도하게 거부하던 문제를 CLI와 같은 JSON 배열 저장으로 수정한 뒤 신규 18개가 모두 통과했다. 위 건수는 수정 후 결과이며 초기 실패를 통과로 집계하지 않았다.
+
+    python -B -m unittest discover -s tests -p test_execution_history_store.py -v
+
+기존 회귀 명령은 위 16b545c 검증 절에 그대로 기재되어 있다. 이번에도 같은 여섯 묶음을 실제 재실행했으며 D/B/C 코드와 기존 137개 테스트 파일은 수정하지 않았다. Python 3.12.14와 jsonschema[format] 4.26.0 환경을 사용했고 실제 SSH 조치는 없다.
+
+원격 PR #23은 201e557 상태다. 16b545c의 ID·최종 보안 상태 구현과 이번 저장소 보완은 로컬 작업으로 구분하며, 이번 요청에서 Push·PR 업데이트·main 병합은 하지 않는다.
