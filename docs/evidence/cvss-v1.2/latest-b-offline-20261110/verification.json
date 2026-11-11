@@ -1,0 +1,27 @@
+{
+  "base_commit": "f35d07b43ec13d185df0bf1d8cdf13ddbc64f26a",
+  "b_commit": "3eda5a56ed3e9fd56d162676507c526ea0d1a1c1",
+  "tracked_files_unchanged": true,
+  "staging_empty": true,
+  "diff_check_exit_code": 0,
+  "b_policy_copy_matches_source": true,
+  "valid_b_to_d_roundtrips": 19,
+  "policy_rejections": 17,
+  "ssh_vm_executed": false,
+  "new_file_sha256": {
+    "tests/test_latest_b_offline_integration.py": "ca27dcfd67ab7ac30cc459cee43eed5dbfd8b1d815bb4c909c68e872f954b7fd",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/environment-and-results.json": "05437805a7a86023041434588fd1d482b830437f2ff338739727c25590232be4",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/latest-b-cases.json": "34bad8c70291aa428483d6200e5ebe79031b0f0decd7b3039e6b97a63baf6586",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/latest-b-offline-report.md": "ef0d0d1a8bd7ab64d3ccd51cb93674e38475812a74c3e5e38f0de8408b6a593f",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/run-latest-b-evidence.py": "2acb04cb7d462addefc8d437a665cf66ac8d49f6b52e4513c0f1b628280f622c",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/source-policy.json": "c54c942d873bdde5493e1819f5a8d826f1054db688d54c83e7eb3602128e3faf",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/01-latest-b-to-d.log": "ed5fa6b1e21afcc7c9b575a10b834761ae65871cd6c1cd3abeff85d0927f7920",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/02-b-unit-unchanged.log": "257f921eb5c14c01babfc440722cd508490dde65eecfb3dbdd11a47a3092a531",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/03-cvss-regression.log": "f182e1f57f42ac8c8dc239f53505d2bf6c6c160cedac1cf015c160c69cbeec5f",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/04-v11-core-regression.log": "a3913d6eacb5237a7669020daa44804b92d0e4b4d49d9b0e6ff314866e13acfa",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/05-v11-remote-regression.log": "346a6b21271f12e7f8c2d66d39dc831686f79c16ece6cc0be02dd0513ef016ed",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/06-pinned-bc-regression.log": "75b07f3bf5bb822b1512c810b76491bd52ffd8cbad3817fabcc5c6a51c988e61",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/07-full-without-bc.log": "17e116facabddb6ae3b76296dca40295fb4e6c2a36f3145fbfc3c7fa84248d61",
+    "docs/evidence/cvss-v1.2/latest-b-offline-20261110/logs/08-full-pinned-bc-and-latest-b.log": "b19a900669ac3ec8dd055d081f7b4dcff5d11af5c7297981c3260002fc7d1be3"
+  }
+}

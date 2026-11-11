@@ -1,0 +1,21 @@
+Started (KST): 2026-11-09T14:54:08+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_core_legacy.py -v
+B/C source mode: current working tree
+Exit code: 0
+
+test_all_field_conflicts_and_failure_preserves_input (test_core_legacy.LegacyNormalizationTests.test_all_field_conflicts_and_failure_preserves_input) ... ok
+test_equal_aliases_removed (test_core_legacy.LegacyNormalizationTests.test_equal_aliases_removed) ... ok
+test_final_validator_rejects_duplicate_extra_empty_and_naive_time (test_core_legacy.LegacyNormalizationTests.test_final_validator_rejects_duplicate_extra_empty_and_naive_time) ... ok
+test_missing_information (test_core_legacy.LegacyNormalizationTests.test_missing_information) ... ok
+test_modern_report_idempotent_and_unknown_version_rejected (test_core_legacy.LegacyNormalizationTests.test_modern_report_idempotent_and_unknown_version_rejected) ... ok
+test_normalization_and_existing_loader (test_core_legacy.LegacyNormalizationTests.test_normalization_and_existing_loader) ... ok
+test_original_preserved_and_nested_copy (test_core_legacy.LegacyNormalizationTests.test_original_preserved_and_nested_copy) ... ok
+test_os_version_not_invented (test_core_legacy.LegacyNormalizationTests.test_os_version_not_invented) ... ok
+test_severities_and_strict_final_validation (test_core_legacy.LegacyNormalizationTests.test_severities_and_strict_final_validation) ... ok
+test_states_unchanged_and_case_not_corrected (test_core_legacy.LegacyNormalizationTests.test_states_unchanged_and_case_not_corrected) ... ok
+test_wrong_types (test_core_legacy.LegacyNormalizationTests.test_wrong_types) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.008s
+
+OK

@@ -1,0 +1,1421 @@
+{
+  "b_commit": "3eda5a56ed3e9fd56d162676507c526ea0d1a1c1",
+  "synthetic_observations_only": true,
+  "cases": [
+    {
+      "case_id": "vulnerable-yes",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin yes\n",
+        "config_text": "",
+        "root_output": "permitrootlogin yes\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "vulnerable-yes",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "vulnerable-yes",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "vulnerable-prohibit-password",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin prohibit-password\n",
+        "config_text": "",
+        "root_output": "permitrootlogin prohibit-password\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin prohibit-password; violation: root login is allowed with public key authentication (password login blocked)",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "vulnerable-prohibit-password",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin prohibit-password; violation: root login is allowed with public key authentication (password login blocked)",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "vulnerable-prohibit-password",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "vulnerable-without-password",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin without-password\n",
+        "config_text": "",
+        "root_output": "permitrootlogin without-password\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin without-password; violation: legacy name of prohibit-password; root login is allowed with public key authentication",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "vulnerable-without-password",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin without-password; violation: legacy name of prohibit-password; root login is allowed with public key authentication",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "vulnerable-without-password",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "vulnerable-forced-commands-only",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin forced-commands-only\n",
+        "config_text": "",
+        "root_output": "permitrootlogin forced-commands-only\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin forced-commands-only; violation: root login is allowed with public key authentication for forced commands only",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "vulnerable-forced-commands-only",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin forced-commands-only; violation: root login is allowed with public key authentication for forced commands only",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "vulnerable-forced-commands-only",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "history-before",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin yes\n",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting: permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "history-before",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting: permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "history-before",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "history-after",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "pass",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "severity": "high",
+        "evidence": "Effective SSH setting: permitrootlogin no",
+        "recommendation": "현재 설정 유지"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "history-after",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "severity": "high",
+            "evidence": "Effective SSH setting: permitrootlogin no",
+            "recommendation": "현재 설정 유지"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "history-after",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "conditional-unresolved",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "PermitRootLogin no\nMatch Address 192.0.2.10\n PermitRootLogin no\nMatch User root\n PermitRootLogin yes\n",
+        "root_output": "permitrootlogin no\n"
+      },
+      "expected_status": "needs_review",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "needs_review",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no; Match conditions (address) may change permitrootlogin for other connections (possible values: no, yes)",
+        "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "conditional-unresolved",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "needs_review",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no; Match conditions (address) may change permitrootlogin for other connections (possible values: no, yes)",
+            "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "conditional-unresolved",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 1,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 1
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "conditional-confirmed-vulnerable",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "PermitRootLogin no\nMatch Address 192.0.2.10\n PermitRootLogin no\nMatch User root\n PermitRootLogin yes\n",
+        "root_output": "permitrootlogin yes\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "conditional-confirmed-vulnerable",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "conditional-confirmed-vulnerable",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "conditional-all-blocked",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "PermitRootLogin no\nMatch Address 192.0.2.10\n PermitRootLogin no\n",
+        "root_output": "permitrootlogin no\n"
+      },
+      "expected_status": "pass",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no",
+        "recommendation": "현재 설정 유지"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "conditional-all-blocked",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no",
+            "recommendation": "현재 설정 유지"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "conditional-all-blocked",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "root-blocked",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin yes\n",
+        "config_text": "PermitRootLogin yes\nMatch User root\n PermitRootLogin no\n",
+        "root_output": "permitrootlogin no\n"
+      },
+      "expected_status": "pass",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no",
+        "recommendation": "현재 설정 유지"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "root-blocked",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no",
+            "recommendation": "현재 설정 유지"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "root-blocked",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "root-allowed",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "PermitRootLogin no\nMatch User root\n PermitRootLogin yes\n",
+        "root_output": "permitrootlogin yes\n"
+      },
+      "expected_status": "vulnerable",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "severity": "high",
+        "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+        "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "root-allowed",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "severity": "high",
+            "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+            "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "root-allowed",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "root-output-invalid",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "",
+        "root_output": ""
+      },
+      "expected_status": "error",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "permitrootlogin not found in sshd -T -C output",
+        "recommendation": "오류 원인 해결 후 재실행"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "root-output-invalid",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "error",
+            "severity": "high",
+            "evidence": "permitrootlogin not found in sshd -T -C output",
+            "recommendation": "오류 원인 해결 후 재실행"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "root-output-invalid",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 1,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 1,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "collection-error-0",
+      "synthetic_input": {
+        "sshd_output": null,
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "error",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "sshd -T output is empty",
+        "recommendation": "오류 원인 해결 후 재실행"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "collection-error-0",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "error",
+            "severity": "high",
+            "evidence": "sshd -T output is empty",
+            "recommendation": "오류 원인 해결 후 재실행"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "collection-error-0",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 1,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 1,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "collection-error-1",
+      "synthetic_input": {
+        "sshd_output": "",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "error",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "sshd -T output is empty",
+        "recommendation": "오류 원인 해결 후 재실행"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "collection-error-1",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "error",
+            "severity": "high",
+            "evidence": "sshd -T output is empty",
+            "recommendation": "오류 원인 해결 후 재실행"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "collection-error-1",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 1,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 1,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "collection-error-2",
+      "synthetic_input": {
+        "sshd_output": " ",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "error",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "sshd -T output is empty",
+        "recommendation": "오류 원인 해결 후 재실행"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "collection-error-2",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "error",
+            "severity": "high",
+            "evidence": "sshd -T output is empty",
+            "recommendation": "오류 원인 해결 후 재실행"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "collection-error-2",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 1,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 1,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "collection-error-3",
+      "synthetic_input": {
+        "sshd_output": "port 22\n",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "error",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "permitrootlogin not found in sshd -T output",
+        "recommendation": "오류 원인 해결 후 재실행"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "collection-error-3",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "error",
+            "severity": "high",
+            "evidence": "permitrootlogin not found in sshd -T output",
+            "recommendation": "오류 원인 해결 후 재실행"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "collection-error-3",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 1,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 1,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "pass-global",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "",
+        "root_output": null
+      },
+      "expected_status": "pass",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "severity": "high",
+        "evidence": "Effective SSH setting: permitrootlogin no",
+        "recommendation": "현재 설정 유지"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "pass-global",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "severity": "high",
+            "evidence": "Effective SSH setting: permitrootlogin no",
+            "recommendation": "현재 설정 유지"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "pass-global",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "match-no-root-no",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin no\n",
+        "config_text": "Match User root\n PermitRootLogin yes\n",
+        "root_output": null
+      },
+      "expected_status": "needs_review",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "needs_review",
+        "severity": "high",
+        "evidence": "Effective SSH setting: permitrootlogin no; Match rule sets permitrootlogin but root-specific evaluation is unavailable",
+        "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "match-no-root-no",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "needs_review",
+            "severity": "high",
+            "evidence": "Effective SSH setting: permitrootlogin no; Match rule sets permitrootlogin but root-specific evaluation is unavailable",
+            "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "match-no-root-no",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 1,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 1
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    },
+    {
+      "case_id": "match-no-root-yes",
+      "synthetic_input": {
+        "sshd_output": "permitrootlogin yes\n",
+        "config_text": "Match User root\n PermitRootLogin yes\n",
+        "root_output": null
+      },
+      "expected_status": "needs_review",
+      "b_result": {
+        "check_id": "SSH-01",
+        "status": "needs_review",
+        "severity": "high",
+        "evidence": "Effective SSH setting: permitrootlogin yes; Match rule sets permitrootlogin but root-specific evaluation is unavailable",
+        "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+      },
+      "d_report": {
+        "schema_version": "1.1",
+        "scan_id": "match-no-root-yes",
+        "target_id": "latest-b-offline",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-10T12:00:00+09:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "needs_review",
+            "severity": "high",
+            "evidence": "Effective SSH setting: permitrootlogin yes; Match rule sets permitrootlogin but root-specific evaluation is unavailable",
+            "recommendation": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정"
+          }
+        ]
+      },
+      "d_summary": {
+        "schema_version": "1.1",
+        "target_info": {
+          "target_id": "latest-b-offline",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "match-no-root-yes",
+          "scanned_at": "2026-11-10T12:00:00+09:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 0,
+          "pass_count": 0,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 1,
+          "pass_rate": "N/A (계산 불가)"
+        },
+        "severity_breakdown": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 1
+          }
+        }
+      },
+      "input_and_original_fields_preserved": true,
+      "saved_and_reloaded_equal": true
+    }
+  ],
+  "invalid_policy_cases": [
+    {
+      "case": "missing-test-connection-user",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.user",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "missing-test-connection-host",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.host",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "missing-test-connection-addr",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.addr",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-test-connection-user-alice",
+      "exception": "ValueError",
+      "message": "criteria.test_connection.user must be root",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-test-connection-user-ROOT",
+      "exception": "ValueError",
+      "message": "criteria.test_connection.user must be root",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-test-connection-host-",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.host",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-test-connection-host-bad host",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.host",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-test-connection-addr-192.0.2.10,user=alice",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection.addr",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "missing-test-connection",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.test_connection",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-None",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-[]",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-{}",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-{'yes': ''}",
+      "exception": "ValueError",
+      "message": "invalid entry in criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-{'': 'reason'}",
+      "exception": "ValueError",
+      "message": "invalid entry in criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-{'yes': 1}",
+      "exception": "ValueError",
+      "message": "invalid entry in criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "invalid-vulnerable-values-{'NO': 'conflict'}",
+      "exception": "ValueError",
+      "message": "criteria.expected is also listed in criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    },
+    {
+      "case": "missing-vulnerable-values",
+      "exception": "ValueError",
+      "message": "missing or invalid field: criteria.vulnerable_values",
+      "rejected_before_d_run": true
+    }
+  ]
+}
