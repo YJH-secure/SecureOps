@@ -9,6 +9,7 @@ import subprocess
 import sys
 
 from .common import PolicyError, load_policy, make_result, recommendation_for_status
+from .result_adapter import adapt_result, add_result_version_argument
 from .service_check import _read_command, read_target_os
 
 
@@ -207,9 +208,11 @@ def run_from_policy(path=DEFAULT_POLICY, command_runner=None, *, config_root=Pat
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--policy', type=Path, default=DEFAULT_POLICY)
+    add_result_version_argument(parser)
     args = parser.parse_args()
     result = run_from_policy(args.policy)
-    print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False), flush=True)
+    print(json.dumps(adapt_result(result, args.result_version), ensure_ascii=False,
+                     indent=2, allow_nan=False), flush=True)
     return 0
 
 
