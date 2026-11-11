@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.1",
+  "scan_id": "v11-vulnerable-4",
+  "target_id": "mock-b-pr21",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T11:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "severity": "high",
+      "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+      "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토"
+    }
+  ]
+}

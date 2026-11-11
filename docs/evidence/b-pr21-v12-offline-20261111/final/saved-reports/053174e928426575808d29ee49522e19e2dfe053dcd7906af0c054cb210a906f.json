@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "vulnerable-2",
+  "target_id": "mock-b-pr21",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T11:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin yes; violation: root login is allowed with password and public key authentication",
+      "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+      "cvss": {
+        "assessment_status": "pending",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "SSH-01 정책 위반 확인. 구체적 공격 시나리오와 접근·영향 근거 검토 전이므로 CVSS v3.1 점수 미산정 (CVSS 평가 정책 v1.2 4장)"
+      },
+      "details": {
+        "setting": "permitrootlogin",
+        "expected": "no",
+        "global_value": "yes",
+        "root_value": "yes",
+        "root_evaluation": "sshd -T -C user=root",
+        "match_rules": []
+      }
+    }
+  ]
+}

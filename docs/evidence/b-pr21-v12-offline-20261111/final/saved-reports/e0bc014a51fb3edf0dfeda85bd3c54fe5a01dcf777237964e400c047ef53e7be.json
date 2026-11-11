@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "error-3",
+  "target_id": "mock-b-pr21",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T11:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "error",
+      "evidence": "Failed to run sshd -T (check root privilege or sshd configuration)",
+      "recommendation": "오류 원인 해결 후 재실행",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "진단 상태가 error이므로 CVSS 평가 대상 아님"
+      }
+    }
+  ]
+}

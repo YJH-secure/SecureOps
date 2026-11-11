@@ -1,0 +1,101 @@
+{
+  "started_at_kst": "2026-11-11T10:35:58+09:00",
+  "d_commit": "42783699356325aa08cfb7187bfaf06ed8519019",
+  "origin_main": "42783699356325aa08cfb7187bfaf06ed8519019",
+  "branch": "feature/b-d-v12-pr21-review-jhm",
+  "b_pr": 21,
+  "b_branch": "feature/json-v1.2-cjw",
+  "b_commit": "9f58ee2efca3189866548219e05b732d254e279f",
+  "b_dependency_pr": 10,
+  "b_dependency_commit": "3eda5a56ed3e9fd56d162676507c526ea0d1a1c1",
+  "b_pr21_merged": false,
+  "b_pr10_merged": false,
+  "scope": "Fixed unmerged B PR source against D main; not official merged-main B integration",
+  "b_source_sha256": {
+    "checks/account/ssh_check.py": "22025954e4905c5c1229106e6d5167991655c0f27ca63adee6b0515c484c767c",
+    "checks/account/policies/ssh_policy.json": "d45d94043584f2cf080f33abb014dbe90a8e819b2cf2fc4a729e1f0b85b5db68",
+    "checks/account/test_ssh_check.py": "87dae1ed5edded187d5f52112ec20c01c6127b200d368eee0daf35b5221ef495"
+  },
+  "python": "3.14.2",
+  "platform": "Windows 11",
+  "architecture": "AMD64",
+  "jsonschema": "4.25.1",
+  "actual_ssh_vm": false,
+  "runs": [
+    {
+      "label": "01-b-pr21-to-d",
+      "command": "python -B -X utf8 docs/evidence/b-pr21-v12-offline-20261111/run-evidence.py --worker integration",
+      "scope": "Actual B run_check with synthetic collection only",
+      "started_at_kst": "2026-11-11T10:35:58+09:00",
+      "finished_at_kst": "2026-11-11T10:35:59+09:00",
+      "exit_code": 0,
+      "tests": 10,
+      "log": "logs/01-b-pr21-to-d.log",
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 10
+    },
+    {
+      "label": "02-original-b-unit",
+      "command": "python -B -X utf8 docs/evidence/b-pr21-v12-offline-20261111/run-evidence.py --worker b-unit",
+      "scope": "Unmodified B original 47 unit tests, process/network fallbacks blocked",
+      "started_at_kst": "2026-11-11T10:35:59+09:00",
+      "finished_at_kst": "2026-11-11T10:36:01+09:00",
+      "exit_code": 0,
+      "tests": 47,
+      "log": "logs/02-original-b-unit.log",
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 47
+    },
+    {
+      "label": "03-default-d-full",
+      "command": "python -B -X utf8 -m unittest discover -s tests -v",
+      "scope": "D tests without external B sources",
+      "started_at_kst": "2026-11-11T10:36:01+09:00",
+      "finished_at_kst": "2026-11-11T10:36:05+09:00",
+      "exit_code": 0,
+      "tests": 159,
+      "log": "logs/03-default-d-full.log",
+      "skipped": 23,
+      "failures": 0,
+      "errors": 0,
+      "passed": 136
+    },
+    {
+      "label": "04-d-full-with-fixed-sources",
+      "command": "python -B -X utf8 -m unittest discover -s tests -v",
+      "scope": "Existing D 149 plus new PR21 10; historical B/C and prior B kept separate",
+      "started_at_kst": "2026-11-11T10:36:07+09:00",
+      "finished_at_kst": "2026-11-11T10:36:11+09:00",
+      "exit_code": 0,
+      "tests": 159,
+      "log": "logs/04-d-full-with-fixed-sources.log",
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 159
+    }
+  ],
+  "policy_provenance": {
+    "path": "checks/account/policies/ssh_policy.json",
+    "commit": "9f58ee2efca3189866548219e05b732d254e279f",
+    "policy_version": "1.0",
+    "reference": "판정 기준: 취약점 점검 기준표 v1.1 SSH-01 (2026-11-09 팀장 판정 기준 승인) / policy_version 1.0은 정책 파일 형식 버전",
+    "cvss_assessment": {
+      "vulnerable_assessment_status": "pending",
+      "rationale": "SSH-01 정책 위반 확인. 구체적 공격 시나리오와 접근·영향 근거 검토 전이므로 CVSS v3.1 점수 미산정 (CVSS 평가 정책 v1.2 4장)"
+    },
+    "operational_policy_reapproved_by_d": false
+  },
+  "separate_regression_source_commits": [
+    "cfbd37b4dbd102ec894a2150d47f751ad5c74afa",
+    "6bb330feccfc6541bc145db9b6e18f24b4bce394",
+    "3eda5a56ed3e9fd56d162676507c526ea0d1a1c1"
+  ],
+  "tracked_file_hashes_unchanged": true,
+  "b_sources_unchanged": true,
+  "finished_at_kst": "2026-11-11T10:36:11+09:00"
+}
