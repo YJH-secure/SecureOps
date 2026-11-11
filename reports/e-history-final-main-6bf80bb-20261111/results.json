@@ -1,0 +1,300 @@
+{
+  "artifact_variant": "public-redacted",
+  "started_at": "2026-11-11T17:48:44.235493+09:00",
+  "branch": "feature/remediation-cvss-v12",
+  "main_sha": "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+  "tested_head": "bb050165b21dade0285372745c92cd5dd996123d",
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "jsonschema": "4.26.0",
+    "dependency_path": "<USER_HOME>\\AppData\\Local\\Temp\\secureops-e-jsonschema"
+  },
+  "tests": [
+    {
+      "name": "01-v11",
+      "group": "existing-117",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "tests/run_de_mock.py",
+        "--d-ref",
+        "6bf80bb114458994bec7d640b4fe4ec53b97bb10"
+      ],
+      "started_at": "2026-11-11T17:48:44.384585+09:00",
+      "finished_at": "2026-11-11T17:48:45.326612+09:00",
+      "expected": 24,
+      "total": 24,
+      "passed": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "5b5d963bfcd8677bba60c3a414ed9ebc3d3d857b42f266772f03d6a0f8d15b9a"
+    },
+    {
+      "name": "02-v12",
+      "group": "existing-117",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_v12.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:45.328037+09:00",
+      "finished_at": "2026-11-11T17:48:47.268016+09:00",
+      "expected": 18,
+      "total": 18,
+      "passed": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "3a06471bc79c4e904480f15934bc1123b6ea50212a781d16b6bb50807a1c3ad7"
+    },
+    {
+      "name": "03-execution-mock",
+      "group": "existing-117",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_execution_integration.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:47.269015+09:00",
+      "finished_at": "2026-11-11T17:48:48.113221+09:00",
+      "expected": 19,
+      "total": 19,
+      "passed": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "6cdf03bf951b8d8fca5604250fe8a56e86772df08047f2324b40420e621c85e2"
+    },
+    {
+      "name": "04-cvss-schema",
+      "group": "existing-117",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvss*.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:48.114222+09:00",
+      "finished_at": "2026-11-11T17:48:49.017556+09:00",
+      "expected": 52,
+      "total": 52,
+      "passed": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "b4e3b9d7c15b2ccfc1c9f6e8ab04afdc22e524b80696846b1bf2ef1dc52dcdcf"
+    },
+    {
+      "name": "05-b-contract",
+      "group": "existing-117",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_b_v12_integration.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:49.021314+09:00",
+      "finished_at": "2026-11-11T17:48:49.472791+09:00",
+      "expected": 4,
+      "total": 4,
+      "passed": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "4e08e407e6fdaff663f20d846bbb0f19a05765f79abf150aa38eec63cde53d4d"
+    },
+    {
+      "name": "06-scan-history",
+      "group": "history-38",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_execution_history.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:49.473795+09:00",
+      "finished_at": "2026-11-11T17:48:50.176725+09:00",
+      "expected": 20,
+      "total": 20,
+      "passed": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "98ad77574fa53648990e727ab5f0d03ac1aea3fc97dda72d4167324e2bf94548"
+    },
+    {
+      "name": "07-history-store",
+      "group": "history-38",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_execution_history_store.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:50.178724+09:00",
+      "finished_at": "2026-11-11T17:48:50.910827+09:00",
+      "expected": 18,
+      "total": 18,
+      "passed": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "10ad93d13adda19dd67b5e688239f3cc32dafca00372e9e4b07e2005cf570148"
+    },
+    {
+      "name": "08-c-firewall",
+      "group": "C-extra",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "checks.system.tests.test_firewall_check",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:50.912842+09:00",
+      "finished_at": "2026-11-11T17:48:51.287991+09:00",
+      "expected": 17,
+      "total": 17,
+      "passed": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "fb726057c36eac6c7915387f482ce7134e4e61989154ae6fbc38c55e5ef2c56f"
+    },
+    {
+      "name": "09-c-log",
+      "group": "C-extra",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "checks.system.tests.test_log_check",
+        "-v"
+      ],
+      "started_at": "2026-11-11T17:48:51.288991+09:00",
+      "finished_at": "2026-11-11T17:48:51.676217+09:00",
+      "expected": 12,
+      "total": 12,
+      "passed": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "original_log_sha256": "1d39da6f8c73acbeadcb92e4a481fe079594a390593f21d9c7390b40b4e019f9"
+    }
+  ],
+  "backup_sha256_before": {
+    "remediation/engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests/test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "finished_at": "2026-11-11T17:48:51.677218+09:00",
+  "backup_sha256_after": {
+    "remediation/engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests/test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "git_checks": [
+    {
+      "args": [
+        "merge-base",
+        "--is-ancestor",
+        "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+        "bb050165b21dade0285372745c92cd5dd996123d"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "49c3e0f",
+        "bb050165b21dade0285372745c92cd5dd996123d",
+        "--",
+        "remediation",
+        "tests"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+        "bb050165b21dade0285372745c92cd5dd996123d",
+        "--",
+        "checks",
+        "core"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--name-status",
+        "49c3e0f",
+        "bb050165b21dade0285372745c92cd5dd996123d"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--name-status",
+        "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+        "bb050165b21dade0285372745c92cd5dd996123d"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "original_sha256": "394daaae08405ef64ce18f514d695e521310b28c659d124cc8940ab93385f2b6"
+}
