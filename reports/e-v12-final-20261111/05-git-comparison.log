@@ -1,0 +1,29 @@
+git merge-base --is-ancestor b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37 6df7caf6a895a919521fb4848ea3d8fc9b473412
+exit_code: 0
+
+git diff --exit-code 32d5107 6df7caf6a895a919521fb4848ea3d8fc9b473412 --
+exit_code: 0
+
+git diff --exit-code feature/remediation-ptj b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37 -- remediation tests/test_remediation.py tests/test_remediation_core_integration.py tests/run_de_mock.py
+exit_code: 0
+
+git diff --exit-code b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37 6df7caf6a895a919521fb4848ea3d8fc9b473412 -- core checks tests/test_remediation.py tests/test_remediation_core_integration.py
+exit_code: 0
+
+git diff --name-status b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37 6df7caf6a895a919521fb4848ea3d8fc9b473412
+exit_code: 0
+M	remediation/README.md
+M	remediation/__main__.py
+M	remediation/contract.py
+M	remediation/engine.py
+M	remediation/mock.py
+M	tests/run_de_mock.py
+A	tests/test_remediation_execution_integration.py
+A	tests/test_remediation_v12.py
+
+git log --oneline b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37..6df7caf6a895a919521fb4848ea3d8fc9b473412
+exit_code: 0
+6df7caf Merge remote-tracking branch 'origin/main' into feature/remediation-cvss-v12
+32d5107 feat(remediation): integrate mock execution-layer recheck reports
+b100f58 feat(remediation): support JSON v1.2 with shared CVSS validation
+946bb0b Merge remote-tracking branch 'origin/main' into feature/remediation-cvss-v12
