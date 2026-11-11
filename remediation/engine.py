@@ -111,7 +111,8 @@ class Remediator:
         self.verify_approval = verify_approval
         self._used = set()
 
-    def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None):
+    def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
+            recheck_report=None):
         """계획을 검증하고 Dry-run 또는 승인된 Mock 조치를 수행한다."""
         # 외부 승인 함수가 원본을 바꾸더라도 실행 입력이 변하지 않도록 복사한다.
         report = deepcopy(report)
@@ -145,6 +146,10 @@ class Remediator:
         # 실제 서버 구현을 잘못 전달해도 실행되지 않도록 Mock만 명시적으로 허용한다.
         if type(backend) is not MockBackend:
             raise PermissionError("live remediation is disabled; only MockBackend is supported")
+        # 콜백은 신뢰된 테스트 코드에서만 전달한다. JSON 입력으로 선택하지 않는다.
+        if recheck_report is not None:
+            if report["schema_version"] != "1.2" or not callable(recheck_report):
+                raise ValueError("recheck_report requires JSON v1.2 and a callable")
         if backend.target_id != plan.target_id or backend.os != plan.os:
             raise ValueError("backend target/OS mismatch")
         now = datetime.now(timezone.utc) if now is None else now
@@ -207,7 +212,11 @@ class Remediator:
 
         # 설정 검증을 통과한 뒤에는 재진단 결과와 오류를 따로 기록한다.
         try:
-            if report["schema_version"] == "1.2":
+            if recheck_report is not None:
+                # 공통 실행 계층이 D에서 검증·저장·재조회한 전체 보고서를 받는다.
+                after = backend.request_recheck(plan, recheck_report)
+                steps.append("recheck")
+            elif report["schema_version"] == "1.2":
                 from core.main import DiagnosisAggregator
                 item = backend.recheck(plan, schema_version="1.2")
                 steps.append("recheck")
@@ -222,6 +231,7 @@ class Remediator:
                          "scan_id": str(uuid4()), "scanned_at": datetime.now(timezone.utc).isoformat(),
                          "results": [item]}
             comparison = compare_reports(report, after, plan.check_id)
+            item = comparison["after"]
             steps.append("compare")
         except Exception:
             reason = ("invalid_recheck_result" if "recheck" in steps else

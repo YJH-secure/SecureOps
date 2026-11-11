@@ -122,3 +122,20 @@ v1.2 내장 시연은 main의 공식 MOCK fixture를 사용한다. SSH-01의 점
 조치 후보는 기존 진단 status와 승인된 항목·허용 목록으로 판단한다. CVSS pending/not_applicable의 null은 0점으로 바꾸지 않는다. CVSS scored의 높은 점수는 조치 승인을 대신하지 않는다. CVSS를 이용한 운영 우선순위는 팀 정책 확정 후 구현한다.
 
 D의 ReportStore에는 after_report만 저장한다. E 실행 이력 저장 규격, B/C 실제 재진단 연결과 실제 SSH 조치는 별도 후속 작업이다.
+
+
+## 공통 실행 계층 MOCK 콜백
+
+기존 run(report, plan, ...)에 선택 인자 recheck_report=callback을 추가했다. 생략하면 기존 v1.1/v1.2 동작을 유지한다. 콜백은 v1.2 MOCK 실행에서만 사용하며, 승인·허용 목록·백업·조치·설정 검증을 통과한 뒤 호출한다.
+
+callback(request, mock_state)의 입력:
+- request: target_id, os, check_id, before_scan_id, schema_version
+- mock_state: files, root_login의 복사본. 실제 백엔드·승인·명령 실행 권한은 전달하지 않음
+
+콜백 반환값은 개별 결과가 아니라 D에서 검증·집계·저장·재조회한 전체 JSON v1.2 보고서다. E는 보고서 버전·대상·검사 항목·새 scan_id·진단 시각을 다시 확인하고, 조치 항목이 vulnerable에서 pass로 바뀐 경우만 성공 처리한다. 다른 항목의 오류는 해당 항목의 결과로 보존한다. 재진단·검증·저장 실패 또는 조치 항목의 미개선 시 기존 MOCK 복구를 수행한다.
+
+테스트 전용 MockExecutionLayer는 최초 진단과 재진단에 같은 execute() 경로를 사용한다. B/C 합성 결과 → D DiagnosisAggregator → ReportStore.save/load를 거쳐 E에 반환한다. 저장소는 TemporaryDirectory만 사용한다. E는 B/C 호출·SSH 연결·저장을 중복 구현하지 않는다.
+
+    python -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v
+
+이 콜백은 신뢰된 로컬 테스트 코드의 주입 지점이며 Python 코드를 격리하는 보안 샌드박스는 아니다. 임의 코드나 실제 원격 실행기를 연결하지 않는다. 실제 공통 실행 계층의 요청 형식·B/C 실행 방식·저장소 책임과 실패 정책은 팀 인터페이스 확정 후 별도로 연결한다. 기존 MockBackend 정확한 타입 검사와 실제 조치 금지는 유지한다.

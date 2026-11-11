@@ -103,6 +103,19 @@ class MockBackend:
             }
         return item
 
+    def request_recheck(self, plan, callback):
+        """신뢰된 MOCK 콜백에 요청·가상 상태의 복사본을 전달하고 전체 보고서를 받는다.
+
+        실제 백엔드나 승인 객체를 넘기지 않는다. 콜백은 Python 테스트 코드이며
+        샌드박스가 아니므로 임의의 외부 코드나 원격 실행기를 전달하면 안 된다.
+        """
+        self._step("recheck")
+        request = {"target_id": plan.target_id, "os": plan.os,
+                   "check_id": plan.check_id, "before_scan_id": plan.scan_id,
+                   "schema_version": "1.2"}
+        state = {"files": deepcopy(self.files), "root_login": self.root_login}
+        return deepcopy(callback(request, state))
+
     def restore(self, token):
         """백업 식별자 token을 받아 파일 상태와 root 로그인 값을 복원한다."""
         self._step("restore")
