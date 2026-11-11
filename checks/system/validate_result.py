@@ -58,7 +58,9 @@ def main():
     if errors:
         print('\n'.join(errors))
         return 1
-    print('JSON v1.1 validation PASS' + (' (individual fixture scenario results)' if args.fixture_report else
+    version = schema.get('properties', {}).get('schema_version', {}).get('const')
+    label = 'JSON v' + version if isinstance(version, str) else 'JSON'
+    print(label + ' validation PASS' + (' (individual fixture scenario results)' if args.fixture_report else
                                       ' (schema; duplicate check_id for full scan reports)'))
     print('Actual D integration, scan-history uniqueness and full sensitive-data audit remain separate.')
     return 0

@@ -1,0 +1,203 @@
+{
+  "kind": "synthetic invalid inputs rejected",
+  "cases": 28,
+  "passed": 28,
+  "results": [
+    {
+      "case": "pass-with-pending",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "pass-with-scored",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "error-with-pending",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "error-with-scored",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "needs_review-with-pending",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "needs_review-with-scored",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "not_applicable-with-pending",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "not_applicable-with-scored",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "scored-with-null-metrics",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "vulnerable-unscored-with-version",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "vulnerable-unscored-with-vector",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "vulnerable-unscored-with-base_score",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "vulnerable-unscored-with-rating",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "pass-unscored-with-version",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "pass-unscored-with-vector",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "pass-unscored-with-base_score",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "pass-unscored-with-rating",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "legacy-severity-in-v12",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "missing-cvss",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "missing-rationale",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "empty-rationale",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "unknown-assessment-status",
+      "expected": "reject",
+      "schema_rejected": true,
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "invalid-json",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "duplicate-key",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "nonstandard-number",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "nonzero-exit",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "transport-failure",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    },
+    {
+      "case": "v12-sent-to-v11-receiver",
+      "kind": "MOCK input or delivery failure",
+      "expected": "reject",
+      "d_rejected": true,
+      "passed": true
+    }
+  ]
+}

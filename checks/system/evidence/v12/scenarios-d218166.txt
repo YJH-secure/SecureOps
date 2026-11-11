@@ -1,0 +1,8 @@
+[OK] 01-pass: pass / not_applicable
+[OK] 02-vulnerable: vulnerable / pending
+[OK] 03-error: error / not_applicable
+[OK] 04-needs-review: needs_review / not_applicable
+[OK] 05-not-applicable: not_applicable / not_applicable
+v1.2 scenarios passed: 5/5
+Invalid inputs rejected: 28/28
+Evidence folder: verification-runs/official-d218166
