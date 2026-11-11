@@ -4,7 +4,7 @@
 
 **담당:** 김민우 (A · 서버·네트워크 인프라)  
 **관련 문서:** [시스템 아키텍처 설계서](../docs/architecture/system-architecture.md) · [프로젝트 README](../README.md)  
-**상태:** 2026-11-11 VM 3대 재구축 완료 — 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷, 검증 증거 확보 완료 / VM 폴더 백업 및 SHA-256 기록 완료(내부 구성·7-Zip 검사·복원 시험은 미수행, 7-1) / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장, 재구축 경위는 11장 참고
+**상태:** 2026-11-11 VM 3대 재구축 완료 — 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷, 검증 증거 확보 완료 / VM 폴더 백업 검증(구성·7-Zip·원본 비교) 및 복원 시험 완료 (7-1) / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장, 재구축 경위는 11장 참고
 
 ## 1. 개요
 
@@ -36,7 +36,7 @@
 | 관리 계정 | Rocky `user1`을 `wheel` 그룹에 추가해 3대 모두 `user1` sudo 사용 | 5-6 |
 | SSH 키 인증 | Ed25519 키 계정별 분리 생성, 공개키 등록, 4개 조합 키 접속 동작 확인 | 5-5 |
 | 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태, 재구축 후 2026-11-11 생성) | 7장 |
-| 백업 | `01-ssh-security-configured` 이후 VM 폴더 3대를 별도 드라이브에 zip으로 백업, SHA-256 기록 (2026-11-11) | 7-1 |
+| 백업 | `01-ssh-security-configured` 이후 VM 폴더 3대를 별도 드라이브에 zip으로 백업, SHA-256 기록, 무결성 검사와 복원 시험 완료 (2026-11-11) | 7-1 |
 
 **추후 적용·검증 예정** — 아직 서버에 적용되지 않음
 
@@ -55,7 +55,7 @@
 
 | 구분 | 서버 식별자 | 호스트명 | OS | 에디션 | IP | 커널 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 중앙 관리 서버 | `central-mgmt` | central-management-ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-139-generic |
+| 중앙 관리 서버 | `central-mgmt` | central-management-ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-149-generic |
 | 진단 대상 A | `ubuntu-a` | Target-Ubuntu | Ubuntu 24.04.5 LTS | Desktop | `192.168.10.20` | 7.0.0-42-generic |
 | 진단 대상 B | `rocky-b` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) | Desktop | `192.168.10.30` | 5.14.0-687.66.1.el9_8.x86_64 |
 
@@ -80,7 +80,7 @@
 
 > **커널 차이:** 같은 Ubuntu 24.04.5라도 Server는 기본 커널(6.8), Desktop은 HWE 커널이 설치된다(재구축 전 `ubuntu-a`는 7.0). 서버 간 진단 결과가 다를 때 확인할 요소로 기록한다.
 
-> **커널 버전 변동:** 커널은 설치 매체와 패키지 업데이트 시점에 따라 바뀐다. 재구축 전후 비교: `central-mgmt` 6.8.0-147 → 6.8.0-139 (더 낮음), `ubuntu-a` 7.0.0-42 (같음), `rocky-b` 5.14.0-687.65.1 → 5.14.0-687.66.1. 진단 결과에 커널 버전을 쓸 때는 이 표가 아니라 진단 시점에 `uname -r`로 수집한 값을 기준으로 한다.
+> **커널 버전 변동:** 커널은 설치 매체와 패키지 업데이트 시점에 따라 바뀐다. 재구축 전후 비교: `central-mgmt` 6.8.0-147 → 6.8.0-139 → 6.8.0-149, `ubuntu-a` 7.0.0-42 (같음), `rocky-b` 5.14.0-687.65.1 → 5.14.0-687.66.1. `central-mgmt`는 2026-11-11 오전 증거(`central-mgmt-kernel-261111.png`) 촬영 뒤, 백업(12:15 종료) 전에 커널이 6.8.0-149로 업데이트되고 재부팅되었다 (`central-mgmt-kernel-update-261111.png`, 복원 시험에서도 149 확인). 업데이트 원인(수동·자동)은 확인하지 않았다. 진단 결과에 커널 버전을 쓸 때는 이 표가 아니라 진단 시점에 `uname -r`로 수집한 값을 기준으로 한다.
 
 ## 3. 네트워크 구성
 
@@ -466,7 +466,7 @@ done
 | 상태 | 확인 항목 | 명령어 | 정상 기준 | 증거 (2026-11-11) |
 | --- | --- | --- | --- | --- |
 | [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 | `<id>-os-261111.png` (3대) |
-| [v] | 커널 버전 | `uname -r` | 2장 커널과 일치 | `<id>-kernel-261111.png` (3대) |
+| [v] | 커널 버전 | `uname -r` | 2장 커널과 일치 | `<id>-kernel-261111.png` (3대), `central-mgmt-kernel-update-261111.png` (업데이트 후 149) |
 | [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 | `<id>-hostname-261111.png` (3대) |
 | [v] | VM 사양 | VMware Virtual Machine Settings | 2장 vCPU·RAM·디스크와 일치 | `central-mgmt-vm-spec-261111.png`, `ubuntu-a-spec-261111.png`, `rocky-b-spec-261111.png` |
 | [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 | `<id>-ip-261111.png` (3대) |
@@ -482,12 +482,17 @@ done
 | [v] | SSH 별칭 접속 | 4개 별칭으로 `whoami; hostname` | 각 계정으로 비밀번호 없이 접속 | `central-mgmt-ssh-alias-261111.png` |
 | [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261111.png` |
 | [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 확인 | `<id>-snapshot-261111.png` (3대) |
+| [v] | 스냅샷 Description | Snapshot Manager | `01` Description에 날짜·작업자·작업 내용 기록 | `<id>-snapshot-desc-261111.png` (3대) |
+| [v] | sudoers 파일 권한 | `sudo ls -l /etc/sudoers.d/secureops-*; sudo visudo -c` (Rocky는 `ls -lZ` 추가) | `0440 root:root`, 모든 파일 해석 성공, Rocky `etc_t` | `<id>-sudoers-perm-261111.png` (진단 대상 2대) |
 | [v] | 백업 해시 | `Get-FileHash -Algorithm SHA256` (호스트 PC) | 7-1 표에 파일명·크기·SHA-256 기록 | 7-1 표 (명령 출력 기준) |
-| [ ] | 백업 내부 구성 | ZIP 내부 목록 (`.vmx`, `.vmsd`, `.vmsn`, `.vmdk`) | 필수 파일 포함, `.lck`·`.vmem`·`.vmss` 없음 | 미수행 (7-1) |
-| [ ] | 백업 무결성 | `7z t <파일>.zip` | `Everything is Ok` | 미수행 (7-1) |
-| [ ] | 복원 시험 | 압축 해제 후 `.vmx` 열기, 스냅샷 확인, 부팅 | 00·01 스냅샷 표시, 부팅 및 SSH 정상 | 미수행 (7-1) |
+| [v] | 백업 내부 구성 | ZIP 내부 목록, `.vmx`·`.vmsd`·디스크 연결 관계 | 필수 파일 포함, 참조 파일 누락 없음 | 7-1 (검사 스크립트 출력 기준) |
+| [v] | 백업 무결성 | `7z t <파일>.zip` | `Everything is Ok` | 7-1 |
+| [v] | 원본과 백업 비교 | 원본 VM 폴더와 ZIP의 파일 이름·크기·SHA-256 | 스냅샷 00·01 파일 일치 | 7-1 |
+| [v] | 복원 시험 | 압축 해제 → `.vmx` 열기 → 스냅샷 확인 → 부팅 → SSH | 00·01 표시, 부팅, SSH·sudo 정상 | 7-2 (`vmrun` 출력 기준, 3대) |
 
-> 스냅샷 `01`의 Description은 3대 모두 비어 있다 (`<id>-snapshot-261111.png`). 7장 규칙에 맞게 입력이 필요하다.
+> 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
+>
+> **저장소 보안 검사 범위 (2026-11-11):** `feature/kmw-infrastructure` 최신 커밋의 텍스트 파일을 개인키 헤더·토큰·비밀번호 패턴으로 검사했고, 키·백업·VM 파일(`id_ed25519*`, `.pem`, `.key`, `.env`, `known_hosts`, `.zip`, `.vmdk`, `.vmx`) 0건이다. 신규 스크린샷 43장은 직접 판독해 비밀번호·키·토큰이 없음을 확인했다. 이전 커밋 이력과 재구축 전 스크린샷은 이번 검사 범위에 포함하지 않았다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -526,7 +531,7 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 
 ### 7-1. VM 백업 현황 (2026-11-11)
 
-`01-ssh-security-configured` 스냅샷을 만든 뒤, 3대를 정상 종료한 상태에서 VM 폴더를 각각 zip으로 압축해 호스트 PC의 별도 드라이브에 보관했다. 크기와 SHA-256은 호스트 PC PowerShell(`Get-ChildItem`, `Get-FileHash -Algorithm SHA256`)로 확인한 값이다.
+`01-ssh-security-configured` 스냅샷을 만든 뒤, 3대를 종료한 상태에서 VM 폴더를 각각 zip으로 압축해 호스트 PC의 별도 드라이브에 보관했다. 크기와 SHA-256은 호스트 PC PowerShell(`Get-ChildItem`, `Get-FileHash -Algorithm SHA256`)로 확인한 값이다.
 
 | 파일명 | 서버 식별자 | OS | 백업 시점 (파일 수정 시각) | 크기 | SHA-256 |
 | --- | --- | --- | --- | --- | --- |
@@ -534,19 +539,50 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 | `Target-Ubuntu.zip` | `ubuntu-a` | Ubuntu 24.04.5 LTS Desktop | 2026-11-11 11:15 | 4,599,817,605 bytes (4.28 GiB) | `33B1CF778E53A18C0C5C14C5A653B37FD78D1D4326E23564C33543F9D93DDCE1` |
 | `Target-Rocky.zip` | `rocky-b` | Rocky Linux 9.8 (Blue Onyx) Desktop | 2026-11-11 11:30 | 7,105,211,739 bytes (6.62 GiB) | `34A52B02D0E8D41B610995ED3213B26797E115A654A617D065278726279C25E0` |
 
-**백업 검증 상태**
+**백업 검증 결과 (2026-11-11, 호스트 PC에서 검사 스크립트로 확인)**
 
-| 항목 | 상태 | 비고 |
-| --- | --- | --- |
-| 정상 종료 후 압축 | 작업자 확인 | 객관적 근거는 아래 내부 목록 확인 시 `.lck`·`.vmem`·`.vmss`가 없는 것으로 보완 |
-| SHA-256 기록 | 완료 | 위 표 |
-| ZIP 내부 구성 (`.vmx`, `.vmsd`, 스냅샷 `.vmsn` 2개, 기본·델타 `.vmdk`, `.nvram`) | 미수행 | |
-| 7-Zip 무결성 검사 (`7z t`) | 미수행 | |
-| 복원 시험 (압축 해제 → `.vmx` 열기 → 스냅샷 00·01 확인 → 부팅·SSH) | 미수행 | 수행 전까지 복원 가능 여부는 확인되지 않은 상태로 본다 |
+| 항목 | `central-mgmt` | `ubuntu-a` | `rocky-b` |
+| --- | --- | --- | --- |
+| SHA-256 | 위 표와 같음 | 같음 | 같음 |
+| 7-Zip `7z t` | Everything is Ok (55개) | Everything is Ok (47개) | Everything is Ok (45개) |
+| 필수 파일 (`.vmx`, `.vmsd`, `.vmsn` 2개, `.nvram`, `.vmxf`) | 있음 | 있음 | 있음 |
+| 스냅샷 (`.vmsd`) | `00-initial-setup` → `01-ssh-security-configured`, 현재 위치는 01 다음 | 같음 | 같음 |
+| 디스크 연결 (기본 → `-000001`(01) → `-000002`(현재)) | 참조 38건, 누락 0 | 참조 29건, 누락 0 | 참조 29건, 누락 0 |
+| `.vmx` 사양 | 2 vCPU, 4GB, SCSI, VMnet8 | 2 vCPU, 4GB, SCSI, VMnet8 | 2 vCPU, 2GB, NVMe, VMnet8 |
+| 실행·일시정지 흔적 (`.vmem`, `.vmss`) | 없음 | 없음 | 없음 |
+| 잠금 파일 (`.vmx.lck`) | **1개 포함** (아래 참고) | 없음 | 없음 |
+| 원본 폴더 비교 | 스냅샷 00·01 파일 일치 | 일치 | 일치 |
+
+- **원본 비교 방법:** 100MB 이하 파일은 SHA-256까지, 그보다 큰 기본 디스크 파일은 크기로 비교했다. ZIP 안 파일의 손상 여부는 `7z t`(CRC)로 따로 확인했다.
+- **원본과 다른 파일:** 현재 상태 디스크(`-000002*`), `.vmx`, `.nvram`, 로그, `scoreboard`는 원본과 다르다. 백업 뒤에도 원본 VM을 켜서 사용했기 때문이며 정상이다. `central-mgmt`의 `.vmsd`는 17:12에 스냅샷 Description을 입력해 달라졌다.
+- **`central-mgmt`의 `.vmx.lck`:** `vmware.log` 끝에 `VMX exit (0)`(2026-11-11 12:15:04 KST, 정상 종료)이 있고 압축은 그 뒤(12:18)에 끝났다. VMware 프로세스가 없는 상태에서도 원본 폴더에 잠금 파일이 남아 있는 것을 확인했다. 따라서 정상 종료 뒤 남은 잠금 파일이 함께 압축된 것으로 판단한다. 복원 시 이 폴더를 지우고 정상 부팅됨을 확인했다(7-2).
+- **`ubuntu-a`의 `autoinst.iso`·`autoinst.flp`:** VMware 간편 설치가 만든 파일이 VM 폴더와 ZIP에 남아 있다. `autoinst.iso`의 `PRESEED.CFG`에 `user1` 계정 이름과 **비밀번호 해시**(SHA-256-crypt)가 들어 있다. 평문 비밀번호, SSH 키, 토큰은 없다. 원본에서의 삭제와 `user1` 비밀번호 변경은 팀장 결정 대기 중이다(10장).
 
 - 받은 쪽은 내려받은 뒤 `Get-FileHash <파일> -Algorithm SHA256` 결과를 위 표와 대조한다.
 - **백업 zip은 비밀정보로 취급한다.** VM 디스크에는 `/etc/shadow` 해시, SSH 호스트 개인키가 들어 있고, `central-mgmt`에는 passphrase가 없는 `id_ed25519_scan`·`id_ed25519_fix` 개인키가 들어 있다. 공유는 지정한 팀원 계정에만 하고, 이 저장소나 외부 AI 서비스에 올리지 않는다. 백업 파일의 저장 경로와 공유 링크는 이 문서에 적지 않는다.
-- 다른 PC에서 복원할 때 확인할 것: VMnet8을 5-1과 같이 설정, 원본 VM과 동시에 켜지 않기(IP 충돌), 처음 켤 때 "I Moved It" 선택, CD/DVD가 작성자 PC의 ISO를 가리키면 연결 해제.
+- 다른 PC에서 복원할 때 확인할 것: VMnet8을 5-1과 같이 설정, 원본 VM과 동시에 켜지 않기(IP 충돌), 처음 켤 때 "I Moved It" 선택, CD/DVD가 작성자 PC의 ISO를 가리키면 연결 해제, `central-mgmt`는 압축 해제 후 `.vmx.lck` 폴더 삭제.
+
+### 7-2. 복원 시험 (2026-11-11, 작성자 PC)
+
+ZIP 3개를 원본과 다른 폴더에 풀어 VMware에서 열고, 원본 VM은 끈 상태에서 복원본만 실행했다. VM 안의 확인은 콘솔 로그인 없이 `vmrun`(VMware Tools 게스트 명령)으로 실행했다.
+
+| 확인 | `central-mgmt` | `ubuntu-a` | `rocky-b` |
+| --- | --- | --- | --- |
+| VMware 인식·실행 | 정상 | 정상 | 정상 |
+| 스냅샷 00·01 표시 (`vmrun listSnapshots`) | 정상 | 정상 | 정상 |
+| 현재 상태 부팅 | 정상 (`.lck` 삭제 후) | 정상 | 정상 |
+| 호스트명 / OS | central-management-ubuntu / Ubuntu 24.04.5 | Target-Ubuntu / Ubuntu 24.04.5 | Target-Rocky / Rocky 9.8 |
+| 커널 | 6.8.0-149-generic | 7.0.0-42-generic | 5.14.0-687.66.1.el9_8 |
+| 디스크 | 40G, LVM 루트 19G | 30G, `/` 30G | NVMe 30G, LVM 루트 27G + 스왑 2G |
+| IP | 192.168.10.10 | 192.168.10.20 | 192.168.10.30 |
+| 복원 `central-mgmt` → 대상 SSH | `secureops-scan`·`secureops-fix` × 2대 모두 성공 | — | — |
+| sudo 허용·차단 | `sshd -T` 허용, `cat /etc/shadow` 차단 (2대) | — | — |
+| 확인 방법 | `vmrun` | VMware Tools가 없어 복원 `central-mgmt`에서 SSH로 확인 | `vmrun` |
+
+- **네트워크 분리:** 시험하는 동안 실행 중인 VM은 복원본 3대뿐이었다(`vmrun list`). 따라서 원본과 IP 충돌은 없었다. 복원본은 LAN segment `restore-test`에 연결했다(작업자 확인). 세그먼트를 만든 기록은 VMware 사용자 설정(`preferences.ini`의 `namedPVNs`)에서 확인했다. 복원본 `.vmx`는 시험 후 삭제해 각 VM의 네트워크 설정 자체는 증거로 남기지 못했다.
+- 호스트 키와 사용자 키가 백업 안에 그대로 보존되어, 복원 `central-mgmt`에서 `BatchMode=yes`로 경고 없이 접속되었다.
+- 스냅샷으로 되돌리기(Go To)는 시험하지 않았다.
+- 복원본은 시험 후 VMware 라이브러리에서 제거하고 폴더를 삭제했다(개인키·`autoinst.iso` 포함).
 
 ## 8. 디렉터리 구조
 
@@ -588,7 +624,9 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 - [ ] root 직접 SSH 로그인 제한 등 `sshd_config` 변경 적용 시점
 - [ ] 계정별 SSH 키 분리 방식 (`id_ed25519_scan`, `id_ed25519_fix`) 확정
 - [ ] `02-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
-- [ ] 진단 대상 Desktop의 자동 업데이트 사용 여부 (재검증 일관성)
+- [ ] 진단 대상 Desktop의 자동 업데이트 사용 여부 (재검증 일관성) — 2026-11-11 `central-mgmt` 커널이 증거 촬영 뒤 6.8.0-139 → 149로 바뀐 사례 있음 (2장)
+- [ ] `ubuntu-a` 원본의 `autoinst.iso`·`autoinst.flp` 연결 해제·삭제 여부 (7-1)
+- [ ] `ubuntu-a` `user1` 비밀번호 변경 여부 — 비밀번호 해시가 백업의 `autoinst.iso`에 있고, 확인 과정에서 외부 AI 대화에 한 번 노출됨 (7-1)
 
 ## 11. 재구축 이력
 
@@ -620,6 +658,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | --- | --- | --- |
 | v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), sudoers 초안 v0 적용 내용 추가(2026-11-06), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가, `01` 스냅샷 재생성 반영(2026-11-06)) |
 | v0.2 | 2026-11-11 | VM 3대 재구축 반영: 2장 서버 구성(호스트명·커널·인터페이스) 갱신, 5-5 호스트 키·사용자 키 재생성 안내, 5-6 sudoers 재적용 내용과 재검증 결과, 5-7 신규 VM SSH 접속 테스트, 6장 체크리스트를 261111 증거 기준으로 갱신(백업 검증 항목 추가), 7장 스냅샷 재생성, 7-1 VM 백업 현황(SHA-256), 11장 재구축 이력 추가, 신규 증거를 `infrastructure/evidence/`로 정리 |
+| v0.3 | 2026-11-11 | 백업 최종 검증 반영: 7-1 ZIP 구성·7-Zip·디스크 연결·원본 비교 결과, `.vmx.lck` 원인, `autoinst.iso` 민감정보, 7-2 복원 시험 추가, 6장 체크리스트(백업·복원·sudoers 권한·Description) 완료 처리, 신규 증거 43장과 보안 검사 범위 기재, `central-mgmt` 커널 6.8.0-149 정정, 10장 협의 사항 추가 |
 
 ---
 

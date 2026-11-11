@@ -12,12 +12,13 @@
 
 | `target_id` | JSON `os` 값 | 호스트명 | OS (실측) | 커널 | IP | 역할 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `central-mgmt` | `ubuntu-24.04` | central-management-ubuntu | Ubuntu 24.04.5 LTS Server | 6.8.0-139-generic | `192.168.10.10` | 중앙 관리: 진단 실행, 결과 수집·집계 |
+| `central-mgmt` | `ubuntu-24.04` | central-management-ubuntu | Ubuntu 24.04.5 LTS Server | 6.8.0-149-generic | `192.168.10.10` | 중앙 관리: 진단 실행, 결과 수집·집계 |
 | `ubuntu-a` | `ubuntu-24.04` | Target-Ubuntu | Ubuntu 24.04.5 LTS Desktop | 7.0.0-42-generic | `192.168.10.20` | 진단 대상 A |
 | `rocky-b` | `rocky-9.8` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) Desktop | 5.14.0-687.66.1.el9_8.x86_64 | `192.168.10.30` | 진단 대상 B |
 
 - `os` 값은 JSON v1.2 계약의 예시 형식(`ubuntu-24.04`, `rocky-9.8`)을 따랐다.
 - `central-mgmt` 호스트명은 소문자로 설정되어 있다. 팀장 결정으로 현재 값을 유지한다.
+- `central-mgmt` 커널은 2026-11-11 오전 6.8.0-139에서 6.8.0-149로 업데이트되었다(README 2장). 진단 결과에는 실행 시점의 `uname -r` 값을 쓴다.
 - 네트워크: VMware VMnet8(NAT) 단일 구성, `192.168.10.0/24`, 게이트웨이·DNS `192.168.10.2`. 외부에서 VM으로 직접 들어오는 경로는 없다.
 - 결과 JSON의 `ip_address`는 저장소 안(비공개)에서만 쓴다. 발표 자료 등 외부에 공개하는 사본에서는 계약 문서에 따라 지운다.
 
@@ -95,6 +96,7 @@
 | 보안 모듈 | AppArmor | SELinux |
 | 인증 로그 | `/var/log/auth.log` | `/var/log/secure` |
 | journal 저장 | `/var/log/journal` (영구) | `/run/log/journal`만 있음 (재부팅 시 사라짐) |
+| VMware Tools | **설치되지 않음** (`vmrun` 게스트 명령 사용 불가) | `vmtoolsd` 실행 중 |
 
 **Rocky Python 3.9 주의**
 - 진단 코드를 대상 서버에서 Python으로 실행하는 방식을 택하면, Rocky에서는 3.10 이상 문법이 동작하지 않는다.
@@ -164,9 +166,11 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 
 | 항목 | 상태 |
 | --- | --- |
-| VM 백업 ZIP 내부 구성, 7-Zip 검사, 원본 비교 | 진행 중 (README 7-1) |
-| 백업 복원 시험 | 진행 중 (민우 PC, 격리 네트워크) |
-| sudoers 파일 권한 `0440`, `visudo -c` 증거 | 진행 중 |
+| VM 백업 ZIP 내부 구성, 7-Zip 검사, 원본 비교 | **완료** (README 7-1) |
+| 백업 복원 시험 | **완료** (3대, README 7-2). 네트워크 격리는 작업자 확인 기준 |
+| sudoers 파일 권한 `0440`, `visudo -c` 증거 | **완료** (`<id>-sudoers-perm-261111.png`) |
+| `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | 팀장 결정 대기 (README 7-1, 10장) |
+| SSH-01 수집기 `/usr/local/sbin/secureops-ssh01-read` 및 전용 sudoers | 팀장 검토 후 적용 예정. 2026-11-11 확인 시 두 대상 모두 미설치(`COLLECTOR_NOT_INSTALLED`). Rocky sudo `secure_path`에 `/usr/local/sbin`이 없으므로 전체 경로로 호출 |
 | `central-mgmt` 저장소 배치, 의존성 설치 | 미착수 (3-1의 결정 필요) |
 | 대상 서버에 실제 포트 접속 시험 | 미실시 |
 | sudoers 추가 후보 (4-3) | 팀장 승인 대기 |
@@ -177,3 +181,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 일자 | 내용 |
 | --- | --- |
 | 2026-11-11 | 최초 작성 (재구축 VM 검증 기준) |
+| 2026-11-11 | `central-mgmt` 커널 6.8.0-149 정정, VMware Tools 현황, 백업·복원·sudoers 증거 완료 반영, SSH-01 수집기 확인 결과 추가 |
