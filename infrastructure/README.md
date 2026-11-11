@@ -553,6 +553,7 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 ```text
 infrastructure/
 ├── README.md                     # 인프라 구성·구축 절차·검증 기준 문서 (이 문서)
+├── HANDOFF.md                    # 진단 실행 환경 인수인계 (SSH 접속, 실행 환경, 명령 경로·권한)
 ├── network/                      # 서버별 고정 IP 설정 파일
 │   ├── netplan-central-mgmt.yaml # 중앙 관리 서버 netplan 설정 (192.168.10.10)
 │   ├── netplan-ubuntu-a.yaml     # 진단 대상 A netplan 설정 (192.168.10.20)
