@@ -1,7 +1,9 @@
+artifact_variant: public-redacted
+original_sha256: 82ff22b32a6d1e1dd5b05544681c6d9a493a6e17d5e67c25c8b3b646c74f1efd
 started_at: 2026-11-11T14:25:35.279808+09:00
 finished_at: 2026-11-11T14:25:36.422661+09:00
 tested_head: 6df7caf6a895a919521fb4848ea3d8fc9b473412
-command: C:\Users\박성준\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B tests/run_de_mock.py --d-ref b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37
+command: <USER_HOME>\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B tests/run_de_mock.py --d-ref b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37
 exit_code: 0
 
 D 기준 커밋: b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37

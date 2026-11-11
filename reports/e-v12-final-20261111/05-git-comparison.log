@@ -1,3 +1,5 @@
+artifact_variant: public-redacted
+original_sha256: b74f4177bf4ac9eac30cb9019686fdada4ad68c1159debc035888c6cee0870eb
 git merge-base --is-ancestor b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37 6df7caf6a895a919521fb4848ea3d8fc9b473412
 exit_code: 0
 

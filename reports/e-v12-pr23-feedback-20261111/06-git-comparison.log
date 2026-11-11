@@ -1,0 +1,33 @@
+artifact_variant: public-redacted
+original_sha256: df4f86a69d28f3a8109ec8bfa3da6e4d600e4893852fb5b43d7f80019c6d5a8a
+git merge-base --is-ancestor e4af8a6659a695a5d7e0152b8c0d831e7736fef1 511895598e988eb6eaee69b0395f7af48c2f6276
+exit_code: 0
+
+git merge-base --is-ancestor d09d9900cff050b73162ac34a987eb8339ac5ceb 511895598e988eb6eaee69b0395f7af48c2f6276
+exit_code: 0
+
+git diff --exit-code 7e33241 511895598e988eb6eaee69b0395f7af48c2f6276 -- remediation core tests/test_remediation.py tests/test_remediation_core_integration.py tests/test_remediation_v12.py tests/test_remediation_execution_integration.py
+exit_code: 0
+
+git diff --exit-code e4af8a6659a695a5d7e0152b8c0d831e7736fef1 511895598e988eb6eaee69b0395f7af48c2f6276 -- checks core
+exit_code: 0
+
+git diff --name-status e4af8a6659a695a5d7e0152b8c0d831e7736fef1 511895598e988eb6eaee69b0395f7af48c2f6276
+exit_code: 0
+M	remediation/README.md
+M	remediation/__main__.py
+M	remediation/contract.py
+M	remediation/engine.py
+M	remediation/mock.py
+A	reports/e-v12-final-20261111/01-v11-regression.log
+A	reports/e-v12-final-20261111/02-v12-regression.log
+A	reports/e-v12-final-20261111/03-execution-mock.log
+A	reports/e-v12-final-20261111/04-cvss-schema.log
+A	reports/e-v12-final-20261111/05-git-comparison.log
+A	reports/e-v12-final-20261111/README.md
+A	reports/e-v12-final-20261111/requirements-test.txt
+A	reports/e-v12-final-20261111/results.json
+M	tests/run_de_mock.py
+A	tests/test_remediation_b_v12_integration.py
+A	tests/test_remediation_execution_integration.py
+A	tests/test_remediation_v12.py

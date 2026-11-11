@@ -1,7 +1,9 @@
+artifact_variant: public-redacted
+original_sha256: 51e4f94508ffe6448943bb4b3ee29b5837a92ef6441f83aedc3a472f54215b02
 started_at: 2026-11-11T14:25:38.594507+09:00
 finished_at: 2026-11-11T14:25:39.600642+09:00
 tested_head: 6df7caf6a895a919521fb4848ea3d8fc9b473412
-command: C:\Users\박성준\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v
+command: <USER_HOME>\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v
 exit_code: 0
 
 test_bad_individual_cvss_is_rejected_by_d (test_remediation_execution_integration.ExecutionIntegrationTests.test_bad_individual_cvss_is_rejected_by_d) ... ok

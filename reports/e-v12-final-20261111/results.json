@@ -6,15 +6,15 @@
   "environment": {
     "os": "Windows-11-10.0.26300-SP0",
     "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
-    "executable": "C:\\Users\\박성준\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "executable": "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
     "jsonschema": "4.26.0",
-    "dependency_path": "C:\\Users\\박성준\\AppData\\Local\\Temp\\secureops-e-jsonschema"
+    "dependency_path": "<USER_HOME>\\AppData\\Local\\Temp\\secureops-e-jsonschema"
   },
   "tests": [
     {
       "name": "01-v11-regression",
       "command": [
-        "C:\\Users\\박성준\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
         "-B",
         "tests/run_de_mock.py",
         "--d-ref",
@@ -34,7 +34,7 @@
     {
       "name": "02-v12-regression",
       "command": [
-        "C:\\Users\\박성준\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
         "-B",
         "-m",
         "unittest",
@@ -59,7 +59,7 @@
     {
       "name": "03-execution-mock",
       "command": [
-        "C:\\Users\\박성준\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
         "-B",
         "-m",
         "unittest",
@@ -84,7 +84,7 @@
     {
       "name": "04-cvss-schema",
       "command": [
-        "C:\\Users\\박성준\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
         "-B",
         "-m",
         "unittest",
@@ -181,5 +181,7 @@
       ],
       "exit_code": 0
     }
-  ]
+  ],
+  "artifact_variant": "public-redacted",
+  "original_sha256": "6426f0e36a28fc1b75aebabb8323a19d38aada11240b884148e03e2ce81e2996"
 }

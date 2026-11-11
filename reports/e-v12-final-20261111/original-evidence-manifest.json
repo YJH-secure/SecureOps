@@ -1,0 +1,46 @@
+{
+  "artifact_variant": "original-hash-manifest",
+  "files": [
+    {
+      "file": "01-v11-regression.log",
+      "original_sha256": "82ff22b32a6d1e1dd5b05544681c6d9a493a6e17d5e67c25c8b3b646c74f1efd",
+      "original_bytes": 3769
+    },
+    {
+      "file": "02-v12-regression.log",
+      "original_sha256": "c7c70d2f6088bdebe0b3eb57701f9d5ce75c01c0d74b6b8a48ada0dd46b5cb84",
+      "original_bytes": 2941
+    },
+    {
+      "file": "03-execution-mock.log",
+      "original_sha256": "51e4f94508ffe6448943bb4b3ee29b5837a92ef6441f83aedc3a472f54215b02",
+      "original_bytes": 3610
+    },
+    {
+      "file": "04-cvss-schema.log",
+      "original_sha256": "c188f3dea4e66853d7652c1e62e4d7b4bc9c354b3b0d4f153b1585ca521b3790",
+      "original_bytes": 7265
+    },
+    {
+      "file": "05-git-comparison.log",
+      "original_sha256": "b74f4177bf4ac9eac30cb9019686fdada4ad68c1159debc035888c6cee0870eb",
+      "original_bytes": 1424
+    },
+    {
+      "file": "README.md",
+      "original_sha256": "298dc7a619169ecce6f4eeba5b510434c170cfbfabe69ed3f2e993456eb34d20",
+      "original_bytes": 7511
+    },
+    {
+      "file": "requirements-test.txt",
+      "original_sha256": "d3819fcad592ba6e59ccf36b4b582ed540bae592ae26acc277104e612df99dff",
+      "original_bytes": 28
+    },
+    {
+      "file": "results.json",
+      "original_sha256": "6426f0e36a28fc1b75aebabb8323a19d38aada11240b884148e03e2ce81e2996",
+      "original_bytes": 5410
+    }
+  ],
+  "storage": "Original bytes preserved outside the Git repository; history was not rewritten."
+}
