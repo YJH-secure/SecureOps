@@ -5,7 +5,11 @@
 **KT 클라우드 사이버보안 부트캠프 | 6인 팀 프로젝트**
 
 개발 기간: 2026.11.04 ~ 2026.12.01  
-프로젝트 상태: 인프라 구축 완료 보고 및 모듈 개발·통합 검증 진행 중
+프로젝트 상태: B/C/D/E 주요 코드 main 반영, JSON v1.2 신규 기준선 확정 / 신규 중앙 VM 실환경 통합·웹/네트워크 확장 진행 중 (2026-11-11)
+
+> **2026-11-11 공통 개발 기준 (먼저 읽기):** 신규 진단·집계·재검증 결과는 [JSON 계약 v1.2](docs/architecture/json-result-contract-v1.2.md)와 [CVSS v3.1 Base 정책 v1.2](docs/security-policy/cvss-scoring-policy-v1.2.md) 기준으로 개발합니다. 개별 결과는 `status/evidence/recommendation/cvss`를 포함하고 v1.2에서는 `severity`를 사용하지 않습니다. CVSS 미평가 점수는 `null`이며, 임의 점수 환산 금지. **기존 JSON v1.1은 레거시 기능·보고서 호환을 위해 유지**합니다. 팀원/AI는 [최신 프로젝트 현황](docs/project-status.md)과 [통합 게이트](docs/integration-checklist.md)를 반드시 확인하세요.
+>
+> **주의:** PR 제출/모의 테스트 = 실제 신규 VM E2E 완료가 아닙니다. 각 담당의 최신 PR, 테스트 SHA, 서버 검증을 구분하여 기록합니다.
 
 ## 1. 프로젝트 소개
 
@@ -73,16 +77,16 @@ SecureOps/
 ```
 
 
-## 공통 JSON 결과 규격 v1.1 (2026-11-06 개발 기준선)
+## 과거 JSON 결과 규격 v1.1 (호환용·2026-11-06 당시 기준)
 
-팀원은 새 기능 개발 및 AI 코드 점검 전에 다음 파일을 **동일한 기준**으로 참고합니다.
+아래는 2026-11-06 확정 당시의 v1.1 자료로, 기존 기능 회귀와 과거 데이터 해석을 위해 보존합니다. **신규 구현은 위의 v1.2 계약을 우선**합니다.
 
 - [공통 JSON 결과 계약서](docs/architecture/json-result-contract-v1.1.md) — 필수 필드·상태값·위험도·이전 규칙
 - [JSON Schema](docs/architecture/json-result-schema-v1.1.schema.json) — JSON 자료형·필수 키 자동 검증
 - [MOCK 샘플 결과](tests/fixtures/sample-result-v1.1-MOCK.json) — 가상 데이터 테스트 예시
 - [AI 코드 점검 가이드 (팀원별 프롬프트 포함)](docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 점검 요청서
 
-**v1.1은 팀장 확정 개발 규격이며, B/C/D/E 코드 적용과 실제 VM 통합 테스트 완료를 의미하지 않습니다.** 기존 v1.0 문서나 개별 모듈 코드의 상충 필드보다 위 v1.1 결과 계약을 우선합니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
+**v1.1은 기존 기능의 레거시 계약입니다.** v1.2로 명시적 전환하지 않은 과거 보고서·진단 경로는 계속 v1.1로 유지합니다. 두 형식은 구분하여 검증해야 하며 v1.1 severity를 CVSS 점수로 환산하지 않습니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
 
 ## 취약점 점검 기준표 v1.1 (진단 정책 기준)
 
