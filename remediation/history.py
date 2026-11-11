@@ -57,8 +57,26 @@ class ExecutionHistoryStore:
     def _encode(cls, record):
         if not isinstance(record, dict):
             raise TypeError("E execution history must be an object")
-        if "schema_version" in record or "results" in record:
+        if "results" in record:
             raise ValueError("D diagnosis reports do not belong in E history")
+        # 둘 다 없으면 과거 E 기록이다. 보정하거나 새 버전을 추측하지 않는다.
+        versions = {"schema_version", "diagnosis_schema_version"}
+        if versions & record.keys():
+            if not versions <= record.keys():
+                raise ValueError("both execution and diagnosis schema versions are required")
+            if any(type(record[key]) is not str for key in versions):
+                raise TypeError("schema versions must be strings")
+            if record["schema_version"] != "1.0":
+                raise ValueError("unsupported E execution history schema version")
+            if record["diagnosis_schema_version"] not in {"1.1", "1.2"}:
+                raise ValueError("unsupported diagnosis schema version")
+            for name in ("after_report", "post_rollback_report"):
+                report = record.get(name)
+                if report is not None:
+                    if not isinstance(report, dict):
+                        raise TypeError("diagnosis snapshot must be an object")
+                    if report.get("schema_version") != record["diagnosis_schema_version"]:
+                        raise ValueError("diagnosis snapshot schema version mismatch")
         for name in ("execution_id", "target_id", "check_id", "before_scan_id"):
             cls._id(record.get(name))
         for name in ("after_scan_id", "post_rollback_scan_id"):

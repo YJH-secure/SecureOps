@@ -71,7 +71,8 @@ class ExecutionHistoryFieldTests(unittest.TestCase):
             with self.subTest(version=version):
                 result = self.demo(result_version=version)
                 self.assertEqual(result["after_report"]["schema_version"], version)
-                self.assertNotIn("schema_version", result)
+                self.assertEqual(result["schema_version"], "1.0")
+                self.assertEqual(result["diagnosis_schema_version"], version)
                 for key in ("approval_id", "started_at", "finished_at"):
                     self.assertIn(key, result)
                     self.assertNotIn(key, result["after_report"])
@@ -120,8 +121,9 @@ class ExecutionHistoryFieldTests(unittest.TestCase):
 
     def test_schema_version_is_not_inferred(self):
         record = self.demo()
-        self.assertNotIn("schema_version", record)
-        with TemporaryDirectory(prefix="secureops-e-deferred-version-") as directory:
+        self.assertEqual(record["schema_version"], "1.0")
+        self.assertEqual(record["diagnosis_schema_version"], "1.2")
+        with TemporaryDirectory(prefix="secureops-e-distinct-version-") as directory:
             record["schema_version"] = "1.2"
             with self.assertRaises(ValueError):
                 ExecutionHistoryStore(directory).save(record)

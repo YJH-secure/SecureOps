@@ -165,6 +165,8 @@ class Remediator:
             result[field] = attempt["scan_id"]
         result["recheck_attempts"] = deepcopy(attempts)
         # 승인 검증·사용을 통과한 ID만 연결한다. 거부·제외·Dry-run은 null이다.
+        result["schema_version"] = "1.0"  # E 실행 이력 자체의 승인된 버전
+        result["diagnosis_schema_version"] = before["schema_version"]
         result["approval_id"] = result["approval"]["approval_id"] if result["approval"] else None
         result["started_at"] = started_at
         result["finished_at"] = datetime.now(timezone.utc).isoformat()
