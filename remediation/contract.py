@@ -1,4 +1,4 @@
-"""외부 패키지 없이 팀 공통 JSON v1.1의 구조와 값 범위를 검증한다."""
+"""v1.1은 기존 검사로, v1.2는 D의 공통 검사로 진단 보고서를 검증한다."""
 
 import json
 import re
@@ -36,11 +36,16 @@ def _fields(obj, required, optional):
 
 
 def validate_report(report):
-    """입력 report가 공통 JSON v1.1 보고서인지 검증한다.
+    """입력 report를 해당 버전의 공통 JSON 규칙으로 검증한다.
 
     반환: 정상일 때 None. 필드·상태·중복 ID·시각 등의 규격 위반은 예외로 거부한다.
     입력 수정이나 레거시 자동 변환은 하지 않는다. 민감정보 제거는 호출자 책임이다.
     """
+    if isinstance(report, dict) and report.get("schema_version") == "1.2":
+        from core.cvss_validation import validate_report as validate_v12
+        return validate_v12(report)
+
+    # v1.1 검증은 이전 필드와 상태값을 그대로 사용한다.
     _fields(report, {"schema_version": str, "scan_id": str, "target_id": str,
                      "os": str, "scanned_at": str, "results": list}, {"ip_address": str})
     if report["schema_version"] != "1.1" or not report["results"]:

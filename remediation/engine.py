@@ -83,6 +83,8 @@ def compare_reports(before, after, check_id):
     """동일 항목의 조치 전후 결과와 개선 여부를 비교한다."""
     validate_report(before)
     validate_report(after)
+    if before["schema_version"] != after["schema_version"]:
+        raise ValueError("recheck schema version mismatch")
     if before["target_id"] != after["target_id"] or before["os"] != after["os"]:
         raise ValueError("recheck target/OS mismatch")
     if before["scan_id"] == after["scan_id"]:
@@ -205,12 +207,20 @@ class Remediator:
 
         # 설정 검증을 통과한 뒤에는 재진단 결과와 오류를 따로 기록한다.
         try:
-            item = backend.recheck(plan)
-            steps.append("recheck")
-            # 조치 전과 같은 서버에 새 진단 회차를 부여해 전후 결과를 구분한다.
-            after = {"schema_version": "1.1", "target_id": plan.target_id, "os": plan.os,
-                     "scan_id": str(uuid4()), "scanned_at": datetime.now(timezone.utc).isoformat(),
-                     "results": [item]}
+            if report["schema_version"] == "1.2":
+                from core.main import DiagnosisAggregator
+                item = backend.recheck(plan, schema_version="1.2")
+                steps.append("recheck")
+                # D가 v1.2 보고서와 새 진단 ID·완료 시각을 생성한다.
+                after = DiagnosisAggregator.from_results(
+                    [item], [], target_id=plan.target_id, os=plan.os, schema_version="1.2",
+                ).get_report()
+            else:
+                item = backend.recheck(plan)
+                steps.append("recheck")
+                after = {"schema_version": "1.1", "target_id": plan.target_id, "os": plan.os,
+                         "scan_id": str(uuid4()), "scanned_at": datetime.now(timezone.utc).isoformat(),
+                         "results": [item]}
             comparison = compare_reports(report, after, plan.check_id)
             steps.append("compare")
         except Exception:
@@ -227,7 +237,7 @@ class Remediator:
             self._restore_after_recheck_failure(backend, snapshot, result)
             return result
 
-        # 재진단 보고서만 공통 JSON v1.1이다. 조치·복구 상태는 바깥 결과에 남긴다.
+        # 재진단 보고서만 공통 진단 JSON 규격을 따른다. 조치·복구 상태는 바깥 결과에 남긴다.
         result.update(after_report=after, comparison=comparison)
         if comparison["improved"]:
             result["outcome"] = "success"

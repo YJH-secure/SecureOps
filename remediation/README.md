@@ -3,7 +3,7 @@
 대상 환경: Ubuntu 24.04 LTS  
 구현 범위: SSH-01 MOCK 조치, 승인, 백업, 재진단, 복구
 
-공통 진단 JSON v1.1을 바탕으로 SSH root 원격 로그인 제한의 조치 흐름을 검증한다. 실제 서버를 변경하지 않고 메모리 기반 MOCK 백엔드를 사용한다.
+공통 진단 JSON v1.1 및 v1.2를 바탕으로 SSH root 원격 로그인 제한의 조치 흐름을 검증한다. 실제 서버를 변경하지 않고 메모리 기반 MOCK 백엔드를 사용한다.
 
 ## 실행 환경 및 명령
 
@@ -68,7 +68,7 @@ python -B -m unittest discover -s tests -v
 
 ## after_report, comparison 및 최종 상태
 
-`after_report`는 **조치 적용 후 재진단 시점**의 공통 JSON v1.1 보고서다. 재진단 이전에 중단되거나 재진단 실행·검증이 실패하면 `null`일 수 있다.
+`after_report`는 **조치 적용 후 재진단 시점**의 보고서이며 입력과 같은 JSON 버전을 사용한다. 재진단 이전에 중단되거나 재진단 실행·검증이 실패하면 `null`일 수 있다.
 
 재진단 결과가 개선되지 않아 그 뒤 MOCK 복구를 진행했다면, `after_report`는 **복구 전의 재진단 결과**일 수 있다. 따라서 `after_report`나 `comparison`을 복구 후 서버의 최종 상태로 해석하지 않는다. 복구 결과는 별도 `rollback`으로 표현하며, 복구 후 별도의 최종 보안 재진단이 수행되었다는 뜻도 아니다.
 
@@ -88,17 +88,37 @@ E 조치 실행 이력에는 다음 항목을 포함한다.
 
 ## 테스트 현황과 재현 조건
 
-현재 저장소의 `tests/test_remediation.py`에서 단위 테스트 **22개가 최신 main 병합 후 통과**했다.
+기존 E 단위 테스트 22개와 D↔E 통합 테스트 2개를 보존한다. 고정 D 커밋과 최신 main D 코드 기준으로 각각 24개를 검증한다. 신규 v1.2 테스트는 입력 검증, 승인·실패 복구, CLI 및 D 저장·재조회·전후 비교를 확인한다.
 
-과거 별도 환경에서 단위 테스트 22개와 연동 테스트 3개, 총 25개를 실행한 기록은 있으나, 현재 저장소에는 3개 연동 테스트의 원본 파일이 없다. 따라서 현재 환경에서 **25개 모두 재실행했다는 뜻이 아니다**.
-
-다른 개발자 환경에서 연동 테스트를 재현하려면 연동 테스트 파일, B/D 팀원 코드의 고정 버전이나 커밋, 입력 fixture 및 실행 명령을 저장소에 제공해야 한다. 개인 로컬 Git 객체에만 의존하는 방식은 재현 조건으로 충분하지 않다. 이 항목은 최종 통합 이전의 후속 과제다.
+테스트는 메모리 MOCK과 임시 저장소를 사용한다. 아래 실행 명령으로 같은 검증을 재현할 수 있으며, 고정 커밋 실행에는 해당 Git 객체가 필요하다.
 
 ## 검증 한계
 
 - MOCK 설정 변경, 백업 및 복구만 검증
 - 실제 SSH 접속, 설정 변경, reload, 접속 영향 미검증
 - 실제 서버 자동 복구 정책 미승인
-- 현재 저장소에서 연동 테스트 3개 재실행 불가
-- D 모듈 영속 저장 연동은 후속 협의 필요
+- D의 진단 보고서 저장 연동은 MOCK으로 검증, E 조치 실행 이력 저장은 후속 협의 필요
 - FILE-01의 실제 조치는 현재 E 모듈 범위에 포함하지 않음
+
+## JSON v1.2 개발
+
+기존 v1.1 실행 방식과 테스트를 보존하며, v1.2 검증은 core.cvss_validation.validate_report에 위임한다. v1.2 재진단 보고서는 DiagnosisAggregator.from_results(..., schema_version="1.2")로 생성한다. E는 CVSS 점수를 계산하지 않으며 평가 결과를 근거와 함께 보존한다. assess_cvss는 D의 별도 평가 경로이며 E 재진단마다 자동 호출하지 않는다.
+
+    python -B -m remediation --mock --result-version 1.2
+    python -B -m remediation --report tests/fixtures/sample-result-v1.2-MOCK.json
+    python -B -m unittest discover -s tests -p test_remediation_v12.py -v
+
+v1.2 내장 시연은 main의 공식 MOCK fixture를 사용한다. SSH-01의 점수는 pending/null이며, pass 재진단에는 CVSS not_applicable/null을 기록한다. 계산기 검증용 CVSS-MOCK-01은 허용된 조치 항목에 포함되지 않는다. 외부 JSON의 v1.2 텍스트는 중복 키를 거부하는 D 파서로 확인한다.
+
+### 기존 24개 회귀와 최신 D 확인
+
+    python -B tests/run_de_mock.py
+    python -B tests/run_de_mock.py --d-ref origin/main
+
+기본 실행은 기존 D 고정 커밋 994d20c를 사용한다. --d-ref는 로컬에서 확인할 D 버전을 선택한다. 두 명령 모두 기존 E 단위 테스트 22개와 v1.1 통합 테스트 2개를 실행한다. 각 테스트 묶음은 별도 프로세스에서 실행해 D 버전의 import 혼합을 방지한다. v1.2 신규 테스트는 새 브랜치에 반영한 main의 실제 D 코드를 사용하며 별도로 실행한다.
+
+### 조치 기준과 후속 협의
+
+조치 후보는 기존 진단 status와 승인된 항목·허용 목록으로 판단한다. CVSS pending/not_applicable의 null은 0점으로 바꾸지 않는다. CVSS scored의 높은 점수는 조치 승인을 대신하지 않는다. CVSS를 이용한 운영 우선순위는 팀 정책 확정 후 구현한다.
+
+D의 ReportStore에는 after_report만 저장한다. E 실행 이력 저장 규격, B/C 실제 재진단 연결과 실제 SSH 조치는 별도 후속 작업이다.

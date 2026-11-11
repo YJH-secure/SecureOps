@@ -79,16 +79,29 @@ class MockBackend:
         if not self.service_running:
             raise MockFailure("mock_service_unhealthy_after_change")
 
-    def recheck(self, plan):
+    def recheck(self, plan, *, schema_version="1.1"):
         """동일 항목의 모의 진단 결과를 반환한다."""
+        if schema_version not in {"1.1", "1.2"}:
+            raise ValueError("unsupported recheck schema version")
         self._step("recheck")
         if self.recheck_callback is not None:
             return self.recheck_callback(self.target_id, plan.check_id,
                                          deepcopy(self.files), self.root_login)
-        return {"check_id": plan.check_id, "severity": "high",
+        item = {"check_id": plan.check_id,
                 "status": "pass" if self.root_login == "no" else "vulnerable",
                 "evidence": "MOCK: effective PermitRootLogin value rechecked",
                 "recommendation": "MOCK: review the change before any VM test"}
+        if schema_version == "1.1":
+            item["severity"] = "high"
+        else:
+            # 가상 설정의 판정만 제공한다. 점수나 Vector를 추측하지 않는다.
+            item["cvss"] = {
+                "assessment_status": "not_applicable" if item["status"] == "pass" else "pending",
+                "version": None, "vector": None, "base_score": None, "rating": None, "source": None,
+                "rationale": ("MOCK: no vulnerable finding after recheck" if item["status"] == "pass"
+                              else "MOCK: CVSS applicability and evidence await review"),
+            }
+        return item
 
     def restore(self, token):
         """백업 식별자 token을 받아 파일 상태와 root 로그인 값을 복원한다."""
