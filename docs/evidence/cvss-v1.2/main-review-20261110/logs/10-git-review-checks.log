@@ -1,0 +1,46 @@
+$ git diff --check
+
+$ git diff --stat origin/main
+ core/main.py          | 66 +++++++++++++++++++++++++++++++++++++++------------
+ core/remote_result.py | 10 +++++---
+ core/runner.py        |  7 +++++-
+ core/storage.py       | 16 +++++++++----
+ 4 files changed, 76 insertions(+), 23 deletions(-)
+
+$ git diff --name-only origin/main
+core/main.py
+core/remote_result.py
+core/runner.py
+core/storage.py
+
+$ git status --short --branch
+## feature/cvss-core-jhm-main-review...origin/main
+ M core/main.py
+ M core/remote_result.py
+ M core/runner.py
+ M core/storage.py
+?? core/cvss.py
+?? core/cvss_assessment.py
+?? core/cvss_validation.py
+?? docs/evidence/cvss-v1.2/
+?? requirements-test.txt
+?? tests/test_cvss.py
+?? tests/test_cvss_assessment.py
+?? tests/test_cvss_v12.py
+
+$ git ls-files --others --exclude-standard
+core/cvss.py
+core/cvss_assessment.py
+core/cvss_validation.py
+docs/evidence/cvss-v1.2/attempts/current-bc-20261110/environment-and-results.json
+docs/evidence/cvss-v1.2/d-cvss-core-report.md
+docs/evidence/cvss-v1.2/environment-and-results.json
+docs/evidence/cvss-v1.2/main-review-20261110/attempts/checkout-newline-check/environment-and-results.json
+docs/evidence/cvss-v1.2/main-review-20261110/environment-and-results.json
+docs/evidence/cvss-v1.2/main-review-20261110/run-main-review-evidence.py
+docs/evidence/cvss-v1.2/main-review-20261110/transfer-manifest.json
+docs/evidence/cvss-v1.2/run-cvss-evidence.py
+requirements-test.txt
+tests/test_cvss.py
+tests/test_cvss_assessment.py
+tests/test_cvss_v12.py

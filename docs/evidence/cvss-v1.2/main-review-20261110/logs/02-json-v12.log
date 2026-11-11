@@ -1,0 +1,38 @@
+Started (KST): 2026-11-10T16:52:36+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_cvss_v12.py -v
+Mode: D worktree; synthetic inputs
+Exit code: 0
+
+test_bc_mock_json_runner_aggregation_storage_and_details (test_cvss_v12.V12PipelineTests.test_bc_mock_json_runner_aggregation_storage_and_details) ... ok
+test_cli_supports_v12_and_both_invocation_styles (test_cvss_v12.V12PipelineTests.test_cli_supports_v12_and_both_invocation_styles) ... ok
+test_five_statuses_and_no_evaluable_results (test_cvss_v12.V12PipelineTests.test_five_statuses_and_no_evaluable_results) ... ok
+test_invalid_remote_cvss_never_saved (test_cvss_v12.V12PipelineTests.test_invalid_remote_cvss_never_saved) ... ok
+test_mixed_version_failure_and_bad_metadata_do_not_save (test_cvss_v12.V12PipelineTests.test_mixed_version_failure_and_bad_metadata_do_not_save) ... ok
+test_remote_v12_strictness_and_explicit_version_selection (test_cvss_v12.V12PipelineTests.test_remote_v12_strictness_and_explicit_version_selection) ... ok
+test_sensitive_values_still_rejected (test_cvss_v12.V12PipelineTests.test_sensitive_values_still_rejected) ... ok
+test_v11_v12_storage_history_and_comparison (test_cvss_v12.V12PipelineTests.test_v11_v12_storage_history_and_comparison) ... ok
+test_v12_file_and_storage_reject_duplicate_json_keys (test_cvss_v12.V12PipelineTests.test_v12_file_and_storage_reject_duplicate_json_keys) ... ok
+test_all_diagnosis_and_assessment_state_combinations (test_cvss_v12.V12RuntimeTests.test_all_diagnosis_and_assessment_state_combinations) ... ok
+test_contracts_are_not_mixed_or_automatically_migrated (test_cvss_v12.V12RuntimeTests.test_contracts_are_not_mixed_or_automatically_migrated) ... ok
+test_cvss_required_extra_fields_source_and_reason (test_cvss_v12.V12RuntimeTests.test_cvss_required_extra_fields_source_and_reason) ... ok
+test_duplicate_check_ids (test_cvss_v12.V12RuntimeTests.test_duplicate_check_ids) ... ok
+test_invalid_numeric_scores_and_precision (test_cvss_v12.V12RuntimeTests.test_invalid_numeric_scores_and_precision) ... ok
+test_invalid_vector_and_unknown_contract (test_cvss_v12.V12RuntimeTests.test_invalid_vector_and_unknown_contract) ... ok
+test_json_native_types_and_nonfinite_details (test_cvss_v12.V12RuntimeTests.test_json_native_types_and_nonfinite_details) ... ok
+test_official_mock_and_expected_aggregates (test_cvss_v12.V12RuntimeTests.test_official_mock_and_expected_aggregates) ... ok
+test_rating_mismatch (test_cvss_v12.V12RuntimeTests.test_rating_mismatch) ... ok
+test_report_and_item_required_fields_and_types (test_cvss_v12.V12RuntimeTests.test_report_and_item_required_fields_and_types) ... ok
+test_score_and_vector_mismatch (test_cvss_v12.V12RuntimeTests.test_score_and_vector_mismatch) ... ok
+test_strict_json_rejects_duplicate_keys_and_nonfinite_numbers (test_cvss_v12.V12RuntimeTests.test_strict_json_rejects_duplicate_keys_and_nonfinite_numbers) ... ok
+test_timestamp_semantics_and_timezone (test_cvss_v12.V12RuntimeTests.test_timestamp_semantics_and_timezone) ... ok
+test_unscored_values_must_all_be_null (test_cvss_v12.V12RuntimeTests.test_unscored_values_must_all_be_null) ... ok
+test_zero_score_and_null_are_distinct (test_cvss_v12.V12RuntimeTests.test_zero_score_and_null_are_distinct) ... ok
+test_adopted_schema_and_mock (test_cvss_v12.V12SchemaTests.test_adopted_schema_and_mock) ... ok
+test_runtime_checks_numeric_consistency_beyond_schema (test_cvss_v12.V12SchemaTests.test_runtime_checks_numeric_consistency_beyond_schema) ... ok
+test_schema_all_state_combinations (test_cvss_v12.V12SchemaTests.test_schema_all_state_combinations) ... ok
+test_schema_and_runtime_reject_structural_negatives (test_cvss_v12.V12SchemaTests.test_schema_and_runtime_reject_structural_negatives) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.369s
+
+OK

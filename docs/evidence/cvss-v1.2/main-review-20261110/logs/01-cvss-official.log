@@ -1,0 +1,21 @@
+Started (KST): 2026-11-10T16:52:36+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_cvss.py -v
+Mode: D worktree; synthetic inputs
+Exit code: 0
+
+test_all_2592_base_combinations_have_valid_bounded_tenths (test_cvss.CVSSBaseTests.test_all_2592_base_combinations_have_valid_bounded_tenths) ... ok
+test_canonical_parser (test_cvss.CVSSBaseTests.test_canonical_parser) ... ok
+test_first_official_examples (test_cvss.CVSSBaseTests.test_first_official_examples) ... ok
+test_first_roundup_examples_and_floating_point (test_cvss.CVSSBaseTests.test_first_roundup_examples_and_floating_point) ... ok
+test_invalid_duplicate_missing_and_extra_metrics (test_cvss.CVSSBaseTests.test_invalid_duplicate_missing_and_extra_metrics) ... ok
+test_policy_mock_is_98_critical (test_cvss.CVSSBaseTests.test_policy_mock_is_98_critical) ... ok
+test_rating_boundaries (test_cvss.CVSSBaseTests.test_rating_boundaries) ... ok
+test_rating_rejects_invalid_values (test_cvss.CVSSBaseTests.test_rating_rejects_invalid_values) ... ok
+test_roundup_rejects_nonfinite_and_non_numeric (test_cvss.CVSSBaseTests.test_roundup_rejects_nonfinite_and_non_numeric) ... ok
+test_scope_and_privilege_weights (test_cvss.CVSSBaseTests.test_scope_and_privilege_weights) ... ok
+test_zero_impact_in_both_scopes (test_cvss.CVSSBaseTests.test_zero_impact_in_both_scopes) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.014s
+
+OK

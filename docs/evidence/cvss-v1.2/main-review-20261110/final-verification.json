@@ -1,0 +1,53 @@
+{
+  "backup_path": "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\SecureOps-cvss-backup-854703a2d5fe",
+  "backup_manifest_sha256": "d02caeb4fcd3fbaf2c23ae225c1034fbcc24aac489a001829d44d6116b7a186a",
+  "backup_file_count": 57,
+  "backup_sha256_match": true,
+  "original_worktree_hashes_unchanged": true,
+  "original_worktree_status_unchanged": true,
+  "existing_branch_refs_unchanged": true,
+  "implementation_files_match_backup": true,
+  "historical_evidence_count": 15,
+  "historical_ignored_logs_count": 11,
+  "historical_evidence_unchanged": true,
+  "unselected_tracked_main_files_unchanged": true,
+  "selected_source_test_dependency_files": [
+    "core/main.py",
+    "core/runner.py",
+    "core/storage.py",
+    "core/remote_result.py",
+    "core/cvss.py",
+    "core/cvss_validation.py",
+    "core/cvss_assessment.py",
+    "tests/test_cvss.py",
+    "tests/test_cvss_v12.py",
+    "tests/test_cvss_assessment.py",
+    "requirements-test.txt"
+  ],
+  "checks": {
+    "git diff --check": {
+      "exit_code": 0,
+      "stdout": ""
+    },
+    "git diff --stat origin/main": {
+      "exit_code": 0,
+      "stdout": " core/main.py          | 66 +++++++++++++++++++++++++++++++++++++++------------\n core/remote_result.py | 10 +++++---\n core/runner.py        |  7 +++++-\n core/storage.py       | 16 +++++++++----\n 4 files changed, 76 insertions(+), 23 deletions(-)\n"
+    },
+    "git diff --name-only origin/main": {
+      "exit_code": 0,
+      "stdout": "core/main.py\ncore/remote_result.py\ncore/runner.py\ncore/storage.py\n"
+    },
+    "git status --short --branch": {
+      "exit_code": 0,
+      "stdout": "## feature/cvss-core-jhm-main-review...origin/main\n M core/main.py\n M core/remote_result.py\n M core/runner.py\n M core/storage.py\n?? core/cvss.py\n?? core/cvss_assessment.py\n?? core/cvss_validation.py\n?? docs/evidence/cvss-v1.2/\n?? requirements-test.txt\n?? tests/test_cvss.py\n?? tests/test_cvss_assessment.py\n?? tests/test_cvss_v12.py\n"
+    },
+    "git ls-files --others --exclude-standard": {
+      "exit_code": 0,
+      "stdout": "core/cvss.py\ncore/cvss_assessment.py\ncore/cvss_validation.py\ndocs/evidence/cvss-v1.2/attempts/current-bc-20261110/environment-and-results.json\ndocs/evidence/cvss-v1.2/d-cvss-core-report.md\ndocs/evidence/cvss-v1.2/environment-and-results.json\ndocs/evidence/cvss-v1.2/main-review-20261110/attempts/checkout-newline-check/environment-and-results.json\ndocs/evidence/cvss-v1.2/main-review-20261110/environment-and-results.json\ndocs/evidence/cvss-v1.2/main-review-20261110/run-main-review-evidence.py\ndocs/evidence/cvss-v1.2/main-review-20261110/transfer-manifest.json\ndocs/evidence/cvss-v1.2/run-cvss-evidence.py\nrequirements-test.txt\ntests/test_cvss.py\ntests/test_cvss_assessment.py\ntests/test_cvss_v12.py\n"
+    }
+  },
+  "review_path": "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\SecureOps-cvss-main-review-854703a2d5fe",
+  "review_branch": "feature/cvss-core-jhm-main-review",
+  "review_head": "d1f7534b3d0d3b9978d15bbea3ae9633eaf43d75",
+  "ssh_vm_executed": false
+}

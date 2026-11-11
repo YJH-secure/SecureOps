@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "mock-cvss-20261110-001",
+  "target_id": "ubuntu-a-mock",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-10T12:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "category": "계정·인증",
+      "title": "SSH root 원격 로그인 제한",
+      "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+      "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+      "cvss": {
+        "assessment_status": "pending",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+      }
+    },
+    {
+      "check_id": "ACC-01",
+      "status": "pass",
+      "category": "계정·인증",
+      "title": "비밀번호 정책 적용 여부",
+      "evidence": "MOCK: 승인된 설정 기준 충족",
+      "recommendation": "현 상태 유지",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+      }
+    },
+    {
+      "check_id": "LOG-01",
+      "status": "vulnerable",
+      "category": "시스템·서비스",
+      "title": "로그 보관 정책",
+      "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+      "recommendation": "관리자 검토 후 보관 정책 개선",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+      }
+    },
+    {
+      "check_id": "CVSS-MOCK-01",
+      "status": "vulnerable",
+      "category": "평가 엔진 테스트",
+      "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+      "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+      "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+      "cvss": {
+        "assessment_status": "scored",
+        "version": "3.1",
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "base_score": 9.8,
+        "rating": "critical",
+        "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+        "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+      }
+    }
+  ]
+}
