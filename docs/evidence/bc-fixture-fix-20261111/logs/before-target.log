@@ -1,0 +1,116 @@
+{"label": "before-target", "command": "python -B -X utf8 -m unittest discover -s tests -p test_bc_offline_integration.py -v", "started_at_kst": "2026-11-11T19:17:31+09:00", "finished_at_kst": "2026-11-11T19:17:31+09:00", "exit_code": 1, "tests_run": 3, "ok_method_lines": 0, "log": "logs/before-target.log", "explicit_d_source": false, "failures": 0, "errors": 6, "skipped": 0, "error_headings": ["test_actual_bc_functions_to_validated_report_summary_and_storage (test_bc_offline_integration.BCOfflineIntegrationTests.test_actual_bc_functions_to_validated_report_summary_and_storage)", "test_file_details_and_inputs_preserved_without_shared_mutation (test_bc_offline_integration.BCOfflineIntegrationTests.test_file_details_and_inputs_preserved_without_shared_mutation)", "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['error', 'needs_review'])", "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'error'])", "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['needs_review', 'pass'])", "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'pass'])"], "sanitized_stdout_sha256_before_space_trim": "8bbae080acbb346feb1676288487510f842516f0ad8191e1171ace79f02ca57c", "log_normalization": "UTF-8/LF; private path placeholders; trailing spaces removed"}
+
+test_actual_bc_functions_to_validated_report_summary_and_storage (test_bc_offline_integration.BCOfflineIntegrationTests.test_actual_bc_functions_to_validated_report_summary_and_storage) ... ERROR
+test_file_details_and_inputs_preserved_without_shared_mutation (test_bc_offline_integration.BCOfflineIntegrationTests.test_file_details_and_inputs_preserved_without_shared_mutation) ... ERROR
+test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) ...
+  test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['error', 'needs_review']) ... ERROR
+  test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'error']) ... ERROR
+  test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['needs_review', 'pass']) ... ERROR
+  test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'pass']) ... ERROR
+
+======================================================================
+ERROR: test_actual_bc_functions_to_validated_report_summary_and_storage (test_bc_offline_integration.BCOfflineIntegrationTests.test_actual_bc_functions_to_validated_report_summary_and_storage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 157, in test_actual_bc_functions_to_validated_report_summary_and_storage
+    result, _ = self._run(sshd_output="permitrootlogin yes\n")
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+======================================================================
+ERROR: test_file_details_and_inputs_preserved_without_shared_mutation (test_bc_offline_integration.BCOfflineIntegrationTests.test_file_details_and_inputs_preserved_without_shared_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 166, in test_file_details_and_inputs_preserved_without_shared_mutation
+    result, originals = self._run()
+                        ~~~~~~~~~^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+======================================================================
+ERROR: test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['error', 'needs_review'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 202, in test_pass_error_and_needs_review_are_counted_independently
+    result, _ = self._run(ssh, scan_id=f"offline-status-{index}")
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+======================================================================
+ERROR: test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'error'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 202, in test_pass_error_and_needs_review_are_counted_independently
+    result, _ = self._run(ssh, scan_id=f"offline-status-{index}")
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+======================================================================
+ERROR: test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['needs_review', 'pass'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 202, in test_pass_error_and_needs_review_are_counted_independently
+    result, _ = self._run(ssh, scan_id=f"offline-status-{index}")
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+======================================================================
+ERROR: test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'pass'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_bc_offline_integration.py", line 202, in test_pass_error_and_needs_review_are_counted_independently
+    result, _ = self._run(ssh, scan_id=f"offline-status-{index}")
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\tests\test_bc_offline_integration.py", line 119, in _run
+    result = run_target(
+        account_checks=[lambda: receive(lambda: self.b.check_ssh_01(
+    ...<5 lines>...
+        scanned_at="2026-11-09T10:00:00+09:00",
+    )
+  File "<REPO>\core\runner.py", line 84, in run_target
+    raise RunFailed(failures, collected)
+core.runner.RunFailed: 진단 호출 또는 반환값 검증 실패: account[0]. 보고서를 저장하지 않았습니다.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.063s
+
+FAILED (errors=6)
