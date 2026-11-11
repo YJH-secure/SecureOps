@@ -1,0 +1,7 @@
+Command: fresh Python inline CLI validation process
+Actual C main() calls: 8
+Passed: 8
+Failed: 0
+D v1.1 error_count: 4
+D v1.2 error_count: 4
+Actual SSH/VM/commands: not executed

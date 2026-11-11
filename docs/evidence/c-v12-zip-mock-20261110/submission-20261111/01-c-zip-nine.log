@@ -1,0 +1,16 @@
+{"command": "python -B -X utf8 -m unittest discover -s tests -p test_c_zip_v12_integration.py -v", "started_at_kst": "2026-11-11T09:36:35+09:00", "finished_at_kst": "2026-11-11T09:36:36+09:00", "exit_code": 0, "tests": 9, "log": "01-c-zip-nine.log", "skipped": 0, "failures": 0, "errors": 0, "passed": 9}
+
+test_c_cli_version_selection_defaults_to_v11 (test_c_zip_v12_integration.CZipV12IntegrationTests.test_c_cli_version_selection_defaults_to_v11) ... ok
+test_deep_details_and_input_independence (test_c_zip_v12_integration.CZipV12IntegrationTests.test_deep_details_and_input_independence) ... ok
+test_diagnosis_error_is_valid_delivered_json (test_c_zip_v12_integration.CZipV12IntegrationTests.test_diagnosis_error_is_valid_delivered_json) ... ok
+test_execution_failure_rejected_without_report (test_c_zip_v12_integration.CZipV12IntegrationTests.test_execution_failure_rejected_without_report) ... ok
+test_existing_scored_fixture_is_separate_from_c_outputs (test_c_zip_v12_integration.CZipV12IntegrationTests.test_existing_scored_fixture_is_separate_from_c_outputs) ... ok
+test_four_actual_c_v12_results_to_d_storage (test_c_zip_v12_integration.CZipV12IntegrationTests.test_four_actual_c_v12_results_to_d_storage) ... ok
+test_invalid_cvss_rejected_without_repair (test_c_zip_v12_integration.CZipV12IntegrationTests.test_invalid_cvss_rejected_without_repair) ... ok
+test_malformed_json_rejected_without_report (test_c_zip_v12_integration.CZipV12IntegrationTests.test_malformed_json_rejected_without_report) ... ok
+test_v11_default_adapter_and_d_default_contract (test_c_zip_v12_integration.CZipV12IntegrationTests.test_v11_default_adapter_and_d_default_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.684s
+
+OK
