@@ -70,6 +70,20 @@ class ExecutionHistoryStore:
             raise ValueError("invalid execution outcome")
         if record.get("rollback") not in {"not_needed", "verified", "failed"}:
             raise ValueError("invalid rollback value")
+        # 과거 미기재 기록은 그대로 읽되 새 메타데이터가 있으면 정합성을 검사한다.
+        if "approval_id" in record:
+            if record["approval_id"] is not None:
+                cls._id(record["approval_id"])
+            approval = record.get("approval")
+            expected_id = approval.get("approval_id") if isinstance(approval, dict) else None
+            if record["approval_id"] != expected_id:
+                raise ValueError("top-level approval_id does not match the verified approval")
+        if "started_at" in record or "finished_at" in record:
+            from .contract import timestamp
+            start = timestamp(record.get("started_at"))
+            finish = timestamp(record.get("finished_at"))
+            if finish < start:
+                raise ValueError("execution finished_at precedes started_at")
         payload = json.dumps(record, ensure_ascii=False, indent=2, allow_nan=False)
         # Dry-run 계획의 tuple은 기존 CLI JSON 출력과 같은 배열로 저장한다.
         _check_object_keys(record)

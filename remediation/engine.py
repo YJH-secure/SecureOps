@@ -114,6 +114,7 @@ class Remediator:
     def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
             recheck_report=None, recheck_adapter=None, post_rollback_recheck=False):
         """기존 조치 절차와 별도로 E 실행 ID·진단 연결·최종 보안 상태를 기록한다."""
+        started_at = datetime.now(timezone.utc).isoformat()
         if type(post_rollback_recheck) is not bool:
             raise ValueError("post_rollback_recheck must be boolean")
         if post_rollback_recheck and recheck_adapter is None:
@@ -163,6 +164,10 @@ class Remediator:
             field = "after_scan_id" if attempt["phase"] == "after" else "post_rollback_scan_id"
             result[field] = attempt["scan_id"]
         result["recheck_attempts"] = deepcopy(attempts)
+        # 승인 검증·사용을 통과한 ID만 연결한다. 거부·제외·Dry-run은 null이다.
+        result["approval_id"] = result["approval"]["approval_id"] if result["approval"] else None
+        result["started_at"] = started_at
+        result["finished_at"] = datetime.now(timezone.utc).isoformat()
         return result
 
     def _run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
