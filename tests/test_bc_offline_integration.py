@@ -72,7 +72,15 @@ class BCOfflineIntegrationTests(unittest.TestCase):
         self.b_policy = {
             "check_id": "SSH-01", "description": "MOCK SSH policy", "severity": "high",
             "criteria": {"type": "sshd_effective_setting", "operator": "equals",
-                         "setting": "PermitRootLogin", "expected": "no"},
+                         "setting": "PermitRootLogin", "expected": "no",
+                         "vulnerable_values": {
+                             "yes": "root login is allowed with password and public key authentication",
+                             "prohibit-password": "root login is allowed with public key authentication (password login blocked)",
+                             "without-password": "legacy name of prohibit-password; root login is allowed with public key authentication",
+                             "forced-commands-only": "root login is allowed with public key authentication for forced commands only",
+                         },
+                         "test_connection": {"user": "root", "host": "mock-offline.invalid",
+                                             "addr": "192.0.2.10"}},
         }
         self.c_policy = {
             "check_id": "FILE-01", "description": "MOCK file policy", "severity": "high",
@@ -184,8 +192,8 @@ class BCOfflineIntegrationTests(unittest.TestCase):
         for index, (ssh, file_state, statuses, counts) in enumerate((
             ("", "pending", ["error", "needs_review"], dict(passed=0, error=1, review=1)),
             ("permitrootlogin no\n", "error", ["pass", "error"], dict(passed=1, error=1)),
-            ("permitrootlogin prohibit-password\n", "pass", ["needs_review", "pass"],
-             dict(passed=1, review=1)),
+            ("permitrootlogin prohibit-password\n", "pass", ["vulnerable", "pass"],
+             dict(passed=1, vulnerable=1)),
             ("permitrootlogin no\n", "pass", ["pass", "pass"], dict(passed=2)),
         )):
             with self.subTest(statuses=statuses):
