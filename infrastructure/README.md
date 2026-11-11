@@ -4,7 +4,7 @@
 
 **담당:** 김민우 (A · 서버·네트워크 인프라)  
 **관련 문서:** [시스템 아키텍처 설계서](../docs/architecture/system-architecture.md) · [프로젝트 README](../README.md)  
-**상태:** 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷 적용 및 검증 증거 확보 완료 / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장 참고
+**상태:** 2026-11-11 VM 3대 재구축 완료 — 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷, 검증 증거 확보 완료 / VM 폴더 백업 및 SHA-256 기록 완료(내부 구성·7-Zip 검사·복원 시험은 미수행, 7-1) / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장, 재구축 경위는 11장 참고
 
 ## 1. 개요
 
@@ -26,7 +26,7 @@
 | --- | --- | --- |
 | 서버 | 3대 OS 설치 (Ubuntu 24.04.5 LTS Server/Desktop, Rocky Linux 9.8 Desktop) | 2장 |
 | 서버 식별자 | `central-mgmt`, `ubuntu-a`, `rocky-b` 확정 | 2장 |
-| 호스트명 | Central-Management-Ubuntu, Target-Ubuntu, Target-Rocky 설정 | 2장 |
+| 호스트명 | central-management-ubuntu, Target-Ubuntu, Target-Rocky 설정 (재구축 후 `central-mgmt`는 소문자) | 2장 |
 | 네트워크 | VMnet8 NAT, `192.168.10.0/24` 고정 IP, 게이트웨이·DNS `192.168.10.2` | 3장 |
 | 시간대 | 3대 모두 `Asia/Seoul` | 5-3 |
 | SSH 서버 | 진단 대상 A/B에서 OpenSSH 서버 실행 | 5-4 |
@@ -35,7 +35,8 @@
 | sudo 권한 | sudoers 초안 v0 적용 — scan은 읽기 보조 명령, fix는 승인된 SSH 설정 적용 명령만 허용 | 5-6 |
 | 관리 계정 | Rocky `user1`을 `wheel` 그룹에 추가해 3대 모두 `user1` sudo 사용 | 5-6 |
 | SSH 키 인증 | Ed25519 키 계정별 분리 생성, 공개키 등록, 4개 조합 키 접속 동작 확인 | 5-5 |
-| 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태, 2026-11-06 재생성) | 7장 |
+| 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태, 재구축 후 2026-11-11 생성) | 7장 |
+| 백업 | `01-ssh-security-configured` 이후 VM 폴더 3대를 별도 드라이브에 zip으로 백업, SHA-256 기록 (2026-11-11) | 7-1 |
 
 **추후 적용·검증 예정** — 아직 서버에 적용되지 않음
 
@@ -50,24 +51,36 @@
 
 ## 2. 서버 구성
 
+2026-11-11 재구축 기준이다. 재구축 전 커널 값은 아래 "커널 버전 변동"에, 재구축 경위는 11장에 적는다.
+
 | 구분 | 서버 식별자 | 호스트명 | OS | 에디션 | IP | 커널 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 중앙 관리 서버 | `central-mgmt` | Central-Management-Ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-147-generic |
+| 중앙 관리 서버 | `central-mgmt` | central-management-ubuntu | Ubuntu 24.04.5 LTS | Server | `192.168.10.10` | 6.8.0-139-generic |
 | 진단 대상 A | `ubuntu-a` | Target-Ubuntu | Ubuntu 24.04.5 LTS | Desktop | `192.168.10.20` | 7.0.0-42-generic |
-| 진단 대상 B | `rocky-b` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) | Desktop | `192.168.10.30` | 5.14.0-687.65.1.el9_8.x86_64 |
+| 진단 대상 B | `rocky-b` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) | Desktop | `192.168.10.30` | 5.14.0-687.66.1.el9_8.x86_64 |
+
+| 서버 식별자 | 네트워크 인터페이스 |
+| --- | --- |
+| `central-mgmt` | `ens33` |
+| `ubuntu-a` | `ens33` |
+| `rocky-b` | `ens160` |
 
 | 구분 | vCPU | RAM | 디스크 | 역할 |
 | --- | --- | --- | --- | --- |
 | 중앙 관리 서버 | 2 | 4096MB | 40GB | 진단 실행, SSH 연결 관리, 결과 통합·평가, 승인·조치 제어 |
 | 진단 대상 A | 2 | 4096MB | 30GB | 1차 Linux 취약점 진단 및 재검증 |
-| 진단 대상 B | 2 | 2048MB | 30GB | 다른 배포판의 점검 및 조치 호환성 검증 |
+| 진단 대상 B | 2 | 2048MB | 30GB (NVMe) | 다른 배포판의 점검 및 조치 호환성 검증 |
 
 - 가상화: VMware Workstation
 - 서버 식별자는 아키텍처 설계서 6장의 논리 식별자를 따르며, IP나 호스트명이 바뀌어도 유지한다.
 
+> **`central-mgmt` 호스트명:** 재구축 후 정적 호스트명이 소문자 `central-management-ubuntu`로 설정되었다 (`central-mgmt-hostname-261111.png`). 재구축 전에는 `Central-Management-Ubuntu`였다. 진단 결과와 연동은 서버 식별자(`central-mgmt`)와 IP를 기준으로 하므로 동작에는 영향이 없다. 대소문자를 맞출지는 10장에서 협의한다.
+
 > **Desktop 대상 주의:** 진단 대상 2대는 Desktop 에디션이라 Server보다 기본 서비스·패키지가 많다. SVC-01 등 서비스 관련 점검 결과에 차이가 생길 수 있다.
 
-> **커널 차이:** 같은 Ubuntu 24.04.5라도 Server는 기본 커널(6.8), Desktop은 HWE 커널(7.0)이 설치된다. 서버 간 진단 결과가 다를 때 확인할 요소로 기록한다.
+> **커널 차이:** 같은 Ubuntu 24.04.5라도 Server는 기본 커널(6.8), Desktop은 HWE 커널이 설치된다(재구축 전 `ubuntu-a`는 7.0). 서버 간 진단 결과가 다를 때 확인할 요소로 기록한다.
+
+> **커널 버전 변동:** 커널은 설치 매체와 패키지 업데이트 시점에 따라 바뀐다. 재구축 전후 비교: `central-mgmt` 6.8.0-147 → 6.8.0-139 (더 낮음), `ubuntu-a` 7.0.0-42 (같음), `rocky-b` 5.14.0-687.65.1 → 5.14.0-687.66.1. 진단 결과에 커널 버전을 쓸 때는 이 표가 아니라 진단 시점에 `uname -r`로 수집한 값을 기준으로 한다.
 
 ## 3. 네트워크 구성
 
@@ -236,6 +249,24 @@ ssh -i ~/.ssh/id_ed25519_fix  secureops-fix@192.168.10.20
 
 > 개인키(`~/.ssh/id_ed25519_scan`, `~/.ssh/id_ed25519_fix`)는 중앙 관리 서버 밖으로 복사하지 않으며 이 저장소에 커밋하지 않는다.
 
+**5) 재구축 시 키 재생성 (2026-11-11)**
+
+VM을 다시 설치하면 서버의 **호스트 키**와 `central-mgmt`의 **사용자 키**가 모두 새로 만들어진다.
+
+| 구분 | 변경 내용 | 조치 |
+| --- | --- | --- |
+| 호스트 키 (3대) | OS 재설치로 SSH 호스트 키가 새로 생성됨 | 이전에 접속한 PC·서버의 `known_hosts`에서 해당 IP 항목을 지운 뒤, 처음 접속할 때 지문을 확인하고 등록 |
+| 사용자 키 (`central-mgmt`) | `id_ed25519_scan`, `id_ed25519_fix`를 위 2)로 새로 생성 | 위 3)으로 진단 대상 A/B에 공개키를 다시 등록 (Rocky는 `restorecon` 포함) |
+
+```bash
+# 이전에 접속했던 PC·서버에서 실행 — 바뀐 호스트 키의 이전 항목 삭제
+ssh-keygen -R 192.168.10.10
+ssh-keygen -R 192.168.10.20
+ssh-keygen -R 192.168.10.30
+```
+
+Windows PowerShell에서도 같은 명령(`ssh-keygen -R <IP>`)을 쓴다. 별칭(`ubuntu-a` 등)으로 접속해 저장된 항목이 있으면 별칭도 같은 방법으로 지운다.
+
 ### 5-6. 계정 권한 및 sudo 설정 현황 (sudoers 초안 v0)
 
 2026-11-06 팀장 요청에 따라 **sudoers 초안 v0**을 진단 대상 A/B에 적용했다. 기준표 v1.1의 8개 점검 항목 중 **일반 권한으로 불가능했던 확인만** 정확한 명령·인자 단위로 허용하며, 팀장 검토 후 확정·조정한다.
@@ -252,45 +283,29 @@ ssh -i ~/.ssh/id_ed25519_fix  secureops-fix@192.168.10.20
 | `secureops-scan` | 본인 그룹만 | `sshd -T`, `ss -lntup`, 방화벽 조회, `nft list ruleset`, 인증 로그 `tail -n 200`, (Rocky) `cat /etc/ssh/sshd_config` | `/etc/sudoers.d/secureops-scan` |
 | `secureops-fix` | 본인 그룹만 | `sshd -t`, 승인된 SSH drop-in 설치·제거, SSH 서비스 reload | `/etc/sudoers.d/secureops-fix` |
 
+2026-11-11 재구축 후 같은 허용 명령으로 다시 적용했다. 재구축본은 `Cmnd_Alias` 없이 한 줄로 작성했으며, 허용 명령과 인자는 재구축 전(2026-11-06)과 같다. 권한은 추가하거나 줄이지 않았다.
+
 **진단 대상 A (Ubuntu) — 적용 내용**
 
 ```text
 # /etc/sudoers.d/secureops-scan
-Cmnd_Alias SECUREOPS_SCAN = /usr/sbin/sshd -T, \
-                            /usr/bin/ss -lntup, \
-                            /usr/sbin/ufw status verbose, \
-                            /usr/sbin/nft list ruleset, \
-                            /usr/bin/tail -n 200 /var/log/auth.log
-secureops-scan ALL=(root) NOPASSWD: SECUREOPS_SCAN
+secureops-scan ALL=(root) NOPASSWD: /usr/sbin/sshd -T, /usr/bin/ss -lntup, /usr/sbin/ufw status verbose, /usr/sbin/nft list ruleset, /usr/bin/tail -n 200 /var/log/auth.log
 
 # /etc/sudoers.d/secureops-fix
-Cmnd_Alias SECUREOPS_FIX = /usr/sbin/sshd -t, \
-    /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, \
-    /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, \
-    /usr/bin/systemctl reload ssh
-secureops-fix ALL=(root) NOPASSWD: SECUREOPS_FIX
+secureops-fix ALL=(root) NOPASSWD: /usr/sbin/sshd -t, /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, /usr/bin/systemctl reload ssh
 ```
 
 **진단 대상 B (Rocky) — 적용 내용**
 
 ```text
 # /etc/sudoers.d/secureops-scan
-Cmnd_Alias SECUREOPS_SCAN = /usr/sbin/sshd -T, \
-                            /usr/bin/cat /etc/ssh/sshd_config, \
-                            /usr/sbin/ss -lntup, \
-                            /usr/bin/firewall-cmd --state, \
-                            /usr/bin/firewall-cmd --list-all, \
-                            /usr/sbin/nft list ruleset, \
-                            /usr/bin/tail -n 200 /var/log/secure
-secureops-scan ALL=(root) NOPASSWD: SECUREOPS_SCAN
+secureops-scan ALL=(root) NOPASSWD: /usr/sbin/sshd -T, /usr/sbin/ss -lntup, /usr/bin/firewall-cmd --state, /usr/bin/firewall-cmd --list-all, /usr/sbin/nft list ruleset, /usr/bin/tail -n 200 /var/log/secure, /usr/bin/cat /etc/ssh/sshd_config
 
 # /etc/sudoers.d/secureops-fix
-Cmnd_Alias SECUREOPS_FIX = /usr/sbin/sshd -t, \
-    /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, \
-    /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, \
-    /usr/bin/systemctl reload sshd
-secureops-fix ALL=(root) NOPASSWD: SECUREOPS_FIX
+secureops-fix ALL=(root) NOPASSWD: /usr/sbin/sshd -t, /usr/bin/install -m 0600 -o root -g root /etc/secureops/approved/01-secureops.conf /etc/ssh/sshd_config.d/01-secureops.conf, /usr/bin/rm -f /etc/ssh/sshd_config.d/01-secureops.conf, /usr/bin/systemctl reload sshd
 ```
+
+> **재구축 전과 대조:** 2026-11-11 `sudo -l -U` 출력(`ubuntu-a-sudo-261111.png`, `rocky-b-sudo-261111.png`)이 재구축 전 허용 명령과 같음을 확인했다. Rocky `scan`은 `cat /etc/ssh/sshd_config`의 나열 위치만 다르며, sudoers는 명령 단위로 비교하므로 동작은 같다. 각 명령의 **인자 순서**는 그대로 유지해야 한다 (예: `install -m 0600 -o root -g root`).
 
 **적용 방법** — `visudo -cf`로 문법 검사 후 설치 (두 서버 `user1`로)
 
@@ -321,7 +336,7 @@ for h in ubuntu-a rocky-b; do
 done
 ```
 
-**확인 결과 (2026-11-06)** — 두 서버 동일
+**확인 결과 (재구축 후 2026-11-11, `central-mgmt-sudo-test-261111.png`)** — 두 서버 동일, 재구축 전(2026-11-06)과 같은 결과
 
 | 테스트 | 결과 |
 | --- | --- |
@@ -402,7 +417,7 @@ Host rocky-b-fix
 **4) 진단 계정 권한 범위**
 
 - 아래 표의 Ubuntu·Rocky 열은 **일반 사용자 권한** 기준 결과이고, "sudo 초안 v0" 열은 5-6의 sudoers로 새로 가능해진 확인이다.
-- "확인 방법" 열이 **테스트**인 항목은 2026-11-05 실제 확인한 결과이고, **예상**인 항목은 배포판 기본 권한 기준이며 추후 확인한다.
+- "확인 방법" 열이 **테스트**인 항목은 실제 확인한 결과이고(2026-11-05 최초 확인, 재구축 후 2026-11-11 재확인 — 결과 동일), **예상**인 항목은 배포판 기본 권한 기준이며 추후 확인한다.
 
 | 점검 대상 | Ubuntu (`ubuntu-a`) | Rocky (`rocky-b`) | sudo 초안 v0 | 확인 방법 | 관련 항목 |
 | --- | --- | --- | --- | --- | --- |
@@ -427,13 +442,18 @@ for h in ubuntu-a rocky-b; do
 done
 ```
 
-**5) SSH 접속 테스트**
+**5) SSH 접속 테스트 (재구축 후 신규 VM, 2026-11-11)**
 
-| 테스트 | 결과 |
-| --- | --- |
-| `secureops-scan`, `secureops-fix` × `ubuntu-a`, `rocky-b` 키 접속 (4개 조합) | 2026-11-05 확인 (`central-mgmt-sshkey-261105.png`) |
-| `~/.ssh/config` 별칭 접속 (`ssh ubuntu-a` 등 4개) | 2026-11-05 동작 확인 (`central-mgmt-ssh-alias-261106.png`) |
-| 진단 계정 읽기 권한 테스트 (위 명령) | 2026-11-05 확인, 4) 표에 반영 (`central-mgmt-scan-read-test-261105.png`) |
+모두 `central-mgmt`의 `user1`로 실행했다.
+
+| 테스트 | 명령 | 결과 | 증거 |
+| --- | --- | --- | --- |
+| 키 직접 접속 (4개 조합) | `ssh -i ~/.ssh/id_ed25519_<scan\|fix> -o BatchMode=yes secureops-<scan\|fix>@<IP> 'whoami; hostname'` | 4개 모두 비밀번호 없이 접속 성공. `192.168.10.20` → `Target-Ubuntu`, `192.168.10.30` → `Target-Rocky`, `whoami`가 접속 계정과 일치 | `central-mgmt-sshkey-261111.png` |
+| `~/.ssh/config` 별칭 접속 (4개) | `ssh <ubuntu-a\|rocky-b\|ubuntu-a-fix\|rocky-b-fix> 'whoami; hostname'` | `ubuntu-a`·`rocky-b` → `secureops-scan`, `-fix` 별칭 → `secureops-fix`, 호스트명 일치 | `central-mgmt-ssh-alias-261111.png` |
+| sudo 허용·차단 | 5-6의 확인 명령 | 허용 2개 동작, 차단 2개 거부 (5-6 확인 결과 표) | `central-mgmt-sudo-test-261111.png` |
+| 진단 계정 읽기 권한 | 위 4)의 명령 | 4) 표와 같음 — `/etc/ssh/sshd_config`는 Ubuntu 읽기 가능, Rocky 불가 / `/etc/shadow`·인증 로그는 두 서버 불가 | `central-mgmt-scan-read-test-261111.png` |
+
+재구축 전(2026-11-05~06)에 같은 테스트를 한 결과는 `*-261105.png`, `*-261106.png`로 남겨 둔다.
 
 ## 6. 검증 체크리스트
 
@@ -441,23 +461,33 @@ done
 
 증거는 서버별 폴더에 `evidence/<서버 식별자>/<서버 식별자>-<항목>-YYMMDD.png` 형식으로 저장한다. 중앙 관리 서버에서 실행해 진단 대상을 함께 확인한 캡처(VM 간 통신, SSH 키 접속, 읽기 권한 테스트)는 `central-mgmt/`에 둔다. 아래 증거 열의 `<id>`는 `central-mgmt`, `ubuntu-a`, `rocky-b`를 뜻한다.
 
-| 상태 | 확인 항목 | 명령어 | 정상 기준 | 증거 (2026-11-05) |
+아래 표는 **2026-11-11 재구축 후 신규 VM** 기준이다. 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 이력으로 남겨 두며, 같은 폴더에 있다.
+
+| 상태 | 확인 항목 | 명령어 | 정상 기준 | 증거 (2026-11-11) |
 | --- | --- | --- | --- | --- |
-| [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 | `<id>-os-261105.png` (3대) |
-| [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 | `<id>-hostname-261105.png` (3대) |
-| [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 | `<id>-ip-261105.png` (3대) |
-| [v] | 기본 경로 | `ip route` | `default via 192.168.10.2` | `<id>-route-261105.png` (3대) |
-| [v] | 시간대 | `timedatectl` | `Asia/Seoul` (3대 모두) | `<id>-timedate-261105.png` (3대) |
-| [v] | 외부 통신 | `ping 8.8.8.8`, `ping google.com` | 응답 수신 | `<id>-outerping-261105.png` (3대) |
-| [v] | VM 간 통신 | `ping 192.168.10.20`, `ping 192.168.10.30` | 중앙 관리 서버에서 응답 | `central-mgmt-innerping-261105.png` |
-| [v] | SSH 키 접속 | `ssh -i ~/.ssh/id_ed25519_scan secureops-scan@192.168.10.20` / `.30` | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 | `central-mgmt-sshkey-261105.png` |
-| [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 | `<id>-pkg-261105.png` (3대) |
-| [v] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-list-261106.png` (진단 대상 2대) |
-| [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-list-261106.png` (진단 대상 2대) |
-| [v] | sudo 허용·차단 | 5-6의 확인 명령 (중앙 관리 서버) | 허용 명령은 동작, 그 외는 거부 | `central-mgmt-sudo-test-261106.png` |
-| [v] | SSH 별칭 접속 | `ssh ubuntu-a whoami` 등 4개 별칭 | 각 계정으로 비밀번호 없이 접속 | `central-mgmt-ssh-alias-261106.png` |
-| [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261105.png` |
-| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured`(재생성본) 확인 | `<id>-snapshot-261106.png` (3대) |
+| [v] | OS 버전 | `cat /etc/os-release` | 2장 버전표와 일치 | `<id>-os-261111.png` (3대) |
+| [v] | 커널 버전 | `uname -r` | 2장 커널과 일치 | `<id>-kernel-261111.png` (3대) |
+| [v] | 호스트명 | `hostnamectl --static` | 2장 호스트명과 일치 | `<id>-hostname-261111.png` (3대) |
+| [v] | VM 사양 | VMware Virtual Machine Settings | 2장 vCPU·RAM·디스크와 일치 | `central-mgmt-vm-spec-261111.png`, `ubuntu-a-spec-261111.png`, `rocky-b-spec-261111.png` |
+| [v] | IP 할당 | `ip -4 a` | 2장 IP와 일치 | `<id>-ip-261111.png` (3대) |
+| [v] | 기본 경로 | `ip route` | `default via 192.168.10.2` | `<id>-route-261111.png` (3대) |
+| [v] | 시간대 | `timedatectl` | `Asia/Seoul` (3대 모두) | `<id>-timedate-261111.png` (3대) |
+| [v] | 외부 통신 | `ping -c 3 8.8.8.8` | 응답 수신 | `<id>-outerping-261111.png` (3대) |
+| [v] | VM 간 통신 | `ping -c 3 192.168.10.20`, `ping -c 3 192.168.10.30` | 중앙 관리 서버에서 응답 | `central-mgmt-innerping-261111.png` |
+| [v] | SSH 키 접속 | 5-7 5)의 키 직접 접속 명령 | `secureops-scan`, `secureops-fix` 모두 비밀번호 없이 로그인 성공 | `central-mgmt-sshkey-261111.png` |
+| [v] | 패키지 관리 | `sudo apt update` / `sudo dnf check-update` | 오류 없이 완료 | `<id>-pkg-261111.png` (3대) |
+| [v] | scan 계정 권한 | `sudo -l -U secureops-scan` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-261111.png` (진단 대상 2대) |
+| [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-261111.png` (진단 대상 2대) |
+| [v] | sudo 허용·차단 | 5-6의 확인 명령 (중앙 관리 서버) | 허용 명령은 동작, 그 외는 거부 | `central-mgmt-sudo-test-261111.png` |
+| [v] | SSH 별칭 접속 | 4개 별칭으로 `whoami; hostname` | 각 계정으로 비밀번호 없이 접속 | `central-mgmt-ssh-alias-261111.png` |
+| [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261111.png` |
+| [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 확인 | `<id>-snapshot-261111.png` (3대) |
+| [v] | 백업 해시 | `Get-FileHash -Algorithm SHA256` (호스트 PC) | 7-1 표에 파일명·크기·SHA-256 기록 | 7-1 표 (명령 출력 기준) |
+| [ ] | 백업 내부 구성 | ZIP 내부 목록 (`.vmx`, `.vmsd`, `.vmsn`, `.vmdk`) | 필수 파일 포함, `.lck`·`.vmem`·`.vmss` 없음 | 미수행 (7-1) |
+| [ ] | 백업 무결성 | `7z t <파일>.zip` | `Everything is Ok` | 미수행 (7-1) |
+| [ ] | 복원 시험 | 압축 해제 후 `.vmx` 열기, 스냅샷 확인, 부팅 | 00·01 스냅샷 표시, 부팅 및 SSH 정상 | 미수행 (7-1) |
+
+> 스냅샷 `01`의 Description은 3대 모두 비어 있다 (`<id>-snapshot-261111.png`). 7장 규칙에 맞게 입력이 필요하다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -472,19 +502,51 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 | 이름 | 대상 | 생성 시점 | 상태 |
 | --- | --- | --- | --- |
 | `00-initial-setup` | 3대 공통 | 기본 설정, 비밀번호 설정, 네트워크 연결 확인 완료 후 — 초기 환경 복구용으로 유지 | **확정** |
-| `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정, sudoers 초안 v0 적용 및 권한 검증 완료 후 (2026-11-06 재생성) | **확정** |
+| `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정, sudoers 초안 v0 적용 및 권한 검증 완료 후 (재구축 후 2026-11-11 생성) | **확정** |
 | `02-mgmt-ready` | 중앙 관리 서버 | Python 3.12, Git 등 개발 도구 설치 후 | 제안 |
 | `02-vuln-baseline` | 진단 대상 A/B | 진단 담당과 협의한 취약 설정 적용 후 | 제안 |
 | `03-pre-remediation-YYMMDD` | 진단 대상 A/B | 관리자 승인 후 조치 직전 (T-03) | 제안 |
 | `04-post-remediation-YYMMDD` | 진단 대상 A/B | 조치·재진단 완료 후 (선택) | 제안 |
 
 > **`01-ssh-security-configured` 재생성 (2026-11-06)** : 최초 생성본(2026-11-05)은 `rocky-b`의 `user1`이 sudoers(`wheel` 그룹)에 적용되지 않은 상태로 생성되었다. `user1`을 `wheel` 그룹에 추가한 뒤, 3대가 같은 시점의 상태를 갖도록 기존 `01`을 삭제하고 같은 이름으로 3대 모두 다시 생성했다. `00-initial-setup`은 그대로 유지한다.
+>
+> **재구축 후 스냅샷 (2026-11-11)** : 이 두 스냅샷은 2026-11-08 VM과 함께 삭제되었고(11장), 재구축한 VM에서 `00-initial-setup`, `01-ssh-security-configured`를 다시 만들었다. 2026-11-11 생성본의 `01` 생성 시각은 아래와 같다 (`<id>-snapshot-261111.png`).
+>
+> | 서버 식별자 | `01-ssh-security-configured` 생성 시각 |
+> | --- | --- |
+> | `central-mgmt` | 2026-11-11 10:47:52 |
+> | `ubuntu-a` | 2026-11-11 10:47:55 |
+> | `rocky-b` | 2026-11-11 10:47:58 |
 
 - 반복될 수 있는 단계(03, 04)에만 날짜를 붙이고, 같은 날 두 번 생성 시 `-2`를 붙인다.
 - Description에 날짜, 작업자, 작업 내용을 기록한다. 예: `261105 김민우 / 기본 설정, 비밀번호 설정, 연결 확인 완료`
 - 기준점 스냅샷(00, 01, 02)은 `sudo poweroff`로 정상 종료한 뒤 생성한다.
-- 스냅샷은 VM 폴더 안에 저장되므로 백업이 아니다. 중요한 시점에는 VM 폴더 전체를 외부 저장소에 복사한다.
+- 스냅샷은 VM 폴더 안에 저장되므로 백업이 아니다. 중요한 시점에는 VM 폴더 전체를 외부 저장소에 복사한다. 현황은 7-1을 참고한다.
 - 복구는 Snapshot Manager → Go To로 하며, 복구 후 6장 체크리스트를 다시 확인한다.
+
+### 7-1. VM 백업 현황 (2026-11-11)
+
+`01-ssh-security-configured` 스냅샷을 만든 뒤, 3대를 정상 종료한 상태에서 VM 폴더를 각각 zip으로 압축해 호스트 PC의 별도 드라이브에 보관했다. 크기와 SHA-256은 호스트 PC PowerShell(`Get-ChildItem`, `Get-FileHash -Algorithm SHA256`)로 확인한 값이다.
+
+| 파일명 | 서버 식별자 | OS | 백업 시점 (파일 수정 시각) | 크기 | SHA-256 |
+| --- | --- | --- | --- | --- | --- |
+| `Central-Management-Ubuntu.zip` | `central-mgmt` | Ubuntu 24.04.5 LTS Server | 2026-11-11 12:18 | 2,878,201,934 bytes (2.68 GiB) | `613396AF67D11DCA39C0C0FC5B13C1BE787785E3DC1FEA81E6ED11795164D3C5` |
+| `Target-Ubuntu.zip` | `ubuntu-a` | Ubuntu 24.04.5 LTS Desktop | 2026-11-11 11:15 | 4,599,817,605 bytes (4.28 GiB) | `33B1CF778E53A18C0C5C14C5A653B37FD78D1D4326E23564C33543F9D93DDCE1` |
+| `Target-Rocky.zip` | `rocky-b` | Rocky Linux 9.8 (Blue Onyx) Desktop | 2026-11-11 11:30 | 7,105,211,739 bytes (6.62 GiB) | `34A52B02D0E8D41B610995ED3213B26797E115A654A617D065278726279C25E0` |
+
+**백업 검증 상태**
+
+| 항목 | 상태 | 비고 |
+| --- | --- | --- |
+| 정상 종료 후 압축 | 작업자 확인 | 객관적 근거는 아래 내부 목록 확인 시 `.lck`·`.vmem`·`.vmss`가 없는 것으로 보완 |
+| SHA-256 기록 | 완료 | 위 표 |
+| ZIP 내부 구성 (`.vmx`, `.vmsd`, 스냅샷 `.vmsn` 2개, 기본·델타 `.vmdk`, `.nvram`) | 미수행 | |
+| 7-Zip 무결성 검사 (`7z t`) | 미수행 | |
+| 복원 시험 (압축 해제 → `.vmx` 열기 → 스냅샷 00·01 확인 → 부팅·SSH) | 미수행 | 수행 전까지 복원 가능 여부는 확인되지 않은 상태로 본다 |
+
+- 받은 쪽은 내려받은 뒤 `Get-FileHash <파일> -Algorithm SHA256` 결과를 위 표와 대조한다.
+- **백업 zip은 비밀정보로 취급한다.** VM 디스크에는 `/etc/shadow` 해시, SSH 호스트 개인키가 들어 있고, `central-mgmt`에는 passphrase가 없는 `id_ed25519_scan`·`id_ed25519_fix` 개인키가 들어 있다. 공유는 지정한 팀원 계정에만 하고, 이 저장소나 외부 AI 서비스에 올리지 않는다. 백업 파일의 저장 경로와 공유 링크는 이 문서에 적지 않는다.
+- 다른 PC에서 복원할 때 확인할 것: VMnet8을 5-1과 같이 설정, 원본 VM과 동시에 켜지 않기(IP 충돌), 처음 켤 때 "I Moved It" 선택, CD/DVD가 작성자 PC의 ISO를 가리키면 연결 해제.
 
 ## 8. 디렉터리 구조
 
@@ -509,11 +571,12 @@ infrastructure/
 
 ## 9. VM 공유 방법
 
-VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일을 만들어 공유 저장소로 전달하고, 이 문서에는 **링크만** 기록한다. VM에 설정된 비밀번호는 5-5의 비밀번호 정책에 따라 공유하지 않으며, 접근 방식은 팀에서 별도로 정한다.
+VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일을 만들거나, 7-1의 VM 폴더 zip 백업을 공유 저장소로 전달한다. 공유 대상은 지정한 팀원 계정으로 제한한다. VM에 설정된 비밀번호는 5-5의 비밀번호 정책에 따라 공유하지 않으며, 접근 방식은 팀에서 별도로 정한다.
 
 ## 10. 팀 협의 필요 사항
 
 - [x] 중앙 관리 서버의 서버 식별자 및 호스트명 (`central-mgmt` / Central-Management-Ubuntu)
+- [ ] 재구축 후 `central-mgmt` 호스트명이 소문자(`central-management-ubuntu`)로 설정됨 — 이전 표기로 되돌릴지 여부 (2장)
 - [x] 진단 대상 호스트명을 서버 식별자(`ubuntu-a`, `rocky-b`)와 맞출지 여부 (호스트명은 Target-Ubuntu, Target-Rocky 유지)
 - [x] 전용 계정·SSH 키 등록 이후 스냅샷 이름 (`01-ssh-security-configured`)
 - [ ] 스냅샷 `02` 이후 단계 이름 확정
@@ -526,11 +589,36 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 - [ ] `02-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
 - [ ] 진단 대상 Desktop의 자동 업데이트 사용 여부 (재검증 일관성)
 
-## 11. 변경 이력
+## 11. 재구축 이력
+
+### 11-1. 경위
+
+| 일자 | 내용 |
+| --- | --- |
+| 2026-11-05~06 | VM 3대 최초 구축, 스냅샷 `00-initial-setup`·`01-ssh-security-configured` 생성, 검증 증거 확보 (`*-261105.png`, `*-261106.png`) |
+| 2026-11-08 | 계획 변경(서버 6대 구성) 논의 중 VM 3대와 스냅샷이 삭제됨 |
+| 2026-11-08~10 | 복구 검토: VMDK와 스냅샷이 모두 삭제되어 복구할 수 없음. 별도 드라이브의 백업은 `00-initial-setup` 이전 설정 오류로 폐기했던 것이고, 디스크가 3대 모두 60GB로 사양과 달라 사용하지 않음 |
+| 2026-11-11 | 팀장 결정으로 6대 구축은 보류하고, 핵심 3대를 기존 사양(2장)으로 재구축. 스냅샷 재생성(7장), VM 폴더 백업(7-1), 검증 증거 재확보 (`*-261111.png`) |
+
+- 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 **삭제된 VM의 기록**으로만 보존한다. 신규 VM의 검증 근거로 쓰지 않는다.
+- 재구축 전 문서 내용은 v0.1(11-2 변경 이력)과 Git 이력에서 확인한다.
+- 재구축으로 호스트 키와 사용자 키가 모두 바뀌었다 (5-5의 5)).
+
+### 11-2. 재구축 중 문제 해결
+
+| 서버 | 증상 | 원인 | 조치 |
+| --- | --- | --- | --- |
+| `central-mgmt` | DNS 조회 실패 | 설치 시 Name servers 입력 누락 | netplan에 `nameservers: addresses: [192.168.10.2]` 추가 후 `sudo netplan try` |
+| `rocky-b` | 호스트명이 `localhost.localdomain` | 설치 시 호스트명 미적용 | `sudo hostnamectl set-hostname Target-Rocky` |
+| 공통 | Windows에서 SSH 접속 시 호스트 키 변경 경고 | 재설치로 호스트 키 변경 | `ssh-keygen -R <IP>` 후 지문 확인하고 재접속 |
+| `ubuntu-a` | sudoers fix 명령 인자 순서 불일치 | 재구성 시 `install` 옵션 순서가 달라짐 | 이전과 같은 `-m 0600 -o root -g root`로 수정 (sudoers는 인자를 순서까지 비교) |
+
+## 12. 변경 이력
 
 | 버전 | 일자 | 변경 사항 |
 | --- | --- | --- |
 | v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), sudoers 초안 v0 적용 내용 추가(2026-11-06), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가, `01` 스냅샷 재생성 반영(2026-11-06)) |
+| v0.2 | 2026-11-11 | VM 3대 재구축 반영: 2장 서버 구성(호스트명·커널·인터페이스) 갱신, 5-5 호스트 키·사용자 키 재생성 안내, 5-6 sudoers 재적용 내용과 재검증 결과, 5-7 신규 VM SSH 접속 테스트, 6장 체크리스트를 261111 증거 기준으로 갱신(백업 검증 항목 추가), 7장 스냅샷 재생성, 7-1 VM 백업 현황(SHA-256), 11장 재구축 이력 추가, 신규 증거를 `infrastructure/evidence/`로 정리 |
 
 ---
 
