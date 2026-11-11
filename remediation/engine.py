@@ -112,7 +112,61 @@ class Remediator:
         self._used = set()
 
     def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
-            recheck_report=None):
+            recheck_report=None, recheck_adapter=None, post_rollback_recheck=False):
+        """기존 조치 절차와 별도로 E 실행 ID·진단 연결·최종 보안 상태를 기록한다."""
+        if type(post_rollback_recheck) is not bool:
+            raise ValueError("post_rollback_recheck must be boolean")
+        if post_rollback_recheck and recheck_adapter is None:
+            raise ValueError("post-rollback diagnosis requires the MOCK adapter")
+        if recheck_adapter is not None:
+            from .recheck import MockRecheckAdapter
+            if type(recheck_adapter) is not MockRecheckAdapter or recheck_report is not None:
+                raise ValueError("use one exact MockRecheckAdapter or the legacy callback")
+            if report.get("schema_version") != "1.2":
+                raise ValueError("MOCK adapter requires JSON v1.2")
+        before = deepcopy(report)
+        execution_id = str(uuid4())
+        attempts = []
+
+        def callback_for(phase):
+            def callback(request, state):
+                previous = deepcopy(attempts)
+                attempt = {"execution_id": execution_id, "phase": phase,
+                           "target_id": request["target_id"], "check_id": request["check_id"],
+                           "scan_id": None, "scanned_at": None,
+                           "save_status": "not_attempted", "load_status": "not_attempted",
+                           "report_verified": False, "failure_stage": None, "failure_reason": None}
+                attempts.append(attempt)
+                return recheck_adapter.recheck(request, state, attempt,
+                                               before_report=before, previous_attempts=previous)
+            return callback
+
+        selected = callback_for("after") if recheck_adapter is not None else recheck_report
+        result = self._run(before, plan, backend=backend, approval=approval, dry_run=dry_run,
+                           now=now, recheck_report=selected, execution_id=execution_id)
+        result.setdefault("after_scan_id", None)
+        result.update(post_rollback_scan_id=None, post_rollback_report=None,
+                      final_security_status=None, final_security_verified=False)
+        if result["outcome"] == "success":
+            result.update(final_security_status="pass", final_security_verified=True)
+        if (post_rollback_recheck and result["rollback"] == "verified"):
+            try:
+                post = backend.request_recheck(plan, callback_for("post_rollback"))
+                # 어댑터의 저장·조회 검증에 더해 기존 E 비교 규칙으로 다시 검사한다.
+                checked = compare_reports(before, post, plan.check_id)["after"]
+                result.update(post_rollback_report=post, final_security_status=checked["status"],
+                              final_security_verified=checked["status"] in {"pass", "vulnerable"})
+            except Exception as exc:
+                result["post_rollback_recheck_error"] = type(exc).__name__
+                # 복구 뒤 재진단 실패를 원래 조치의 성공으로 바꾸지 않는다.
+        for attempt in attempts:
+            field = "after_scan_id" if attempt["phase"] == "after" else "post_rollback_scan_id"
+            result[field] = attempt["scan_id"]
+        result["recheck_attempts"] = deepcopy(attempts)
+        return result
+
+    def _run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
+             recheck_report=None, execution_id):
         """계획을 검증하고 Dry-run 또는 승인된 Mock 조치를 수행한다."""
         # 외부 승인 함수가 원본을 바꾸더라도 실행 입력이 변하지 않도록 복사한다.
         report = deepcopy(report)
@@ -124,7 +178,7 @@ class Remediator:
             raise ValueError("dry_run must be boolean")
         before_item = next((item for item in report["results"]
                             if item["check_id"] == plan.check_id), None)
-        result = {"mode": "dry_run" if dry_run else "mock", "plan_id": plan.plan_id, "execution_id": str(uuid4()),
+        result = {"mode": "dry_run" if dry_run else "mock", "plan_id": plan.plan_id, "execution_id": execution_id,
                   "target_id": plan.target_id, "check_id": plan.check_id,
                   "outcome": "planned", "backup": "not_attempted", "backup_id": None,
                   "rollback": "not_needed", "approval": None,
@@ -232,6 +286,7 @@ class Remediator:
                          "results": [item]}
             comparison = compare_reports(report, after, plan.check_id)
             item = comparison["after"]
+            result["after_scan_id"] = after["scan_id"]
             steps.append("compare")
         except Exception:
             reason = ("invalid_recheck_result" if "recheck" in steps else

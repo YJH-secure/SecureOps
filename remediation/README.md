@@ -139,3 +139,46 @@ callback(request, mock_state)의 입력:
     python -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v
 
 이 콜백은 신뢰된 로컬 테스트 코드의 주입 지점이며 Python 코드를 격리하는 보안 샌드박스는 아니다. 임의 코드나 실제 원격 실행기를 연결하지 않는다. 실제 공통 실행 계층의 요청 형식·B/C 실행 방식·저장소 책임과 실패 정책은 팀 인터페이스 확정 후 별도로 연결한다. 기존 MockBackend 정확한 타입 검사와 실제 조치 금지는 유지한다.
+
+
+## E 실행 이력과 D scan_id 연결 (추가 확정 사항)
+
+E의 반환 객체가 진단 보고서와 별개인 실행 이력이다. E에서 생성한 execution_id에 before_scan_id, after_scan_id, post_rollback_scan_id를 연결한다. D JSON v1.2와 ReportStore API는 변경하지 않는다. E 이력을 D의 진단 보고서로 저장하거나 새로운 영속 저장 규격을 추가하지 않는다.
+
+새 연결은 remediation.recheck.MockRecheckAdapter(diagnose, store)를 run(..., recheck_adapter=adapter)에 전달한다. 기존 recheck_report 콜백과 동시에 사용하지 않는다. diagnose(request, mock_state)는 신뢰된 MOCK 코드이며 **아직 저장하지 않은 전체 D v1.2 보고서**를 반환한다. D 집계 함수로 보고서를 만들 수 있으나 store.save/load는 어댑터가 담당한다. 기존의 저장까지 수행하는 콜백을 그대로 중첩하면 안 된다. 저장 단계 전에 ID를 관찰할 수 없는 기존 불투명 콜백 대신 이 어댑터를 사용해야 한다.
+
+ReportStore.save(report)는 경로를 반환하므로 ID로 사용하지 않는다. 어댑터는 검증된 report["scan_id"]를 저장 시도 전에 확보하고, 단계별 recheck_attempts에 다음을 기록한다.
+
+- execution_id, phase(after/post_rollback), target_id, check_id, scan_id, scanned_at
+- save_status와 load_status: not_attempted / attempted / success / failed
+- report_verified: 재조회 결과까지 원본과 일치하는지 확인
+- failure_stage, failure_reason: 실패 단계와 예외 종류. 개인 경로가 섞일 수 있는 예외 원문은 제외
+
+save 성공 후 load 실패여도 after_scan_id는 유지한다. store.load(result["target_id"], result["after_scan_id"])로 같은 보고서를 재조회할 수 있다. 다시 조회한 복구 전 pass를 복구 후 최종 pass로 바꾸지는 않는다. save가 예외를 낸 경우에는 일부 I/O가 끝났을 수도 있으므로 save_status=failed를 보고서가 절대 존재하지 않는다는 의미로 해석하지 않는다.
+
+복구 후 보안 재진단은 기본적으로 실행하지 않는다. post_rollback_recheck=True와 MOCK 어댑터를 함께 전달하면 rollback=verified 이후 새 scan_id로 진단하고 post_rollback_scan_id에 연결한다. 복구가 실패하면 후속 재진단을 실행하지 않는다. 이전 scan_id 재사용 및 앞선 진단보다 오래된 시각은 거부한다.
+
+- 복구 후 보안 재진단 없음: final_security_status=null, final_security_verified=false
+- 복구 후 저장·조회·검증 실패: 새 ID를 확보한 단계까지 보존하며 최종 보안 상태는 null/false
+- 복구 후 pass 또는 vulnerable 진단: 해당 status와 final_security_verified=true. true는 상태 확인을 뜻하며 vulnerable이 조치 성공이라는 뜻은 아님
+- 복구 후 error/needs_review/not_applicable 진단: 해당 status와 final_security_verified=false
+
+원래 조치가 실패했다면 복구 후 pass를 확인해도 outcome=failed를 유지한다. after_report는 조치 후 진단 당시 결과이고 post_rollback_report는 별도의 복구 후 결과다. rollback 필드명을 유지하며 rollback_status를 추가하지 않는다. 기존 승인·허용 목록·정확한 MockBackend 타입 검사·MOCK 복구 절차는 유지한다.
+
+이 요청·반환 어댑터는 E 전용 MOCK 연결이며 공통 SSH 실행 계층의 최종 계약이 아니다. 실제 통합 시 어댑터만 조정할 수 있도록 격리했다. 실제 SSH·서버 설정 변경 및 점수 임의 계산은 수행하지 않는다.
+
+    python -B -m unittest discover -s tests -p test_remediation_execution_history.py -v
+
+
+### 이번 추가 규격 검증 결과 (2026-11-11)
+
+기존 회귀 117개(24+18+19+52+4)와 신규 실행 이력 MOCK 테스트 20개를 구분해 실제 실행했으며 모두 통과했다. 실패·오류·건너뜀은 각각 0개다. 과거 PR #23의 117개 증거를 새 실행 로그로 재사용한 결과가 아니다. 기존 테스트 파일은 수정하지 않았다. 현재 origin/main 기준은 e4af8a6이며 Python 3.12.14, jsonschema[format] 4.26.0 환경을 사용했다.
+
+    python -B tests/run_de_mock.py --d-ref e4af8a6659a695a5d7e0152b8c0d831e7736fef1
+    python -B -m unittest discover -s tests -p test_remediation_v12.py -v
+    python -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v
+    python -B -m unittest discover -s tests -p 'test_cvss*.py' -v
+    python -B -m unittest discover -s tests -p test_remediation_b_v12_integration.py -v
+    python -B -m unittest discover -s tests -p test_remediation_execution_history.py -v
+
+이 결과는 오프라인 MOCK 검증이다. 실제 SSH 실행 및 D 저장 API 변경은 없다. 이번 작업은 로컬까지만 반영하며 Push·PR 업데이트는 하지 않는다.
