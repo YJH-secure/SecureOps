@@ -47,7 +47,7 @@
 
 ## 3. 담당 경계와 필수 인계 (중복개발 금지)
 
-- **A 김민우**: VM·GNS3·계정/SSH·sudoers/복원. SSH 별칭/BachMode·source IP·키 정보(공개 지문만)와 서버 실행 권한 증거 → 팀장·B/C.
+- **A 김민우**: VM·GNS3·계정/SSH·sudoers/복원. SSH 별칭/BatchMode·source IP·키 정보(공개 지문만)와 서버 실행 권한 증거 → 팀장·B/C.
 - **B 최종욱**: SSH-01·SSH-02·ACC-01/02의 판정/테스트·SSH Match 근거, v1.2 개별 JSON → D/팀장. 현재 #10/#21 main.
 - **C 김서후**: FILE/SVC/FW/LOG 진단/정책 보류·OS별 수집 동작, #27 공식 v1.2 SHA·CLI·로그 → D/팀장.
 - **D 조효민**: 입력 규격·집계/CVSS·scan_id/저장/재조회, B/C 공식 소스 독립 재검증, E와 전후 보고서 계약 → 팀장. #20/#25는 과거 ZIP/고정 SHA 증거.
