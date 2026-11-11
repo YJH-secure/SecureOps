@@ -27,6 +27,7 @@ SSH 진단 모듈 - SSH-01: SSH root 원격 로그인 제한
 [실행 방법]
 sudo python3 ssh_check.py
 sudo python3 ssh_check.py --addr <테스트할 접속 IP> --host <테스트할 접속 이름>   (실제 환경 조건 지정)
+sudo python3 ssh_check.py --result-version 1.2   (JSON 결과 계약 v1.2 형식으로 출력, 기본은 v1.1)
 
 이 프로그램은 설정을 읽기만 하고, 서버 설정을 바꾸지 않습니다.
 """
@@ -80,6 +81,17 @@ RECOMMENDATIONS = {
     "not_applicable": "해당 없음, 근거 확인",
     "needs_review": "관리자가 Match 적용 조건과 승인 정책을 비교해 최종 판정",
 }
+
+# 결과 형식 버전: 전환 기간에는 v1.1이 기본, v1.2는 명시적으로 선택할 때만 사용
+DEFAULT_RESULT_VERSION = "1.1"
+SUPPORTED_RESULT_VERSIONS = {"1.1", "1.2"}
+
+# v1.2: 진단 결과가 vulnerable일 때 정책에서 고를 수 있는 CVSS 평가 상태
+#   pending        : CVSS 평가 검토 중 (점수·등급 null)
+#   not_applicable : 단순 정책 준수 위반으로 CVSS 평가 대상이 아님 (점수·등급 null)
+# scored(점수 산정)는 D 모듈이 담당하므로 B는 만들지 않습니다.
+ALLOWED_VULNERABLE_CVSS_STATUSES = {"pending", "not_applicable"}
+
 
 
 # ==================================================
@@ -145,6 +157,20 @@ def validate_policy(policy):
 
     # root 접속 조건 확인용 테스트 접속 정보 (sshd -T -C에 사용)
     validate_test_connection(criteria.get("test_connection"))
+
+    # v1.2용 CVSS 평가 상태 설정 (선택 필드, 있으면 형식 검사)
+    # cvss_assessment가 있을 때만 검사, 없어도 오류로 처리 하지 않음
+    # 1. 딕셔너리 인가? : cvss_assessment 처럼 글자 하나만
+    # 2. 평가 상태가 허용값인가? : scored, 빈칸, 오타 등
+    # 3. 이유가 적혀 있는가? : rationale이 없거나 빈칸
+    cvss_assessment = policy.get("cvss_assessment")
+    if cvss_assessment is not None:
+        if not isinstance(cvss_assessment, dict):
+            raise ValueError("invalid field: cvss_assessment")
+        if cvss_assessment.get("vulnerable_assessment_status") not in ALLOWED_VULNERABLE_CVSS_STATUSES:
+            raise ValueError("invalid field: cvss_assessment.vulnerable_assessment_status")
+        if not is_text(cvss_assessment.get("rationale")):
+            raise ValueError("missing or invalid field: cvss_assessment.rationale")
 
 
 # 테스트 접속 정보가 올바른지 검사합니다.
@@ -409,13 +435,28 @@ def check_ssh_01(policy, sshd_output, config_text="", root_output=None):
 # ==================================================
 
 # host, addr: 실제 환경의 테스트 접속 조건을 실행할 때 따로 지정하는 값 (없으면 정책 값 사용)
-def run_check(policy_path=POLICY_FILE, host=None, addr=None):
+# result_version: "1.1"(기본) 또는 "1.2". 판정은 같고 결과 형식만 다릅니다.
+def run_check(policy_path=POLICY_FILE, host=None, addr=None, result_version=DEFAULT_RESULT_VERSION):
+    if result_version not in SUPPORTED_RESULT_VERSIONS:
+        raise ValueError(f"unsupported result_version: {result_version}")
+
+    inputs = {}   # 판정에 쓴 재료를 모아 두는 상자 (v1.2 details용)
+    result = run_check_v1_1(policy_path, host, addr, inputs)
+    if result_version == "1.1":
+        return result
+    return to_result_v1_2(result, inputs)
+
+
+# 판정을 실행하고 v1.1 결과를 만듭니다. 판정 로직은 v1.1과 v1.2가 함께 씁니다.
+# inputs에는 판정에 사용한 정책과 수집 결과를 기록합니다.
+def run_check_v1_1(policy_path, host, addr, inputs):
     # 1단계: 정책 읽기
     try:
         policy = load_policy(policy_path)
     except (OSError, ValueError) as e:
         return make_result("error", FALLBACK_SEVERITY, f"Policy load failed: {type(e).__name__}")
 
+    inputs["policy"] = policy
     severity = policy["severity"]
 
     # 테스트 접속 조건: 정책 값을 복사한 뒤, 실행할 때 지정한 값이 있으면 덮어씁니다.
@@ -435,22 +476,98 @@ def run_check(policy_path=POLICY_FILE, host=None, addr=None):
         return make_result("not_applicable", severity, "OpenSSH server (sshd) is not installed")
 
     # 3단계: 전체 기본 설정 읽기
+    # inputs["sshd_output"] = sshd_output 추가 이유
+    # sshd_output은 run_check_v1_1() 안에서만 쓰는 변수 따라서 inputs을 통해 바깥 상자에 저장
     sshd_output = get_sshd_output(sshd)
+    inputs["sshd_output"] = sshd_output
     if sshd_output is None:
         return make_result("error", severity, "Failed to run sshd -T (check root privilege or sshd configuration)")
 
     # 4단계: Match 확인에 필요한 설정 파일 읽기
     config_text = read_config_text()
+    inputs["config_text"] = config_text
     if config_text is None:
         return make_result("error", severity, "Failed to read sshd configuration files")
 
     # 5단계: root 접속 조건에서 적용되는 설정 읽기
     root_output = get_sshd_output(sshd, build_connection_spec(test_connection))
+    inputs["root_output"] = root_output
     if root_output is None:
         return make_result("error", severity, "Failed to run sshd -T -C for root connection test")
 
     # 6단계: 판정
     return check_ssh_01(policy, sshd_output, config_text, root_output)
+
+# ==================================================
+# 7. JSON 결과 계약 v1.2 형식으로 바꾸기
+#    판정은 다시 하지 않고, v1.1 결과를 v1.2 형식으로만 옮깁니다.
+# ==================================================
+
+# v1.2의 cvss 객체를 만듭니다. B는 점수·등급을 만들지 않으므로 항상 null입니다.
+# 정책의 severity(레거시 우선순위)는 CVSS 등급으로 바꾸지 않습니다.
+def build_cvss(status, policy):
+    if status == "vulnerable":
+        cvss_assessment = (policy or {}).get("cvss_assessment")
+        if cvss_assessment:
+            assessment_status = cvss_assessment["vulnerable_assessment_status"]
+            rationale = cvss_assessment["rationale"]
+        else:
+            # 정책에 설정이 없으면 JSON 계약 v1.2 6장의 전환 규칙대로 pending
+            assessment_status = "pending"
+            rationale = "CVSS 평가 검토 전 (정책에 cvss_assessment 설정 없음, JSON 계약 v1.2 6장 전환 규칙)"
+    else:
+        assessment_status = "not_applicable"
+        rationale = f"진단 상태가 {status}이므로 CVSS 평가 대상 아님"
+
+    return {
+        "assessment_status": assessment_status,
+        "version": None,      # 점수를 매기지 않으므로 모두 null
+        "vector": None,
+        "base_score": None,
+        "rating": None,
+        "source": None,
+        "rationale": rationale,
+    }
+
+
+# CVSS 평가에 필요한 실제 설정값과 Match 근거를 details로 정리합니다.
+# 테스트 접속의 IP와 host는 실제 내부 정보일 수 있어 넣지 않습니다.
+def build_details(inputs):
+    policy = inputs.get("policy")
+    sshd_output = inputs.get("sshd_output")
+    if not policy or not sshd_output:
+        return None
+
+    setting = policy["criteria"]["setting"].lower()
+    root_output = inputs.get("root_output")
+    match_rules = find_match_rules(inputs.get("config_text") or "", setting)
+
+    return {
+        "setting": setting,
+        "expected": policy["criteria"]["expected"].lower(),
+        "global_value": parse_setting_value(sshd_output, setting),
+        "root_value": parse_setting_value(root_output, setting) if root_output else None,
+        "root_evaluation": "sshd -T -C user=root",
+        "match_rules": [
+            {"conditions": sorted(rule["keywords"]), "value": rule["value"]}
+            for rule in match_rules
+        ],
+    }
+
+
+# v1.1 결과를 v1.2 결과로 바꿉니다. severity는 넣지 않습니다.
+def to_result_v1_2(result, inputs):
+    result_v1_2 = {
+        "check_id": result["check_id"],
+        "status": result["status"],
+        "evidence": result["evidence"],
+        "recommendation": result["recommendation"],
+        "cvss": build_cvss(result["status"], inputs.get("policy")),
+    }
+    details = build_details(inputs)
+    if details is not None:
+        result_v1_2["details"] = details
+    return result_v1_2
 
 
 if __name__ == "__main__":
@@ -458,5 +575,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SSH-01 root 원격 로그인 제한 점검")
     parser.add_argument("--host", help="sshd -T -C 테스트 접속의 host 값 (기본: 정책 값)")
     parser.add_argument("--addr", help="sshd -T -C 테스트 접속의 addr 값 (기본: 정책 값)")
+    parser.add_argument("--result-version", choices=sorted(SUPPORTED_RESULT_VERSIONS),
+                        default=DEFAULT_RESULT_VERSION, help="결과 형식 버전 (기본: 1.1)")
     args = parser.parse_args()
-    print(json.dumps(run_check(host=args.host, addr=args.addr), ensure_ascii=False, indent=2))
+    result = run_check(host=args.host, addr=args.addr, result_version=args.result_version)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
