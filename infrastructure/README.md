@@ -4,7 +4,7 @@
 
 **담당:** 김민우 (A · 서버·네트워크 인프라)  
 **관련 문서:** [시스템 아키텍처 설계서](../docs/architecture/system-architecture.md) · [프로젝트 README](../README.md)  
-**상태:** 2026-11-11 VM 3대 재구축 완료 — 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷, 검증 증거 확보 완료 / VM 폴더 백업 검증(구성·7-Zip·원본 비교) 및 복원 시험 완료 (7-1) / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장, 재구축 경위는 11장 참고
+**상태:** 2026-11-11 VM 3대 재구축 완료 — 서버·네트워크 구성, 전용 계정, SSH 키 인증, sudoers 초안 v0, `01-ssh-security-configured` 스냅샷, 검증 증거 확보 완료 / VM 폴더 백업 검증(구성·7-Zip·원본 비교) 및 복원 시험 완료 (7-1) / 2026-11-12 `ubuntu-a` `user1` 비밀번호 변경·설치 미디어 제거, `01-ssh-security-configured-passwd` 스냅샷과 신규 백업·복원 시험 완료 (7-3) / sudo 권한 팀장 검토·확정 예정 — 적용 현황은 1장, 검증 상태는 6장, 재구축 경위는 11장 참고
 
 ## 1. 개요
 
@@ -37,6 +37,7 @@
 | SSH 키 인증 | Ed25519 키 계정별 분리 생성, 공개키 등록, 4개 조합 키 접속 동작 확인 | 5-5 |
 | 스냅샷 | `00-initial-setup` (초기 환경 복구용), `01-ssh-security-configured` (보안 설정 완료 상태, 재구축 후 2026-11-11 생성) | 7장 |
 | 백업 | `01-ssh-security-configured` 이후 VM 폴더 3대를 별도 드라이브에 zip으로 백업, SHA-256 기록, 무결성 검사와 복원 시험 완료 (2026-11-11) | 7-1 |
+| `ubuntu-a` 자격증명 조치 | `user1` 비밀번호 변경, `autoinst.iso`·`autoinst.flp` 장치 제거·원본 삭제, `01-ssh-security-configured-passwd` 스냅샷(일반 복구 기준), 신규 백업·복원 시험 (2026-11-12, 팀장 승인) | 7-3 |
 
 **추후 적용·검증 예정** — 아직 서버에 적용되지 않음
 
@@ -491,12 +492,16 @@ done
 | [v] | 백업 무결성 | `7z t <파일>.zip` | `Everything is Ok` | 7-1 |
 | [v] | 원본과 백업 비교 | 원본 VM 폴더와 ZIP의 파일 이름·크기·SHA-256 | 스냅샷 00·01 파일 일치 | 7-1 |
 | [v] | 복원 시험 | 압축 해제 → `.vmx` 열기 → 스냅샷 확인 → 부팅 → SSH | 00·01 표시, 부팅, SSH·sudo 정상 | 7-2 (`vmrun` 출력 기준, 3대) |
+| [v] | `ubuntu-a` 비밀번호 변경 (2026-11-12) | `passwd`, `sudo -k; sudo -v`, `/etc/shadow` 3번째 필드만 출력 | 변경일 `20769`, sudo·콘솔·scan/fix SSH 정상 | `ubuntu-a-passwd-change-261112.png`, `central-mgmt-ubuntu-a-ssh-after-passwd-261112.png` |
+| [v] | `ubuntu-a` 설치 미디어 제거 (2026-11-12) | `.vmx`·`vmware.log` 확인, 게스트 `lsblk` | autoinst 장치 없음, 재부팅·Go To 정상 | `ubuntu-a-media-{before,after}-261112.png`, `ubuntu-a-revert01-boot-261112.png`, `ubuntu-a-revert-passwd-261112.png` |
+| [v] | `ubuntu-a` 신규 스냅샷 (2026-11-12) | Snapshot Manager, `vmrun listSnapshots` | `01-ssh-security-configured-passwd` 생성 | `ubuntu-a-snapshot-261112.png` |
+| [v] | `ubuntu-a` 신규 백업·복원 (2026-11-12) | SHA-256, `7z t`, 원본 비교, 복원 후 부팅·SSH | 7-3 4)·5) 표와 같음 | `ubuntu-a-restore-test-261112.png`, `central-mgmt-ubuntu-a-ssh-restore-261112.png` |
 
 > 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
 >
 > **저장소 보안 검사 범위 (2026-11-11):** `feature/kmw-infrastructure` 최신 커밋의 텍스트 파일을 개인키 헤더·토큰·비밀번호 패턴으로 검사했고, 키·백업·VM 파일(`id_ed25519*`, `.pem`, `.key`, `.env`, `known_hosts`, `.zip`, `.vmdk`, `.vmx`) 0건이다. 신규 스크린샷 43장은 직접 판독해 비밀번호·키·토큰이 없음을 확인했다. 이전 커밋 이력과 재구축 전 스크린샷은 이번 검사 범위에 포함하지 않았다.
 >
-> **2026-11-12 추가 증거 2장** (`central-mgmt-ssh-source-261112.png`, `central-mgmt-ssh-authlog-261112.png`): IP, 계정명, 공개키 지문만 담겨 있으며 비밀번호·개인키·토큰이 없음을 직접 판독해 확인했다.
+> **2026-11-12 추가 증거 13장** (`*-261112.png`, `central-mgmt` 6장, `ubuntu-a` 7장): IP, 계정명, 공개키 지문, 명령 결과, 스냅샷 화면만 담겨 있으며 비밀번호·해시·개인키·토큰이 없음을 직접 판독해 확인했다. `/etc/shadow`는 마지막 변경일 필드만 출력했다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -512,6 +517,7 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 | --- | --- | --- | --- |
 | `00-initial-setup` | 3대 공통 | 기본 설정, 비밀번호 설정, 네트워크 연결 확인 완료 후 — 초기 환경 복구용으로 유지 | **확정** |
 | `01-ssh-security-configured` | 3대 공통 | 전용 계정·SSH 키 인증·호스트명 설정, sudoers 초안 v0 적용 및 권한 검증 완료 후 (재구축 후 2026-11-11 생성) | **확정** |
+| `01-ssh-security-configured-passwd` | `ubuntu-a`만 | `user1` 비밀번호 변경과 설치 미디어 제거 후 (2026-11-12 생성) — `ubuntu-a` 일반 복구 기준 | **확정** (7-3) |
 | `02-mgmt-ready` | 중앙 관리 서버 | Python 3.12, Git 등 개발 도구 설치 후 | 제안 |
 | `02-vuln-baseline` | 진단 대상 A/B | 진단 담당과 협의한 취약 설정 적용 후 | 제안 |
 | `03-pre-remediation-YYMMDD` | 진단 대상 A/B | 관리자 승인 후 조치 직전 (T-03) | 제안 |
@@ -540,7 +546,7 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 | 파일명 | 서버 식별자 | OS | 백업 시점 (파일 수정 시각) | 크기 | SHA-256 |
 | --- | --- | --- | --- | --- | --- |
 | `Central-Management-Ubuntu.zip` | `central-mgmt` | Ubuntu 24.04.5 LTS Server | 2026-11-11 12:18 | 2,878,201,934 bytes (2.68 GiB) | `613396AF67D11DCA39C0C0FC5B13C1BE787785E3DC1FEA81E6ED11795164D3C5` |
-| `Target-Ubuntu.zip` | `ubuntu-a` | Ubuntu 24.04.5 LTS Desktop | 2026-11-11 11:15 | 4,599,817,605 bytes (4.28 GiB) | `33B1CF778E53A18C0C5C14C5A653B37FD78D1D4326E23564C33543F9D93DDCE1` |
+| `Target-Ubuntu.zip` → 2026-11-12 `Target-Ubuntu-261111-legacy-oldhash.zip`으로 이름 변경·읽기 전용 (7-3) | `ubuntu-a` | Ubuntu 24.04.5 LTS Desktop | 2026-11-11 11:15 | 4,599,817,605 bytes (4.28 GiB) | `33B1CF778E53A18C0C5C14C5A653B37FD78D1D4326E23564C33543F9D93DDCE1` |
 | `Target-Rocky.zip` | `rocky-b` | Rocky Linux 9.8 (Blue Onyx) Desktop | 2026-11-11 11:30 | 7,105,211,739 bytes (6.62 GiB) | `34A52B02D0E8D41B610995ED3213B26797E115A654A617D065278726279C25E0` |
 
 **백업 검증 결과 (2026-11-11, 호스트 PC에서 검사 스크립트로 확인)**
@@ -559,8 +565,8 @@ for ip in 192.168.10.20 192.168.10.30; do echo "=== $ip ==="; ssh -i ~/.ssh/id_e
 
 - **원본 비교 방법:** 100MB 이하 파일은 SHA-256까지, 그보다 큰 기본 디스크 파일은 크기로 비교했다. ZIP 안 파일의 손상 여부는 `7z t`(CRC)로 따로 확인했다.
 - **원본과 다른 파일:** 현재 상태 디스크(`-000002*`), `.vmx`, `.nvram`, 로그, `scoreboard`는 원본과 다르다. 백업 뒤에도 원본 VM을 켜서 사용했기 때문이며 정상이다. `central-mgmt`의 `.vmsd`는 17:12에 스냅샷 Description을 입력해 달라졌다.
-- **`central-mgmt`의 `.vmx.lck`:** `vmware.log` 끝에 `VMX exit (0)`(2026-11-11 12:15:04 KST, 정상 종료)이 있고 압축은 그 뒤(12:18)에 끝났다. VMware 프로세스가 없는 상태에서도 원본 폴더에 잠금 파일이 남아 있는 것을 확인했다. 따라서 정상 종료 뒤 남은 잠금 파일이 함께 압축된 것으로 판단한다. 복원 시 이 폴더를 지우고 정상 부팅됨을 확인했다(7-2).
-- **`ubuntu-a`의 `autoinst.iso`·`autoinst.flp`:** VMware 간편 설치가 만든 파일이 VM 폴더와 ZIP에 남아 있다. `autoinst.iso`의 `PRESEED.CFG`에 `user1` 계정 이름과 **비밀번호 해시**(SHA-256-crypt)가 들어 있다. 평문 비밀번호, SSH 키, 토큰은 없다. 원본에서의 삭제와 `user1` 비밀번호 변경은 팀장 결정 대기 중이다(10장).
+- **`central-mgmt`의 `.vmx.lck`:** `vmware.log` 끝에 `VMX exit (0)`(2026-11-11 12:15:04 KST, 정상 종료)이 있고 압축은 그 뒤(12:18)에 끝났다. VMware 프로세스가 없는 상태에서도 원본 폴더에 잠금 파일이 남아 있는 것을 확인했다. 따라서 정상 종료 뒤 남은 잠금 파일이 함께 압축된 것으로 판단한다. 복원 시 이 폴더를 지우고 정상 부팅됨을 확인했다(7-2). **원인 보충 (2026-11-12):** VM을 꺼도 Workstation에 탭으로 열려 있으면 잠금이 유지되고, 탭을 닫거나 라이브러리에서 Remove하면 사라지는 것을 작업자가 확인했다. 백업 절차에 반영했다(7-3 7)).
+- **`ubuntu-a`의 `autoinst.iso`·`autoinst.flp`:** VMware 간편 설치가 만든 파일이 VM 폴더와 ZIP에 남아 있다. `autoinst.iso`의 `PRESEED.CFG`에 `user1` 계정 이름과 **비밀번호 해시**(SHA-256-crypt)가 들어 있다. 평문 비밀번호, SSH 키, 토큰은 없다. 2026-11-12 팀장 승인에 따라 `user1` 비밀번호를 바꾸고 원본 VM 폴더의 두 파일을 삭제했다(7-3). **이 표의 ZIP에는 그대로 남아 있다.**
 
 - 받은 쪽은 내려받은 뒤 `Get-FileHash <파일> -Algorithm SHA256` 결과를 위 표와 대조한다.
 - **백업 zip은 비밀정보로 취급한다.** VM 디스크에는 `/etc/shadow` 해시, SSH 호스트 개인키가 들어 있고, `central-mgmt`에는 passphrase가 없는 `id_ed25519_scan`·`id_ed25519_fix` 개인키가 들어 있다. 공유는 지정한 팀원 계정에만 하고, 이 저장소나 외부 AI 서비스에 올리지 않는다. 백업 파일의 저장 경로와 공유 링크는 이 문서에 적지 않는다.
@@ -585,8 +591,103 @@ ZIP 3개를 원본과 다른 폴더에 풀어 VMware에서 열고, 원본 VM은 
 
 - **네트워크 분리:** 시험하는 동안 실행 중인 VM은 복원본 3대뿐이었다(`vmrun list`). 따라서 원본과 IP 충돌은 없었다. 복원본은 LAN segment `restore-test`에 연결했다(작업자 확인). 세그먼트를 만든 기록은 VMware 사용자 설정(`preferences.ini`의 `namedPVNs`)에서 확인했다. 복원본 `.vmx`는 시험 후 삭제해 각 VM의 네트워크 설정 자체는 증거로 남기지 못했다.
 - 호스트 키와 사용자 키가 백업 안에 그대로 보존되어, 복원 `central-mgmt`에서 `BatchMode=yes`로 경고 없이 접속되었다.
-- 스냅샷으로 되돌리기(Go To)는 시험하지 않았다.
+- 스냅샷으로 되돌리기(Go To)는 이 시험에서 하지 않았다. 2026-11-12 `ubuntu-a` 원본에서 `01` → `01-…-passwd` Go To를 시험했다(7-3 2)).
 - 복원본은 시험 후 VMware 라이브러리에서 제거하고 폴더를 삭제했다(개인키·`autoinst.iso` 포함).
+
+### 7-3. `ubuntu-a` 자격증명 조치 및 신규 복구 기준 (2026-11-12)
+
+팀장 승인(2026-11-12)에 따라 **`ubuntu-a`에만** 적용했다. sudoers, SSH 설정, `secureops-scan`·`secureops-fix` 계정, 다른 VM은 바꾸지 않았다.
+
+**1) `user1` 비밀번호 변경**
+
+| 확인 | 결과 | 증거 |
+| --- | --- | --- |
+| 변경 | 다른 서버·계정과 겹치지 않는 새 무작위 비밀번호 적용. `/etc/shadow`의 마지막 변경일 `20769` (= 2026-11-12) | `ubuntu-a-passwd-change-261112.png` |
+| sudo | `sudo -k` 뒤 새 비밀번호로 `sudo -v` 성공 | 같음 |
+| 콘솔 로그인 | 로그아웃 뒤 새 비밀번호로 재로그인 성공 (작업자 확인) | — |
+| 기존 SSH | `central-mgmt`에서 `ubuntu-a`(scan)·`ubuntu-a-fix`(fix) 키 접속 유지 | `central-mgmt-ubuntu-a-ssh-after-passwd-261112.png` |
+
+비밀번호와 해시는 저장소·채팅·외부 서비스에 기록하지 않았다.
+
+**2) 설치 미디어(`autoinst.iso`·`autoinst.flp`) 참조 확인과 해제**
+
+| 단계 | 결과 | 근거 |
+| --- | --- | --- |
+| 참조 확인 | 현재 `.vmx`와 스냅샷 `00`·`01`(`.vmsn` 안의 설정)이 모두 `sata0:0 = autoinst.iso`, `floppy0 = autoinst.flp`를 참조. 다른 VM은 참조 없음 | 호스트에서 `.vmx`·`.vmsd`·`.vmsn` 설정 줄만 조회 (ISO 내용은 열지 않음) |
+| 실제 연결 상태 | 09:19 부팅 시 `CDROM: Connecting sata0:0 to 'autoinst.iso'`, 플로피 이미지 열림 → 게스트에 `sr0`(103.3M)·`fd0`으로 보임 (마운트는 안 됨) | `vmware.log`, `ubuntu-a-media-before-261112.png` |
+| 연결 해제 | VM 종료 후 autoinst CD·Floppy 장치 **제거**, 설치 ISO(`sata0:1`)는 `startConnected = FALSE` | `.vmx` 재확인 |
+| 재부팅 | autoinst 연결 기록 없음, 게스트에는 빈 `sr0`(1024M)만 있음, sudo·SSH 정상 | `ubuntu-a-media-after-261112.png`, `central-mgmt-ubuntu-a-ssh-after-media-261112.png` |
+| 격리 후 기존 스냅샷 시험 | 두 파일을 VM 폴더 밖으로 옮긴 뒤 `01`로 Go To → 부팅. 아래 메시지와 함께 해당 장치만 끊긴 채 로그인 화면까지 정상 부팅 | `ubuntu-a-revert01-boot-261112.png`, `vmware.log` |
+| 새 기준으로 복귀 | `01-ssh-security-configured-passwd`로 Go To → 부팅. autoinst 경고 없음, sudo·SSH 정상 | `ubuntu-a-revert-passwd-261112.png`, `central-mgmt-ubuntu-a-ssh-after-revert-261112.png` |
+| 원본 삭제 | 위 시험 통과 후 2026-11-12 10:15 영구 삭제. VM 폴더에 `autoinst*` 0개 | 호스트 확인 |
+
+`01`로 되돌렸을 때 `vmware.log`에 남은 메시지:
+
+```text
+[msg.floppyImage.inaccessibleFile] Floppy "autoinst.flp" is inaccessible.
+[msg.device.startdisconnected] Virtual device 'floppy0' will start disconnected.
+[msg.cdromImage.cantOpen] Cannot connect file "autoinst.iso" as a CD-ROM image: Could not find the file
+[msg.device.startdisconnected] Virtual device 'sata0:0' will start disconnected.
+```
+
+- 장치를 제거해도 `.vmx`에는 `sata0:0.fileName`, `floppy0.fileName` 줄이 남는다. 장치가 비활성(`present` 없음 / `FALSE`)이라 파일을 읽지 않으며, 위 재부팅 시험으로 확인했다.
+- 원본에서만 삭제했다. **기존 백업 ZIP(2026-11-11)에는 `autoinst.iso`가 그대로 있다.**
+
+**3) 신규 스냅샷 — 일반 복구 기준**
+
+| 이름 | 대상 | 생성 | 상태 |
+| --- | --- | --- | --- |
+| `01-ssh-security-configured-passwd` | `ubuntu-a`만 | 2026-11-12 10:03:41, VM 종료 상태 | 팀장 승인, **`ubuntu-a` 일반 복구 기준** |
+
+- 스냅샷 트리: `00-initial-setup` → `01-ssh-security-configured` → `01-ssh-security-configured-passwd` (`ubuntu-a-snapshot-261112.png`)
+- 이 스냅샷에 저장된 설정에는 autoinst 장치가 없다(`.vmsn` 확인).
+
+**4) 신규 백업과 검증**
+
+| 파일명 | 백업 시점 | 크기 | SHA-256 |
+| --- | --- | --- | --- |
+| `Target-Ubuntu-261112.zip` | 2026-11-12 10:24 | 4,469,751,437 bytes (4.16 GiB) | `6D184A80E78BE2A548A84A56A2EC89DAF767117E9527007962DD1533F18064EF` |
+
+| 항목 | 결과 |
+| --- | --- |
+| 7-Zip `7z t` | Everything is Ok (55개) |
+| 필수 파일 (`.vmx`, `.vmsd`, `.vmxf`, `.nvram`, `.vmsn` 3개) | 있음 |
+| 스냅샷 (`.vmsd`) | `00` → `01` → `01-…-passwd`, 현재 위치는 passwd 다음 |
+| 디스크 연결 (기본 → `-000001` → `-000002` → `-000003`(현재)) | 참조 35건, 누락 0 |
+| 제외 확인 | `autoinst*` 0, `.lck` 0, `.vmem`·`.vmss` 0 |
+| 원본 폴더 비교 | `.lck`를 뺀 55개 파일 이름·크기·SHA-256 모두 일치 |
+
+- 압축 직전 원본 폴더에 `Target-Ubuntu.vmx.lck`가 있었다(VM은 `VMX exit (0)`으로 종료됨). Workstation에 VM 탭이 열려 있는 동안 유지되는 잠금이라 압축에서 제외했다(`-xr!*.lck`).
+
+**5) 복원 시험 (2026-11-12)**
+
+ZIP을 원본과 다른 폴더에 풀어 VMware에서 열고, **원본 `ubuntu-a`는 끈 상태**에서 복원본만 VMnet8에 연결해 실행했다(`vmrun list`로 확인).
+
+| 확인 | 결과 |
+| --- | --- |
+| 스냅샷 표시 (`vmrun listSnapshots`) | 3개 모두 표시 |
+| 처음 켤 때 | "I Copied It"으로 진행되어 MAC이 새로 생성됨. 고정 IP는 그대로 적용 |
+| IP / 장치 | `ens33 192.168.10.20/24`, 빈 `sr0`만 있음 |
+| 자격증명 | 새 비밀번호로 콘솔 로그인, `sudo -v` 성공 |
+| `central-mgmt` → 복원본 SSH | scan·fix 모두 성공. `BatchMode`에서 호스트 키 경고 없음 (호스트 키 보존) |
+| 증거 | `ubuntu-a-restore-test-261112.png`, `central-mgmt-ubuntu-a-ssh-restore-261112.png` |
+
+복원본은 시험 후 라이브러리에서 제거하고 폴더를 삭제했다(2026-11-12 11:09).
+
+**6) 과거 자료 취급 (팀장 지시)**
+
+- 기존 스냅샷 `00-initial-setup`, `01-ssh-security-configured`는 **삭제하지 않고 유지**한다. 과거 자료 삭제 여부는 이후 별도 승인으로 정한다.
+- 기존 백업 ZIP(2026-11-11)은 보존하되 접근을 제한한다. 파일명을 `Target-Ubuntu-261111-legacy-oldhash.zip`으로 바꾸고 읽기 전용으로 설정했다(SHA-256은 7-1 표와 같음, 2026-11-12 재확인).
+- 기존 스냅샷과 기존 백업에는 노출된 **과거 비밀번호 해시**가 남아 있으므로 **일반 복구에 쓰지 않는다.**
+- 불가피하게 이전 상태로 복구할 때는 **네트워크를 격리한 상태에서** 자격증명을 다시 설정하고 검증한 뒤에만 VMnet8 접속을 복구한다.
+- **신규 백업(`Target-Ubuntu-261112.zip`)에도 `00`·`01` 스냅샷 디스크가 포함된다.** 따라서 신규 백업에서 과거 해시가 완전히 제거되었다고 보지 않는다. 바뀐 것은 현재 상태(`01-…-passwd` 이후)의 자격증명이다.
+
+**7) 백업 절차 보완 (다음 백업부터)**
+
+1. 게스트에서 `sudo poweroff`로 종료한다.
+2. Workstation에서 해당 VM 탭을 닫는다(또는 라이브러리에서 Remove). 탭이 열려 있으면 `.vmx.lck`가 남는다.
+3. VM 폴더에 `.lck`, `.vmem`, `.vmss`가 없는지 확인한 뒤 압축한다.
+4. 기존 백업과 다른 파일명(`<VM>-YYMMDD.zip`)으로 만들고, SHA-256·`7z t`·원본 비교·복원 시험을 한다.
 
 ## 8. 디렉터리 구조
 
@@ -629,8 +730,9 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 - [ ] 계정별 SSH 키 분리 방식 (`id_ed25519_scan`, `id_ed25519_fix`) 확정
 - [ ] `02-vuln-baseline`에 적용할 취약 설정 목록 (B · 최종욱, C · 김서후)
 - [ ] 진단 대상 Desktop의 자동 업데이트 사용 여부 (재검증 일관성) — 2026-11-11 `central-mgmt` 커널이 증거 촬영 뒤 6.8.0-139 → 149로 바뀐 사례 있음 (2장)
-- [ ] `ubuntu-a` 원본의 `autoinst.iso`·`autoinst.flp` 연결 해제·삭제 여부 (7-1)
-- [ ] `ubuntu-a` `user1` 비밀번호 변경 여부 — 비밀번호 해시가 백업의 `autoinst.iso`에 있고, 확인 과정에서 외부 AI 대화에 한 번 노출됨 (7-1)
+- [x] `ubuntu-a` 원본의 `autoinst.iso`·`autoinst.flp` 연결 해제·삭제 여부 — 2026-11-12 조건부 승인, 참조 확인·해제·재부팅·스냅샷 시험 후 원본 삭제 (7-3)
+- [x] `ubuntu-a` `user1` 비밀번호 변경 여부 — 2026-11-12 승인·적용, 신규 스냅샷 `01-ssh-security-configured-passwd`를 일반 복구 기준으로 지정 (7-3)
+- [ ] 과거 해시가 남은 기존 스냅샷(`00`, `01`)과 기존 백업 ZIP의 삭제 여부 — 현재는 유지·접근 제한, 이후 별도 승인 (7-3 6))
 
 ## 11. 재구축 이력
 
@@ -664,6 +766,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | v0.2 | 2026-11-11 | VM 3대 재구축 반영: 2장 서버 구성(호스트명·커널·인터페이스) 갱신, 5-5 호스트 키·사용자 키 재생성 안내, 5-6 sudoers 재적용 내용과 재검증 결과, 5-7 신규 VM SSH 접속 테스트, 6장 체크리스트를 261111 증거 기준으로 갱신(백업 검증 항목 추가), 7장 스냅샷 재생성, 7-1 VM 백업 현황(SHA-256), 11장 재구축 이력 추가, 신규 증거를 `infrastructure/evidence/`로 정리 |
 | v0.3 | 2026-11-11 | 백업 최종 검증 반영: 7-1 ZIP 구성·7-Zip·디스크 연결·원본 비교 결과, `.vmx.lck` 원인, `autoinst.iso` 민감정보, 7-2 복원 시험 추가, 6장 체크리스트(백업·복원·sudoers 권한·Description) 완료 처리, 신규 증거 43장과 보안 검사 범위 기재, `central-mgmt` 커널 6.8.0-149 정정, 10장 협의 사항 추가 |
 | v0.4 | 2026-11-12 | 5-7 5)와 6장 체크리스트에 SSH 출발지 IP·실제 인증 키 확인 추가(상세는 HANDOFF 2-4), 증거 2장(`*-261112.png`) 추가 |
+| v0.5 | 2026-11-12 | 7-3 추가: `ubuntu-a` `user1` 비밀번호 변경, 설치 미디어 참조 확인·제거·원본 삭제, `01-ssh-security-configured-passwd` 스냅샷(일반 복구 기준), 신규 백업 SHA-256·검증·복원 시험, 과거 자료 취급 원칙, 백업 절차 보완(`.lck`). 7장·7-1·7-2·6장·10장 갱신, 증거 11장 추가 |
 
 ---
 

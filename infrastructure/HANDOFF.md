@@ -197,7 +197,8 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | VM 백업 ZIP 내부 구성, 7-Zip 검사, 원본 비교 | **완료** (README 7-1) |
 | 백업 복원 시험 | **완료** (3대, README 7-2). 네트워크 격리는 작업자 확인 기준 |
 | sudoers 파일 권한 `0440`, `visudo -c` 증거 | **완료** (`<id>-sudoers-perm-261111.png`) |
-| `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | 팀장 결정 대기 (README 7-1, 10장) |
+| `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | **완료** (2026-11-12, 팀장 승인, README 7-3). `ubuntu-a` 일반 복구 기준은 `01-ssh-security-configured-passwd` 스냅샷과 `Target-Ubuntu-261112.zip`. 기존 스냅샷 `00`·`01`과 기존 백업에는 과거 해시가 남아 있어 일반 복구에 쓰지 않음 |
+| 과거 해시가 남은 스냅샷·백업 삭제 | 팀장 별도 승인 대기 (현재 유지·접근 제한) |
 | SSH-01 수집기 `/usr/local/sbin/secureops-ssh01-read` 및 전용 sudoers | 팀장 검토 후 적용 예정. 2026-11-11 확인 시 두 대상 모두 미설치(`COLLECTOR_NOT_INSTALLED`). Rocky sudo `secure_path`에 `/usr/local/sbin`이 없으므로 전체 경로로 호출 |
 | `central-mgmt` 저장소 배치, 의존성 설치 | 미착수 (3-1의 결정 필요) |
 | 대상 서버에 실제 포트 접속 시험 | 미실시 |
@@ -211,3 +212,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-11 | 최초 작성 (재구축 VM 검증 기준) |
 | 2026-11-11 | `central-mgmt` 커널 6.8.0-149 정정, VMware Tools 현황, 백업·복원·sudoers 증거 완료 반영, SSH-01 수집기 확인 결과 추가 |
 | 2026-11-12 | 2-4 SSH 출발지 IP·실제 인증 키 증거 추가 (Rocky `sshd-session` 로그 형식 참고 포함) |
+| 2026-11-12 | 6장: `ubuntu-a` 비밀번호 변경·설치 미디어 삭제 완료, 신규 복구 기준 반영 (README 7-3) |
