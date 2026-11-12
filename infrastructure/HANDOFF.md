@@ -55,6 +55,34 @@
 | sudo 허용·차단 | scan `sshd -T` 허용 / scan `cat /etc/shadow` 차단 / fix `id` 차단 / fix `sshd -t` 허용 | `central-mgmt-sudo-test-261111.png` |
 | 진단 계정 읽기 권한 | 4-1 표와 같음 | `central-mgmt-scan-read-test-261111.png` |
 
+### 2-4. SSH 출발지 IP와 실제 인증 키 (2026-11-12 09:20 확인)
+
+`central-mgmt`의 `user1`에서 조회만 했다. 대상 쪽 로그는 sudoers v0에 이미 허용된 `tail -n 200` 명령으로 읽었다.
+
+| 별칭 | 접속 계정 | 대상 호스트명 | 출발지 (`SSH_CONNECTION` 1번째 값) | 접속 주소 (3번째 값) |
+| --- | --- | --- | --- | --- |
+| `ubuntu-a` | `secureops-scan` | Target-Ubuntu | `192.168.10.10` | `192.168.10.20` |
+| `rocky-b` | `secureops-scan` | Target-Rocky | `192.168.10.10` | `192.168.10.30` |
+| `ubuntu-a-fix` | `secureops-fix` | Target-Ubuntu | `192.168.10.10` | `192.168.10.20` |
+| `rocky-b-fix` | `secureops-fix` | Target-Rocky | `192.168.10.10` | `192.168.10.30` |
+
+| 대상 로그 | `Accepted publickey` 기록 (09:20 접속분) | 2-2 지문과 일치 |
+| --- | --- | --- |
+| `ubuntu-a` `/var/log/auth.log` | `secureops-scan` from `192.168.10.10` ED25519 `SHA256:AUX6A1uv…`, `secureops-fix` from `192.168.10.10` ED25519 `SHA256:///ZMLW9…` | 일치 |
+| `rocky-b` `/var/log/secure` | 위와 같음 | 일치 |
+
+- `central-mgmt`에서 `ssh-keygen -lf`로 확인한 공개키 지문(scan·fix)도 2-2 표와 같다.
+- 결론: 네 별칭 모두 `central-mgmt`(`192.168.10.10`)에서 출발하고, 대상 서버는 각 계정에 지정된 키(scan 키 / fix 키)로 인증했다. 다른 키나 비밀번호 인증 기록은 이번 조회 범위(최근 200줄)에 없었다.
+- **로그 형식 차이 (LOG-01 참고):** Rocky 9.8의 인증 로그는 프로세스 이름이 `sshd`가 아니라 **`sshd-session[PID]`**로 기록된다. 시각도 Ubuntu는 ISO 8601(`2026-11-12T09:20:11.494728+09:00`), Rocky는 syslog 형식(`Nov 12 09:20:11`)이다. 로그를 파싱할 때 두 형식을 모두 고려해야 한다.
+- 증거: `central-mgmt-ssh-source-261112.png` (출발지·지문), `central-mgmt-ssh-authlog-261112.png` (대상 로그)
+
+```bash
+# central-mgmt user1에서 실행 (조회만)
+for h in ubuntu-a rocky-b ubuntu-a-fix rocky-b-fix; do echo "== $h"; ssh -o BatchMode=yes "$h" 'echo "user=$(whoami) host=$(hostname) client=${SSH_CONNECTION%% *} server=$(echo $SSH_CONNECTION | cut -d" " -f3)"'; done
+ssh ubuntu-a 'sudo -n /usr/bin/tail -n 200 /var/log/auth.log' | grep 'Accepted publickey' | tail -n 4
+ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publickey' | tail -n 4
+```
+
 **원격 실행 시 권장**
 - 비대화식 실행에는 `ssh -o BatchMode=yes <별칭> '<명령>'`을 쓴다. 키 문제가 생기면 비밀번호를 묻지 않고 바로 실패한다.
 - sudo가 필요한 명령은 `sudo -n <전체 경로> <허용된 인자 그대로>`로 호출한다. `-n`이 없으면 허용되지 않은 명령에서 비밀번호 입력을 기다리며 멈출 수 있다.
@@ -182,3 +210,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | --- | --- |
 | 2026-11-11 | 최초 작성 (재구축 VM 검증 기준) |
 | 2026-11-11 | `central-mgmt` 커널 6.8.0-149 정정, VMware Tools 현황, 백업·복원·sudoers 증거 완료 반영, SSH-01 수집기 확인 결과 추가 |
+| 2026-11-12 | 2-4 SSH 출발지 IP·실제 인증 키 증거 추가 (Rocky `sshd-session` 로그 형식 참고 포함) |

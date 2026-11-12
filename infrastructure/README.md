@@ -452,6 +452,7 @@ done
 | `~/.ssh/config` 별칭 접속 (4개) | `ssh <ubuntu-a\|rocky-b\|ubuntu-a-fix\|rocky-b-fix> 'whoami; hostname'` | `ubuntu-a`·`rocky-b` → `secureops-scan`, `-fix` 별칭 → `secureops-fix`, 호스트명 일치 | `central-mgmt-ssh-alias-261111.png` |
 | sudo 허용·차단 | 5-6의 확인 명령 | 허용 2개 동작, 차단 2개 거부 (5-6 확인 결과 표) | `central-mgmt-sudo-test-261111.png` |
 | 진단 계정 읽기 권한 | 위 4)의 명령 | 4) 표와 같음 — `/etc/ssh/sshd_config`는 Ubuntu 읽기 가능, Rocky 불가 / `/etc/shadow`·인증 로그는 두 서버 불가 | `central-mgmt-scan-read-test-261111.png` |
+| SSH 출발지·인증 키 (2026-11-12) | 4개 별칭에서 `SSH_CONNECTION` 출력, 대상 인증 로그 `sudo -n tail -n 200` 중 `Accepted publickey` | 출발지 모두 `192.168.10.10`, 로그의 키 지문이 scan·fix 키와 일치 (HANDOFF 2-4) | `central-mgmt-ssh-source-261112.png`, `central-mgmt-ssh-authlog-261112.png` |
 
 재구축 전(2026-11-05~06)에 같은 테스트를 한 결과는 `*-261105.png`, `*-261106.png`로 남겨 둔다.
 
@@ -480,6 +481,7 @@ done
 | [v] | fix 계정 권한 | `sudo -l -U secureops-fix` (진단 대상에서 `user1`로) | 5-6 초안 v0의 허용 명령만 표시 | `<id>-sudo-261111.png` (진단 대상 2대) |
 | [v] | sudo 허용·차단 | 5-6의 확인 명령 (중앙 관리 서버) | 허용 명령은 동작, 그 외는 거부 | `central-mgmt-sudo-test-261111.png` |
 | [v] | SSH 별칭 접속 | 4개 별칭으로 `whoami; hostname` | 각 계정으로 비밀번호 없이 접속 | `central-mgmt-ssh-alias-261111.png` |
+| [v] | SSH 출발지·인증 키 | 4개 별칭으로 `SSH_CONNECTION` 확인, 대상 인증 로그의 `Accepted publickey` (HANDOFF 2-4) | 출발지 `192.168.10.10`, 로그의 키 지문이 scan·fix 키 지문과 일치 | `central-mgmt-ssh-source-261112.png`, `central-mgmt-ssh-authlog-261112.png` (2026-11-12) |
 | [v] | 진단 계정 읽기 권한 | 5-7의 읽기 권한 확인 명령 | 결과를 5-7 표에 반영 | `central-mgmt-scan-read-test-261111.png` |
 | [v] | 스냅샷 | Snapshot Manager | `00-initial-setup`, `01-ssh-security-configured` 확인 | `<id>-snapshot-261111.png` (3대) |
 | [v] | 스냅샷 Description | Snapshot Manager | `01` Description에 날짜·작업자·작업 내용 기록 | `<id>-snapshot-desc-261111.png` (3대) |
@@ -493,6 +495,8 @@ done
 > 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
 >
 > **저장소 보안 검사 범위 (2026-11-11):** `feature/kmw-infrastructure` 최신 커밋의 텍스트 파일을 개인키 헤더·토큰·비밀번호 패턴으로 검사했고, 키·백업·VM 파일(`id_ed25519*`, `.pem`, `.key`, `.env`, `known_hosts`, `.zip`, `.vmdk`, `.vmx`) 0건이다. 신규 스크린샷 43장은 직접 판독해 비밀번호·키·토큰이 없음을 확인했다. 이전 커밋 이력과 재구축 전 스크린샷은 이번 검사 범위에 포함하지 않았다.
+>
+> **2026-11-12 추가 증거 2장** (`central-mgmt-ssh-source-261112.png`, `central-mgmt-ssh-authlog-261112.png`): IP, 계정명, 공개키 지문만 담겨 있으며 비밀번호·개인키·토큰이 없음을 직접 판독해 확인했다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -659,6 +663,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | v0.1 | 2026-11-05 | 서버 구성(실제 OS 버전·에디션·커널), 네트워크, 구축 절차, 비밀번호 정책, SSH 키 인증 및 계정 구성(user1, secureops-scan, secureops-fix), 검증 체크리스트, 스냅샷 규칙 초안 작성 (아키텍처 설계서 v0.2 기준), sudoers 초안 v0 적용 내용 추가(2026-11-06), 공통 SSH 모듈 연동 정보 추가, 검토 반영 (`central-mgmt` 확정, 적용 완료·예정 구분, `01-ssh-security-configured` 스냅샷 및 계정 권한 현황 추가, `01` 스냅샷 재생성 반영(2026-11-06)) |
 | v0.2 | 2026-11-11 | VM 3대 재구축 반영: 2장 서버 구성(호스트명·커널·인터페이스) 갱신, 5-5 호스트 키·사용자 키 재생성 안내, 5-6 sudoers 재적용 내용과 재검증 결과, 5-7 신규 VM SSH 접속 테스트, 6장 체크리스트를 261111 증거 기준으로 갱신(백업 검증 항목 추가), 7장 스냅샷 재생성, 7-1 VM 백업 현황(SHA-256), 11장 재구축 이력 추가, 신규 증거를 `infrastructure/evidence/`로 정리 |
 | v0.3 | 2026-11-11 | 백업 최종 검증 반영: 7-1 ZIP 구성·7-Zip·디스크 연결·원본 비교 결과, `.vmx.lck` 원인, `autoinst.iso` 민감정보, 7-2 복원 시험 추가, 6장 체크리스트(백업·복원·sudoers 권한·Description) 완료 처리, 신규 증거 43장과 보안 검사 범위 기재, `central-mgmt` 커널 6.8.0-149 정정, 10장 협의 사항 추가 |
+| v0.4 | 2026-11-12 | 5-7 5)와 6장 체크리스트에 SSH 출발지 IP·실제 인증 키 확인 추가(상세는 HANDOFF 2-4), 증거 2장(`*-261112.png`) 추가 |
 
 ---
 
