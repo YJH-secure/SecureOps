@@ -101,7 +101,7 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 - Rocky의 crypto-policies 파일은 시스템이 만드는 암호 알고리즘 목록이라 이번 검색 범위에 넣지 않았다.
 - 증거: `ubuntu-a-ssh01-context-261112.png`, `rocky-b-ssh01-context-261112.png`
 
-**`targets.json` 권장값 (팀장 확정 대상, PR #26 `central_ssh01_runner.py` 기준)**
+**`targets.json` 값 (2026-11-12 팀장 확정, PR #26 `central_ssh01_runner.py` 기준)**
 
 | 필드 | `ubuntu-a` | `rocky-b` |
 | --- | --- | --- |
@@ -111,7 +111,21 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 | `ssh01_context` | `user=root,host=192.168.10.10,addr=192.168.10.10` | 같음 |
 
 - 수집기의 `ROOT_CONTEXT`와 `ssh01_context`는 글자까지 같아야 한다(다르면 실행기가 `context mismatch`로 거부).
-- **PR #24 배포 안내 주의:** `deploy/ssh01/README.md`는 sudoers 예시를 `/etc/sudoers.d/secureops-scan`으로 설치하도록 되어 있다. 이 이름은 v0 scan 파일과 같아 그대로 설치하면 기존 허용 명령이 모두 사라진다. `/etc/sudoers.d/secureops-ssh01` 같은 별도 파일 사용을 제안했다(팀장 검토).
+- **PR #24 배포 안내 주의:** `deploy/ssh01/README.md`는 sudoers 예시를 `/etc/sudoers.d/secureops-scan`으로 설치하도록 되어 있다. 이 이름은 v0 scan 파일과 같아 그대로 설치하면 기존 허용 명령이 모두 사라진다. `/etc/sudoers.d/secureops-ssh01` 같은 별도 파일 사용을 제안했다.
+- **팀장 결정 (2026-11-12):** 위 값으로 `targets.json`과 수집기 `ROOT_CONTEXT`를 적용한다. 전용 sudoers 최종 경로는 `/etc/sudoers.d/secureops-ssh01-read`이고, 기존 `/etc/sudoers.d/secureops-scan`은 반드시 보존한다. 수정본이 GitHub에 반영되기 전까지 PR #24의 기존 README로 설치하지 않는다. 수집기·전용 sudoers는 팀장 설치 승인 전까지 미설치 상태를 유지한다.
+
+**중앙 실행기 SSH 계층 사전 점검 (2026-11-12, `central-mgmt-runner-preflight-261112.png`)**
+
+`common/ssh_client.py`와 같은 옵션(`BatchMode=yes`, `StrictHostKeyChecking=yes`, `ConnectTimeout=10`, `ConnectionAttempts=1`, `-p 22`, `secureops-scan@<별칭>`)으로 정의된 작업 5개를 실행했다.
+
+| 작업 | `ubuntu-a` | `rocky-b` |
+| --- | --- | --- |
+| `uname -s` / `cat /etc/os-release` / `id -un` / `stat -c '%a %U %G' /etc/passwd` | 모두 exit 0 (`Linux`, Ubuntu 24.04.5, `secureops-scan`, `644 root root`) | 모두 exit 0 (`Linux`, Rocky 9.8, `secureops-scan`, `644 root root`) |
+| `sudo -n /usr/local/sbin/secureops-ssh01-read` | `sudo: a password is required`, exit 1 | 같음 |
+
+- 별칭·키·known_hosts 기준으로 SSH 계층은 신규 VM에서 동작한다. SSH-01 실패는 수집기·전용 sudoers 미설치 때문이다(예상 결과).
+- 실행기 경로(`central_ssh01_runner.py` → `common/ssh_client`, `checks/account/ssh_check`, `core/remote_result`, `core/main`)는 표준 라이브러리만 쓴다. pip·venv·`jsonschema>=4.18`은 테스트 실행에만 필요하다.
+- 예상 결과: 두 대상 모두 `permitrootlogin without-password`이므로 연동 시 SSH-01 = `vulnerable`(CVSS pending).
 
 **원격 실행 시 권장**
 - 비대화식 실행에는 `ssh -o BatchMode=yes <별칭> '<명령>'`을 쓴다. 키 문제가 생기면 비밀번호를 묻지 않고 바로 실패한다.
@@ -213,7 +227,9 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 공통 | `/usr/sbin/nft -j list ruleset` | 출력 형식만 JSON이고 읽는 정보는 기존 허용 명령과 같음. 지금은 거부됨(실측) |
 | Rocky | `/usr/bin/firewall-cmd --info-zone=public`, `--info-service=ssh`, `--info-service=cockpit`, `--info-service=dhcpv6-client` | 존·서비스가 바뀌면 승인 목록도 갱신해야 함 |
 | Rocky (선택) | journal 용량 | `journalctl --disk-usage`·`du` 모두 권한 부족. ① 정확한 sudo 명령 1개 허용(README 5-6에서 셸 탈출 위험으로 제외했던 `journalctl`은 재검토 필요), ② scan을 `systemd-journal` 그룹에 추가(전체 journal 읽기, 범위 넓음), ③ LOG-01에서 확인 불가(`error`) 처리 중 팀장 결정. Ubuntu는 `du`로 가능 |
-| 공통 (PR #24) | `/usr/local/sbin/secureops-ssh01-read ""` | SSH-01 수집기 전용. 기존 v0 파일과 **별도 파일**로 설치 필요 (2-5) |
+| 공통 (PR #24) | `/usr/local/sbin/secureops-ssh01-read ""` | SSH-01 수집기 전용. 별도 파일 `/etc/sudoers.d/secureops-ssh01-read`로 설치 예정(팀장 확정, 설치 승인 대기) (2-5) |
+
+> **팀장 결정 (2026-11-12):** `nft -j`, Rocky 추가 firewalld 조회, Rocky journal 용량 조회는 **보류**한다. C 담당과 기존 권한으로 가능한 조회부터 검증한다.
 
 ## 5. 네트워크 노출 현황 (2026-11-11 실측, `sudo ss -lntup`)
 
@@ -249,3 +265,5 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-12 | 2-4 SSH 출발지 IP·실제 인증 키 증거 추가 (Rocky `sshd-session` 로그 형식 참고 포함) |
 | 2026-11-12 | 6장: `ubuntu-a` 비밀번호 변경·설치 미디어 삭제 완료, 신규 복구 기준 반영 (README 7-3) |
 | 2026-11-12 | 2-5 중앙 실행기 연동값·SSH-01 평가 문맥·수집기 현황 추가, 4-1 `getfacl`·journal `du` 실측, 4-3 C 요청 재측정 결과로 후보 확정(PR #24 수집기 포함), 6장 수집기 상태 갱신 |
+| 2026-11-12 | 팀장 결정 반영: `targets.json`·`ssh01_context` 확정, 전용 sudoers 경로 `secureops-ssh01-read`, C 추가 권한 보류. 신규 VM 대상 서버 scan 홈에 저장소 없음 확인 |
+| 2026-11-12 | 2-5 중앙 실행기 SSH 계층 사전 점검 결과와 실행 의존성·예상 결과 추가 |
