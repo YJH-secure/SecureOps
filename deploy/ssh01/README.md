@@ -52,9 +52,14 @@ sudo /usr/local/sbin/secureops-ssh01-read
 
 After confirming its output, install the sudoers rule:
 
+Do not overwrite the existing /etc/sudoers.d/secureops-scan.
+Stop if the dedicated SSH-01 sudoers file already exists or is a symlink.
+
+sudo test ! -e /etc/sudoers.d/secureops-ssh01-read && \
+sudo test ! -L /etc/sudoers.d/secureops-ssh01-read && \
 sudo install -o root -g root -m 0440 -T \
   ./secureops-scan.sudoers.example \
-  /etc/sudoers.d/secureops-scan
+  /etc/sudoers.d/secureops-ssh01-read
 
 sudo visudo -c
 
