@@ -697,6 +697,8 @@ ZIP을 원본과 다른 폴더에 풀어 VMware에서 열고, **원본 `ubuntu-a
 infrastructure/
 ├── README.md                     # 인프라 구성·구축 절차·검증 기준 문서 (이 문서)
 ├── HANDOFF.md                    # 진단 실행 환경 인수인계 (SSH 접속, 실행 환경, 명령 경로·권한)
+├── NETWORK-PLAN.md               # 현재 구성도(실측) + GNS3 망 분리 계획안 (6대 구성, 팀장 채택)
+├── diagrams/                     # 구성도 SVG (vmware-current.svg, gns3-plan.svg)
 ├── network/                      # 서버별 고정 IP 설정 파일
 │   ├── netplan-central-mgmt.yaml # 중앙 관리 서버 netplan 설정 (192.168.10.10)
 │   ├── netplan-ubuntu-a.yaml     # 진단 대상 A netplan 설정 (192.168.10.20)
@@ -770,6 +772,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | v0.4 | 2026-11-12 | 5-7 5)와 6장 체크리스트에 SSH 출발지 IP·실제 인증 키 확인 추가(상세는 HANDOFF 2-4), 증거 2장(`*-261112.png`) 추가 |
 | v0.5 | 2026-11-12 | 7-3 추가: `ubuntu-a` `user1` 비밀번호 변경, 설치 미디어 참조 확인·제거·원본 삭제, `01-ssh-security-configured-passwd` 스냅샷(일반 복구 기준), 신규 백업 SHA-256·검증·복원 시험, 과거 자료 취급 원칙, 백업 절차 보완(`.lck`). 7장·7-1·7-2·6장·10장 갱신, 증거 11장 추가 |
 | v0.6 | 2026-11-12 | 6장 체크리스트에 SSH 별칭·SSH-01 평가 문맥, C 요청 권한 재측정 추가(상세는 HANDOFF 2-5·4장), 증거 6장 추가 |
+| v0.7 | 2026-11-12 | `NETWORK-PLAN.md` v0.2와 `diagrams/` 구성도 SVG 2개 추가 (현재 VMware 구성, GNS3 6대 계획: IP 대역·인터페이스·통신 정책 초안, IDS/WAF·로그, 서비스-진단 모듈 연결, 자원, 기본·심화 범위, 전환 절차). 8장 디렉터리 구조 갱신, 증거 1장(`central-mgmt-c-deploy-precheck-261112.png`) |
 
 ---
 
