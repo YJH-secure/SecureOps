@@ -1,0 +1,7 @@
+{
+  "check_id": "LOG-01",
+  "status": "needs_review",
+  "severity": "medium",
+  "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+  "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요."
+}

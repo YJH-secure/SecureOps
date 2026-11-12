@@ -1,0 +1,34 @@
+{
+  "os": {
+    "id": "ubuntu",
+    "version_id": "24.04"
+  },
+  "target": {
+    "target_id": "scenario-target-mock",
+    "role": "service-mock",
+    "network_context": "mock-network"
+  },
+  "active_units_stdout": "example.service loaded active running MOCK example\n",
+  "unit_files_stdout": "example.service enabled enabled\n",
+  "listeners_stdout": "",
+  "policy": {
+    "check_id": "SVC-01",
+    "description": "MOCK explicitly forbidden unit",
+    "severity": "medium",
+    "criteria": {
+      "profiles": [
+        {
+          "os_id": "ubuntu",
+          "os_version": "24.04",
+          "role": "service-mock",
+          "network_context": "mock-network",
+          "approval_status": "approved",
+          "unit_rules": {
+            "example.service": "forbidden"
+          },
+          "listener_rules": []
+        }
+      ]
+    }
+  }
+}

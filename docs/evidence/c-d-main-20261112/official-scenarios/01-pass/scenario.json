@@ -1,0 +1,92 @@
+{
+  "id": "01-pass",
+  "title": "정상",
+  "runner": "file",
+  "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+  "condition": "합성 승인 정책의 UID 0·0644 비트 조건과 기본 ACL을 충족하는 FILE 메타데이터를 입력한다.",
+  "reason": "실제 FILE 판정 함수의 UID·권한·기본 ACL 검사 결과를 확인한다.",
+  "limitations": "실제 passwd 보안 적합성이나 운영 정책 승인을 의미하지 않는다.",
+  "inputs": {
+    "policy": {
+      "check_id": "FILE-01",
+      "description": "MOCK approved policy for demonstration only",
+      "severity": "high",
+      "criteria": {
+        "files": [
+          {
+            "path": "/etc/passwd",
+            "expected_uid": 0,
+            "allowed_permission_bits": "0644",
+            "reference_gid": 0,
+            "approval_status": "approved"
+          }
+        ]
+      }
+    },
+    "observation": {
+      "path": "/etc/passwd",
+      "uid": 0,
+      "gid": 0,
+      "mode": "0644",
+      "file_type": "regular",
+      "acl": {
+        "state": "collected",
+        "raw": "user::rw-\ngroup::r--\nother::r--\n"
+      }
+    }
+  },
+  "expected": {
+    "check_id": "FILE-01",
+    "status": "pass",
+    "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+    "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+    "cvss": {
+      "assessment_status": "not_applicable",
+      "version": null,
+      "vector": null,
+      "base_score": null,
+      "rating": null,
+      "source": null,
+      "rationale": "v1.1 pass. 승인 기준을 충족해 CVSS 평가 대상이 아닙니다."
+    }
+  },
+  "details_checks": [
+    {
+      "path": [
+        "details",
+        "files",
+        0,
+        "status"
+      ],
+      "equals": "pass"
+    },
+    {
+      "path": [
+        "details",
+        "files",
+        0,
+        "actual",
+        "uid"
+      ],
+      "equals": 0
+    },
+    {
+      "path": [
+        "details",
+        "files",
+        0,
+        "actual",
+        "mode"
+      ],
+      "equals": "0644"
+    }
+  ],
+  "expected_v11": {
+    "check_id": "FILE-01",
+    "status": "pass",
+    "severity": "high",
+    "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+    "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요."
+  },
+  "scenario_contract": "1.2"
+}

@@ -1,0 +1,34 @@
+{
+  "scenario_id": "04-needs-review",
+  "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+  "expected_status": "needs_review",
+  "passed": true,
+  "official_integration_verified": false,
+  "v11_regression": true,
+  "v12_schema": true,
+  "evidence_details_preserved": true,
+  "cvss_nulls": true,
+  "legacy_severity_not_converted": true,
+  "actual_status": "needs_review",
+  "assessment_status": "not_applicable",
+  "d_reference_mock": {
+    "passed": true,
+    "kind": "local MOCK reference check",
+    "full_result_preserved": true,
+    "metrics": {
+      "total_items": 1,
+      "evaluable_items": 0,
+      "pass_count": 0,
+      "vulnerable_count": 0,
+      "error_count": 0,
+      "na_count": 0,
+      "needs_review_count": 1,
+      "pass_rate": "N/A (계산 불가)"
+    },
+    "cvss_assessment_breakdown": {
+      "scored": 0,
+      "pending": 0,
+      "not_applicable": 1
+    }
+  }
+}

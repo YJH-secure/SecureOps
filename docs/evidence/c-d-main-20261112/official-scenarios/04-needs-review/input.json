@@ -1,0 +1,11 @@
+{
+  "os": {
+    "id": "ubuntu",
+    "version_id": "24.04"
+  },
+  "unit_stdout": "LoadState=loaded\nActiveState=active\nUnitFileState=enabled\n",
+  "journald_stdout": "[Journal]\nStorage=persistent\n",
+  "usage_stdout": "Archived and active journals take up 8.0M in the file system.\n",
+  "path_metadata": "All known log paths are missing in the synthetic fixture",
+  "policy_approval": "pending"
+}

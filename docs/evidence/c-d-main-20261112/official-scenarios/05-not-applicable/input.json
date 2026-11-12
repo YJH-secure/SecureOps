@@ -1,0 +1,9 @@
+{
+  "check_id": "FILE-01",
+  "severity": "high",
+  "exclusion_id": "MOCK-EXEMPT-01",
+  "approval_status": "MOCK_ONLY_NOT_OPERATIONAL",
+  "condition": "Synthetic target explicitly exempted from FILE-01 inside this fixture only",
+  "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+  "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요."
+}

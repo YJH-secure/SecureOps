@@ -1,0 +1,42 @@
+{
+  "check_id": "SVC-01",
+  "status": "vulnerable",
+  "severity": "medium",
+  "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+  "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+  "details": {
+    "policy_version": "MOCK-scenarios-v1",
+    "approval_status": "approved",
+    "target": {
+      "target_id": "scenario-target-mock",
+      "role": "service-mock",
+      "network_context": "mock-network",
+      "hostname": "scenario-host-mock",
+      "os": {
+        "id": "ubuntu",
+        "version_id": "24.04"
+      }
+    },
+    "observations": {
+      "active_units": [
+        "example.service"
+      ],
+      "unit_files": [
+        {
+          "unit": "example.service",
+          "state": "enabled"
+        }
+      ],
+      "listeners": []
+    },
+    "violations": [
+      {
+        "unit": "example.service",
+        "rule": "forbidden",
+        "active": true
+      }
+    ],
+    "review": [],
+    "errors": []
+  }
+}

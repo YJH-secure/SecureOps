@@ -1,0 +1,7 @@
+{
+  "check_id": "FILE-01",
+  "status": "pass",
+  "severity": "high",
+  "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+  "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요."
+}
