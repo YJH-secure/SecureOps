@@ -1,0 +1,1647 @@
+{
+  "kind": "official C code local MOCK evidence, not a live server scan",
+  "c_code_commit": "d21816689f7a795a64657148067994a28201772e",
+  "d_code_base": "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+  "summary": {
+    "kind": "C JSON v1.2 MOCK scenarios, counterpart and live integration tracked separately",
+    "executed_at": "2026-11-11T08:16:11.616777+00:00",
+    "scenarios": 5,
+    "passed": 5,
+    "rejection_cases": 28,
+    "rejection_passed": 28,
+    "results": [
+      {
+        "scenario_id": "01-pass",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "expected_status": "pass",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "pass",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 1,
+            "pass_count": 1,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "100.0%"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      },
+      {
+        "scenario_id": "02-vulnerable",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "expected_status": "vulnerable",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "vulnerable",
+        "assessment_status": "pending",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 1,
+            "pass_count": 0,
+            "vulnerable_count": 1,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "0.0%"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 1,
+            "not_applicable": 0
+          }
+        }
+      },
+      {
+        "scenario_id": "03-error",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "expected_status": "error",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "error",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 1,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      },
+      {
+        "scenario_id": "04-needs-review",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "expected_status": "needs_review",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "needs_review",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 1,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      },
+      {
+        "scenario_id": "05-not-applicable",
+        "execution_kind": "CONTRACT_FIXTURE_ONLY",
+        "expected_status": "not_applicable",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "not_applicable",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 1,
+            "needs_review_count": 0,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      }
+    ],
+    "code_commit_reference": "d21816689f7a795a64657148067994a28201772e",
+    "commit_label_verified_by_runner": false,
+    "ssh_executed": false,
+    "operational_policy_approval": false,
+    "scored_scenarios": 0
+  },
+  "cases": [
+    {
+      "scenario": {
+        "id": "01-pass",
+        "title": "정상",
+        "runner": "file",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "condition": "합성 승인 정책의 UID 0·0644 비트 조건과 기본 ACL을 충족하는 FILE 메타데이터를 입력한다.",
+        "reason": "실제 FILE 판정 함수의 UID·권한·기본 ACL 검사 결과를 확인한다.",
+        "limitations": "실제 passwd 보안 적합성이나 운영 정책 승인을 의미하지 않는다.",
+        "inputs": {
+          "policy": {
+            "check_id": "FILE-01",
+            "description": "MOCK approved policy for demonstration only",
+            "severity": "high",
+            "criteria": {
+              "files": [
+                {
+                  "path": "/etc/passwd",
+                  "expected_uid": 0,
+                  "allowed_permission_bits": "0644",
+                  "reference_gid": 0,
+                  "approval_status": "approved"
+                }
+              ]
+            }
+          },
+          "observation": {
+            "path": "/etc/passwd",
+            "uid": 0,
+            "gid": 0,
+            "mode": "0644",
+            "file_type": "regular",
+            "acl": {
+              "state": "collected",
+              "raw": "user::rw-\ngroup::r--\nother::r--\n"
+            }
+          }
+        },
+        "expected": {
+          "check_id": "FILE-01",
+          "status": "pass",
+          "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+          "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "v1.1 pass. 승인 기준을 충족해 CVSS 평가 대상이 아닙니다."
+          }
+        },
+        "details_checks": [
+          {
+            "path": [
+              "details",
+              "files",
+              0,
+              "status"
+            ],
+            "equals": "pass"
+          },
+          {
+            "path": [
+              "details",
+              "files",
+              0,
+              "actual",
+              "uid"
+            ],
+            "equals": 0
+          },
+          {
+            "path": [
+              "details",
+              "files",
+              0,
+              "actual",
+              "mode"
+            ],
+            "equals": "0644"
+          }
+        ],
+        "expected_v11": {
+          "check_id": "FILE-01",
+          "status": "pass",
+          "severity": "high",
+          "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+          "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요."
+        },
+        "scenario_contract": "1.2"
+      },
+      "actual_v11": {
+        "check_id": "FILE-01",
+        "status": "pass",
+        "severity": "high",
+        "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+        "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+        "details": {
+          "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+          "environment": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "collection_origin": "MOCK"
+          },
+          "files": [
+            {
+              "path": "/etc/passwd",
+              "actual": {
+                "path": "/etc/passwd",
+                "uid": 0,
+                "gid": 0,
+                "mode": "0644",
+                "file_type": "regular",
+                "acl": {
+                  "state": "collected",
+                  "raw": "user::rw-\ngroup::r--\nother::r--\n"
+                }
+              },
+              "expected": {
+                "path": "/etc/passwd",
+                "expected_uid": 0,
+                "allowed_permission_bits": "0644",
+                "reference_gid": 0,
+                "approval_status": "approved"
+              },
+              "checks": [
+                {
+                  "name": "owner",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": 0,
+                  "reason": "compare numeric UID"
+                },
+                {
+                  "name": "permissions",
+                  "status": "pass",
+                  "actual": "0644",
+                  "expected": {
+                    "allowed_permission_bits": "0644",
+                    "unexpected_bits": "0000"
+                  },
+                  "reason": "actual & ~allowed within 07777; special bits included"
+                },
+                {
+                  "name": "acl",
+                  "status": "pass",
+                  "actual": {
+                    "state": "collected",
+                    "raw": "user::rw-\ngroup::r--\nother::r--\n",
+                    "effective_entries": [
+                      {
+                        "kind": "user",
+                        "qualifier": "",
+                        "declared_bits": 6,
+                        "effective_bits": 6
+                      },
+                      {
+                        "kind": "group",
+                        "qualifier": "",
+                        "declared_bits": 4,
+                        "effective_bits": 4
+                      },
+                      {
+                        "kind": "other",
+                        "qualifier": "",
+                        "declared_bits": 4,
+                        "effective_bits": 4
+                      }
+                    ]
+                  },
+                  "expected": "base ACL consistent with mode",
+                  "reason": "no extended ACL; access represented by mode bits"
+                },
+                {
+                  "name": "group",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": {
+                    "reference_gid": 0,
+                    "enforced": false
+                  },
+                  "reason": "project strengthening reference only; mismatch is not a violation"
+                }
+              ],
+              "policy_approval_status": "approved",
+              "status": "pass"
+            }
+          ]
+        }
+      },
+      "actual_v12": {
+        "check_id": "FILE-01",
+        "status": "pass",
+        "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+        "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+        "details": {
+          "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+          "environment": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "collection_origin": "MOCK"
+          },
+          "files": [
+            {
+              "path": "/etc/passwd",
+              "actual": {
+                "path": "/etc/passwd",
+                "uid": 0,
+                "gid": 0,
+                "mode": "0644",
+                "file_type": "regular",
+                "acl": {
+                  "state": "collected",
+                  "raw": "user::rw-\ngroup::r--\nother::r--\n"
+                }
+              },
+              "expected": {
+                "path": "/etc/passwd",
+                "expected_uid": 0,
+                "allowed_permission_bits": "0644",
+                "reference_gid": 0,
+                "approval_status": "approved"
+              },
+              "checks": [
+                {
+                  "name": "owner",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": 0,
+                  "reason": "compare numeric UID"
+                },
+                {
+                  "name": "permissions",
+                  "status": "pass",
+                  "actual": "0644",
+                  "expected": {
+                    "allowed_permission_bits": "0644",
+                    "unexpected_bits": "0000"
+                  },
+                  "reason": "actual & ~allowed within 07777; special bits included"
+                },
+                {
+                  "name": "acl",
+                  "status": "pass",
+                  "actual": {
+                    "state": "collected",
+                    "raw": "user::rw-\ngroup::r--\nother::r--\n",
+                    "effective_entries": [
+                      {
+                        "kind": "user",
+                        "qualifier": "",
+                        "declared_bits": 6,
+                        "effective_bits": 6
+                      },
+                      {
+                        "kind": "group",
+                        "qualifier": "",
+                        "declared_bits": 4,
+                        "effective_bits": 4
+                      },
+                      {
+                        "kind": "other",
+                        "qualifier": "",
+                        "declared_bits": 4,
+                        "effective_bits": 4
+                      }
+                    ]
+                  },
+                  "expected": "base ACL consistent with mode",
+                  "reason": "no extended ACL; access represented by mode bits"
+                },
+                {
+                  "name": "group",
+                  "status": "pass",
+                  "actual": 0,
+                  "expected": {
+                    "reference_gid": 0,
+                    "enforced": false
+                  },
+                  "reason": "project strengthening reference only; mismatch is not a violation"
+                }
+              ],
+              "policy_approval_status": "approved",
+              "status": "pass"
+            }
+          ]
+        },
+        "cvss": {
+          "assessment_status": "not_applicable",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 pass. 승인 기준을 충족해 CVSS 평가 대상이 아닙니다."
+        }
+      },
+      "d_saved_and_reloaded_report": {
+        "schema_version": "1.2",
+        "scan_id": "scan-v12-01-pass",
+        "target_id": "scenario-target-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-11T00:00:00Z",
+        "results": [
+          {
+            "check_id": "FILE-01",
+            "status": "pass",
+            "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+            "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+            "details": {
+              "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+              "environment": {
+                "id": "ubuntu",
+                "version_id": "24.04",
+                "collection_origin": "MOCK"
+              },
+              "files": [
+                {
+                  "path": "/etc/passwd",
+                  "actual": {
+                    "path": "/etc/passwd",
+                    "uid": 0,
+                    "gid": 0,
+                    "mode": "0644",
+                    "file_type": "regular",
+                    "acl": {
+                      "state": "collected",
+                      "raw": "user::rw-\ngroup::r--\nother::r--\n"
+                    }
+                  },
+                  "expected": {
+                    "path": "/etc/passwd",
+                    "expected_uid": 0,
+                    "allowed_permission_bits": "0644",
+                    "reference_gid": 0,
+                    "approval_status": "approved"
+                  },
+                  "checks": [
+                    {
+                      "name": "owner",
+                      "status": "pass",
+                      "actual": 0,
+                      "expected": 0,
+                      "reason": "compare numeric UID"
+                    },
+                    {
+                      "name": "permissions",
+                      "status": "pass",
+                      "actual": "0644",
+                      "expected": {
+                        "allowed_permission_bits": "0644",
+                        "unexpected_bits": "0000"
+                      },
+                      "reason": "actual & ~allowed within 07777; special bits included"
+                    },
+                    {
+                      "name": "acl",
+                      "status": "pass",
+                      "actual": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::r--\nother::r--\n",
+                        "effective_entries": [
+                          {
+                            "kind": "user",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "group",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          },
+                          {
+                            "kind": "other",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          }
+                        ]
+                      },
+                      "expected": "base ACL consistent with mode",
+                      "reason": "no extended ACL; access represented by mode bits"
+                    },
+                    {
+                      "name": "group",
+                      "status": "pass",
+                      "actual": 0,
+                      "expected": {
+                        "reference_gid": 0,
+                        "enforced": false
+                      },
+                      "reason": "project strengthening reference only; mismatch is not a violation"
+                    }
+                  ],
+                  "policy_approval_status": "approved",
+                  "status": "pass"
+                }
+              ]
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 pass. 승인 기준을 충족해 CVSS 평가 대상이 아닙니다."
+            }
+          }
+        ]
+      },
+      "test_result": {
+        "scenario_id": "01-pass",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "expected_status": "pass",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "pass",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 1,
+            "pass_count": 1,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "100.0%"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "02-vulnerable",
+        "title": "취약",
+        "runner": "service",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "condition": "OS·역할·망이 일치하는 합성 승인 정책이 금지한 example.service가 활성 상태로 관측된다.",
+        "reason": "실제 SVC 판정 함수가 명시적 유닛 금지 위반을 판정한다.",
+        "limitations": "미등록 항목 전체를 취약 처리하는 예시가 아니다. 정책 승인은 MOCK 안에서만 가정한다.",
+        "inputs": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04"
+          },
+          "target": {
+            "target_id": "scenario-target-mock",
+            "role": "service-mock",
+            "network_context": "mock-network"
+          },
+          "active_units_stdout": "example.service loaded active running MOCK example\n",
+          "unit_files_stdout": "example.service enabled enabled\n",
+          "listeners_stdout": "",
+          "policy": {
+            "check_id": "SVC-01",
+            "description": "MOCK explicitly forbidden unit",
+            "severity": "medium",
+            "criteria": {
+              "profiles": [
+                {
+                  "os_id": "ubuntu",
+                  "os_version": "24.04",
+                  "role": "service-mock",
+                  "network_context": "mock-network",
+                  "approval_status": "approved",
+                  "unit_rules": {
+                    "example.service": "forbidden"
+                  },
+                  "listener_rules": []
+                }
+              ]
+            }
+          }
+        },
+        "expected": {
+          "check_id": "SVC-01",
+          "status": "vulnerable",
+          "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+          "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+          }
+        },
+        "details_checks": [
+          {
+            "path": [
+              "details",
+              "violations",
+              0,
+              "unit"
+            ],
+            "equals": "example.service"
+          },
+          {
+            "path": [
+              "details",
+              "violations",
+              0,
+              "rule"
+            ],
+            "equals": "forbidden"
+          },
+          {
+            "path": [
+              "details",
+              "violations",
+              0,
+              "active"
+            ],
+            "equals": true
+          },
+          {
+            "path": [
+              "details",
+              "errors"
+            ],
+            "equals": []
+          }
+        ],
+        "expected_v11": {
+          "check_id": "SVC-01",
+          "status": "vulnerable",
+          "severity": "medium",
+          "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+          "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요."
+        },
+        "scenario_contract": "1.2"
+      },
+      "actual_v11": {
+        "check_id": "SVC-01",
+        "status": "vulnerable",
+        "severity": "medium",
+        "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+        "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "approval_status": "approved",
+          "target": {
+            "target_id": "scenario-target-mock",
+            "role": "service-mock",
+            "network_context": "mock-network",
+            "hostname": "scenario-host-mock",
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            }
+          },
+          "observations": {
+            "active_units": [
+              "example.service"
+            ],
+            "unit_files": [
+              {
+                "unit": "example.service",
+                "state": "enabled"
+              }
+            ],
+            "listeners": []
+          },
+          "violations": [
+            {
+              "unit": "example.service",
+              "rule": "forbidden",
+              "active": true
+            }
+          ],
+          "review": [],
+          "errors": []
+        }
+      },
+      "actual_v12": {
+        "check_id": "SVC-01",
+        "status": "vulnerable",
+        "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+        "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "approval_status": "approved",
+          "target": {
+            "target_id": "scenario-target-mock",
+            "role": "service-mock",
+            "network_context": "mock-network",
+            "hostname": "scenario-host-mock",
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            }
+          },
+          "observations": {
+            "active_units": [
+              "example.service"
+            ],
+            "unit_files": [
+              {
+                "unit": "example.service",
+                "state": "enabled"
+              }
+            ],
+            "listeners": []
+          },
+          "violations": [
+            {
+              "unit": "example.service",
+              "rule": "forbidden",
+              "active": true
+            }
+          ],
+          "review": [],
+          "errors": []
+        },
+        "cvss": {
+          "assessment_status": "pending",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+        }
+      },
+      "d_saved_and_reloaded_report": {
+        "schema_version": "1.2",
+        "scan_id": "scan-v12-02-vulnerable",
+        "target_id": "scenario-target-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-11T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SVC-01",
+            "status": "vulnerable",
+            "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+            "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+            "details": {
+              "policy_version": "MOCK-scenarios-v1",
+              "approval_status": "approved",
+              "target": {
+                "target_id": "scenario-target-mock",
+                "role": "service-mock",
+                "network_context": "mock-network",
+                "hostname": "scenario-host-mock",
+                "os": {
+                  "id": "ubuntu",
+                  "version_id": "24.04"
+                }
+              },
+              "observations": {
+                "active_units": [
+                  "example.service"
+                ],
+                "unit_files": [
+                  {
+                    "unit": "example.service",
+                    "state": "enabled"
+                  }
+                ],
+                "listeners": []
+              },
+              "violations": [
+                {
+                  "unit": "example.service",
+                  "rule": "forbidden",
+                  "active": true
+                }
+              ],
+              "review": [],
+              "errors": []
+            },
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+            }
+          }
+        ]
+      },
+      "test_result": {
+        "scenario_id": "02-vulnerable",
+        "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+        "expected_status": "vulnerable",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "vulnerable",
+        "assessment_status": "pending",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 1,
+            "pass_count": 0,
+            "vulnerable_count": 1,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "0.0%"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 1,
+            "not_applicable": 0
+          }
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "03-error",
+        "title": "조회 오류",
+        "runner": "firewall",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "condition": "UFW와 소켓 조회는 MOCK으로 성공하고 nft -j list ruleset은 권한 부족 오류를 반환한다.",
+        "reason": "실제 FW 수집 함수가 필수 조회 오류와 수집된 다른 관측값을 보존한다.",
+        "limitations": "FW의 운영 정책 기반 pass/vulnerable 판정 기능을 시연하는 것이 아니다.",
+        "inputs": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04"
+          },
+          "ufw_stdout": "Status: inactive\n",
+          "listeners_stdout": "",
+          "nft_exception": {
+            "kind": "CalledProcessError",
+            "exit_code": 1,
+            "stderr": "Operation not permitted (MOCK)"
+          },
+          "policy_approval": "pending"
+        },
+        "expected": {
+          "check_id": "FW-01",
+          "status": "error",
+          "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+          "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+          }
+        },
+        "details_checks": [
+          {
+            "path": [
+              "details",
+              "errors",
+              0,
+              "stage"
+            ],
+            "equals": "nftables"
+          },
+          {
+            "path": [
+              "details",
+              "errors",
+              0,
+              "reason"
+            ],
+            "equals": "permission_denied"
+          },
+          {
+            "path": [
+              "details",
+              "observations",
+              "ufw",
+              "state"
+            ],
+            "equals": "inactive"
+          }
+        ],
+        "expected_v11": {
+          "check_id": "FW-01",
+          "status": "error",
+          "severity": "high",
+          "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+          "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요."
+        },
+        "scenario_contract": "1.2"
+      },
+      "actual_v11": {
+        "check_id": "FW-01",
+        "status": "error",
+        "severity": "high",
+        "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+        "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "observations": {
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            },
+            "ufw": {
+              "state": "inactive",
+              "rules": [],
+              "unparsed_rule_count": 0
+            },
+            "listeners": []
+          },
+          "errors": [
+            {
+              "stage": "nftables",
+              "kind": "CalledProcessError",
+              "exit_code": 1,
+              "reason": "permission_denied"
+            }
+          ],
+          "review": [
+            "policy_pending"
+          ],
+          "listener_comparison": {
+            "basis": "protocol_port_configuration_hints",
+            "listeners": [],
+            "configured_port_references_without_listener": []
+          }
+        }
+      },
+      "actual_v12": {
+        "check_id": "FW-01",
+        "status": "error",
+        "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+        "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "observations": {
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            },
+            "ufw": {
+              "state": "inactive",
+              "rules": [],
+              "unparsed_rule_count": 0
+            },
+            "listeners": []
+          },
+          "errors": [
+            {
+              "stage": "nftables",
+              "kind": "CalledProcessError",
+              "exit_code": 1,
+              "reason": "permission_denied"
+            }
+          ],
+          "review": [
+            "policy_pending"
+          ],
+          "listener_comparison": {
+            "basis": "protocol_port_configuration_hints",
+            "listeners": [],
+            "configured_port_references_without_listener": []
+          }
+        },
+        "cvss": {
+          "assessment_status": "not_applicable",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+        }
+      },
+      "d_saved_and_reloaded_report": {
+        "schema_version": "1.2",
+        "scan_id": "scan-v12-03-error",
+        "target_id": "scenario-target-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-11T00:00:00Z",
+        "results": [
+          {
+            "check_id": "FW-01",
+            "status": "error",
+            "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+            "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+            "details": {
+              "policy_version": "MOCK-scenarios-v1",
+              "observations": {
+                "os": {
+                  "id": "ubuntu",
+                  "version_id": "24.04"
+                },
+                "ufw": {
+                  "state": "inactive",
+                  "rules": [],
+                  "unparsed_rule_count": 0
+                },
+                "listeners": []
+              },
+              "errors": [
+                {
+                  "stage": "nftables",
+                  "kind": "CalledProcessError",
+                  "exit_code": 1,
+                  "reason": "permission_denied"
+                }
+              ],
+              "review": [
+                "policy_pending"
+              ],
+              "listener_comparison": {
+                "basis": "protocol_port_configuration_hints",
+                "listeners": [],
+                "configured_port_references_without_listener": []
+              }
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+            }
+          }
+        ]
+      },
+      "test_result": {
+        "scenario_id": "03-error",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "expected_status": "error",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "error",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 1,
+            "na_count": 0,
+            "needs_review_count": 0,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "04-needs-review",
+        "title": "정책 미승인",
+        "runner": "log",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "condition": "로그 서비스·명시 설정·사용량은 MOCK 조회되지만 운영 정책 목록은 비어 있다.",
+        "reason": "실제 LOG 수집 함수가 조회 성공과 운영 정책 미승인을 구분한다.",
+        "limitations": "로그 경로는 fixture에서 missing이다. 실제 이벤트 보관이나 LOG의 pass/vulnerable 판정을 입증하지 않는다.",
+        "inputs": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04"
+          },
+          "unit_stdout": "LoadState=loaded\nActiveState=active\nUnitFileState=enabled\n",
+          "journald_stdout": "[Journal]\nStorage=persistent\n",
+          "usage_stdout": "Archived and active journals take up 8.0M in the file system.\n",
+          "path_metadata": "All known log paths are missing in the synthetic fixture",
+          "policy_approval": "pending"
+        },
+        "expected": {
+          "check_id": "LOG-01",
+          "status": "needs_review",
+          "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+          "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+          }
+        },
+        "details_checks": [
+          {
+            "path": [
+              "details",
+              "errors"
+            ],
+            "equals": []
+          },
+          {
+            "path": [
+              "details",
+              "review"
+            ],
+            "equals": [
+              "policy_pending"
+            ]
+          },
+          {
+            "path": [
+              "details",
+              "observations",
+              "journald_settings",
+              "Storage"
+            ],
+            "equals": "persistent"
+          }
+        ],
+        "expected_v11": {
+          "check_id": "LOG-01",
+          "status": "needs_review",
+          "severity": "medium",
+          "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+          "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요."
+        },
+        "scenario_contract": "1.2"
+      },
+      "actual_v11": {
+        "check_id": "LOG-01",
+        "status": "needs_review",
+        "severity": "medium",
+        "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+        "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "observations": {
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            },
+            "unit:systemd-journald.service": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "unit:rsyslog.service": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "unit:logrotate.timer": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "journald_settings": {
+              "Storage": "persistent"
+            },
+            "journal_disk_usage": "8.0M",
+            "path:/var/log/journal": {
+              "path": "/var/log/journal",
+              "state": "missing"
+            },
+            "path:/run/log/journal": {
+              "path": "/run/log/journal",
+              "state": "missing"
+            },
+            "path:/var/log/auth.log": {
+              "path": "/var/log/auth.log",
+              "state": "missing"
+            },
+            "path:/var/log/syslog": {
+              "path": "/var/log/syslog",
+              "state": "missing"
+            },
+            "rsyslog_config_hints": [],
+            "logrotate_config_hints": []
+          },
+          "errors": [],
+          "review": [
+            "policy_pending"
+          ]
+        }
+      },
+      "actual_v12": {
+        "check_id": "LOG-01",
+        "status": "needs_review",
+        "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+        "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+        "details": {
+          "policy_version": "MOCK-scenarios-v1",
+          "observations": {
+            "os": {
+              "id": "ubuntu",
+              "version_id": "24.04"
+            },
+            "unit:systemd-journald.service": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "unit:rsyslog.service": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "unit:logrotate.timer": {
+              "LoadState": "loaded",
+              "ActiveState": "active",
+              "UnitFileState": "enabled"
+            },
+            "journald_settings": {
+              "Storage": "persistent"
+            },
+            "journal_disk_usage": "8.0M",
+            "path:/var/log/journal": {
+              "path": "/var/log/journal",
+              "state": "missing"
+            },
+            "path:/run/log/journal": {
+              "path": "/run/log/journal",
+              "state": "missing"
+            },
+            "path:/var/log/auth.log": {
+              "path": "/var/log/auth.log",
+              "state": "missing"
+            },
+            "path:/var/log/syslog": {
+              "path": "/var/log/syslog",
+              "state": "missing"
+            },
+            "rsyslog_config_hints": [],
+            "logrotate_config_hints": []
+          },
+          "errors": [],
+          "review": [
+            "policy_pending"
+          ]
+        },
+        "cvss": {
+          "assessment_status": "not_applicable",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+        }
+      },
+      "d_saved_and_reloaded_report": {
+        "schema_version": "1.2",
+        "scan_id": "scan-v12-04-needs-review",
+        "target_id": "scenario-target-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-11T00:00:00Z",
+        "results": [
+          {
+            "check_id": "LOG-01",
+            "status": "needs_review",
+            "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+            "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+            "details": {
+              "policy_version": "MOCK-scenarios-v1",
+              "observations": {
+                "os": {
+                  "id": "ubuntu",
+                  "version_id": "24.04"
+                },
+                "unit:systemd-journald.service": {
+                  "LoadState": "loaded",
+                  "ActiveState": "active",
+                  "UnitFileState": "enabled"
+                },
+                "unit:rsyslog.service": {
+                  "LoadState": "loaded",
+                  "ActiveState": "active",
+                  "UnitFileState": "enabled"
+                },
+                "unit:logrotate.timer": {
+                  "LoadState": "loaded",
+                  "ActiveState": "active",
+                  "UnitFileState": "enabled"
+                },
+                "journald_settings": {
+                  "Storage": "persistent"
+                },
+                "journal_disk_usage": "8.0M",
+                "path:/var/log/journal": {
+                  "path": "/var/log/journal",
+                  "state": "missing"
+                },
+                "path:/run/log/journal": {
+                  "path": "/run/log/journal",
+                  "state": "missing"
+                },
+                "path:/var/log/auth.log": {
+                  "path": "/var/log/auth.log",
+                  "state": "missing"
+                },
+                "path:/var/log/syslog": {
+                  "path": "/var/log/syslog",
+                  "state": "missing"
+                },
+                "rsyslog_config_hints": [],
+                "logrotate_config_hints": []
+              },
+              "errors": [],
+              "review": [
+                "policy_pending"
+              ]
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+            }
+          }
+        ]
+      },
+      "test_result": {
+        "scenario_id": "04-needs-review",
+        "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+        "expected_status": "needs_review",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "needs_review",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 0,
+            "needs_review_count": 1,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "05-not-applicable",
+        "title": "적용 제외",
+        "runner": "exemption_fixture",
+        "execution_kind": "CONTRACT_FIXTURE_ONLY",
+        "condition": "합성 대상에 FILE-01 적용 제외가 승인됐다고 fixture 안에서만 가정한다.",
+        "reason": "공통 결과 생성기로 not_applicable 형식과 D 집계를 검증하며 실제 FILE 자동 제외 판정은 실행하지 않는다.",
+        "limitations": "실제 운영 제외 조건 평가 기능의 구현 증거가 아니다. 이 fixture의 승인을 운영 승인으로 사용하지 않는다.",
+        "inputs": {
+          "check_id": "FILE-01",
+          "severity": "high",
+          "exclusion_id": "MOCK-EXEMPT-01",
+          "approval_status": "MOCK_ONLY_NOT_OPERATIONAL",
+          "condition": "Synthetic target explicitly exempted from FILE-01 inside this fixture only",
+          "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+          "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요."
+        },
+        "expected": {
+          "check_id": "FILE-01",
+          "status": "not_applicable",
+          "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+          "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요.",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "v1.1 not_applicable. 이 대상에는 해당 진단이 적용되지 않습니다."
+          }
+        },
+        "details_checks": [
+          {
+            "path": [
+              "details",
+              "fixture_only"
+            ],
+            "equals": true
+          },
+          {
+            "path": [
+              "details",
+              "exclusion_id"
+            ],
+            "equals": "MOCK-EXEMPT-01"
+          },
+          {
+            "path": [
+              "details",
+              "approval_status"
+            ],
+            "equals": "MOCK_ONLY_NOT_OPERATIONAL"
+          }
+        ],
+        "expected_v11": {
+          "check_id": "FILE-01",
+          "status": "not_applicable",
+          "severity": "high",
+          "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+          "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요."
+        },
+        "scenario_contract": "1.2"
+      },
+      "actual_v11": {
+        "check_id": "FILE-01",
+        "status": "not_applicable",
+        "severity": "high",
+        "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+        "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요.",
+        "details": {
+          "fixture_only": true,
+          "exclusion_id": "MOCK-EXEMPT-01",
+          "approval_status": "MOCK_ONLY_NOT_OPERATIONAL",
+          "condition": "Synthetic target explicitly exempted from FILE-01 inside this fixture only"
+        }
+      },
+      "actual_v12": {
+        "check_id": "FILE-01",
+        "status": "not_applicable",
+        "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+        "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요.",
+        "details": {
+          "fixture_only": true,
+          "exclusion_id": "MOCK-EXEMPT-01",
+          "approval_status": "MOCK_ONLY_NOT_OPERATIONAL",
+          "condition": "Synthetic target explicitly exempted from FILE-01 inside this fixture only"
+        },
+        "cvss": {
+          "assessment_status": "not_applicable",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 not_applicable. 이 대상에는 해당 진단이 적용되지 않습니다."
+        }
+      },
+      "d_saved_and_reloaded_report": {
+        "schema_version": "1.2",
+        "scan_id": "scan-v12-05-not-applicable",
+        "target_id": "scenario-target-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-11T00:00:00Z",
+        "results": [
+          {
+            "check_id": "FILE-01",
+            "status": "not_applicable",
+            "evidence": "MOCK 계약 예시: 합성 대상의 FILE-01 적용 제외를 fixture에서 가정했습니다.",
+            "recommendation": "실환경 적용 전 제외 조건과 승인 기록을 별도로 확인하세요.",
+            "details": {
+              "fixture_only": true,
+              "exclusion_id": "MOCK-EXEMPT-01",
+              "approval_status": "MOCK_ONLY_NOT_OPERATIONAL",
+              "condition": "Synthetic target explicitly exempted from FILE-01 inside this fixture only"
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 not_applicable. 이 대상에는 해당 진단이 적용되지 않습니다."
+            }
+          }
+        ]
+      },
+      "test_result": {
+        "scenario_id": "05-not-applicable",
+        "execution_kind": "CONTRACT_FIXTURE_ONLY",
+        "expected_status": "not_applicable",
+        "passed": true,
+        "official_integration_verified": false,
+        "v11_regression": true,
+        "v12_schema": true,
+        "evidence_details_preserved": true,
+        "cvss_nulls": true,
+        "legacy_severity_not_converted": true,
+        "actual_status": "not_applicable",
+        "assessment_status": "not_applicable",
+        "d_reference_mock": {
+          "passed": true,
+          "kind": "local MOCK reference check",
+          "full_result_preserved": true,
+          "metrics": {
+            "total_items": 1,
+            "evaluable_items": 0,
+            "pass_count": 0,
+            "vulnerable_count": 0,
+            "error_count": 0,
+            "na_count": 1,
+            "needs_review_count": 0,
+            "pass_rate": "N/A (계산 불가)"
+          },
+          "cvss_assessment_breakdown": {
+            "scored": 0,
+            "pending": 0,
+            "not_applicable": 1
+          }
+        }
+      }
+    }
+  ]
+}

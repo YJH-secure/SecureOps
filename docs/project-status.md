@@ -1,79 +1,73 @@
-# SecureOps 프로젝트 진행 현황 — 2026-11-09
+# SecureOps 프로젝트 진행 현황 — 2026-11-12 갱신
 
-> 단일 현황 문서 (팀장 관리 초안). **완료 / 검증됨 / 구현 중 / 승인 대기 / 계획**을 구별한다. 이 문서는 기존 JSON 계약서나 보안 정책을 대체하지 않는다.
-> 마지막 확인: 2026-11-09. 기록에 없는 기능은 완료로 간주하지 않는다.
+> **기준**: 2026-11-12 팀장 검토, **기능 검증 당시의 main 기준 커밋** `62d1bf72ef52c7455bc0c2dd624206eb8350f925` 및 아래 PR/팀원 보고. 현재 main HEAD는 관리 문서 병합으로 달라질 수 있으므로 본 SHA를 실험 재현 기준으로 해석한다. `main에 병합` / `오프라인 검증` / `신규 VM 실측` / `정책·권한 승인`을 구별한다. **11/11 원문은 Git 이력으로 보존하며 아래가 최신 팀장 관리 상태다.** 직접 재실행하지 않은 숫자는 담당자 제출 로그·화면에 기초함.
 
-## 1. 공식 기준·일정
+## 1. 기본·심화 일정과 범위
 
-- 주제: Linux 서버 취약점 진단·평가·승인 기반 조치·재진단 자동화, 격리된 웹 보안 테스트 3건.
-- 기본 프로젝트 중간발표: **2026-11-18(수)**.
-- 최종발표: **2026-12-02(수)**, 팀당 **20분 발표 + 10분 질의응답**.
-- 최종 제출: **2026-12-01(화) 18:00까지**, 조교에게 제출.
-- 필수 산출물: (1) PDF 결과 보고서/발표 자료 (2) **5~10분, 100MB 이하 MP4 시연 영상** (3) README를 포함한 GitHub 저장소 URL.
-- 공식 과제 추적: 서비스 구축 / 서버 취약점 진단 / 평가 및 보안 조치 계획 / 웹 취약점 분석 보고서 3건 / 자동 스캐닝.
+**[4개 발표·제출 마일스톤 상세](milestones-basic-deep-20261112.md)**
 
-## 2. 현재 환경 — 구축 보고와 향후 계획 구분
+| 단계 | 일자(KST) | 확정할 범위 |
+| --- | --- | --- |
+| 기본 프로젝트 중간 발표 | **11/18(수)** | 시스템 설계와 신규 VM 최소 1대 중앙 SSH-01→B 판정→D v1.2 저장·재조회 실측 목표; C 오프라인, E MOCK를 실제 결과와 구분 |
+| 기본 프로젝트 최종 제출/발표 | **12/01(화) 18:00 / 12/02(수)** | 기존 과제 1~4단계(서버·네트워크 / 자동 진단·조치 / 통합·대시보드 / 웹 취약점 **SQLi·XSS·파일 업로드 분석 보고서 3건**)와 PDF·PPT·MP4·README |
+| 심화 프로젝트 중간 발표 | **12/22(화)** | **제안 범위**: GNS3 내부/DMZ/외부·OPNsense·Suricata/IDS·WAF·DNS/FTP 구축·초기 이벤트 연계 |
+| 심화 프로젝트 최종 발표 | **2027/01/11(월)** | **제안 범위**: 서버 진단 + 네트워크/웹 경보 + 승인 조치·재진단·감사 이력의 통합 검증 |
 
-- A 인프라 문서의 **실제 구축 보고 환경**: VMware VMnet8 NAT, 192.168.10.0/24, 중앙 관리 서버 `central-mgmt`(Ubuntu Server 24.04.5, 192.168.10.10), 진단 대상 `ubuntu-a`(Ubuntu Desktop 24.04.5, 192.168.10.20), `rocky-b`(Rocky 9.8 Desktop, 192.168.10.30). SSH TCP 22 원격 접속, 진단/조치 전용 계정과 키 인증.
-- 관련 근거: [A 인프라 PR #9](https://github.com/YJH-secure/SecureOps/pull/9), [A 인프라 브랜치 문서](https://github.com/YJH-secure/SecureOps/blob/feature/kmw-infrastructure/infrastructure/README.md).
-- **GNS3 + 방화벽/망 분리 + DNS/FTP 확장**은 목표 설계이며, 해당 망의 실제 적용과 접근 통제 검증은 아직 확인되지 않음. **GNS3 구축 완료로 기재 금지**.
+> 심화 주제·평가 요구는 강사/공식 심화 가이드의 승인 전까지 확정된 필수 과제라고 표시하지 않는다. 기본 발표는 심화 전체 기능을 요구하지 않는다.
 
-## 3. 6인 팀 역할 (변경 시 공지 및 기록)
+## 2. 현재 합의된 데이터·보안 기준
 
-| 담당 | 개발/관리 책임 | 현황 |
-|---|---|---|
-| 양지혁 (팀장) | 요구사항, 아키텍처, 정책 승인, 공통 SSH 개발, 독립 Integration Validator, 웹 취약점 분석 보고서 3건, 통합 검증·산출물 총괄 | SSH MOCK·JSON 계약 테스트 증거 있음; Validator/웹 보고서 구현 예정 |
-| 김민우 (A) | VM·네트워크·계정/SSH 기반 인프라 | VMware 3대 구성 및 키 인증 검증 보고; GNS3/망 정책 검증 대기 |
-| 최종욱 (B) | SSH·계정·인증 진단 | [PR #10](https://github.com/YJH-secure/SecureOps/pull/10) 열림; SSH-01 판정/Match 정책·통합 검증 확인 필요 |
-| 김서후 (C) | FILE-01/SVC-01/FW-01/LOG-01 | FILE-01 임시 ACL·링크 13/13 MOCK 일치 보고, SVC-01 Rocky 수집 성공; 정책·실제 원격 연동 미완료 |
-| 조효민 (D) | 진단 결과 정규화·집계·위험도·리포트 | [PR #8](https://github.com/YJH-secure/SecureOps/pull/8) 열림; B/C 실환경 원격 연동 검증 대기 |
-| 박태준 (E) | 관리자 승인·백업·조치·재진단·복구 | 설계/개발 진행, 승인된 실제 조치→재진단 E2E 증거 확인 필요 |
+- 신규 결과 JSON **v1.2**, CVSS **v3.1 Base**. 기존 v1.1은 선택 출력·호환 경로로 유지.
+- 스캔: `schema_version=1.2`, `scan_id/target_id/os/scanned_at/results`. 개별: `check_id/status/evidence/recommendation/cvss`, 선택 `details`. v1.2 개별 `severity` 사용 금지.
+- 상태: `pass/vulnerable/error/not_applicable/needs_review`; CVSS 평가: `scored/pending/not_applicable`. 평가 보류 점수는 **null**; severity를 임의 점수로 환산하지 않음.
+- 이행률 `pass/(pass+vulnerable)`; 오류·해당없음·검토필요 제외.
+- sudoers·운영 정책·보안 조치는 명시적 관리자 승인·백업/복구·권한 확인 뒤에만. 개인키/비밀번호/해시/백업 ZIP을 커밋하지 않음.
 
-## 4. 기준선 / 확정사항
+## 3. 팀원별 실제 상태 — 11/12
 
-- [공통 JSON 결과 계약 v1.1](architecture/json-result-contract-v1.1.md) **개발 기준 확정**. 최상위: `schema_version=1.1`, `scan_id`, `target_id`, `os`, `scanned_at`, `results`. 개별 결과 필수: `check_id/status/severity/evidence/recommendation`.
-- 상태값: `pass`, `vulnerable`, `error`, `not_applicable`, `needs_review`; `severity`는 소문자. `evidence`는 문자열, 구조화 정보는 선택적 `details`.
-- [취약점 점검 기준표 v1.1](security-policy/vulnerability-checklist-v1.1.md)은 **JSON 스키마 버전과 별개의 정책 기준표**. 세부 OS·서비스 승인 조건은 여전히 미확정 가능.
-- A/B/C는 개별 진단 결과를 생성; D가 스캔 메타데이터를 추가하여 최상위 v1.1 보고서 구성. 미정 원격 실행·판정 인터페이스는 별도 합의/검증 필요.
-- GitHub: 기능 브랜치 → PR → 팀장 검토·테스트 → `main` 병합. **PR 생성 = 승인 또는 병합 아님**.
+| 담당 | 구현·오프라인/로컬 검증 증거 | 아직 완료하지 않은 관문 | 다음 담당 |
+| --- | --- | --- | --- |
+| **팀장 양지혁** | PR [#24](https://github.com/YJH-secure/SecureOps/pull/24) SSH-01 수집기·[#26](https://github.com/YJH-secure/SecureOps/pull/26) 중앙 실행기 **Draft**; 새 로컬 Worktree `feature/ssh01-main-verify-yjh-1112`에서 PR24+PR26를 main 62d1bf7에 결합, Windows Python 3.14.10 D/SSH 180회(179 pass, 클래스 Skip 1), C 163/163, git diff/check 통과(사용자 제공 화면). **로컬 검증이지 신규 VM 실측 아님.** | 기존 sudoers와 SSH-01 전용 파일 분리 최종 검토, SSH 별칭·`sshd -T -C` 컨텍스트 확정, 승인된 대상 1대에서 실행 및 D 저장; PR24→26 리뷰/병합 | A·팀장, D |
+| **A 김민우** | PR [#9](https://github.com/YJH-secure/SecureOps/pull/9) Open, `0a9773d`; central-mgmt `.10`→ubuntu-a `.20`/rocky-b `.30` SSH 키 별칭/출발 IP 확인; ubuntu-a `user1` 비밀번호 조치, ISO/FLOPPY 제거·재부팅, 새 스냅샷 및 ZIP 해시·파일·복원 부팅 검증을 문서/증거로 보고 | 팀장 요청 SSH -G/Host/Match 문맥, 기존·전용 sudoers 확인; GNS3·망 분리 실연동, central/rocky 복원성 추가 검증 | A·팀장 |
+| **B 최종욱** | SSH-01 [#10](https://github.com/YJH-secure/SecureOps/pull/10), v1.2 [#21](https://github.com/YJH-secure/SecureOps/pull/21) **main 병합**. SSH-02 판정안 제출·팀장 읽기 전용 개발 방향 승인, 개인 Ubuntu 실측(정책 제안) | SSH-02 코드/Mock, ACC-01/02 개발·납기 검증, 신규 VM 판정, 계정별 Match 처리 | B·팀장 |
+| **C 김서후** | FILE/SVC/FW/LOG #15/#22와 v1.2 [#27](https://github.com/YJH-secure/SecureOps/pull/27) **main 병합**; C 163, 상태 5/5, 거부 28/28, D 원본 MOCK; Python 3.12 공식 main 재검증. C 원격 수집 어댑터·권한 인계 분석 완료 보고 | 실제 대상의 FILE/LOG metadata, SVC/FW OS·hostname, sudo/권한 예외, LOG-01 자동 판정·미승인 정책; 신규 VM 실측 | C·A·팀장 |
+| **D 조효민** | D Core [#8](https://github.com/YJH-secure/SecureOps/pull/8), CVSS [#19](https://github.com/YJH-secure/SecureOps/pull/19) **main 병합**; C→D 최신 main 독립 MOCK 증거 [#20](https://github.com/YJH-secure/SecureOps/pull/20) Draft/커밋 `b72909d`(88개 추가); D↔E 독립·교차 검증 [#30](https://github.com/YJH-secure/SecureOps/pull/30) Draft/커밋 `d5a6a6f`(증거 93개). Windows Python 3.14 별도 D 204+8+181 실행(중복 제거 고유 ID 309), E Python 3.12 208 실행 증거 교차 확인 | 신규 VM B/C 실측 JSON 수신·집계·저장·재조회, 자동 실행·간단 대시보드, E 운영 저장 호출 계약 | D·팀장·E |
+| **E 박태준** | E v1.2/CVSS·실행 이력 [#23](https://github.com/YJH-secure/SecureOps/pull/23) **Open·미병합**, `b0ef73a`; MOCK 204개 및 Python 3.12 추가 MOCK 포함 **208 실행 통과 보고**, D 독립 교차 검증 [#30](https://github.com/YJH-secure/SecureOps/pull/30) 자료 | #23 병합 전 증거·코드 최종 확인; 실제 조치 권한·승인·백업/복구 사전 계획, 중간 발표 E MOCK 시연 | E·D·팀장 |
 
-## 5. 오늘 확인한 개발 증거 — 완료 과장 금지
+## 4. 주요 PR·Issue 상태와 처리 방침
 
-| 내용 | 근거/상태 | 남은 확인 |
-|---|---|---|
-| 공통 SSH MOCK 5개 | 2026-11-09 팀장 실행 결과 5/5 OK 보고 | 실제 `central-mgmt → ubuntu-a/rocky-b` 원격 명령 검증 |
-| JSON 계약 자동 테스트 8개 | 2026-11-09 팀장 실행 결과 8/8 OK 보고; `tests/test_json_contract.py`는 `feature/architecture-yjh`에 존재 | 다른 모듈 실제 출력으로 재실행; `main` 반영은 별도 검토 |
-| PR #13 | `main → feature/architecture-yjh` 방향 병합 확인. **main으로의 병합이 아님** | 필요할 때 팀장 브랜치의 검증된 변경만 별도 PR |
-| FILE-01 | 임시 ACL·심볼릭 링크 시나리오 13/13 기대 결과 일치 보고 | OS별 passwd/shadow 정책 확정, 실제 대상 결과·회귀 테스트, D/SSH 연동 |
-| SVC-01 Rocky 9.8 | 서후님 제공 `svc01-result.json`: active_units 59, unit_files 282, listeners 9, errors 0, `needs_review`, `medium`, `approval_status=pending` | 자산 매핑 확인, 서비스 승인 목록, 원격 접근성, 수정 코드 회귀·통합 테스트 |
-| SVC-01 소켓 요약 | TCP 21(0.0.0.0), 22(0.0.0.0/::), 631(loopback); UDP 323(loopback), 5353(0.0.0.0/::) | FTP·SSH 허용 출발지, IPv4/IPv6, mDNS 필요성, 방화벽 근거 |
-| 웹 취약점 3건 | 팀장이 SQLi/XSS/파일 업로드 분석 담당 의사 확정 | 격리 실습 환경·허용 범위 확정, 분석·개선·검증 보고서 작성 |
-| 자동 스캐닝 | Python 진단 및 집계 모듈 개발 진행 | 스케줄/원격 실행/저장·관리 실제 연결·증거 확인 |
+- **main 병합 완료**: B #10/#21, C #15/#22/#27, D #8/#19, E 초기 MOCK #16, fixture 수정 #29, JSON/CVSS 개발 정책 #18 등. `main` 공식 SHA 62d1bf7.
+- **Open·미병합**: A [#9](https://github.com/YJH-secure/SecureOps/pull/9), E [#23](https://github.com/YJH-secure/SecureOps/pull/23), 팀장 [#24](https://github.com/YJH-secure/SecureOps/pull/24) → [#26](https://github.com/YJH-secure/SecureOps/pull/26), D 근거 자료 Draft [#20](https://github.com/YJH-secure/SecureOps/pull/20)/[#25](https://github.com/YJH-secure/SecureOps/pull/25)/[#30](https://github.com/YJH-secure/SecureOps/pull/30), 역사 문서 Draft [#17](https://github.com/YJH-secure/SecureOps/pull/17).
+- **병합 순서/안전성:** #24의 최소권한 배포 문서·코드 확인 후 #24 → #26. E #23은 #30 증거 교차 대조 후 검토·병합. A #9은 인프라 한정 변경 검토 후. D 증거 Draft는 중복 ZIP/과거 테스트 포함 여부를 살펴 필요할 때만 병합. 기존 PR을 임의 병합·닫지 않음.
+- 담당 기능 이슈 [#2](https://github.com/YJH-secure/SecureOps/issues/2)~[#7](https://github.com/YJH-secure/SecureOps/issues/7)은 전부 Open. **코드 일부가 완료여도 이슈 전체에는 실서버·발표·정책 승인 게이트가 남으므로 무조건 닫지 않는다.** 초기 체크리스트와 오늘의 검증 근거를 별도 표기한다.
 
-> 최신 SVC-01 JSON 원본은 팀 대화에서 제공된 자료다. 공개 가능한 증거만 검토하여 PR/보고서에 추가할 것. 자산 IP·자격증명·개인정보·내부 상세 설정의 무분별한 공개 금지.
+## 5. 실제 인프라·원격 실행 게이트
 
-## 6. 미해결 의사결정 — 팀장 승인 전 확정 금지
+- VMware VMnet8 NAT: central-mgmt Ubuntu 24.04.5 `192.168.10.10`; ubuntu-a Ubuntu Desktop 24.04.5 `.20`; rocky-b Rocky 9.8 Desktop `.30`. 중앙 `secureops-scan`/별도 `secureops-fix` 키 인증 보고. **실제 SSH-01 중앙 수집기 신규 VM 설치·실행은 아직 미완료.**
+- PR24 안전 방침: 별도 `/usr/local/sbin/secureops-ssh01-read` 및 `/etc/sudoers.d/secureops-ssh01-read` 제안. 기존 `/etc/sudoers.d/secureops-scan`은 보존. root 소유·0440·sudoers 정확한 무인자 실행·SELinux/visudo 검증 및 관리자 승인 전 설치 금지.
+- `sshd -T -C`의 `addr`은 client 출발지 `.10`, `host`는 평가용 클라이언트 호스트 문맥(SSH alias와 무관)으로 별도 검증. 승인되지 않은 값은 작성·운영 배포 금지.
+- C 실제 실행 설계: 1차로 **대상 VM에서 C CLI 로컬 진단**, 중앙 서버가 승인된 SSH로 고정 작업을 트리거하고 JSON을 수신하는 방향. FILE collector/environment·LOG metadata/config·OS 정보·실행 오류 경계를 분리. 자동 sudo 없음; 세부 명령별 승인 필요.
+- 인프라 ubuntu-a 신규 백업 복원 검증 완료 보고; 과거 00/01 스냅샷 및 백업에는 이전 자격증명 상태가 남으므로 보관 접근 제한·일반 복구 사용 금지, 삭제는 별도 승인. central/rocky 동일 수준 복원 테스트는 별도 확인.
 
-1. **SVC-01**: 모든 활성 유닛은 evidence에 수집하되 주요 네트워크/정책 지정 서비스 중심으로 판정하는 안; 허용 목록 밖 관측은 '무조건 취약'이 아니라 **승인된 기본 차단 정책의 존재 및 접근 근거**에 따라 `needs_review` 또는 `vulnerable` 구분. UDP 5353·FTP 21·SSH 22의 서버 역할별 승인 범위 미확정.
-2. **FILE-01**: Ubuntu/Rocky `/etc/shadow`·`/etc/passwd` 그룹/권한·ACL·링크 최종 운영 승인과 회귀 검증.
-3. **SSH-01**: `PermitRootLogin` 모드 및 `Match`의 조건별 유효 설정 판정 승인/PR #10 검토.
-4. **원격 통합**: B/C 로컬 판정을 중앙에서 실행하는 방법, D 최종 v1.1 집계, E 승인·백업·조치·재진단 연결.
-5. **인프라**: A 실제 VM 기준선과 GNS3 최종 토폴로지/서버별 역할·방화벽/IPv6 정책 대조.
-6. **제출물**: 공식 과제 5단계 충족 표, 웹 분석 3건, PDF·MP4·README, 발표·시연 증거.
+## 6. 11/18 전에 해결해야 하는 일과 최종 제출 위험
 
-## 7. 다음 작업 및 검수 게이트
+| 우선 | 기한 | 담당 | 증거 기준 |
+| --- | --- | --- | --- |
+| P0 | **11/12~13** | A+팀장 | SSH alias 설정, SSHD 평가 컨텍스트, 별도 sudoers·고정 명령·권한 계획; 원본 설정 변경 금지 |
+| P0 | **11/16 18:00** | 팀장+A+B/D | 신규 VM 한 대에서 SSH-01 읽기 전용→B JSON v1.2→D 저장·재조회, 실제 명령/로그/원시 결과; 실패 시 MOCK과 명시적 구분 |
+| P1 | **11/13** | B+C | SSH-02/ACC 남은 범위·납기, C OS별 명령·권한·미승인 정책 목록 동결 |
+| P1 | **11/16** | D+E | E #23/#30 리뷰, E MOCK 발표 화면·승인/롤백 스토리; 운영 서버 조치 승인 없음 |
+| P0 | **11/17 18:00** | 전원 | 20분 발표/10분 질의응답용 PPT·시연·대본 및 리허설·증거 동결 |
+| P0 | **12/01 18:00** | 전원 | 기본 1~4단계, 웹 SQLi/XSS/파일 업로드 보고서 3건, PDF·MP4(5~10분·100MB 이하)·README/PPT 제출 |
 
-- **팀장**: [통합 검증 체크리스트](integration-checklist.md) 기준으로 실제 SSH 실행·JSON v1.1·모듈 연동 테스트 및 결과 기록.
-- **A↔C**: Rocky 자산 식별·서비스 승인 목록·포트/출발지·방화벽 허용 범위를 공동 검토.
-- **B/C↔D**: 개별 결과 → 중앙 원격 수집 → 최상위 v1.1 결과가 되는 샘플 경로 확정.
-- **D↔E**: 조치 전·후 `scan_id` 분리, 승인 상태 및 오류 처리 확인.
-- **팀장/웹 분석**: 실습 환경 구축·분석 보고서 3건과 실제 검증 증거 확보.
-- **중간발표 우선순위**: 실제 서버 연결 + 진단 + JSON 결과 + 규격 검증이 연속으로 동작하는 최소 시나리오.
-- **최종 승인 게이트**: 정책 근거, 정상/오류 테스트, 재현 가능한 명령 및 evidence, 비밀정보 검수, 리뷰 및 최종 병합 승인.
+- **심화 네트워크 확장:** GNS3/OPNsense/Suricata/WAF/DNS/FTP·내부/DMZ/외부 구현 증거는 아직 완성으로 인정하지 않음. 기본 최종의 필수 1~4단계를 우선하고 심화 마일스톤은 별도 킥오프·가이드로 확정.
+- **웹 3건**: 현재 공식 완료 증거가 부족함. 팀장 주도 허가된 격리 웹 분석·보고서를 기본 최종 전에 별도 일정 확보.
+- **자동 실행/대시보드**: D Core JSON 저장과 구별, 기본 최종에 최소 동작 화면·반복 실행 증거 필요.
+- **운영 정책**: FILE/SVC/FW/LOG·LOG-01 등 미승인 조건을 `pass`/CVSS scored로 오표기 금지.
 
-## 8. 업데이트 규칙
+## 7. 유지관리 규칙
 
-1. 개발·정책 결정 때마다 날짜, 담당, 작업 브랜치/PR, 테스트 명령, 기대/실제 결과, 미해결/승인 여부를 남긴다.
-2. '완료'는 실행 결과가 있을 때만, '통합 완료'는 중앙 관리 서버에서 실제 연결·수집·집계까지 확인했을 때만 표시한다.
-3. 정책을 바꿀 때는 [의사결정 기록](decisions/ADR-001-governance-and-policy-status.md)에 근거와 영향을 남긴다.
-4. ChatGPT 또는 다른 AI에 프로젝트를 설명할 때 [AI 인수인계 요약](PROJECT_CONTEXT_FOR_AI.md), 이 현황 문서, 확정 JSON 계약·정책, 해당 PR을 **순서대로 확인**한다. 요약이 실제 코드와 다르면 최신 검증 근거를 우선하며 차이를 표시한다.
+1. **PR 병합/독립 검증/실서버 성공 때 해당 Issue 체크와 이 문서의 상태를 함께 갱신**한다. GitHub PR 병합이 문서·이슈를 자동으로 수정하지 않는다는 점을 전제로 한다.
+2. 로그에는 날짜·담당·SHA·OS/Python·데이터 출처(MOCK/fixture/old ZIP/new VM)·테스트 건수/Skip·증거 링크를 반드시 기록. 중복 실행 횟수를 고유 테스트 수로 표시하지 않는다.
+3. 기본 중간 발표, 기본 최종 발표, 심화 프로젝트를 서로 다른 관문으로 취급한다. [통합 검증 체크리스트](integration-checklist.md)의 실제 실환경 완료 증거만 발표에서 '실환경 검증 완료'로 선언한다.
+4. **관리 문서 수정은 별도 docs PR로 검토 후 반영**하여 운영 브랜치와 PR을 건드리지 않는다. 자동 마감 점검 보고는 별도로 실제 파일 수정이 완료됐는지 확인해야 한다.

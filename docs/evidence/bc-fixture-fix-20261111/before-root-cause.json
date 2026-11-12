@@ -1,0 +1,10 @@
+{
+  "outer": "RunFailed",
+  "nested": [
+    {
+      "area": "account",
+      "type": "KeyError",
+      "message": "'vulnerable_values'"
+    }
+  ]
+}

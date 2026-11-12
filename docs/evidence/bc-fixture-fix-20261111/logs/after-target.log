@@ -1,0 +1,10 @@
+{"label": "after-target", "command": "python -B -X utf8 -m unittest discover -s tests -p test_bc_offline_integration.py -v", "started_at_kst": "2026-11-11T19:18:38+09:00", "finished_at_kst": "2026-11-11T19:18:39+09:00", "exit_code": 0, "tests_run": 3, "ok_method_lines": 3, "log": "logs/after-target.log", "sanitized_stdout_sha256_before_space_trim": "cdf13f240e6a1a4ca77a820454a97f90f6be015437cf4733b62b11ae7891e949", "log_normalization": "UTF-8/LF; private path placeholders; trailing spaces removed", "explicit_d_source": false, "failures": 0, "errors": 0, "skipped": 0, "error_headings": []}
+
+test_actual_bc_functions_to_validated_report_summary_and_storage (test_bc_offline_integration.BCOfflineIntegrationTests.test_actual_bc_functions_to_validated_report_summary_and_storage) ... ok
+test_file_details_and_inputs_preserved_without_shared_mutation (test_bc_offline_integration.BCOfflineIntegrationTests.test_file_details_and_inputs_preserved_without_shared_mutation) ... ok
+test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.144s
+
+OK

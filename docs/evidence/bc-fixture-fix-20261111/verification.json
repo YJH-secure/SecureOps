@@ -1,0 +1,21 @@
+{
+  "baseline_commit": "66495d0506391a7a259accf558c822d28be3b219",
+  "only_existing_file_changed": "tests/test_bc_offline_integration.py",
+  "test_methods_preserved": 3,
+  "operational_sources_unchanged": true,
+  "preparation_evidence_hashes_unchanged": true,
+  "privacy_scan_passed": true,
+  "new_file_sha256": {
+    "docs/evidence/bc-fixture-fix-20261111/after-results.json": "31d98c7f7cdcc3dc684798dccc2614972dd91fe1348c9ea47257068d35743eda",
+    "docs/evidence/bc-fixture-fix-20261111/before-results.json": "a1d2d6bd8860b20babf9a108ad050861653b6defa290965311da1b94cb84e38d",
+    "docs/evidence/bc-fixture-fix-20261111/before-root-cause.json": "3159b142dd9bd2fd6057074b1192302f7d4ee5706a31c417141745b9a7c51cb4",
+    "docs/evidence/bc-fixture-fix-20261111/logs/after-default-full.log": "84ac2e395369ffdbf53e6ff367e3a857b331580af6bd06b529e69817f29c9cec",
+    "docs/evidence/bc-fixture-fix-20261111/logs/after-full-with-d-source.log": "83305874dd13979f6f3d7e3e8642ac3b5813f64cac18478fef454da51aff7bec",
+    "docs/evidence/bc-fixture-fix-20261111/logs/after-target.log": "b5835a9b47ae96b7c183eefb9f5306f41e98c437c4faa28f103997b68bc82eb5",
+    "docs/evidence/bc-fixture-fix-20261111/logs/before-target.log": "ad37f3e903c72c84f9fa8e04ccd67b182d9292982efeb08ed34d0419b31c426e",
+    "docs/evidence/bc-fixture-fix-20261111/policy-check.json": "39b10438668bd5d510deb37a82cd9695316645ece052067087518ea825bef4a5",
+    "docs/evidence/bc-fixture-fix-20261111/report.md": "b8efb9254087cef13b29e461d8d9a946d519f3c2f9efae5a7d5855452ef0a4df",
+    "docs/evidence/bc-fixture-fix-20261111/run-evidence.py": "ab6b7dc43719c02e239311a7f532b9c597296b6f925a5b2e269f344e51551fbc",
+    "tests/test_bc_offline_integration.py": "e194d0a55220d139ea439dd6a02cb5ac1aceef35b16a64ee90589785ab005592"
+  }
+}

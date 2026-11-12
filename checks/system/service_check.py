@@ -12,6 +12,7 @@ import subprocess
 import sys
 
 from .common import PolicyError, load_policy, make_result, recommendation_for_status
+from .result_adapter import adapt_result, add_result_version_argument
 
 
 CHECK_ID = 'SVC-01'
@@ -288,11 +289,13 @@ def main():
     parser.add_argument('--target-id')
     parser.add_argument('--role')
     parser.add_argument('--network-context')
+    add_result_version_argument(parser)
     args = parser.parse_args()
     result = run_from_policy(args.policy, target_id=args.target_id, role=args.role,
                              network_context=args.network_context)
     # The exit code reports delivery of the JSON. Its status reports the diagnosis.
-    print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False), flush=True)
+    print(json.dumps(adapt_result(result, args.result_version), ensure_ascii=False,
+                     indent=2, allow_nan=False), flush=True)
     return 0
 
 

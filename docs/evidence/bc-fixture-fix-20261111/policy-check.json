@@ -1,0 +1,6 @@
+{
+  "fixture_policy_validates_with_current_b": true,
+  "vulnerable_values_match_approved_main_policy": true,
+  "test_connection_is_synthetic": true,
+  "test_connection_uses_documentation_address": true
+}

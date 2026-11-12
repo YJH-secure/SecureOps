@@ -12,6 +12,7 @@ from .common import (PolicyError, load_policy, make_result, validate_policy,
                      recommendation_for_status, sanitize_details, sanitize_text)
 from .policy_rules import validate_extensions, group_check, gate_candidate, valid_identity
 from .link_check import inspect_link
+from .result_adapter import adapt_result, add_result_version_argument
 
 TARGET = '/etc/passwd'
 TARGETS = frozenset(('/etc/passwd', '/etc/shadow'))
@@ -407,13 +408,14 @@ def run_from_policy(path=DEFAULT_POLICY):
 def main():
     parser = argparse.ArgumentParser(description='FILE-01 read-only diagnosis')
     parser.add_argument('--policy', type=Path, default=DEFAULT_POLICY)
+    add_result_version_argument(parser)
     args = parser.parse_args()
     try:
         result = run_from_policy(args.policy)
     except PolicyError as exc:
         print('Policy error: ' + sanitize_text(str(exc)), file=sys.stderr)
         return 2
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(adapt_result(result, args.result_version), indent=2, ensure_ascii=False))
     return 0
 
 
