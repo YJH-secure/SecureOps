@@ -2,12 +2,14 @@
 import json
 import unittest
 from contextlib import redirect_stdout
+from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 import central_ssh01_runner as runner
 from common.ssh_client import SSHCollectionError
+from core.storage import ReportStore
 
 
 CONTEXT = "user=root,host=198.51.100.5,addr=198.51.100.5"
@@ -39,20 +41,33 @@ def ssh_response(target_id, value):
 
 def execute_mock(targets, fake_ssh):
     with TemporaryDirectory() as directory:
+        submitted = {}
+        real_save = ReportStore.save
+
+        def capture_save(store, report):
+            submitted[(report["target_id"], report["scan_id"])] = deepcopy(report)
+            return real_save(store, report)
+
         with (
             patch.object(runner, "read_targets", return_value=targets),
             patch.object(runner, "run_readonly", side_effect=fake_ssh),
             patch.object(runner, "RESULT_DIR", Path(directory)),
+            patch.object(ReportStore, "save", capture_save),
             redirect_stdout(io.StringIO()),
         ):
-            runner.main()
+            outcomes = runner.main()
 
         reports = {}
 
-        for path in Path(directory).glob("SSH01_*.json"):
-            with path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-
+        store = ReportStore(directory)
+        for outcome in outcomes:
+            if outcome["save_outcome"] != "confirmed" or not outcome["load_succeeded"]:
+                raise AssertionError("Expected verified report persistence")
+            data = store.load(outcome["target_id"], outcome["scan_id"])
+            if data != submitted[(outcome["target_id"], outcome["scan_id"])]:
+                raise AssertionError("Loaded report differs from submitted report")
+            if store.history(outcome["target_id"]) != [data]:
+                raise AssertionError("Expected one immutable report per target")
             reports[data["target_id"]] = data
 
         return reports
