@@ -495,13 +495,15 @@ done
 | [v] | `ubuntu-a` 비밀번호 변경 (2026-11-12) | `passwd`, `sudo -k; sudo -v`, `/etc/shadow` 3번째 필드만 출력 | 변경일 `20769`, sudo·콘솔·scan/fix SSH 정상 | `ubuntu-a-passwd-change-261112.png`, `central-mgmt-ubuntu-a-ssh-after-passwd-261112.png` |
 | [v] | `ubuntu-a` 설치 미디어 제거 (2026-11-12) | `.vmx`·`vmware.log` 확인, 게스트 `lsblk` | autoinst 장치 없음, 재부팅·Go To 정상 | `ubuntu-a-media-{before,after}-261112.png`, `ubuntu-a-revert01-boot-261112.png`, `ubuntu-a-revert-passwd-261112.png` |
 | [v] | `ubuntu-a` 신규 스냅샷 (2026-11-12) | Snapshot Manager, `vmrun listSnapshots` | `01-ssh-security-configured-passwd` 생성 | `ubuntu-a-snapshot-261112.png` |
+| [v] | SSH 별칭·SSH-01 문맥 (2026-11-12) | `ssh -G`, `sshd -T`(`usedns`), `Match` 검색, `sshd -T -C …` (대상은 `user1`) | 별칭 2-1과 일치, `usedns no`, `Match` 없음 (HANDOFF 2-5) | `central-mgmt-ssh-g-261112.png`, `<id>-ssh01-context-261112.png` (진단 대상 2대) |
+| [v] | C 요청 권한 재측정 (2026-11-12) | scan으로 `sudo -l`, `getfacl`, journal, firewalld 조회 | `sudo -l` v0과 같음, 분류는 HANDOFF 4-1·4-3 | `central-mgmt-c-permission-check-{1,2,3}-261112.png` |
 | [v] | `ubuntu-a` 신규 백업·복원 (2026-11-12) | SHA-256, `7z t`, 원본 비교, 복원 후 부팅·SSH | 7-3 4)·5) 표와 같음 | `ubuntu-a-restore-test-261112.png`, `central-mgmt-ubuntu-a-ssh-restore-261112.png` |
 
 > 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
 >
 > **저장소 보안 검사 범위 (2026-11-11):** `feature/kmw-infrastructure` 최신 커밋의 텍스트 파일을 개인키 헤더·토큰·비밀번호 패턴으로 검사했고, 키·백업·VM 파일(`id_ed25519*`, `.pem`, `.key`, `.env`, `known_hosts`, `.zip`, `.vmdk`, `.vmx`) 0건이다. 신규 스크린샷 43장은 직접 판독해 비밀번호·키·토큰이 없음을 확인했다. 이전 커밋 이력과 재구축 전 스크린샷은 이번 검사 범위에 포함하지 않았다.
 >
-> **2026-11-12 추가 증거 13장** (`*-261112.png`, `central-mgmt` 6장, `ubuntu-a` 7장): IP, 계정명, 공개키 지문, 명령 결과, 스냅샷 화면만 담겨 있으며 비밀번호·해시·개인키·토큰이 없음을 직접 판독해 확인했다. `/etc/shadow`는 마지막 변경일 필드만 출력했다.
+> **2026-11-12 추가 증거 19장** (`*-261112.png`, `central-mgmt` 10장, `ubuntu-a` 8장, `rocky-b` 1장): IP, 계정명, 공개키 지문, 명령 결과, 스냅샷 화면만 담겨 있으며 비밀번호·해시·개인키·토큰이 없음을 직접 판독해 확인했다. `/etc/shadow`는 마지막 변경일 필드만 출력했다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -767,6 +769,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | v0.3 | 2026-11-11 | 백업 최종 검증 반영: 7-1 ZIP 구성·7-Zip·디스크 연결·원본 비교 결과, `.vmx.lck` 원인, `autoinst.iso` 민감정보, 7-2 복원 시험 추가, 6장 체크리스트(백업·복원·sudoers 권한·Description) 완료 처리, 신규 증거 43장과 보안 검사 범위 기재, `central-mgmt` 커널 6.8.0-149 정정, 10장 협의 사항 추가 |
 | v0.4 | 2026-11-12 | 5-7 5)와 6장 체크리스트에 SSH 출발지 IP·실제 인증 키 확인 추가(상세는 HANDOFF 2-4), 증거 2장(`*-261112.png`) 추가 |
 | v0.5 | 2026-11-12 | 7-3 추가: `ubuntu-a` `user1` 비밀번호 변경, 설치 미디어 참조 확인·제거·원본 삭제, `01-ssh-security-configured-passwd` 스냅샷(일반 복구 기준), 신규 백업 SHA-256·검증·복원 시험, 과거 자료 취급 원칙, 백업 절차 보완(`.lck`). 7장·7-1·7-2·6장·10장 갱신, 증거 11장 추가 |
+| v0.6 | 2026-11-12 | 6장 체크리스트에 SSH 별칭·SSH-01 평가 문맥, C 요청 권한 재측정 추가(상세는 HANDOFF 2-5·4장), 증거 6장 추가 |
 
 ---
 

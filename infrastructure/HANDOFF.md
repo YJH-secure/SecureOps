@@ -83,6 +83,36 @@ ssh ubuntu-a 'sudo -n /usr/bin/tail -n 200 /var/log/auth.log' | grep 'Accepted p
 ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publickey' | tail -n 4
 ```
 
+### 2-5. 중앙 실행기 연동값과 SSH-01 평가 문맥 (2026-11-12 확인)
+
+`ssh -G` 확인 결과 (`central-mgmt-ssh-g-261112.png`): 2-1 표와 같다. 키 지정(`IdentityFile`, `IdentitiesOnly yes`)은 **별칭에만** 걸려 있다.
+
+| 확인 (`user1`로 각 대상 콘솔에서, 읽기 전용) | `ubuntu-a` | `rocky-b` |
+| --- | --- | --- |
+| `sshd` 경로 | `/usr/sbin/sshd` | `/usr/sbin/sshd` |
+| `sshd -T`의 `usedns` | `no` | `no` |
+| `Match` 블록 (`sshd_config`, `sshd_config.d/`) | 없음 (`Include sshd_config.d/*.conf`만 있음) | 없음 (`Include` → `50-redhat.conf` → crypto-policies `opensshserver.config`) |
+| 전역 `permitrootlogin` | `without-password` | `without-password` |
+| `sshd -T -C user=root,host=192.168.10.10,addr=192.168.10.10` | `without-password` | `without-password` |
+| `/usr/local/sbin/secureops-ssh01-read` | 미설치 | 미설치 |
+| `/etc/sudoers.d/` | `README`, `secureops-fix`, `secureops-scan` (SSH-01 전용 파일 없음) | `secureops-fix`, `secureops-scan` (`etc_t`, SSH-01 전용 파일 없음) |
+
+- `UseDNS no`이면 sshd는 클라이언트 이름을 DNS로 찾지 않고, `Match Host`도 클라이언트 **IP 문자열**로 평가한다. 실제 출발지는 2-4의 `192.168.10.10`이다.
+- Rocky의 crypto-policies 파일은 시스템이 만드는 암호 알고리즘 목록이라 이번 검색 범위에 넣지 않았다.
+- 증거: `ubuntu-a-ssh01-context-261112.png`, `rocky-b-ssh01-context-261112.png`
+
+**`targets.json` 권장값 (팀장 확정 대상, PR #26 `central_ssh01_runner.py` 기준)**
+
+| 필드 | `ubuntu-a` | `rocky-b` |
+| --- | --- | --- |
+| `host` | `ubuntu-a` (별칭. IP를 넣으면 scan 키가 선택되지 않음) | `rocky-b` |
+| `username` | `secureops-scan` | `secureops-scan` |
+| `port` | 22 | 22 |
+| `ssh01_context` | `user=root,host=192.168.10.10,addr=192.168.10.10` | 같음 |
+
+- 수집기의 `ROOT_CONTEXT`와 `ssh01_context`는 글자까지 같아야 한다(다르면 실행기가 `context mismatch`로 거부).
+- **PR #24 배포 안내 주의:** `deploy/ssh01/README.md`는 sudoers 예시를 `/etc/sudoers.d/secureops-scan`으로 설치하도록 되어 있다. 이 이름은 v0 scan 파일과 같아 그대로 설치하면 기존 허용 명령이 모두 사라진다. `/etc/sudoers.d/secureops-ssh01` 같은 별도 파일 사용을 제안했다(팀장 검토).
+
 **원격 실행 시 권장**
 - 비대화식 실행에는 `ssh -o BatchMode=yes <별칭> '<명령>'`을 쓴다. 키 문제가 생기면 비밀번호를 묻지 않고 바로 실패한다.
 - sudo가 필요한 명령은 `sudo -n <전체 경로> <허용된 인자 그대로>`로 호출한다. `-n`이 없으면 허용되지 않은 명령에서 비밀번호 입력을 기다리며 멈출 수 있다.
@@ -152,6 +182,8 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 | `firewall-cmd --state`, `--list-all`, `--info-zone=…`, `--info-service=…` | 해당 없음 | **불가** (polkit `Authorization failed`) |
 | `nft list ruleset` (`-j` 포함) | 불가 (root 필요) | 불가 |
 | `ufw status verbose` | 불가 (root 필요) | 해당 없음 |
+| `getfacl -n -p -P -- /etc/passwd /etc/shadow` (`/usr/bin/getfacl`) | **가능** (2026-11-12). 확장 ACL 없음, shadow `0:42 640` | **가능** (2026-11-12). 확장 ACL 없음, shadow `0:0 000` |
+| `du -sh` journal 디렉터리 | **가능** — `/var/log/journal` 194M (2026-11-12, `journalctl --disk-usage`는 34.1M로 일부만 집계) | **불가** — 하위 디렉터리 `Permission denied`인데 `du`는 `0`을 출력함 (오류 시 0을 값으로 쓰면 안 됨) |
 
 ### 4-2. 현재 sudo로 허용된 명령 (경로·인자를 글자 그대로 써야 함)
 
@@ -174,11 +206,14 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 
 C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승인 전까지는 **허용되지 않은 상태**로 보고 개발한다.
 
+> **2026-11-12 재측정** (`central-mgmt-c-permission-check-{1,2,3}-261112.png`): 두 대상의 `sudo -l`이 4-2 표(v0)와 같다. Rocky 기본 존·활성 존은 `public`(ens160) 하나, 서비스는 `cockpit dhcpv6-client ssh`로 11/11과 같다. 따라서 Rocky 후보는 아래 4개 명령으로 확정된다. `getfacl`과 Ubuntu journal 용량(`du`)은 일반 권한으로 가능해 후보에서 뺀다.
+
 | 대상 | 후보 명령 | 비고 |
 | --- | --- | --- |
 | 공통 | `/usr/sbin/nft -j list ruleset` | 출력 형식만 JSON이고 읽는 정보는 기존 허용 명령과 같음. 지금은 거부됨(실측) |
 | Rocky | `/usr/bin/firewall-cmd --info-zone=public`, `--info-service=ssh`, `--info-service=cockpit`, `--info-service=dhcpv6-client` | 존·서비스가 바뀌면 승인 목록도 갱신해야 함 |
-| 공통 (선택) | `/usr/bin/journalctl --no-pager --disk-usage` | README 5-6에서 셸 탈출 위험으로 제외했던 명령이라 별도 검토 필요 |
+| Rocky (선택) | journal 용량 | `journalctl --disk-usage`·`du` 모두 권한 부족. ① 정확한 sudo 명령 1개 허용(README 5-6에서 셸 탈출 위험으로 제외했던 `journalctl`은 재검토 필요), ② scan을 `systemd-journal` 그룹에 추가(전체 journal 읽기, 범위 넓음), ③ LOG-01에서 확인 불가(`error`) 처리 중 팀장 결정. Ubuntu는 `du`로 가능 |
+| 공통 (PR #24) | `/usr/local/sbin/secureops-ssh01-read ""` | SSH-01 수집기 전용. 기존 v0 파일과 **별도 파일**로 설치 필요 (2-5) |
 
 ## 5. 네트워크 노출 현황 (2026-11-11 실측, `sudo ss -lntup`)
 
@@ -199,7 +234,7 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | sudoers 파일 권한 `0440`, `visudo -c` 증거 | **완료** (`<id>-sudoers-perm-261111.png`) |
 | `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | **완료** (2026-11-12, 팀장 승인, README 7-3). `ubuntu-a` 일반 복구 기준은 `01-ssh-security-configured-passwd` 스냅샷과 `Target-Ubuntu-261112.zip`. 기존 스냅샷 `00`·`01`과 기존 백업에는 과거 해시가 남아 있어 일반 복구에 쓰지 않음 |
 | 과거 해시가 남은 스냅샷·백업 삭제 | 팀장 별도 승인 대기 (현재 유지·접근 제한) |
-| SSH-01 수집기 `/usr/local/sbin/secureops-ssh01-read` 및 전용 sudoers | 팀장 검토 후 적용 예정. 2026-11-11 확인 시 두 대상 모두 미설치(`COLLECTOR_NOT_INSTALLED`). Rocky sudo `secure_path`에 `/usr/local/sbin`이 없으므로 전체 경로로 호출 |
+| SSH-01 수집기 `/usr/local/sbin/secureops-ssh01-read` 및 전용 sudoers | 팀장 검토 후 적용 예정. 2026-11-12 재확인 시에도 두 대상 모두 미설치, 전용 sudoers 없음, 기존 scan sudoers 보존(2-5). 실행 조건(`/usr/bin/python3`, `/usr/local/sbin`)은 충족. Rocky sudo `secure_path`에 `/usr/local/sbin`이 없으므로 전체 경로로 호출 |
 | `central-mgmt` 저장소 배치, 의존성 설치 | 미착수 (3-1의 결정 필요) |
 | 대상 서버에 실제 포트 접속 시험 | 미실시 |
 | sudoers 추가 후보 (4-3) | 팀장 승인 대기 |
@@ -213,3 +248,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-11 | `central-mgmt` 커널 6.8.0-149 정정, VMware Tools 현황, 백업·복원·sudoers 증거 완료 반영, SSH-01 수집기 확인 결과 추가 |
 | 2026-11-12 | 2-4 SSH 출발지 IP·실제 인증 키 증거 추가 (Rocky `sshd-session` 로그 형식 참고 포함) |
 | 2026-11-12 | 6장: `ubuntu-a` 비밀번호 변경·설치 미디어 삭제 완료, 신규 복구 기준 반영 (README 7-3) |
+| 2026-11-12 | 2-5 중앙 실행기 연동값·SSH-01 평가 문맥·수집기 현황 추가, 4-1 `getfacl`·journal `du` 실측, 4-3 C 요청 재측정 결과로 후보 확정(PR #24 수집기 포함), 6장 수집기 상태 갱신 |
