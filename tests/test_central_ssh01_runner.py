@@ -1,5 +1,6 @@
 ﻿import io
 import json
+import runpy
 import unittest
 from contextlib import redirect_stdout
 from copy import deepcopy
@@ -74,6 +75,40 @@ def execute_mock(targets, fake_ssh):
 
 
 class TestCentralSSH01Runner(unittest.TestCase):
+
+    def test_no_enabled_targets_fails_without_diagnosis_or_storage(self):
+        for targets in ([], [dict(BASE, enabled=False)]):
+            with self.subTest(targets=targets), TemporaryDirectory() as directory:
+                home = Path(directory)
+                config = home / "SecureOps-local-config" / "targets.json"
+                config.parent.mkdir()
+                config.write_text(json.dumps({"schema_version": "1", "targets": targets}), encoding="utf-8")
+                with (
+                    patch.object(runner, "CONFIG", config),
+                    patch.object(runner, "diagnose") as diagnose,
+                    patch.object(runner, "run_readonly") as collect,
+                    patch.object(ReportStore, "save") as save,
+                    patch.object(ReportStore, "load") as load,
+                    redirect_stdout(io.StringIO()),
+                ):
+                    with self.assertRaisesRegex(ValueError, "No enabled targets"):
+                        runner.main(output_root=home / "reports")
+                    diagnose.assert_not_called()
+                    collect.assert_not_called()
+                    output = io.StringIO()
+                    with (
+                        patch.object(Path, "home", return_value=home),
+                        patch("common.ssh_client.run_readonly", side_effect=AssertionError("SSH must not run")) as cli_collect,
+                        redirect_stdout(output),
+                    ):
+                        with self.assertRaises(SystemExit) as caught:
+                            runpy.run_path(str(Path(runner.__file__).resolve()), run_name="__main__")
+                    self.assertEqual(caught.exception.code, 1)
+                    self.assertEqual(output.getvalue().strip(), "Central SSH-01 configuration failed")
+                    cli_collect.assert_not_called()
+                    save.assert_not_called()
+                    load.assert_not_called()
+                    self.assertFalse((home / "reports").exists())
 
     def test_vulnerable_configuration(self):
         target = dict(BASE)

@@ -219,6 +219,8 @@ def save_report(target, item, *, output_root=None):
 
 def main(*, output_root=None):
     targets = read_targets()
+    if not targets:
+        raise ValueError("No enabled targets")
     policy = load_policy()
 
     print("Enabled targets:", len(targets))
