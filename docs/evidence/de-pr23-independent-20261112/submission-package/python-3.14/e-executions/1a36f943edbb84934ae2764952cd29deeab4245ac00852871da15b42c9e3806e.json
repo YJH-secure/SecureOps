@@ -1,0 +1,58 @@
+{
+  "mode": "mock",
+  "plan_id": "548dedde65325371c2e326f8fa496aeb102cb6430a264388da1290d0784b2b43",
+  "execution_id": "94ed8639-eb7e-4deb-ab4f-abcbea010a7a",
+  "target_id": "history-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "failed",
+  "backup": "success",
+  "backup_id": "mock-backup-617ec680-4667-469b-8d38-8d35de9887d9",
+  "rollback": "verified",
+  "approval": {
+    "approval_id": "history-approval",
+    "approved_by": "admin-MOCK",
+    "scan_id": "02206477-f9a1-4257-90a0-478343396fc1"
+  },
+  "before_status": "vulnerable",
+  "before_scan_id": "02206477-f9a1-4257-90a0-478343396fc1",
+  "completed_steps": [
+    "plan",
+    "approval",
+    "preflight",
+    "backup",
+    "apply",
+    "validate",
+    "restore",
+    "verify_restore",
+    "verify_service"
+  ],
+  "after_report": null,
+  "comparison": null,
+  "failed_stage": "recheck",
+  "failure_reason": "recheck_execution_failed",
+  "after_scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+  "post_rollback_scan_id": null,
+  "post_rollback_report": null,
+  "final_security_status": null,
+  "final_security_verified": false,
+  "recheck_attempts": [
+    {
+      "execution_id": "94ed8639-eb7e-4deb-ab4f-abcbea010a7a",
+      "phase": "after",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+      "scanned_at": "2026-11-12T00:19:41.131456+00:00",
+      "save_status": "success",
+      "load_status": "failed",
+      "report_verified": false,
+      "failure_stage": "load",
+      "failure_reason": "OSError"
+    }
+  ],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.2",
+  "approval_id": "history-approval",
+  "started_at": "2026-11-12T00:19:41.130925+00:00",
+  "finished_at": "2026-11-12T00:19:41.135296+00:00"
+}

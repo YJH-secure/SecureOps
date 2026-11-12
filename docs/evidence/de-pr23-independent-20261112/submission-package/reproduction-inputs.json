@@ -1,0 +1,19 @@
+{
+  "d_commit": "62d1bf72ef52c7455bc0c2dd624206eb8350f925",
+  "e_commit": "b0ef73a1613ebc40fdd596edcbaf0413d32309b8",
+  "source_snapshots": [
+    {
+      "snapshot": "reproduction-sources/test_de_pr23_independent.py",
+      "required_repository_path": "tests/test_de_pr23_independent.py",
+      "sha256": "62d5185cc02708bec751f9e3dadce1343f1357d8d89467c1e8cf31441d7813e7",
+      "copied_without_modification": true
+    },
+    {
+      "snapshot": "reproduction-sources/run-review.py",
+      "required_repository_path": "docs/evidence/de-pr23-independent-20261112/run-review.py",
+      "sha256": "81ec9cffb4a1a8d1297e81a0f26401c44fc8dce87828be27348eb89b11b546c5",
+      "copied_without_modification": true
+    }
+  ],
+  "instruction": "Snapshots are not executed in this package layout. Restore to required_repository_path in an isolated D checkout, use separate E checkout, then run the documented original command with a new output folder."
+}

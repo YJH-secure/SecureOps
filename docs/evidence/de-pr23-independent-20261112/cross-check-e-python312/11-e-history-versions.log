@@ -1,0 +1,18 @@
+$ python -B -m unittest discover -s tests -p test_execution_history_versions.py -v
+Exit code: 0
+
+test_actual_d_input_version_is_used_for_both_supported_versions (test_execution_history_versions.ExecutionHistoryVersionTests.test_actual_d_input_version_is_used_for_both_supported_versions) ... ok
+test_corrupted_stored_versions_are_rejected_on_load (test_execution_history_versions.ExecutionHistoryVersionTests.test_corrupted_stored_versions_are_rejected_on_load) ... ok
+test_d_diagnosis_reports_are_still_rejected (test_execution_history_versions.ExecutionHistoryVersionTests.test_d_diagnosis_reports_are_still_rejected) ... ok
+test_diagnosis_snapshot_cannot_disagree_with_diagnosis_version (test_execution_history_versions.ExecutionHistoryVersionTests.test_diagnosis_snapshot_cannot_disagree_with_diagnosis_version) ... ok
+test_invalid_diagnosis_version_values_and_types_are_rejected (test_execution_history_versions.ExecutionHistoryVersionTests.test_invalid_diagnosis_version_values_and_types_are_rejected) ... ok
+test_invalid_execution_version_values_and_types_are_rejected (test_execution_history_versions.ExecutionHistoryVersionTests.test_invalid_execution_version_values_and_types_are_rejected) ... ok
+test_legacy_record_without_versions_is_loaded_without_rewrite (test_execution_history_versions.ExecutionHistoryVersionTests.test_legacy_record_without_versions_is_loaded_without_rewrite) ... ok
+test_new_history_versions_round_trip_without_changing_input (test_execution_history_versions.ExecutionHistoryVersionTests.test_new_history_versions_round_trip_without_changing_input) ... ok
+test_partial_version_pair_is_rejected (test_execution_history_versions.ExecutionHistoryVersionTests.test_partial_version_pair_is_rejected) ... ok
+test_versions_are_recorded_on_every_normal_outcome (test_execution_history_versions.ExecutionHistoryVersionTests.test_versions_are_recorded_on_every_normal_outcome) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.121s
+
+OK

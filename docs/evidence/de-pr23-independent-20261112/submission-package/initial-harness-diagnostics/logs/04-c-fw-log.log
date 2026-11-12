@@ -1,0 +1,36 @@
+{"group": "c-fw-log", "command": "python -B -X utf8 docs/evidence/de-pr23-independent-20261112/run-review.py --e-root <E_PR23> --worker c-fw-log", "started_at_kst": "2026-11-12T09:12:09+09:00", "finished_at_kst": "2026-11-12T09:12:11+09:00", "exit_code": 0, "tests_run": 29, "ok_method_lines": 29, "log": "logs/04-c-fw-log.log", "failures": 0, "errors": 0, "skipped": 0}
+
+test_absent_frontend_can_still_observe_nftables (checks.system.tests.test_firewall_check.FirewallCheckTests.test_absent_frontend_can_still_observe_nftables) ... ok
+test_backend_permission_failure_preserves_other_evidence (checks.system.tests.test_firewall_check.FirewallCheckTests.test_backend_permission_failure_preserves_other_evidence) ... ok
+test_cli_emits_diagnostic_error_with_exit_zero (checks.system.tests.test_firewall_check.FirewallCheckTests.test_cli_emits_diagnostic_error_with_exit_zero) ... ok
+test_default_zone_is_queried_when_no_active_zones_listed (checks.system.tests.test_firewall_check.FirewallCheckTests.test_default_zone_is_queried_when_no_active_zones_listed) ... ok
+test_explicit_empty_ruleset_remains_review (checks.system.tests.test_firewall_check.FirewallCheckTests.test_explicit_empty_ruleset_remains_review) ... ok
+test_firewalld_failed_start_is_an_error (checks.system.tests.test_firewall_check.FirewallCheckTests.test_firewalld_failed_start_is_an_error) ... ok
+test_firewalld_not_running_does_not_query_zones (checks.system.tests.test_firewall_check.FirewallCheckTests.test_firewalld_not_running_does_not_query_zones) ... ok
+test_firewalld_service_lookup_error_preserves_zone_and_other_observations (checks.system.tests.test_firewall_check.FirewallCheckTests.test_firewalld_service_lookup_error_preserves_zone_and_other_observations) ... ok
+test_malformed_nftables_is_not_an_empty_ruleset (checks.system.tests.test_firewall_check.FirewallCheckTests.test_malformed_nftables_is_not_an_empty_ruleset) ... ok
+test_missing_os_preserves_backend_evidence_and_fails_collection (checks.system.tests.test_firewall_check.FirewallCheckTests.test_missing_os_preserves_backend_evidence_and_fails_collection) ... ok
+test_port_references_match_protocol_and_range_without_access_verdict (checks.system.tests.test_firewall_check.FirewallCheckTests.test_port_references_match_protocol_and_range_without_access_verdict) ... ok
+test_rocky_collects_active_zones (checks.system.tests.test_firewall_check.FirewallCheckTests.test_rocky_collects_active_zones) ... ok
+test_truncated_zone_does_not_count_as_empty_configuration (checks.system.tests.test_firewall_check.FirewallCheckTests.test_truncated_zone_does_not_count_as_empty_configuration) ... ok
+test_ubuntu_collects_runtime_state_without_a_policy_verdict (checks.system.tests.test_firewall_check.FirewallCheckTests.test_ubuntu_collects_runtime_state_without_a_policy_verdict) ... ok
+test_ufw_inactive_still_checks_nftables (checks.system.tests.test_firewall_check.FirewallCheckTests.test_ufw_inactive_still_checks_nftables) ... ok
+test_ufw_reads_allow_and_deny_ranges_and_removes_comments (checks.system.tests.test_firewall_check.FirewallCheckTests.test_ufw_reads_allow_and_deny_ranges_and_removes_comments) ... ok
+test_unsupported_nft_set_expression_is_recorded_as_unresolved (checks.system.tests.test_firewall_check.FirewallCheckTests.test_unsupported_nft_set_expression_is_recorded_as_unresolved) ... ok
+test_cli_emits_diagnostic_error_json_with_exit_zero (checks.system.tests.test_log_check.LogCheckTests.test_cli_emits_diagnostic_error_json_with_exit_zero) ... ok
+test_config_read_failure_preserves_successful_fragments (checks.system.tests.test_log_check.LogCheckTests.test_config_read_failure_preserves_successful_fragments) ... ok
+test_dropin_value_overrides_main_and_blank_is_recorded (checks.system.tests.test_log_check.LogCheckTests.test_dropin_value_overrides_main_and_blank_is_recorded) ... ok
+test_file_metadata_permission_error_is_distinct_from_missing (checks.system.tests.test_log_check.LogCheckTests.test_file_metadata_permission_error_is_distinct_from_missing) ... ok
+test_journal_permission_failure_retains_other_stages (checks.system.tests.test_log_check.LogCheckTests.test_journal_permission_failure_retains_other_stages) ... ok
+test_malformed_unit_output_is_not_an_inactive_service (checks.system.tests.test_log_check.LogCheckTests.test_malformed_unit_output_is_not_an_inactive_service) ... ok
+test_malformed_usage_is_error_not_zero_usage (checks.system.tests.test_log_check.LogCheckTests.test_malformed_usage_is_error_not_zero_usage) ... ok
+test_metadata_does_not_follow_symlinks (checks.system.tests.test_log_check.LogCheckTests.test_metadata_does_not_follow_symlinks) ... ok
+test_only_selected_config_hints_are_reported (checks.system.tests.test_log_check.LogCheckTests.test_only_selected_config_hints_are_reported) ... ok
+test_rocky_selects_its_known_paths_and_preserves_missing_rsyslog (checks.system.tests.test_log_check.LogCheckTests.test_rocky_selects_its_known_paths_and_preserves_missing_rsyslog) ... ok
+test_ubuntu_logs_are_observed_by_metadata_without_a_verdict (checks.system.tests.test_log_check.LogCheckTests.test_ubuntu_logs_are_observed_by_metadata_without_a_verdict) ... ok
+test_unknown_os_does_not_borrow_ubuntu_or_rocky_paths (checks.system.tests.test_log_check.LogCheckTests.test_unknown_os_does_not_borrow_ubuntu_or_rocky_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.119s
+
+OK

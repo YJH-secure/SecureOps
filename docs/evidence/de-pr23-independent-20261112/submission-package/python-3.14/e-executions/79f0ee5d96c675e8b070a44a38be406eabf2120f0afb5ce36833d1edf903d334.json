@@ -1,0 +1,133 @@
+{
+  "mode": "mock",
+  "plan_id": "c367fc6a651d8964c4748f6571babb2ebc22bfcccf0b12b659f864b34923ac29",
+  "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+  "target_id": "history-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "failed",
+  "backup": "success",
+  "backup_id": "mock-backup-0271b327-9d05-43d6-b702-a66004a11147",
+  "rollback": "verified",
+  "approval": {
+    "approval_id": "history-approval",
+    "approved_by": "admin-MOCK",
+    "scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e"
+  },
+  "before_status": "vulnerable",
+  "before_scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+  "completed_steps": [
+    "plan",
+    "approval",
+    "preflight",
+    "backup",
+    "apply",
+    "validate",
+    "recheck",
+    "compare",
+    "restore",
+    "verify_restore",
+    "verify_service"
+  ],
+  "after_report": {
+    "schema_version": "1.2",
+    "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+    "target_id": "history-MOCK",
+    "os": "ubuntu-24.04",
+    "scanned_at": "2026-11-12T00:19:41.042013+00:00",
+    "results": [
+      {
+        "check_id": "SSH-01",
+        "status": "vulnerable",
+        "evidence": "MOCK: synthetic diagnosis",
+        "recommendation": "MOCK: review diagnosis",
+        "cvss": {
+          "assessment_status": "pending",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "MOCK: synthetic assessment"
+        }
+      }
+    ]
+  },
+  "comparison": {
+    "target_id": "history-MOCK",
+    "check_id": "SSH-01",
+    "before_scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+    "after_scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+    "before": {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "evidence": "MOCK: synthetic diagnosis",
+      "recommendation": "MOCK: review diagnosis",
+      "cvss": {
+        "assessment_status": "pending",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "MOCK: synthetic assessment"
+      }
+    },
+    "after": {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "evidence": "MOCK: synthetic diagnosis",
+      "recommendation": "MOCK: review diagnosis",
+      "cvss": {
+        "assessment_status": "pending",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "MOCK: synthetic assessment"
+      }
+    },
+    "improved": false
+  },
+  "after_scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+  "failed_stage": "recheck",
+  "failure_reason": "recheck_not_improved",
+  "post_rollback_scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+  "post_rollback_report": null,
+  "final_security_status": null,
+  "final_security_verified": false,
+  "post_rollback_recheck_error": "OSError",
+  "recheck_attempts": [
+    {
+      "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+      "phase": "after",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+      "scanned_at": "2026-11-12T00:19:41.042013+00:00",
+      "save_status": "success",
+      "load_status": "success",
+      "report_verified": true,
+      "failure_stage": null,
+      "failure_reason": null
+    },
+    {
+      "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+      "phase": "post_rollback",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+      "scanned_at": "2026-11-12T00:19:41.059197+00:00",
+      "save_status": "success",
+      "load_status": "failed",
+      "report_verified": false,
+      "failure_stage": "load",
+      "failure_reason": "OSError"
+    }
+  ],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.2",
+  "approval_id": "history-approval",
+  "started_at": "2026-11-12T00:19:41.041604+00:00",
+  "finished_at": "2026-11-12T00:19:41.064032+00:00"
+}

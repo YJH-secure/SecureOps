@@ -1,0 +1,144 @@
+{
+  "main_sha": "62d1bf72ef52c7455bc0c2dd624206eb8350f925",
+  "pr_sha": "b0ef73a1613ebc40fdd596edcbaf0413d32309b8",
+  "combined_tree": "6f98efbf940ef05a8d3307835a059990c408de85",
+  "started_kst": "2026-11-12T09:27:11.624411+09:00",
+  "finished_kst": "2026-11-12T09:27:19.201231+09:00",
+  "os": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.14",
+  "jsonschema": "4.26.0",
+  "groups": [
+    {
+      "name": "01-e-v11",
+      "command": "python -B tests/run_de_mock.py --d-ref 62d1bf72ef52c7455bc0c2dd624206eb8350f925",
+      "expected": 24,
+      "exit_code": 0,
+      "ran": 24,
+      "passed": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "02-e-v12",
+      "command": "python -B -m unittest discover -s tests -p test_remediation_v12.py -v",
+      "expected": 18,
+      "exit_code": 0,
+      "ran": 18,
+      "passed": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "03-e-execution",
+      "command": "python -B -m unittest discover -s tests -p test_remediation_execution_integration.py -v",
+      "expected": 19,
+      "exit_code": 0,
+      "ran": 19,
+      "passed": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "04-d-cvss",
+      "command": "python -B -m unittest discover -s tests -p \"test_cvss*.py\" -v",
+      "expected": 52,
+      "exit_code": 0,
+      "ran": 52,
+      "passed": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "05-b-contract",
+      "command": "python -B -m unittest discover -s tests -p test_remediation_b_v12_integration.py -v",
+      "expected": 4,
+      "exit_code": 0,
+      "ran": 4,
+      "passed": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "06-e-history",
+      "command": "python -B -m unittest discover -s tests -p test_remediation_execution_history.py -v",
+      "expected": 20,
+      "exit_code": 0,
+      "ran": 20,
+      "passed": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "07-e-store",
+      "command": "python -B -m unittest discover -s tests -p test_execution_history_store.py -v",
+      "expected": 18,
+      "exit_code": 0,
+      "ran": 18,
+      "passed": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "08-c-firewall",
+      "command": "python -B -m unittest checks.system.tests.test_firewall_check -v",
+      "expected": 17,
+      "exit_code": 0,
+      "ran": 17,
+      "passed": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "09-c-log",
+      "command": "python -B -m unittest checks.system.tests.test_log_check -v",
+      "expected": 12,
+      "exit_code": 0,
+      "ran": 12,
+      "passed": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "10-e-history-fields",
+      "command": "python -B -m unittest discover -s tests -p test_execution_history_fields.py -v",
+      "expected": 10,
+      "exit_code": 0,
+      "ran": 10,
+      "passed": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "11-e-history-versions",
+      "command": "python -B -m unittest discover -s tests -p test_execution_history_versions.py -v",
+      "expected": 10,
+      "exit_code": 0,
+      "ran": 10,
+      "passed": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "12-full-mock-flow",
+      "command": "python -B \"<EVIDENCE_DIR>\\verify_flow.py\"",
+      "expected": 4,
+      "exit_code": 0,
+      "ran": 4,
+      "passed": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

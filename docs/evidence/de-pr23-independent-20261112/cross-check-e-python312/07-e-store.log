@@ -1,0 +1,26 @@
+$ python -B -m unittest discover -s tests -p test_execution_history_store.py -v
+Exit code: 0
+
+test_concurrent_duplicate_has_exactly_one_winner (test_execution_history_store.ExecutionHistoryStoreTests.test_concurrent_duplicate_has_exactly_one_winner) ... ok
+test_d_load_failure_scan_link_survives_new_history_store_instance (test_execution_history_store.ExecutionHistoryStoreTests.test_d_load_failure_scan_link_survives_new_history_store_instance) ... ok
+test_d_report_is_not_accepted_as_execution_history (test_execution_history_store.ExecutionHistoryStoreTests.test_d_report_is_not_accepted_as_execution_history) ... ok
+test_duplicate_execution_does_not_overwrite (test_execution_history_store.ExecutionHistoryStoreTests.test_duplicate_execution_does_not_overwrite) ... ok
+test_duplicate_json_keys_are_rejected (test_execution_history_store.ExecutionHistoryStoreTests.test_duplicate_json_keys_are_rejected) ... ok
+test_execution_id_cannot_escape_history_directory (test_execution_history_store.ExecutionHistoryStoreTests.test_execution_id_cannot_escape_history_directory) ... ok
+test_failed_rejected_skipped_and_rollback_results_are_preserved (test_execution_history_store.ExecutionHistoryStoreTests.test_failed_rejected_skipped_and_rollback_results_are_preserved) ... ok
+test_invalid_execution_ids_are_rejected (test_execution_history_store.ExecutionHistoryStoreTests.test_invalid_execution_ids_are_rejected) ... ok
+test_malformed_saved_json_is_rejected (test_execution_history_store.ExecutionHistoryStoreTests.test_malformed_saved_json_is_rejected) ... ok
+test_mismatched_saved_execution_id_is_rejected (test_execution_history_store.ExecutionHistoryStoreTests.test_mismatched_saved_execution_id_is_rejected) ... ok
+test_missing_record_is_reported (test_execution_history_store.ExecutionHistoryStoreTests.test_missing_record_is_reported) ... ok
+test_new_instance_loads_completed_execution (test_execution_history_store.ExecutionHistoryStoreTests.test_new_instance_loads_completed_execution) ... ok
+test_new_python_process_loads_by_execution_id (test_execution_history_store.ExecutionHistoryStoreTests.test_new_python_process_loads_by_execution_id) ... ok
+test_non_json_and_invalid_execution_records_are_not_saved (test_execution_history_store.ExecutionHistoryStoreTests.test_non_json_and_invalid_execution_records_are_not_saved) ... ok
+test_publish_io_failure_does_not_change_execution_result (test_execution_history_store.ExecutionHistoryStoreTests.test_publish_io_failure_does_not_change_execution_result) ... ok
+test_read_io_failure_is_reported_without_mutating_saved_record (test_execution_history_store.ExecutionHistoryStoreTests.test_read_io_failure_is_reported_without_mutating_saved_record) ... ok
+test_saved_record_and_loaded_records_are_independent_snapshots (test_execution_history_store.ExecutionHistoryStoreTests.test_saved_record_and_loaded_records_are_independent_snapshots) ... ok
+test_temporary_write_open_failure_is_reported (test_execution_history_store.ExecutionHistoryStoreTests.test_temporary_write_open_failure_is_reported) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.344s
+
+OK

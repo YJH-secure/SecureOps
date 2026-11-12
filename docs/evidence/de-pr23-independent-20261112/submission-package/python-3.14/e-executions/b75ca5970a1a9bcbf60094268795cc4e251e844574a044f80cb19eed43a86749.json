@@ -1,0 +1,114 @@
+{
+  "mode": "mock",
+  "plan_id": "20083e5a5f0a47e3a71b6a82cb7cbc248db79cbf5e513cf21d866b76d0d22bc9",
+  "execution_id": "81783b39-d54d-4a9f-8767-4887a862838d",
+  "target_id": "history-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "success",
+  "backup": "success",
+  "backup_id": "mock-backup-16971b29-fcf3-467a-bfca-6defb127e882",
+  "rollback": "not_needed",
+  "approval": {
+    "approval_id": "history-approval",
+    "approved_by": "admin-MOCK",
+    "scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7"
+  },
+  "before_status": "vulnerable",
+  "before_scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+  "completed_steps": [
+    "plan",
+    "approval",
+    "preflight",
+    "backup",
+    "apply",
+    "validate",
+    "recheck",
+    "compare"
+  ],
+  "after_report": {
+    "schema_version": "1.2",
+    "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+    "target_id": "history-MOCK",
+    "os": "ubuntu-24.04",
+    "scanned_at": "2026-11-12T00:19:40.963411+00:00",
+    "results": [
+      {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "evidence": "MOCK: synthetic diagnosis",
+        "recommendation": "MOCK: review diagnosis",
+        "cvss": {
+          "assessment_status": "not_applicable",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "MOCK: synthetic assessment"
+        }
+      }
+    ]
+  },
+  "comparison": {
+    "target_id": "history-MOCK",
+    "check_id": "SSH-01",
+    "before_scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+    "after_scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+    "before": {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "evidence": "MOCK: synthetic diagnosis",
+      "recommendation": "MOCK: review diagnosis",
+      "cvss": {
+        "assessment_status": "pending",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "MOCK: synthetic assessment"
+      }
+    },
+    "after": {
+      "check_id": "SSH-01",
+      "status": "pass",
+      "evidence": "MOCK: synthetic diagnosis",
+      "recommendation": "MOCK: review diagnosis",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "MOCK: synthetic assessment"
+      }
+    },
+    "improved": true
+  },
+  "after_scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+  "post_rollback_scan_id": null,
+  "post_rollback_report": null,
+  "final_security_status": "pass",
+  "final_security_verified": true,
+  "recheck_attempts": [
+    {
+      "execution_id": "81783b39-d54d-4a9f-8767-4887a862838d",
+      "phase": "after",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+      "scanned_at": "2026-11-12T00:19:40.963411+00:00",
+      "save_status": "success",
+      "load_status": "success",
+      "report_verified": true,
+      "failure_stage": null,
+      "failure_reason": null
+    }
+  ],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.2",
+  "approval_id": "history-approval",
+  "started_at": "2026-11-12T00:19:40.962510+00:00",
+  "finished_at": "2026-11-12T00:19:40.976438+00:00"
+}

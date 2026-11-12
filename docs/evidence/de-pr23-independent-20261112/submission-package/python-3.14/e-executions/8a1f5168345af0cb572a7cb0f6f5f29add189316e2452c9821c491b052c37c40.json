@@ -1,0 +1,32 @@
+{
+  "mode": "mock",
+  "plan_id": "18e205435608fb4bbb80d14bbf5a0ddf8dff0fa151bdccbec4de4dcd89d391a8",
+  "execution_id": "f7224fa7-b5c2-4c91-9480-c985e1870016",
+  "target_id": "history-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "rejected",
+  "backup": "not_attempted",
+  "backup_id": null,
+  "rollback": "not_needed",
+  "approval": null,
+  "before_status": "vulnerable",
+  "before_scan_id": "f1045c89-bc98-413a-9e80-c27544362165",
+  "completed_steps": [
+    "plan"
+  ],
+  "after_report": null,
+  "comparison": null,
+  "stopped_stage": "approval",
+  "failure_reason": "approval_required",
+  "after_scan_id": null,
+  "post_rollback_scan_id": null,
+  "post_rollback_report": null,
+  "final_security_status": null,
+  "final_security_verified": false,
+  "recheck_attempts": [],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.2",
+  "approval_id": null,
+  "started_at": "2026-11-12T00:19:40.853184+00:00",
+  "finished_at": "2026-11-12T00:19:40.853619+00:00"
+}

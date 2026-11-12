@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+  "target_id": "history-MOCK",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-12T00:19:41.131456+00:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "pass",
+      "evidence": "MOCK: synthetic diagnosis",
+      "recommendation": "MOCK: review diagnosis",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "MOCK: synthetic assessment"
+      }
+    }
+  ]
+}

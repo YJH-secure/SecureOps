@@ -1,0 +1,15 @@
+{"group": "independent", "command": "python -B -X utf8 docs/evidence/de-pr23-independent-20261112/run-review.py --e-root <E_PR23> --worker independent", "started_at_kst": "2026-11-12T09:19:39+09:00", "finished_at_kst": "2026-11-12T09:19:41+09:00", "exit_code": 0, "tests_run": 8, "ok_method_lines": 8, "log": "logs/05-independent.log", "failures": 0, "errors": 0, "skipped": 0}
+
+test_both_execution_and_scan_duplicates_preserve_originals (test_de_pr23_independent.DIndependentEReview.test_both_execution_and_scan_duplicates_preserve_originals) ... ok
+test_denial_and_dry_run_do_not_diagnose (test_de_pr23_independent.DIndependentEReview.test_denial_and_dry_run_do_not_diagnose) ... ok
+test_e_history_and_d_reports_use_distinct_versions_and_stores (test_de_pr23_independent.DIndependentEReview.test_e_history_and_d_reports_use_distinct_versions_and_stores) ... ok
+test_plan_approval_callback_and_history_links (test_de_pr23_independent.DIndependentEReview.test_plan_approval_callback_and_history_links) ... ok
+test_post_rollback_fresh_scan_does_not_erase_action_failure (test_de_pr23_independent.DIndependentEReview.test_post_rollback_fresh_scan_does_not_erase_action_failure) ... ok
+test_post_rollback_load_failure_preserves_link_without_security_claim (test_de_pr23_independent.DIndependentEReview.test_post_rollback_load_failure_preserves_link_without_security_claim) ... ok
+test_rollback_without_new_diagnosis_remains_unknown (test_de_pr23_independent.DIndependentEReview.test_rollback_without_new_diagnosis_remains_unknown) ... ok
+test_save_success_load_failure_retains_after_id_and_unknown_state (test_de_pr23_independent.DIndependentEReview.test_save_success_load_failure_retains_after_id_and_unknown_state) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.423s
+
+OK

@@ -1,0 +1,18 @@
+$ python -B -m unittest discover -s tests -p test_execution_history_fields.py -v
+Exit code: 0
+
+test_audit_time_is_independent_from_approval_clock (test_execution_history_fields.ExecutionHistoryFieldTests.test_audit_time_is_independent_from_approval_clock) ... ok
+test_bad_or_incomplete_times_are_rejected (test_execution_history_fields.ExecutionHistoryFieldTests.test_bad_or_incomplete_times_are_rejected) ... ok
+test_different_valid_timezones_compare_correctly (test_execution_history_fields.ExecutionHistoryFieldTests.test_different_valid_timezones_compare_correctly) ... ok
+test_fields_do_not_modify_diagnosis_contracts (test_execution_history_fields.ExecutionHistoryFieldTests.test_fields_do_not_modify_diagnosis_contracts) ... ok
+test_legacy_stored_records_remain_readable (test_execution_history_fields.ExecutionHistoryFieldTests.test_legacy_stored_records_remain_readable) ... ok
+test_metadata_on_every_normal_return (test_execution_history_fields.ExecutionHistoryFieldTests.test_metadata_on_every_normal_return) ... ok
+test_mismatched_top_level_approval_id_is_rejected (test_execution_history_fields.ExecutionHistoryFieldTests.test_mismatched_top_level_approval_id_is_rejected) ... ok
+test_schema_version_is_not_inferred (test_execution_history_fields.ExecutionHistoryFieldTests.test_schema_version_is_not_inferred) ... ok
+test_store_round_trip_preserves_metadata (test_execution_history_fields.ExecutionHistoryFieldTests.test_store_round_trip_preserves_metadata) ... ok
+test_unverified_approval_id_is_null (test_execution_history_fields.ExecutionHistoryFieldTests.test_unverified_approval_id_is_null) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.109s
+
+OK

@@ -1,0 +1,35 @@
+{
+  "python_312_available": false,
+  "python_312_tests_executed": false,
+  "reason": "No Python 3.12 executable found in launcher, standard install locations, repository virtualenvs, or existing validation virtualenvs",
+  "launcher_probe": "py -0p: No installed Pythons found",
+  "commands": [
+    "Get-Command py,python,python3.12",
+    "py -0p",
+    "python -B -c \"import sys; print(sys.version.split()[0])\" (each discovered executable)"
+  ],
+  "discovered_executables": [
+    {
+      "installation": "validation-venv",
+      "version": "3.14.2",
+      "exit_code": 0
+    },
+    {
+      "installation": "validation-venv",
+      "version": "3.14.2",
+      "exit_code": 0
+    },
+    {
+      "installation": "standard-install",
+      "version": "3.14.2",
+      "exit_code": 0
+    }
+  ],
+  "new_python_interpreter_downloaded_or_installed": false,
+  "existing_evidence_hashes_verified": 59,
+  "additional_author_managed_runtime_probe": {
+    "source": "E public evidence names a managed Codex Python runtime",
+    "local_runtime_candidate_exists": false,
+    "python_312_executed": false
+  }
+}

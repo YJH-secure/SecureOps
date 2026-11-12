@@ -1,0 +1,1855 @@
+[
+  {
+    "case": "denied",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "18e205435608fb4bbb80d14bbf5a0ddf8dff0fa151bdccbec4de4dcd89d391a8",
+      "execution_id": "f7224fa7-b5c2-4c91-9480-c985e1870016",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "rejected",
+      "backup": "not_attempted",
+      "backup_id": null,
+      "rollback": "not_needed",
+      "approval": null,
+      "before_status": "vulnerable",
+      "before_scan_id": "f1045c89-bc98-413a-9e80-c27544362165",
+      "completed_steps": [
+        "plan"
+      ],
+      "after_report": null,
+      "comparison": null,
+      "stopped_stage": "approval",
+      "failure_reason": "approval_required",
+      "after_scan_id": null,
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": null,
+      "final_security_verified": false,
+      "recheck_attempts": [],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": null,
+      "started_at": "2026-11-12T00:19:40.853184+00:00",
+      "finished_at": "2026-11-12T00:19:40.853619+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "f1045c89-bc98-413a-9e80-c27544362165",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "f1045c89-bc98-413a-9e80-c27544362165",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": "dry-run",
+    "e_execution": {
+      "mode": "dry_run",
+      "plan_id": "e5fa1d86cf83fbec8f278c38c83842e987b967d94058db906e14fef8f42dac9f",
+      "execution_id": "cb070894-fe39-4b58-8bac-cb1e9e1302f1",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "planned",
+      "backup": "not_attempted",
+      "backup_id": null,
+      "rollback": "not_needed",
+      "approval": null,
+      "before_status": "vulnerable",
+      "before_scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+      "completed_steps": [
+        "plan"
+      ],
+      "after_report": null,
+      "comparison": null,
+      "plan": {
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+        "check_id": "SSH-01",
+        "source_digest": "3a5ea964e5d4e27e90966118f8a23c470b9ec16577df1d82ee733ea18574c4f2",
+        "policy_version": "ssh-01-proposal-v1",
+        "actions": [
+          [
+            "ssh_dropin",
+            "/etc/ssh/sshd_config.d/01-secureops.conf",
+            "PermitRootLogin no\n"
+          ]
+        ],
+        "skip_reason": null
+      },
+      "after_scan_id": null,
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": null,
+      "final_security_verified": false,
+      "recheck_attempts": [],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": null,
+      "started_at": "2026-11-12T00:19:40.872949+00:00",
+      "finished_at": "2026-11-12T00:19:40.873328+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": "version-1.1",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "cea15d5814d31473c3d63773ca68248660f5c542c61ebbbff06affc59629b4af",
+      "execution_id": "b1857cb3-5920-4a4c-beac-abe438abd71e",
+      "target_id": "demo-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "success",
+      "backup": "success",
+      "backup_id": "mock-backup-46ba42ff-d3af-4482-bd48-ccb5f7501a7f",
+      "rollback": "not_needed",
+      "approval": {
+        "approval_id": "demo-approval-MOCK",
+        "approved_by": "demo-admin-MOCK",
+        "scan_id": "demo-before-MOCK"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "demo-before-MOCK",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare"
+      ],
+      "after_report": {
+        "schema_version": "1.1",
+        "target_id": "demo-MOCK",
+        "os": "ubuntu-24.04",
+        "scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+        "scanned_at": "2026-11-12T00:19:40.876041+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: effective PermitRootLogin value rechecked",
+            "recommendation": "MOCK: review the change before any VM test",
+            "severity": "high"
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "demo-MOCK",
+        "check_id": "SSH-01",
+        "before_scan_id": "demo-before-MOCK",
+        "after_scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "MOCK: permitrootlogin yes",
+          "recommendation": "MOCK: request administrator approval"
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "evidence": "MOCK: effective PermitRootLogin value rechecked",
+          "recommendation": "MOCK: review the change before any VM test",
+          "severity": "high"
+        },
+        "improved": true
+      },
+      "after_scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "recheck_attempts": [],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.1",
+      "approval_id": "demo-approval-MOCK",
+      "started_at": "2026-11-12T00:19:40.875884+00:00",
+      "finished_at": "2026-11-12T00:19:40.876107+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.1",
+        "target_id": "demo-MOCK",
+        "os": "ubuntu-24.04",
+        "scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+        "scanned_at": "2026-11-12T00:19:40.876041+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: effective PermitRootLogin value rechecked",
+            "recommendation": "MOCK: review the change before any VM test",
+            "severity": "high"
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": null
+  },
+  {
+    "case": "version-1.2",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "7953a32db971b8fb297553b636e6156bf55b47918c9b6134160f235fef8cdc21",
+      "execution_id": "df7e7472-ddf0-48fe-a477-7826ae8011e5",
+      "target_id": "ubuntu-a-mock",
+      "check_id": "SSH-01",
+      "outcome": "success",
+      "backup": "success",
+      "backup_id": "mock-backup-de5ddd2f-aa56-4c60-ac55-dfc4341c6f09",
+      "rollback": "not_needed",
+      "approval": {
+        "approval_id": "demo-approval-MOCK",
+        "approved_by": "demo-admin-MOCK",
+        "scan_id": "mock-cvss-20261110-001"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "mock-cvss-20261110-001",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare"
+      ],
+      "after_report": {
+        "schema_version": "1.2",
+        "scan_id": "5c514aec-fd45-4a5f-967c-e353d6172262",
+        "target_id": "ubuntu-a-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.915158+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: effective PermitRootLogin value rechecked",
+            "recommendation": "MOCK: review the change before any VM test",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: no vulnerable finding after recheck"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "ubuntu-a-mock",
+        "check_id": "SSH-01",
+        "before_scan_id": "mock-cvss-20261110-001",
+        "after_scan_id": "5c514aec-fd45-4a5f-967c-e353d6172262",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "evidence": "MOCK: effective PermitRootLogin value rechecked",
+          "recommendation": "MOCK: review the change before any VM test",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: no vulnerable finding after recheck"
+          }
+        },
+        "improved": true
+      },
+      "after_scan_id": "5c514aec-fd45-4a5f-967c-e353d6172262",
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "recheck_attempts": [],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "demo-approval-MOCK",
+      "started_at": "2026-11-12T00:19:40.914849+00:00",
+      "finished_at": "2026-11-12T00:19:40.915402+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "5c514aec-fd45-4a5f-967c-e353d6172262",
+        "target_id": "ubuntu-a-mock",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.915158+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: effective PermitRootLogin value rechecked",
+            "recommendation": "MOCK: review the change before any VM test",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: no vulnerable finding after recheck"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": null
+  },
+  {
+    "case": "success",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "20083e5a5f0a47e3a71b6a82cb7cbc248db79cbf5e513cf21d866b76d0d22bc9",
+      "execution_id": "81783b39-d54d-4a9f-8767-4887a862838d",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "success",
+      "backup": "success",
+      "backup_id": "mock-backup-16971b29-fcf3-467a-bfca-6defb127e882",
+      "rollback": "not_needed",
+      "approval": {
+        "approval_id": "history-approval",
+        "approved_by": "admin-MOCK",
+        "scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare"
+      ],
+      "after_report": {
+        "schema_version": "1.2",
+        "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.963411+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "history-MOCK",
+        "check_id": "SSH-01",
+        "before_scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+        "after_scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "improved": true
+      },
+      "after_scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "recheck_attempts": [
+        {
+          "execution_id": "81783b39-d54d-4a9f-8767-4887a862838d",
+          "phase": "after",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+          "scanned_at": "2026-11-12T00:19:40.963411+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        }
+      ],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "history-approval",
+      "started_at": "2026-11-12T00:19:40.962510+00:00",
+      "finished_at": "2026-11-12T00:19:40.976438+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.963411+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+          "scanned_at": "2026-11-12T00:19:40.963411+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 0,
+          "not_applicable": 1
+        }
+      }
+    ]
+  },
+  {
+    "case": "post-rollback-pass-action-failed",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "d6275492b531158a598ae970c2e7f10bd84038c58fd2e8d7575cb4b1fe7e4a66",
+      "execution_id": "de18256e-041e-49e2-918b-719de1fa4131",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "failed",
+      "backup": "success",
+      "backup_id": "mock-backup-04e224cf-e5dc-4dde-bc26-b200583ac49c",
+      "rollback": "verified",
+      "approval": {
+        "approval_id": "history-approval",
+        "approved_by": "admin-MOCK",
+        "scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare",
+        "restore",
+        "verify_restore",
+        "verify_service"
+      ],
+      "after_report": {
+        "schema_version": "1.2",
+        "scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.994798+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "history-MOCK",
+        "check_id": "SSH-01",
+        "before_scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992",
+        "after_scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "improved": false
+      },
+      "after_scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+      "failed_stage": "recheck",
+      "failure_reason": "recheck_not_improved",
+      "post_rollback_scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+      "post_rollback_report": {
+        "schema_version": "1.2",
+        "scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.007989+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "recheck_attempts": [
+        {
+          "execution_id": "de18256e-041e-49e2-918b-719de1fa4131",
+          "phase": "after",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+          "scanned_at": "2026-11-12T00:19:40.994798+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        },
+        {
+          "execution_id": "de18256e-041e-49e2-918b-719de1fa4131",
+          "phase": "post_rollback",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+          "scanned_at": "2026-11-12T00:19:41.007989+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        }
+      ],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "history-approval",
+      "started_at": "2026-11-12T00:19:40.994378+00:00",
+      "finished_at": "2026-11-12T00:19:41.022617+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:40.994798+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.007989+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+          "scanned_at": "2026-11-12T00:19:40.994798+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+          "scanned_at": "2026-11-12T00:19:41.007989+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 0,
+          "not_applicable": 1
+        }
+      }
+    ]
+  },
+  {
+    "case": "post-rollback-load-failed",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "c367fc6a651d8964c4748f6571babb2ebc22bfcccf0b12b659f864b34923ac29",
+      "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "failed",
+      "backup": "success",
+      "backup_id": "mock-backup-0271b327-9d05-43d6-b702-a66004a11147",
+      "rollback": "verified",
+      "approval": {
+        "approval_id": "history-approval",
+        "approved_by": "admin-MOCK",
+        "scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare",
+        "restore",
+        "verify_restore",
+        "verify_service"
+      ],
+      "after_report": {
+        "schema_version": "1.2",
+        "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.042013+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "history-MOCK",
+        "check_id": "SSH-01",
+        "before_scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+        "after_scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "improved": false
+      },
+      "after_scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+      "failed_stage": "recheck",
+      "failure_reason": "recheck_not_improved",
+      "post_rollback_scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+      "post_rollback_report": null,
+      "final_security_status": null,
+      "final_security_verified": false,
+      "post_rollback_recheck_error": "OSError",
+      "recheck_attempts": [
+        {
+          "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+          "phase": "after",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+          "scanned_at": "2026-11-12T00:19:41.042013+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        },
+        {
+          "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+          "phase": "post_rollback",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+          "scanned_at": "2026-11-12T00:19:41.059197+00:00",
+          "save_status": "success",
+          "load_status": "failed",
+          "report_verified": false,
+          "failure_stage": "load",
+          "failure_reason": "OSError"
+        }
+      ],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "history-approval",
+      "started_at": "2026-11-12T00:19:41.041604+00:00",
+      "finished_at": "2026-11-12T00:19:41.064032+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.042013+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.059197+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+          "scanned_at": "2026-11-12T00:19:41.042013+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+          "scanned_at": "2026-11-12T00:19:41.059197+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": "rollback-unknown",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "a181c2aee18a823ac69f1720baf2865010ce1b2c55e85b46ff39d303d4f773f5",
+      "execution_id": "7f4d747e-a470-4bfd-85af-39f331983d1f",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "failed",
+      "backup": "success",
+      "backup_id": "mock-backup-2a7fcdbb-054c-4fe2-9829-9895125ebfd7",
+      "rollback": "verified",
+      "approval": {
+        "approval_id": "history-approval",
+        "approved_by": "admin-MOCK",
+        "scan_id": "659771ee-218f-43e6-be00-3acd2209f98f"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "659771ee-218f-43e6-be00-3acd2209f98f",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "recheck",
+        "compare",
+        "restore",
+        "verify_restore",
+        "verify_service"
+      ],
+      "after_report": {
+        "schema_version": "1.2",
+        "scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.095969+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "target_id": "history-MOCK",
+        "check_id": "SSH-01",
+        "before_scan_id": "659771ee-218f-43e6-be00-3acd2209f98f",
+        "after_scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+        "before": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "after": {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "evidence": "MOCK: synthetic diagnosis",
+          "recommendation": "MOCK: review diagnosis",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: synthetic assessment"
+          }
+        },
+        "improved": false
+      },
+      "after_scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+      "failed_stage": "recheck",
+      "failure_reason": "recheck_not_improved",
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": null,
+      "final_security_verified": false,
+      "recheck_attempts": [
+        {
+          "execution_id": "7f4d747e-a470-4bfd-85af-39f331983d1f",
+          "phase": "after",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+          "scanned_at": "2026-11-12T00:19:41.095969+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        }
+      ],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "history-approval",
+      "started_at": "2026-11-12T00:19:41.095456+00:00",
+      "finished_at": "2026-11-12T00:19:41.109766+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "659771ee-218f-43e6-be00-3acd2209f98f",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.095969+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "659771ee-218f-43e6-be00-3acd2209f98f",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+          "scanned_at": "2026-11-12T00:19:41.095969+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      }
+    ]
+  },
+  {
+    "case": "saved-but-load-failed",
+    "e_execution": {
+      "mode": "mock",
+      "plan_id": "548dedde65325371c2e326f8fa496aeb102cb6430a264388da1290d0784b2b43",
+      "execution_id": "94ed8639-eb7e-4deb-ab4f-abcbea010a7a",
+      "target_id": "history-MOCK",
+      "check_id": "SSH-01",
+      "outcome": "failed",
+      "backup": "success",
+      "backup_id": "mock-backup-617ec680-4667-469b-8d38-8d35de9887d9",
+      "rollback": "verified",
+      "approval": {
+        "approval_id": "history-approval",
+        "approved_by": "admin-MOCK",
+        "scan_id": "02206477-f9a1-4257-90a0-478343396fc1"
+      },
+      "before_status": "vulnerable",
+      "before_scan_id": "02206477-f9a1-4257-90a0-478343396fc1",
+      "completed_steps": [
+        "plan",
+        "approval",
+        "preflight",
+        "backup",
+        "apply",
+        "validate",
+        "restore",
+        "verify_restore",
+        "verify_service"
+      ],
+      "after_report": null,
+      "comparison": null,
+      "failed_stage": "recheck",
+      "failure_reason": "recheck_execution_failed",
+      "after_scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+      "post_rollback_scan_id": null,
+      "post_rollback_report": null,
+      "final_security_status": null,
+      "final_security_verified": false,
+      "recheck_attempts": [
+        {
+          "execution_id": "94ed8639-eb7e-4deb-ab4f-abcbea010a7a",
+          "phase": "after",
+          "target_id": "history-MOCK",
+          "check_id": "SSH-01",
+          "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+          "scanned_at": "2026-11-12T00:19:41.131456+00:00",
+          "save_status": "success",
+          "load_status": "failed",
+          "report_verified": false,
+          "failure_stage": "load",
+          "failure_reason": "OSError"
+        }
+      ],
+      "schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "approval_id": "history-approval",
+      "started_at": "2026-11-12T00:19:41.130925+00:00",
+      "finished_at": "2026-11-12T00:19:41.135296+00:00"
+    },
+    "d_reports": [
+      {
+        "schema_version": "1.2",
+        "scan_id": "02206477-f9a1-4257-90a0-478343396fc1",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-01T00:00:00Z",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "vulnerable",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      },
+      {
+        "schema_version": "1.2",
+        "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+        "target_id": "history-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-12T00:19:41.131456+00:00",
+        "results": [
+          {
+            "check_id": "SSH-01",
+            "status": "pass",
+            "evidence": "MOCK: synthetic diagnosis",
+            "recommendation": "MOCK: review diagnosis",
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "MOCK: synthetic assessment"
+            }
+          }
+        ]
+      }
+    ],
+    "before_bytes_preserved": true,
+    "summaries": [
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "02206477-f9a1-4257-90a0-478343396fc1",
+          "scanned_at": "2026-11-01T00:00:00Z"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 0,
+          "vulnerable_count": 1,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "0.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 0,
+            "VULNERABLE": 1,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 1,
+          "not_applicable": 0
+        }
+      },
+      {
+        "schema_version": "1.2",
+        "target_info": {
+          "target_id": "history-MOCK",
+          "ip_address": "Unknown",
+          "os": "ubuntu-24.04",
+          "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+          "scanned_at": "2026-11-12T00:19:41.131456+00:00"
+        },
+        "metrics": {
+          "total_items": 1,
+          "evaluable_items": 1,
+          "pass_count": 1,
+          "vulnerable_count": 0,
+          "error_count": 0,
+          "na_count": 0,
+          "needs_review_count": 0,
+          "pass_rate": "100.0%"
+        },
+        "category_breakdown": {
+          "기타": {
+            "PASS": 1,
+            "VULNERABLE": 0,
+            "ERROR": 0,
+            "N/A": 0,
+            "REVIEW": 0
+          }
+        },
+        "cvss_rating_breakdown": {
+          "none": 0,
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "cvss_assessment_breakdown": {
+          "scored": 0,
+          "pending": 0,
+          "not_applicable": 1
+        }
+      }
+    ]
+  }
+]

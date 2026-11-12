@@ -1,0 +1,76 @@
+{
+  "mode": "mock",
+  "plan_id": "cea15d5814d31473c3d63773ca68248660f5c542c61ebbbff06affc59629b4af",
+  "execution_id": "b1857cb3-5920-4a4c-beac-abe438abd71e",
+  "target_id": "demo-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "success",
+  "backup": "success",
+  "backup_id": "mock-backup-46ba42ff-d3af-4482-bd48-ccb5f7501a7f",
+  "rollback": "not_needed",
+  "approval": {
+    "approval_id": "demo-approval-MOCK",
+    "approved_by": "demo-admin-MOCK",
+    "scan_id": "demo-before-MOCK"
+  },
+  "before_status": "vulnerable",
+  "before_scan_id": "demo-before-MOCK",
+  "completed_steps": [
+    "plan",
+    "approval",
+    "preflight",
+    "backup",
+    "apply",
+    "validate",
+    "recheck",
+    "compare"
+  ],
+  "after_report": {
+    "schema_version": "1.1",
+    "target_id": "demo-MOCK",
+    "os": "ubuntu-24.04",
+    "scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+    "scanned_at": "2026-11-12T00:19:40.876041+00:00",
+    "results": [
+      {
+        "check_id": "SSH-01",
+        "status": "pass",
+        "evidence": "MOCK: effective PermitRootLogin value rechecked",
+        "recommendation": "MOCK: review the change before any VM test",
+        "severity": "high"
+      }
+    ]
+  },
+  "comparison": {
+    "target_id": "demo-MOCK",
+    "check_id": "SSH-01",
+    "before_scan_id": "demo-before-MOCK",
+    "after_scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+    "before": {
+      "check_id": "SSH-01",
+      "status": "vulnerable",
+      "severity": "high",
+      "evidence": "MOCK: permitrootlogin yes",
+      "recommendation": "MOCK: request administrator approval"
+    },
+    "after": {
+      "check_id": "SSH-01",
+      "status": "pass",
+      "evidence": "MOCK: effective PermitRootLogin value rechecked",
+      "recommendation": "MOCK: review the change before any VM test",
+      "severity": "high"
+    },
+    "improved": true
+  },
+  "after_scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+  "post_rollback_scan_id": null,
+  "post_rollback_report": null,
+  "final_security_status": "pass",
+  "final_security_verified": true,
+  "recheck_attempts": [],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.1",
+  "approval_id": "demo-approval-MOCK",
+  "started_at": "2026-11-12T00:19:40.875884+00:00",
+  "finished_at": "2026-11-12T00:19:40.876107+00:00"
+}

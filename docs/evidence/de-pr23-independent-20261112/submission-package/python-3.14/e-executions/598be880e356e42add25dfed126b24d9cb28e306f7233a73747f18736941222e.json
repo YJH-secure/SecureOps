@@ -1,0 +1,46 @@
+{
+  "mode": "dry_run",
+  "plan_id": "e5fa1d86cf83fbec8f278c38c83842e987b967d94058db906e14fef8f42dac9f",
+  "execution_id": "cb070894-fe39-4b58-8bac-cb1e9e1302f1",
+  "target_id": "history-MOCK",
+  "check_id": "SSH-01",
+  "outcome": "planned",
+  "backup": "not_attempted",
+  "backup_id": null,
+  "rollback": "not_needed",
+  "approval": null,
+  "before_status": "vulnerable",
+  "before_scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+  "completed_steps": [
+    "plan"
+  ],
+  "after_report": null,
+  "comparison": null,
+  "plan": {
+    "target_id": "history-MOCK",
+    "os": "ubuntu-24.04",
+    "scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+    "check_id": "SSH-01",
+    "source_digest": "3a5ea964e5d4e27e90966118f8a23c470b9ec16577df1d82ee733ea18574c4f2",
+    "policy_version": "ssh-01-proposal-v1",
+    "actions": [
+      [
+        "ssh_dropin",
+        "/etc/ssh/sshd_config.d/01-secureops.conf",
+        "PermitRootLogin no\n"
+      ]
+    ],
+    "skip_reason": null
+  },
+  "after_scan_id": null,
+  "post_rollback_scan_id": null,
+  "post_rollback_report": null,
+  "final_security_status": null,
+  "final_security_verified": false,
+  "recheck_attempts": [],
+  "schema_version": "1.0",
+  "diagnosis_schema_version": "1.2",
+  "approval_id": null,
+  "started_at": "2026-11-12T00:19:40.872949+00:00",
+  "finished_at": "2026-11-12T00:19:40.873328+00:00"
+}

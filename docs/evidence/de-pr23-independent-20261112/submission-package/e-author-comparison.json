@@ -1,0 +1,83 @@
+{
+  "author_reported_204": 204,
+  "author_reported_python": "3.12.14",
+  "author_reported_jsonschema": "4.26.0",
+  "author_latest_test_code_commit": "7730f4ff6d8fc666bd68093f072e7971c79e358a",
+  "public_184_metadata_tested_head": "bb050165b21dade0285372745c92cd5dd996123d",
+  "public_184_metadata_d_main": "6bf80bb114458994bec7d640b4fe4ec53b97bb10",
+  "public_raw_ok_ids_found": 184,
+  "public_logs": [
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/01-v11.log",
+      "sha256": "26083d2e0b6fe04f02368c0c9dcc103d82a4820df6c66453d9bbeedb22084146",
+      "ok_ids": 24
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/02-v12.log",
+      "sha256": "3328dabb416555c40736097a91c9fbc2016cf5d2640405c470d85fcd9440ff98",
+      "ok_ids": 18
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/03-execution-mock.log",
+      "sha256": "2b295d04aa7a7f22d645db7a1b47ccf714e175b49146bb458c81017d907de686",
+      "ok_ids": 19
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/04-cvss-schema.log",
+      "sha256": "8c7827d95516ed6cb25c0ddb6c4ede1c61491c92593138c8380bd51d23f6aeb9",
+      "ok_ids": 52
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/05-b-contract.log",
+      "sha256": "ca424d9367720b2bd80d6b835aca922ce1d71914f4dc057610598d3463b0bf73",
+      "ok_ids": 4
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/06-scan-history.log",
+      "sha256": "f021fa128ab3d0d016c44fa0b3ad7766f85ec029e1be7680192f78b433591802",
+      "ok_ids": 20
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/07-history-store.log",
+      "sha256": "32f50ba40ee1debde4976e1c6e6511a2a0e1eb083164c24a699e4f30cbe02260",
+      "ok_ids": 18
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/08-c-firewall.log",
+      "sha256": "ca20338c1d3861de80e529c60c32d1b0dd1796cb5cf64e9136e759804d7f12d7",
+      "ok_ids": 17
+    },
+    {
+      "path": "reports/e-history-final-main-6bf80bb-20261111/09-c-log.log",
+      "sha256": "9b8dc9c2f6215b01b03f1f71563c9fa8872bc874b8b710dc344a05eae166da08",
+      "ok_ids": 12
+    }
+  ],
+  "public_ids_also_in_d_204": 184,
+  "public_ids_missing_from_d_204": [],
+  "d_204_ids_not_in_public_184": [
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_audit_time_is_independent_from_approval_clock",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_bad_or_incomplete_times_are_rejected",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_different_valid_timezones_compare_correctly",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_fields_do_not_modify_diagnosis_contracts",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_legacy_stored_records_remain_readable",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_metadata_on_every_normal_return",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_mismatched_top_level_approval_id_is_rejected",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_schema_version_is_not_inferred",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_store_round_trip_preserves_metadata",
+    "test_execution_history_fields.ExecutionHistoryFieldTests.test_unverified_approval_id_is_null",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_actual_d_input_version_is_used_for_both_supported_versions",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_corrupted_stored_versions_are_rejected_on_load",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_d_diagnosis_reports_are_still_rejected",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_diagnosis_snapshot_cannot_disagree_with_diagnosis_version",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_invalid_diagnosis_version_values_and_types_are_rejected",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_invalid_execution_version_values_and_types_are_rejected",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_legacy_record_without_versions_is_loaded_without_rewrite",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_new_history_versions_round_trip_without_changing_input",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_partial_version_pair_is_rejected",
+    "test_execution_history_versions.ExecutionHistoryVersionTests.test_versions_are_recorded_on_every_normal_outcome"
+  ],
+  "public_complete_latest_204_raw_stdout_available": false,
+  "latest_204_original_run_time_and_interpreter_hash_independently_verified": false,
+  "evidence_limit": "README/PR reports 204; public complete logs cover older 184. New 20 IDs and current code can be inspected; private final stdout is unavailable."
+}
