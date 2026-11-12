@@ -309,5 +309,34 @@ class ResultFormatTest(unittest.TestCase):
             ssh_auth_check.run_check(result_version="2.0")
 
 
+# ---------- Rocky Linux 9 호환성 (Mock, 실제 Rocky VM 실행은 별도) ----------
+class RockyCompatTest(unittest.TestCase):
+    # Rocky 9 기본값 예시: 50-redhat.conf에 GSSAPIAuthentication yes, 비밀번호 인증 기본 yes
+    ROCKY_DEFAULT = make_output(passwordauthentication="yes", gssapiauthentication="yes")
+
+    def test_rocky_default_gssapi_is_vulnerable(self):
+        result = judge(self.ROCKY_DEFAULT)
+        self.assertEqual(result["status"], "vulnerable")
+        self.assertEqual(finding(result, "gssapiauthentication")[0]["status"], "vulnerable")
+
+    def test_missing_gssapi_or_kerberos_line_is_error_not_pass(self):
+        # 빌드 옵션 등으로 sshd -T에 줄이 없으면 "꺼져 있다"고 추측하지 않고 error
+        for setting in ("gssapiauthentication", "kerberosauthentication"):
+            with self.subTest(setting):
+                result = judge(make_output(allowusers=APPROVED_USERS, remove=(setting,)))
+                self.assertEqual(result["status"], "error")
+                self.assertEqual(finding(result, setting)[0]["status"], "error")
+
+    def test_permission_failure_is_error_not_pass(self):
+        # sudo 없이 실행하면 sshd -T 또는 설정 파일 읽기가 실패 -> pass가 아니라 error
+        for target in ("get_sshd_output", "read_config_text"):
+            with self.subTest(target), \
+                 mock.patch.object(ssh_check, "find_sshd", return_value="/usr/sbin/sshd"), \
+                 mock.patch.object(ssh_check, "get_sshd_output", return_value=make_output(allowusers=APPROVED_USERS)), \
+                 mock.patch.object(ssh_check, "read_config_text", return_value=""), \
+                 mock.patch.object(ssh_check, target, return_value=None):
+                self.assertEqual(ssh_auth_check.run_check()["status"], "error")
+
+
 if __name__ == "__main__":
     unittest.main()
