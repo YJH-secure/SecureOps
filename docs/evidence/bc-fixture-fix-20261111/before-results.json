@@ -1,0 +1,39 @@
+{
+  "phase": "before",
+  "base_commit": "66495d0506391a7a259accf558c822d28be3b219",
+  "started_at_kst": "2026-11-11T19:17:30+09:00",
+  "python": "3.14.2",
+  "platform": "Windows 11",
+  "jsonschema": "4.25.1",
+  "fixture_sha256": "6c999546f2bcd2b22fd167ea58c2c5809180376e599268b3c8cf1c5fb90fa307",
+  "external_source_variables_cleared": true,
+  "actual_ssh_vm": false,
+  "runs": [
+    {
+      "label": "before-target",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_bc_offline_integration.py -v",
+      "started_at_kst": "2026-11-11T19:17:31+09:00",
+      "finished_at_kst": "2026-11-11T19:17:31+09:00",
+      "exit_code": 1,
+      "tests_run": 3,
+      "ok_method_lines": 0,
+      "log": "logs/before-target.log",
+      "explicit_d_source": false,
+      "failures": 0,
+      "errors": 6,
+      "skipped": 0,
+      "error_headings": [
+        "test_actual_bc_functions_to_validated_report_summary_and_storage (test_bc_offline_integration.BCOfflineIntegrationTests.test_actual_bc_functions_to_validated_report_summary_and_storage)",
+        "test_file_details_and_inputs_preserved_without_shared_mutation (test_bc_offline_integration.BCOfflineIntegrationTests.test_file_details_and_inputs_preserved_without_shared_mutation)",
+        "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['error', 'needs_review'])",
+        "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'error'])",
+        "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['needs_review', 'pass'])",
+        "test_pass_error_and_needs_review_are_counted_independently (test_bc_offline_integration.BCOfflineIntegrationTests.test_pass_error_and_needs_review_are_counted_independently) (statuses=['pass', 'pass'])"
+      ],
+      "sanitized_stdout_sha256_before_space_trim": "8bbae080acbb346feb1676288487510f842516f0ad8191e1171ace79f02ca57c",
+      "log_normalization": "UTF-8/LF; private path placeholders; trailing spaces removed"
+    }
+  ],
+  "tracked_files_unchanged_during_test": true,
+  "finished_at_kst": "2026-11-11T19:17:31+09:00"
+}

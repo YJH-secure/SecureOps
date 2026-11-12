@@ -1,0 +1,244 @@
+{
+  "started_at_kst": "2026-11-10T16:17:28+09:00",
+  "branch": "feature/cvss-core-jhm",
+  "head": "994d20c1d7a914ba8a77ab9e89ea7080c16e171e",
+  "uncommitted_implementation": true,
+  "initial_status": "## feature/cvss-core-jhm\n M core/main.py\n M core/remote_result.py\n M core/runner.py\n M core/storage.py\n?? core/cvss.py\n?? core/cvss_assessment.py\n?? core/cvss_validation.py\n?? docs/architecture/json-result-contract-v1.2.md\n?? docs/architecture/json-result-schema-v1.2.schema.json\n?? docs/evidence/cvss-v1.2/\n?? docs/security-policy/cvss-scoring-policy-v1.2.md\n?? requirements-test.txt\n?? tests/fixtures/sample-result-v1.2-MOCK.json\n?? tests/test_cvss.py\n?? tests/test_cvss_assessment.py\n?? tests/test_cvss_v12.py\n",
+  "python": "3.14.2",
+  "implementation": "CPython",
+  "os": "Windows",
+  "release": "11",
+  "architecture": "AMD64",
+  "policy_pr": "https://github.com/YJH-secure/SecureOps/pull/18",
+  "core_pr": "https://github.com/YJH-secure/SecureOps/pull/8",
+  "policy_commit": "0647f7e0de104c2a7196d34ccd6143f22731a0c3",
+  "network_fetch": false,
+  "ssh_vm_executed": false,
+  "runs": [
+    {
+      "label": "01-cvss-official",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_cvss.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:29+09:00",
+      "finished_at_kst": "2026-11-10T16:17:29+09:00",
+      "exit_code": 0,
+      "tests": 11,
+      "seconds": 0.015,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/01-cvss-official.log",
+      "passed": 11
+    },
+    {
+      "label": "02-json-v12",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_cvss_v12.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:29+09:00",
+      "finished_at_kst": "2026-11-10T16:17:30+09:00",
+      "exit_code": 0,
+      "tests": 28,
+      "seconds": 0.401,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/02-json-v12.log",
+      "passed": 28
+    },
+    {
+      "label": "09-explicit-assessment",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_cvss_assessment.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:30+09:00",
+      "finished_at_kst": "2026-11-10T16:17:30+09:00",
+      "exit_code": 0,
+      "tests": 13,
+      "seconds": 0.026,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/09-explicit-assessment.log",
+      "passed": 13
+    },
+    {
+      "label": "03-v11-core-regression",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_core*.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:30+09:00",
+      "finished_at_kst": "2026-11-10T16:17:31+09:00",
+      "exit_code": 0,
+      "tests": 70,
+      "seconds": 0.601,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/03-v11-core-regression.log",
+      "passed": 70
+    },
+    {
+      "label": "04-v11-remote-regression",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_remote_result.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:31+09:00",
+      "finished_at_kst": "2026-11-10T16:17:31+09:00",
+      "exit_code": 0,
+      "tests": 14,
+      "seconds": 0.022,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/04-v11-remote-regression.log",
+      "passed": 14
+    },
+    {
+      "label": "05-full-worktree",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "mode": "D worktree; synthetic inputs",
+      "started_at_kst": "2026-11-10T16:17:31+09:00",
+      "finished_at_kst": "2026-11-10T16:17:32+09:00",
+      "exit_code": 0,
+      "tests": 139,
+      "seconds": 1.052,
+      "skipped": 3,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/05-full-worktree.log",
+      "passed": 136
+    },
+    {
+      "label": "06-actual-bc-v11-offline",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_bc_offline_integration.py -v",
+      "mode": "Actual B/C v1.1 functions; synthetic observations; no collection/SSH/VM",
+      "started_at_kst": "2026-11-10T16:17:33+09:00",
+      "finished_at_kst": "2026-11-10T16:17:33+09:00",
+      "exit_code": 0,
+      "tests": 3,
+      "seconds": 0.144,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/06-actual-bc-v11-offline.log",
+      "passed": 3
+    },
+    {
+      "label": "07-full-with-bc",
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "mode": "Actual B/C v1.1 functions; synthetic observations; no collection/SSH/VM",
+      "started_at_kst": "2026-11-10T16:17:33+09:00",
+      "finished_at_kst": "2026-11-10T16:17:34+09:00",
+      "exit_code": 0,
+      "tests": 139,
+      "seconds": 1.172,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/07-full-with-bc.log",
+      "passed": 139
+    },
+    {
+      "label": "08-v12-cli-mock",
+      "command": "python -B -X utf8 core/main.py tests/fixtures/sample-result-v1.2-MOCK.json",
+      "mode": "Adopted v1.2 MOCK fixture; no actual detections",
+      "started_at_kst": "2026-11-10T16:17:34+09:00",
+      "finished_at_kst": "2026-11-10T16:17:34+09:00",
+      "exit_code": 0,
+      "tests": null,
+      "seconds": null,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "logs/08-v12-cli-mock.log",
+      "passed": null
+    }
+  ],
+  "policy_files": {
+    "docs/security-policy/cvss-scoring-policy-v1.2.md": {
+      "sha256": "610aeff24604315d603f6ce05b8a459b975a9aa1eb292b667daca5245856ff56",
+      "matches_pr18_commit": true
+    },
+    "docs/architecture/json-result-contract-v1.2.md": {
+      "sha256": "0fce190151cb8716059db854ad3e74c37a784a6499c3e00f327ba2ae6a9034d8",
+      "matches_pr18_commit": true
+    },
+    "docs/architecture/json-result-schema-v1.2.schema.json": {
+      "sha256": "5cd097dce33ebf2d34753291ad94e1bd267e98a52a93ccdd3a903d3ac33b0606",
+      "matches_pr18_commit": true
+    },
+    "tests/fixtures/sample-result-v1.2-MOCK.json": {
+      "sha256": "9e059201360274151bc2f0c3b1c50ae52994d7597b6de1b539d9605f0a17ed35",
+      "matches_pr18_commit": true
+    }
+  },
+  "bc_sources": {
+    "B": {
+      "ref": "cfbd37b4dbd102ec894a2150d47f751ad5c74afa",
+      "commit": "cfbd37b4dbd102ec894a2150d47f751ad5c74afa",
+      "sha256": {
+        "checks/account/ssh_check.py": "dafc0d51b2a3674367c372b64a4d15bd976f1ad7717b141f2462f44942132fff"
+      }
+    },
+    "C": {
+      "ref": "6bb330feccfc6541bc145db9b6e18f24b4bce394",
+      "commit": "6bb330feccfc6541bc145db9b6e18f24b4bce394",
+      "sha256": {
+        "checks/system/file_check.py": "d0ff9979d233498dbe3f6e0358920c06a4d2415646cfba85219cce96d916844f",
+        "checks/system/common.py": "9759c210709734720312cd346d6590b923ae61316f36bec4c5e96d48eac483e9",
+        "checks/system/policy_rules.py": "1c031843bf7f27725e498d0500ba859a7bb89dce9b0062c776fde96f4bbf1909",
+        "checks/system/link_check.py": "4694d99799e3145fd51fe7ef64a8d2c2c6978735d533267c0f376a1eefbef898"
+      }
+    }
+  },
+  "branch_refs": {
+    "feature/core-jhm": "994d20c1d7a914ba8a77ab9e89ea7080c16e171e",
+    "feature/cvss-core-jhm": "994d20c1d7a914ba8a77ab9e89ea7080c16e171e",
+    "main": "49e5d2dd1281a1b9af275f2efe080e66003f3ca5"
+  },
+  "jsonschema_version": "4.25.1",
+  "jsonschema_date_time_checker_available": false,
+  "preservation_comparison": "git diff HEAD; respects checkout CRLF/LF normalization",
+  "preserved_existing_files": {
+    "checks/account/.gitkeep": true,
+    "checks/system/.gitkeep": true,
+    "core/legacy.py": true,
+    "tests/.gitkeep": true,
+    "tests/fixtures/sample_diagnosis.json": true,
+    "tests/test_bc_offline_integration.py": true,
+    "tests/test_core.py": true,
+    "tests/test_core_integration.py": true,
+    "tests/test_core_legacy.py": true,
+    "tests/test_core_runner.py": true,
+    "tests/test_core_storage.py": true,
+    "tests/test_remote_result.py": true
+  },
+  "v11_validator_body_preserved": true,
+  "tested_file_sha256": {
+    "core/cvss.py": "392907644acadf34d24d3690fb227be40e0fce53c472e52d5d0ce963a8ec9be6",
+    "core/cvss_assessment.py": "bdd91556f648b977517bd6b33da8ed381ab260b89ddb1fde8fce5c1221b656b2",
+    "core/cvss_validation.py": "f9e67b616b5ecff121930f113850e7f969f5f3176d26edd4187ceff01e2aa56b",
+    "core/legacy.py": "504afa8618a82e60da53850049405993f2a6d729b639ae975460d111cb6d6f9f",
+    "core/main.py": "a1e2ebaf74190aeb61555a79138ec9f60ec4e724802c19999c82c063d410a3fb",
+    "core/remote_result.py": "bc235776d9822c5100cc9c60a27342aff165f28fae9e1305dc6962bd96ff007c",
+    "core/runner.py": "efc58f4849d2dda06e3d0f474bf1778c66a781489b839154a095f30a9dbe1ace",
+    "core/storage.py": "2b62c1ea473175e69ba44c9bdb5432a98a0dee0082ea375f52092a25ff7cc3e4",
+    "tests/test_bc_offline_integration.py": "d78c516e704ba97f1782e6c5a302533536e035a122f93f242bc9d32f9b6d9059",
+    "tests/test_core.py": "9da108216dcb7f15cf7323930decedaf01ecd79dd957236959d1822a8218c0db",
+    "tests/test_core_integration.py": "38bb155ad3dfd68f2298d512c76cac09902e40cef0a43265f459ed555697af38",
+    "tests/test_core_legacy.py": "789641ca19cd81a96cbea1a20028f773696097402e835404f981b76679d53f5f",
+    "tests/test_core_runner.py": "baa21c8e312c46fb84599bd72c034a5dbdcc2bbc83c7e726b16e787dd7ca2ca3",
+    "tests/test_core_storage.py": "c481be46d4f9f71d15745a78ccf136e4868183443418fe09ade057edd23ade6b",
+    "tests/test_cvss.py": "eddef1aaa84e0dd798f65bd82c0de2ef5db12634bbec6f14a0ce4777a3cd4a54",
+    "tests/test_cvss_assessment.py": "2949a22baabec3f6a07a840491c035365360d85a273e92f21101cbc7868749c0",
+    "tests/test_cvss_v12.py": "3833f5f15a75174a6b8edebe2b6c7a527555ae175a5df9c7f5f6fccb6a249719",
+    "tests/test_remote_result.py": "adaed27600f3f84370a5876b2136b87d03ff3a20e43bcbbf1ccadfd073a037f8",
+    "tests/fixtures/sample-result-v1.2-MOCK.json": "9e059201360274151bc2f0c3b1c50ae52994d7597b6de1b539d9605f0a17ed35",
+    "tests/fixtures/sample_diagnosis.json": "01ec4704772b82859ed8a1a14e17a88a8a8363f22432a01223241b5900bb42d2",
+    "requirements-test.txt": "ae143715ed05374cc21277859c738c745a4ae35904fabca9214c95d0ac7ae694",
+    "docs/security-policy/cvss-scoring-policy-v1.2.md": "610aeff24604315d603f6ce05b8a459b975a9aa1eb292b667daca5245856ff56",
+    "docs/architecture/json-result-contract-v1.2.md": "0fce190151cb8716059db854ad3e74c37a784a6499c3e00f327ba2ae6a9034d8",
+    "docs/architecture/json-result-schema-v1.2.schema.json": "5cd097dce33ebf2d34753291ad94e1bd267e98a52a93ccdd3a903d3ac33b0606",
+    "docs/evidence/cvss-v1.2/run-cvss-evidence.py": "a1a0632aca9d2fa0ddcbef035ed33fc84c1ea13621f11dc66a7df3f5a015cfce"
+  },
+  "official_v11_mock_commit": "49e5d2dd1281a1b9af275f2efe080e66003f3ca5",
+  "tested_files_unchanged_during_run": true,
+  "finished_at_kst": "2026-11-10T16:17:34+09:00"
+}

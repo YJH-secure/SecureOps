@@ -1,0 +1,20 @@
+Started (KST): 2026-11-09T14:54:08+09:00
+Command: python -B -X utf8 -m unittest discover -s tests -p test_core_integration.py -v
+B/C source mode: current working tree
+Exit code: 0
+
+test_combined_report_and_json_roundtrip (test_core_integration.ResultIntegrationTests.test_combined_report_and_json_roundtrip) ... ok
+test_details_and_input_are_independent (test_core_integration.ResultIntegrationTests.test_details_and_input_are_independent) ... ok
+test_duplicate_across_modules_rejected (test_core_integration.ResultIntegrationTests.test_duplicate_across_modules_rejected) ... ok
+test_empty_groups (test_core_integration.ResultIntegrationTests.test_empty_groups) ... ok
+test_error_and_review_never_become_pass (test_core_integration.ResultIntegrationTests.test_error_and_review_never_become_pass) ... ok
+test_generated_execution_metadata (test_core_integration.ResultIntegrationTests.test_generated_execution_metadata) ... ok
+test_invalid_groups (test_core_integration.ResultIntegrationTests.test_invalid_groups) ... ok
+test_invalid_items (test_core_integration.ResultIntegrationTests.test_invalid_items) ... ok
+test_invalid_metadata_not_replaced (test_core_integration.ResultIntegrationTests.test_invalid_metadata_not_replaced) ... ok
+test_non_json_details_rejected (test_core_integration.ResultIntegrationTests.test_non_json_details_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.002s
+
+OK

@@ -5,7 +5,11 @@
 **KT 클라우드 사이버보안 부트캠프 | 6인 팀 프로젝트**
 
 개발 기간: 2026.11.04 ~ 2026.12.01  
-프로젝트 상태: 설계 및 개발 준비 단계
+프로젝트 상태: B/C/D/E 주요 코드 main 반영, JSON v1.2 신규 기준선 확정 / 신규 중앙 VM 실환경 통합·웹/네트워크 확장 진행 중 (2026-11-11)
+
+> **2026-11-11 공통 개발 기준 (먼저 읽기):** 신규 진단·집계·재검증 결과는 [JSON 계약 v1.2](docs/architecture/json-result-contract-v1.2.md)와 [CVSS v3.1 Base 정책 v1.2](docs/security-policy/cvss-scoring-policy-v1.2.md) 기준으로 개발합니다. 개별 결과는 `status/evidence/recommendation/cvss`를 포함하고 v1.2에서는 `severity`를 사용하지 않습니다. CVSS 미평가 점수는 `null`이며, 임의 점수 환산 금지. **기존 JSON v1.1은 레거시 기능·보고서 호환을 위해 유지**합니다. 팀원/AI는 [최신 프로젝트 현황](docs/project-status.md)과 [통합 게이트](docs/integration-checklist.md)를 반드시 확인하세요.
+>
+> **주의:** PR 제출/모의 테스트 = 실제 신규 VM E2E 완료가 아닙니다. 각 담당의 최신 PR, 테스트 SHA, 서버 검증을 구분하여 기록합니다.
 
 ## 1. 프로젝트 소개
 
@@ -33,17 +37,17 @@ SecureOps는 Linux 서버의 보안 설정을 자동으로 진단하고, 취약�
 | 조효민 | 진단 자동화·위험도 평가 | Python 기반 진단 결과 통합 |
 | 박태준 | 보안 조치·재검증 | 승인 기반 조치 및 개선 결과 확인 |
 
-## 4. 개발 환경 (초안)
+## 4. 개발 환경 (실제 구축 보고 기준)
 
 - 가상화: VMware Workstation
-- 중앙 관리 서버: Ubuntu Server 24.04 LTS
-- 진단 대상: Ubuntu Server 24.04 LTS / Rocky Linux 9 계열
+- 중앙 관리 서버 (실제 인프라 구축 기준): Ubuntu Server 24.04.5 LTS (`central-mgmt`)
+- 진단 대상 (실제 인프라 구축 기준): Ubuntu Desktop 24.04.5 LTS (`ubuntu-a`) / Rocky Linux 9.8 Desktop (`rocky-b`)
 - 개발 언어: Python 3.12 기준 / Bash
 - 개발 도구: VS Code
 - 협업: Git / GitHub
 - 데이터 형식: JSON
 
-※ 개발 환경은 실제 구축 및 호환성 검증 과정에서 조정될 수 있습니다.
+※ VM 종류와 OS 버전은 인프라 담당자 PR #9의 2026-11-11 신규 VM 재구축·인수인계 기준입니다. SSH 키 접속 성공 보고와 실제 SecureOps 중앙 진단기 E2E 검증은 별개입니다. Desktop 대상은 Server와 기본 서비스 및 패키지 구성이 다를 수 있습니다.
 
 ## 5. 시스템 처리 흐름
 
@@ -72,6 +76,27 @@ SecureOps/
 └── .gitignore
 ```
 
+
+## 과거 JSON 결과 규격 v1.1 (호환용·2026-11-06 당시 기준)
+
+아래는 2026-11-06 확정 당시의 v1.1 자료로, 기존 기능 회귀와 과거 데이터 해석을 위해 보존합니다. **신규 구현은 위의 v1.2 계약을 우선**합니다.
+
+- [공통 JSON 결과 계약서](docs/architecture/json-result-contract-v1.1.md) — 필수 필드·상태값·위험도·이전 규칙
+- [JSON Schema](docs/architecture/json-result-schema-v1.1.schema.json) — JSON 자료형·필수 키 자동 검증
+- [MOCK 샘플 결과](tests/fixtures/sample-result-v1.1-MOCK.json) — 가상 데이터 테스트 예시
+- [AI 코드 점검 가이드 (팀원별 프롬프트 포함)](docs/architecture/AI_JSON_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 점검 요청서
+
+**v1.1은 기존 기능의 레거시 계약입니다.** v1.2로 명시적 전환하지 않은 과거 보고서·진단 경로는 계속 v1.1로 유지합니다. 두 형식은 구분하여 검증해야 하며 v1.1 severity를 CVSS 점수로 환산하지 않습니다. 비밀값과 실제 계정 정보는 AI 도구 및 GitHub에 공유하지 않습니다.
+
+## 취약점 점검 기준표 v1.1 (진단 정책 기준)
+
+- [취약점 점검 기준표 v1.1](docs/security-policy/vulnerability-checklist-v1.1.md) — 8개 검사 항목의 판정 원칙·초기 위험도·테스트 계획
+- [인프라 구축 문서 PR #9](https://github.com/YJH-secure/SecureOps/pull/9) — 실제 서버·SSH·sudo 설정 및 검증 현황 (`infrastructure/README.md`, Merge 후 main 반영)
+
+- [팀원 AI 정책 검토 가이드](docs/security-policy/AI_SECURITY_POLICY_REVIEW_GUIDE_v1.1.md) — 각자 AI에 제공할 공통 프롬프트 및 담당별 점검 기준
+
+**판정 기준표 v1.1은 공통 JSON 결과 규격 v1.1과 별개의 정책 문서**입니다. 판정 세부 기준 중 승인 대기 항목은 임의로 확정 처리하지 않습니다. SSH-01은 root 직접 SSH 접속 금지 정책을 적용하며, 유효 설정 확인에 실패한 경우 오류/검토 상태로 구분합니다.
+
 ## 7. GitHub 협업 규칙
 
 - 각 담당자는 본인의 작업 영역을 기준으로 개발합니다.
@@ -86,13 +111,14 @@ SecureOps/
 - [x] 프로젝트 주제 확정
 - [x] 팀원별 역할 분담
 - [x] 시스템 아키텍처 초안 작성
-- [x] 취약점 점검 기준표 v1.0 작성
+- [x] 취약점 점검 기준표 v1.1 문서화 (세부 조건·검증 상태는 항목별 확인 필요)
 - [x] GitHub 저장소 및 디렉터리 초기화
-- [ ] 개발 환경 구축
-- [ ] 보안 진단 기능 구현
-- [ ] 결과 통합 및 위험도 평가
-- [ ] 승인 기반 보안 조치 및 재검증
-- [ ] 전체 기능 통합 테스트
+- [x] 가상머신 3대·기본 SSH 및 계정 인프라 구축 (인프라 담당자 검증 보고 기준)
+- [ ] 중앙 관리 기능과 각 담당 모듈의 실제 통합 환경 검증
+- [x] B SSH-01 / C FILE-01·SVC-01·FW-01·LOG-01 기본 읽기 전용 진단 코드 main 반영 (B 기타 항목과 실서버 정책/연동은 미완료)
+- [x] D JSON v1.2 검증·CVSS v3.1 Base 계산/집계 코드 main 반영 (실환경 E2E/실제 취약 사례 점수는 별도 검증)
+- [x] E 승인 기반 MOCK 조치·재검증 기본 코드 main 반영 (E v1.2 PR #23 및 실제 서버 조치·복구 미완료)
+- [ ] 신규 central-mgmt → ubuntu-a/rocky-b 통합 실행·JSON v1.2 집계·저장 E2E 증거 (개인 linux2 실습 성공과 구분)
 - [ ] 최종 보고서 및 발표
 
 ## 9. 프로젝트 산출물
