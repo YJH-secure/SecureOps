@@ -3,6 +3,9 @@
 from copy import deepcopy
 from uuid import uuid4
 
+from .handlers import SSH01MockHandler
+from .policies import REMEDIATION_POLICIES
+
 
 class MockFailure(RuntimeError):
     """실패 기록에 사용할 수 있는 고정된 모의 실패 코드."""
@@ -39,45 +42,25 @@ class MockBackend:
         # 관리 접근과 VM 복구 경로를 확보하지 못한 상태에서는 변경을 시작하지 않는다.
         if not self.access_verified or not self.snapshot_verified:
             raise MockFailure("access_or_snapshot_unverified")
-        if not self.include_verified or self.match_present:
-            raise MockFailure("ssh_include_or_match_unverified")
-        if not self.service_running:
-            raise MockFailure("mock_service_initially_unhealthy")
-        _, path, _ = plan.actions[0]
-        record = self.files.get(path)
-        if record is not None:
-            if record.get("type") != "regular" or record.get("acl") != "none":
-                raise MockFailure("ssh_file_type_or_acl_unverified")
-            if any(type(record.get(key)) is not int for key in ("uid", "gid", "mode")):
-                raise MockFailure("ssh_file_metadata_incomplete")
+        REMEDIATION_POLICIES[plan.check_id].handler.preflight(self, plan)
 
     def backup(self, plan):
         """입력 Plan 실행 전 가상 파일 상태와 root 로그인 값을 복사해 보관한다."""
         self._step("backup")
         token = "mock-backup-" + str(uuid4())
-        self._backups[token] = deepcopy((self.files, self.root_login, self.service_running))
+        self._backups[token] = REMEDIATION_POLICIES[plan.check_id].handler.snapshot(self)
         return token
 
     def apply(self, plan):
         """입력 Plan의 고정 작업을 메모리 상태에 적용한다. 반환값은 없다."""
         # 첫 변경 직후에도 실패를 주입해, 일부만 변경된 상태에서의 복구를 검증한다.
         self._step("before_apply")
-        _, path, value = plan.actions[0]
-        self.files[path] = {"uid": 0, "gid": 0, "mode": 0o600,
-                            "type": "regular", "acl": "none", "content": value}
-        self.root_login = "no"
-        self.service_running = False
-        self._step("apply")
-        self.service_running = True
+        REMEDIATION_POLICIES[plan.check_id].handler.apply(self, plan)
 
     def validate(self, plan):
         """가상 drop-in과 유효 설정값을 확인한다."""
         self._step("validate")
-        _, path, value = plan.actions[0]
-        if self.files[path]["content"] != value or self.root_login != "no":
-            raise MockFailure("mock_ssh_setting_invalid")
-        if not self.service_running:
-            raise MockFailure("mock_service_unhealthy_after_change")
+        REMEDIATION_POLICIES[plan.check_id].handler.validate(self, plan)
 
     def recheck(self, plan, *, schema_version="1.1"):
         """동일 항목의 모의 진단 결과를 반환한다."""
@@ -87,21 +70,7 @@ class MockBackend:
         if self.recheck_callback is not None:
             return self.recheck_callback(self.target_id, plan.check_id,
                                          deepcopy(self.files), self.root_login)
-        item = {"check_id": plan.check_id,
-                "status": "pass" if self.root_login == "no" else "vulnerable",
-                "evidence": "MOCK: effective PermitRootLogin value rechecked",
-                "recommendation": "MOCK: review the change before any VM test"}
-        if schema_version == "1.1":
-            item["severity"] = "high"
-        else:
-            # 가상 설정의 판정만 제공한다. 점수나 Vector를 추측하지 않는다.
-            item["cvss"] = {
-                "assessment_status": "not_applicable" if item["status"] == "pass" else "pending",
-                "version": None, "vector": None, "base_score": None, "rating": None, "source": None,
-                "rationale": ("MOCK: no vulnerable finding after recheck" if item["status"] == "pass"
-                              else "MOCK: CVSS applicability and evidence await review"),
-            }
-        return item
+        return REMEDIATION_POLICIES[plan.check_id].handler.recheck(self, plan, schema_version=schema_version)
 
     def request_recheck(self, plan, callback):
         """신뢰된 MOCK 콜백에 요청·가상 상태의 복사본을 전달하고 전체 보고서를 받는다.
@@ -119,16 +88,14 @@ class MockBackend:
     def restore(self, token):
         """백업 식별자 token을 받아 파일 상태와 root 로그인 값을 복원한다."""
         self._step("restore")
-        self.files, self.root_login, self.service_running = deepcopy(self._backups[token])
+        SSH01MockHandler.restore(self, self._backups[token])
 
     def verify_restore(self, token):
         """백업 식별자 token의 원본과 현재 가상 상태가 일치하는지 검증한다."""
         self._step("verify_restore")
-        if (self.files, self.root_login) != self._backups[token][:2]:
-            raise MockFailure("backup_restoration_mismatch")
+        SSH01MockHandler.verify_restore(self, self._backups[token])
 
     def verify_service(self):
         """복구 후 가상 SSH 서비스 상태를 확인한다."""
         self._step("verify_service")
-        if not self.service_running:
-            raise MockFailure("mock_service_unhealthy_after_restore")
+        SSH01MockHandler.verify_service(self)

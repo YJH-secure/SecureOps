@@ -1,0 +1,2481 @@
+[
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "674ef9a6bbbe0fda2b53d5a138f564e515ffc819ed64b04588d8ca4a1dab03af",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "c2087d89206d53191acdbaf5eadb1d412b76da0e989622c0d05b3353a6ac5c99"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "674ef9a6bbbe0fda2b53d5a138f564e515ffc819ed64b04588d8ca4a1dab03af",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "c2087d89206d53191acdbaf5eadb1d412b76da0e989622c0d05b3353a6ac5c99"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "08c4e0bffa3321e1239ad86a1305cd99b32685554bc0df3cb316238160337bae",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "d6afece76b22b7ea861b0e081da144bd4d067bc9d5e89f27cafb0ab345bbcf9d"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "08c4e0bffa3321e1239ad86a1305cd99b32685554bc0df3cb316238160337bae",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "d6afece76b22b7ea861b0e081da144bd4d067bc9d5e89f27cafb0ab345bbcf9d"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "error",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "35aad735a9a25e6a5aa79edbae4021875dc66718bb3b54640d22cccb43ebef67",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ecd9abd51266daf0fdf29cf66780d6d83a5fabc90679493b9487a2d9e6c5e8d9"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "35aad735a9a25e6a5aa79edbae4021875dc66718bb3b54640d22cccb43ebef67",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ecd9abd51266daf0fdf29cf66780d6d83a5fabc90679493b9487a2d9e6c5e8d9"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "3a2fa92cded5717fb6bfe48ca59b471ffa4111c2a2ed4ebf1a5de3a7e1a75e7f",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "5bb207446c52912dd82870b977993d62360fd08c708fbf91e40e4bfec299d9aa"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "3a2fa92cded5717fb6bfe48ca59b471ffa4111c2a2ed4ebf1a5de3a7e1a75e7f",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "5bb207446c52912dd82870b977993d62360fd08c708fbf91e40e4bfec299d9aa"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "not_applicable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "22388a2ce2ba094e42a51012f225a0d206ae27397ea29388196171d7ba10cb9e",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "f4b048c2280f5bf042cf3deadd857205ef5d6171ff4cd92d1b8e01fef54cd032"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "22388a2ce2ba094e42a51012f225a0d206ae27397ea29388196171d7ba10cb9e",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "f4b048c2280f5bf042cf3deadd857205ef5d6171ff4cd92d1b8e01fef54cd032"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "e487316cebce0f83da1317bcaf2010383cd76bcc2a2d16d2bc87905c33737fc0",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "d0a6cd85d1c7d40512df85b9215af7cc855790909bba9032c5b87c0e37de47a8"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "e487316cebce0f83da1317bcaf2010383cd76bcc2a2d16d2bc87905c33737fc0",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "d0a6cd85d1c7d40512df85b9215af7cc855790909bba9032c5b87c0e37de47a8"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "20e8bdcd4f20d5efe749b82caa81be41f51fefe78d90d85f43799c392375dd23",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "6e759c62bd7079361ada8a71ec463b59dfad8a5f02f1b6f8380203ac5f8ff539"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "20e8bdcd4f20d5efe749b82caa81be41f51fefe78d90d85f43799c392375dd23",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "6e759c62bd7079361ada8a71ec463b59dfad8a5f02f1b6f8380203ac5f8ff539"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "error",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "bb664dd756fddb2e878824c9c2078590381fdfb4ac70704472c6eb7548028af6",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "2641b26363421060ddab6b3a23f32f7dff93364fd236f226d7b828fc4ed87327"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "bb664dd756fddb2e878824c9c2078590381fdfb4ac70704472c6eb7548028af6",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "2641b26363421060ddab6b3a23f32f7dff93364fd236f226d7b828fc4ed87327"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "8c52bd5f926f56c9b3ed58c41fbfd18e485f2bc3edc67619bbd24398533d7e7c",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ccfaff6fc00109023ec1de8ce42c6f11e83242adc2d130d339803227d6abcc02"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "8c52bd5f926f56c9b3ed58c41fbfd18e485f2bc3edc67619bbd24398533d7e7c",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ccfaff6fc00109023ec1de8ce42c6f11e83242adc2d130d339803227d6abcc02"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "not_applicable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "a1f34b325a0694d12e351ce8171e86675c7d3e25169df038895253cf1418fa7d",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "908fdb4c04363c4f2d5fa76938769991a797edb0c53afcd3f9376deb08d8745a"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "a1f34b325a0694d12e351ce8171e86675c7d3e25169df038895253cf1418fa7d",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "908fdb4c04363c4f2d5fa76938769991a797edb0c53afcd3f9376deb08d8745a"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "rocky-9.8",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "47bcd63000dd4d75f32e0048788abe9f35fa2b63b94a61ea6e7063a4cf150410",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "unsupported_os",
+      "plan_id": "3c90599182fda58b9e720e6b0f898512e3fb489ae797c250cee5974ea46badf4"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "47bcd63000dd4d75f32e0048788abe9f35fa2b63b94a61ea6e7063a4cf150410",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "unsupported_os",
+      "plan_id": "3c90599182fda58b9e720e6b0f898512e3fb489ae797c250cee5974ea46badf4"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "OTHER-MOCK",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "eb854ab34822d73e579f623a5576230a1c92ade3adc5dbb859491a0c00cd38a2",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_found",
+      "plan_id": "c7e078f6d776cd64b315886c74610031d695489f98619eda85e49b11f1ce3a48"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "SSH-01",
+      "source_digest": "eb854ab34822d73e579f623a5576230a1c92ade3adc5dbb859491a0c00cd38a2",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_found",
+      "plan_id": "c7e078f6d776cd64b315886c74610031d695489f98619eda85e49b11f1ce3a48"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.1",
+    "os": "ubuntu-24.04",
+    "check_id": "UNKNOWN-MOCK",
+    "source_report": {
+      "schema_version": "1.1",
+      "scan_id": "scan-20261106-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-06T10:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "severity": "high",
+          "evidence": "예시: 유효 SSH 설정에서 root 직접 로그인이 허용됨 (MOCK)",
+          "recommendation": "관리자 승인 후 root 원격 로그인 제한 정책 검토",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "checked_at": "2026-11-06T09:59:55+09:00"
+        },
+        {
+          "check_id": "FILE-01",
+          "status": "needs_review",
+          "severity": "high",
+          "evidence": "예시: /etc/shadow 허용 권한 기준의 최종 승인이 필요함 (MOCK)",
+          "recommendation": "OS별 승인 기준 확정 후 재판정",
+          "category": "시스템·파일",
+          "title": "중요 파일 소유자·권한 점검",
+          "details": {
+            "files": [
+              {
+                "path": "/etc/shadow",
+                "judgement": "needs_review"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "UNKNOWN-MOCK",
+      "source_digest": "674ef9a6bbbe0fda2b53d5a138f564e515ffc819ed64b04588d8ca4a1dab03af",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_policy_not_allowed",
+      "plan_id": "489c05e20960e63944f8b68b34e5f533f06c41ca1883ecb5fdc3db8a515623e7"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "scan-20261106-001",
+      "check_id": "UNKNOWN-MOCK",
+      "source_digest": "674ef9a6bbbe0fda2b53d5a138f564e515ffc819ed64b04588d8ca4a1dab03af",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_policy_not_allowed",
+      "plan_id": "489c05e20960e63944f8b68b34e5f533f06c41ca1883ecb5fdc3db8a515623e7"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "5bb8c2cc62fbabdb26400b7c97a706e78b3df51229c5a56682d55544a5311c13",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "7953a32db971b8fb297553b636e6156bf55b47918c9b6134160f235fef8cdc21"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "5bb8c2cc62fbabdb26400b7c97a706e78b3df51229c5a56682d55544a5311c13",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "7953a32db971b8fb297553b636e6156bf55b47918c9b6134160f235fef8cdc21"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "03f5e5b3583acc6cbf36d8551ecadea94e3f585a6c668b65a9864fabc17727d8",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "b72cad41e1d185e5238edcbac3a713e95100e2d7e42382419df6ad6dacabd44e"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "03f5e5b3583acc6cbf36d8551ecadea94e3f585a6c668b65a9864fabc17727d8",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "b72cad41e1d185e5238edcbac3a713e95100e2d7e42382419df6ad6dacabd44e"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "error",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "2cbc089ce7ccfd66dfc0038f19c101a07d45941ff8bccfd6375199580d56ae72",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "285ecea14bb9f6b443c8f24d9a0392649c213db279ad54ea5acb0fc96b6b3221"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "2cbc089ce7ccfd66dfc0038f19c101a07d45941ff8bccfd6375199580d56ae72",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "285ecea14bb9f6b443c8f24d9a0392649c213db279ad54ea5acb0fc96b6b3221"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "needs_review",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "6fb7f4cb0233f96481685071c9fff936936886f737b18422cbba52f8b153d05e",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "69fbcecb621158fd0312d945ce3dce17f4baf53bf9cf5941380f78d53dbce60a"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "6fb7f4cb0233f96481685071c9fff936936886f737b18422cbba52f8b153d05e",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "69fbcecb621158fd0312d945ce3dce17f4baf53bf9cf5941380f78d53dbce60a"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "not_applicable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "0d41ccf2b7b62e74e3ef8abde2ff422305fbc6dfa920264be7216959cf752a06",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "62de7ac1802bfd1919c006010aed34c2e4537cf30b4772d66db8d7f9a6242af0"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "0d41ccf2b7b62e74e3ef8abde2ff422305fbc6dfa920264be7216959cf752a06",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "62de7ac1802bfd1919c006010aed34c2e4537cf30b4772d66db8d7f9a6242af0"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "791dee131deef5c4e37ebe64bc87d200a575359db311c0740d1068198c9fc888",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "99999883a671adf775e3e7e65c4ffaeefe81f25a04f6809dce9b85c87ea0c172"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "791dee131deef5c4e37ebe64bc87d200a575359db311c0740d1068198c9fc888",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "99999883a671adf775e3e7e65c4ffaeefe81f25a04f6809dce9b85c87ea0c172"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "c41ace43f77a555274946990ffe31b2583500402c67e3b32f493dea36a5cde1b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "c4aca27282981eb4cbc8203a4a238f177ec0a83ce5ddab8361620d4fa86dcc53"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "c41ace43f77a555274946990ffe31b2583500402c67e3b32f493dea36a5cde1b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "c4aca27282981eb4cbc8203a4a238f177ec0a83ce5ddab8361620d4fa86dcc53"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "error",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "94655a1a44d29ab612ec59fc134afcc64e0ddd606a1e983fa8a5cadb8a5bf23d",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "0812f1e5065c6061b057892875fc442c0e1eb972a5c30dc46cc86eb3cbea77e1"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "94655a1a44d29ab612ec59fc134afcc64e0ddd606a1e983fa8a5cadb8a5bf23d",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "0812f1e5065c6061b057892875fc442c0e1eb972a5c30dc46cc86eb3cbea77e1"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "needs_review",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "b5906bc641db6e57359754bf844263ea72b532abf932fd0ab9d9cf7c068d4186",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "a06453b0bd1e5490e4a0eea2c61709eea52064df26a3f8223de7411d69f6fe73"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "b5906bc641db6e57359754bf844263ea72b532abf932fd0ab9d9cf7c068d4186",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "a06453b0bd1e5490e4a0eea2c61709eea52064df26a3f8223de7411d69f6fe73"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04.5",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "not_applicable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "664b93a29642720f6b88c85045a9a763cf640c1684053c8a21bc5d8ba3ce94b3",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ab3179ad2a532a11104362990413cd614e3dd22757dc3af33c16bfd059c69205"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04.5",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "664b93a29642720f6b88c85045a9a763cf640c1684053c8a21bc5d8ba3ce94b3",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_vulnerable",
+      "plan_id": "ab3179ad2a532a11104362990413cd614e3dd22757dc3af33c16bfd059c69205"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "rocky-9.8",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "d284e1c22f5c486e187ef41420e298fa7bd70023d7011ef67e6abc8c6cacf85b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "unsupported_os",
+      "plan_id": "b9a432fd1dd07f6ad5be74e5bfb18521d6acf3dd5f7217331909f1ffced3ada5"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "rocky-9.8",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "d284e1c22f5c486e187ef41420e298fa7bd70023d7011ef67e6abc8c6cacf85b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "unsupported_os",
+      "plan_id": "b9a432fd1dd07f6ad5be74e5bfb18521d6acf3dd5f7217331909f1ffced3ada5"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "OTHER-MOCK",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "e5e22bb71d83f050007d3efc8d42c2998b1722b66a60f8450d2261be38a4a83b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_found",
+      "plan_id": "ef71100d4d1aad3baaf9b0e870f7ceec67286908efe71ec33e033fec6aa8be83"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "e5e22bb71d83f050007d3efc8d42c2998b1722b66a60f8450d2261be38a4a83b",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_not_found",
+      "plan_id": "ef71100d4d1aad3baaf9b0e870f7ceec67286908efe71ec33e033fec6aa8be83"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "UNKNOWN-MOCK",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "UNKNOWN-MOCK",
+      "source_digest": "5bb8c2cc62fbabdb26400b7c97a706e78b3df51229c5a56682d55544a5311c13",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_policy_not_allowed",
+      "plan_id": "88d95e30f8739afadd026d6f582693d6743314471a4d86d73739af58be49824e"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "UNKNOWN-MOCK",
+      "source_digest": "5bb8c2cc62fbabdb26400b7c97a706e78b3df51229c5a56682d55544a5311c13",
+      "policy_version": "",
+      "actions": [],
+      "skip_reason": "check_policy_not_allowed",
+      "plan_id": "88d95e30f8739afadd026d6f582693d6743314471a4d86d73739af58be49824e"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "MOCK: compliance only"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "base_score": 9.8,
+            "rating": "critical",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "계산기 검증 전용 합성 메트릭. 실제 구성·CVE 탐지 주장 금지"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "fd8e9b02ced9d5bfa8674bb9bb5b7688f886358602f2cc2340cd172c1b43a851",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "a6010412ac2291ab274eabea78271d68fae6053b567dcaa48db66593eaacf7a5"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "fd8e9b02ced9d5bfa8674bb9bb5b7688f886358602f2cc2340cd172c1b43a851",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "a6010412ac2291ab274eabea78271d68fae6053b567dcaa48db66593eaacf7a5"
+    },
+    "equal": true
+  },
+  {
+    "schema_version": "1.2",
+    "os": "ubuntu-24.04",
+    "check_id": "SSH-01",
+    "source_report": {
+      "schema_version": "1.2",
+      "scan_id": "mock-cvss-20261110-001",
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scanned_at": "2026-11-10T12:00:00+09:00",
+      "results": [
+        {
+          "check_id": "SSH-01",
+          "status": "vulnerable",
+          "category": "계정·인증",
+          "title": "SSH root 원격 로그인 제한",
+          "evidence": "MOCK: root 직접 로그인 제한 정책을 충족하지 않음. CVSS 점수 미검토.",
+          "recommendation": "팀 정책 및 관리자 승인에 따라 개선 검토",
+          "cvss": {
+            "assessment_status": "pending",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "정책 위반은 확인되었으나 구체적 공격 전제·영향이 검증되지 않아 CVSS 미산정"
+          }
+        },
+        {
+          "check_id": "ACC-01",
+          "status": "pass",
+          "category": "계정·인증",
+          "title": "비밀번호 정책 적용 여부",
+          "evidence": "MOCK: 승인된 설정 기준 충족",
+          "recommendation": "현 상태 유지",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "취약 판정이 아니므로 CVSS 평가 대상 아님"
+          }
+        },
+        {
+          "check_id": "LOG-01",
+          "status": "vulnerable",
+          "category": "시스템·서비스",
+          "title": "로그 보관 정책",
+          "evidence": "MOCK: 내부 로그 보관 정책 미준수",
+          "recommendation": "관리자 검토 후 보관 정책 개선",
+          "cvss": {
+            "assessment_status": "not_applicable",
+            "version": null,
+            "vector": null,
+            "base_score": null,
+            "rating": null,
+            "source": null,
+            "rationale": "본 사례는 내부 준수 정책 위반이며 독립된 기술적 취약점의 CVSS 적용 근거가 부족함"
+          }
+        },
+        {
+          "check_id": "CVSS-MOCK-01",
+          "status": "vulnerable",
+          "category": "평가 엔진 테스트",
+          "title": "공식 CVSS v3.1 Base 메트릭 계산용 합성 사례",
+          "evidence": "MOCK ONLY: 네트워크 원격 공격 가능, 권한·사용자 개입 불필요, Scope unchanged, C/I/A High라고 가정한 평가기 테스트 벡터. 실제 서버 취약점 아님.",
+          "recommendation": "정식 계산기 재현 시험에서만 사용. 실제 진단 및 자동 조치 대상 제외.",
+          "cvss": {
+            "assessment_status": "scored",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+            "base_score": 0.0,
+            "rating": "none",
+            "source": "FIRST CVSS v3.1 specification mathematical example: https://www.first.org/cvss/v3-1/specification-document",
+            "rationale": "MOCK: zero-impact calculator fixture"
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "1a2a41a6abc329c2b415975648d65c80fab465f48b99867944e94d3aa40d81af",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "78b8bed9a6a21a986d45fd16581378f76f693f95858a9ab32e9e5729cec21f95"
+    },
+    "refactored": {
+      "target_id": "ubuntu-a-mock",
+      "os": "ubuntu-24.04",
+      "scan_id": "mock-cvss-20261110-001",
+      "check_id": "SSH-01",
+      "source_digest": "1a2a41a6abc329c2b415975648d65c80fab465f48b99867944e94d3aa40d81af",
+      "policy_version": "ssh-01-proposal-v1",
+      "actions": [
+        [
+          "ssh_dropin",
+          "/etc/ssh/sshd_config.d/01-secureops.conf",
+          "PermitRootLogin no\n"
+        ]
+      ],
+      "skip_reason": null,
+      "plan_id": "78b8bed9a6a21a986d45fd16581378f76f693f95858a9ab32e9e5729cec21f95"
+    },
+    "equal": true
+  }
+]
