@@ -1,0 +1,15 @@
+[
+  {
+    "mode": "default",
+    "stdout_encoding": "cp949",
+    "utf8_json": false,
+    "error": "UnicodeDecodeError",
+    "outcome_when_decoded_with_stdout_encoding": "success"
+  },
+  {
+    "mode": "utf8",
+    "stdout_encoding": "utf-8",
+    "utf8_json": true,
+    "outcome": "success"
+  }
+]

@@ -9,8 +9,9 @@ from uuid import uuid4
 
 from .contract import timestamp, validate_report
 from .mock import MockBackend, MockFailure
+from .policies import REMEDIATION_POLICIES
 
-SUPPORTED_OS = {"ubuntu-24.04", "ubuntu-24.04.5"}
+SUPPORTED_OS = set(REMEDIATION_POLICIES["SSH-01"].supported_os)
 
 
 def digest(value):
@@ -50,9 +51,10 @@ def build_plan(report, check_id):
     item = next((item for item in report["results"] if item["check_id"] == check_id), None)
     # 진단 결과가 유효해도 대상·정책·판정에 따라 조치에서 제외할 수 있다.
     skip_reason = None
-    if check_id != "SSH-01":
+    policy = REMEDIATION_POLICIES.get(check_id)
+    if policy is None:
         skip_reason = "check_policy_not_allowed"
-    elif report["os"] not in SUPPORTED_OS:
+    elif report["os"] not in policy.supported_os:
         skip_reason = "unsupported_os"
     elif item is None:
         skip_reason = "check_not_found"
@@ -60,11 +62,9 @@ def build_plan(report, check_id):
         skip_reason = "check_not_vulnerable"
 
     # SSH-01은 현재 Ubuntu 모의 조치에서만 허용한다.
-    actions = () if skip_reason else (
-        ("ssh_dropin", "/etc/ssh/sshd_config.d/01-secureops.conf", "PermitRootLogin no\n"),
-    )
+    actions = () if skip_reason else policy.actions
     return Plan(report["target_id"], report["os"], report["scan_id"], check_id, digest(report),
-                "ssh-01-proposal-v1" if actions else "", actions, skip_reason)
+                policy.policy_version if actions else "", actions, skip_reason)
 
 
 @dataclass(frozen=True)

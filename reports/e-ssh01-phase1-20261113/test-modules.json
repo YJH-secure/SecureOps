@@ -1,0 +1,16 @@
+{
+  "checks": 29,
+  "test_cvss": 11,
+  "test_cvss_assessment": 13,
+  "test_cvss_v12": 28,
+  "test_execution_history_fields": 10,
+  "test_execution_history_store": 18,
+  "test_execution_history_versions": 10,
+  "test_remediation": 22,
+  "test_remediation_b_v12_integration": 4,
+  "test_remediation_core_integration": 2,
+  "test_remediation_execution_history": 20,
+  "test_remediation_execution_integration": 19,
+  "test_remediation_policy_handler": 12,
+  "test_remediation_v12": 18
+}
