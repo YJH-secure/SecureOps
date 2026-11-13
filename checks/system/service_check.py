@@ -24,6 +24,13 @@ LISTENERS_COMMAND = ('ss', '-H', '-lntup')
 SERVICE_NAME = re.compile(r'[A-Za-z0-9@_.:\\-]+\.service')
 PROCESS_NAME = re.compile(r'\("([A-Za-z0-9_.@ +:/-]+)",pid=[0-9]+,fd=[0-9]+\)')
 
+_JOURNAL_USAGE_COMMAND = ('journalctl', '--no-pager', '--disk-usage')
+_JOURNAL_VISIBILITY_NOTICE = (
+    'Hint: You are currently not seeing messages from other users and the system.',
+    "Users in groups 'adm', 'systemd-journal' can see all messages.",
+    'Pass -q to turn off this notice.',
+)
+
 
 def parse_active_units(output):
     """Parse UNIT LOAD ACTIVE SUB, without exporting descriptions."""
@@ -113,7 +120,16 @@ def _read_command(command):
     completed = subprocess.run(command, capture_output=True, encoding='utf-8',
                                env=env, timeout=10, check=True)
     if completed.stderr.strip():
-        raise ValueError('command reported a diagnostic on stderr')
+        error = ValueError('command reported a diagnostic on stderr')
+        if (completed.returncode == 0 and command == _JOURNAL_USAGE_COMMAND
+                and len(completed.stderr) <= 512
+                and tuple(line.strip() for line in completed.stderr.strip().splitlines())
+                == _JOURNAL_VISIBILITY_NOTICE):
+            # Explain the rejected collection without attaching raw command output.
+            error.collection_reason = 'journal_visibility_limited'
+            error.command_exit_code = 0
+            error.visibility = 'partial'
+        raise error
     return completed.stdout
 
 
