@@ -6,7 +6,7 @@
     </marker>
   </defs>
   <rect x="0" y="0" width="1000" height="720" fill="#ffffff"/>
-  <text x="24" y="32" font-size="18" font-weight="bold" fill="#2C2C2A">GNS3 계획 구성도 — 초안 · 미구축 (IP 대역은 제안값)</text>
+  <text x="24" y="32" font-size="18" font-weight="bold" fill="#2C2C2A">GNS3 계획 구성도 v0.3 — 초안 · 미구축 (IP 대역은 제안값)</text>
 
   <ellipse cx="500" cy="78" rx="110" ry="24" fill="#F1EFE8" stroke="#888780"/>
   <text x="500" y="83" font-size="13" fill="#444441" text-anchor="middle">인터넷 (패키지 업데이트용)</text>
@@ -82,7 +82,7 @@
 
   <rect x="420" y="420" width="160" height="150" rx="8" fill="#F1EFE8" stroke="#888780" stroke-dasharray="4 3"/>
   <text x="500" y="442" font-size="14" font-weight="bold" fill="#444441" text-anchor="middle">Rocky Server (신규)</text>
-  <text x="500" y="462" font-size="12" fill="#444441" text-anchor="middle">내부 서비스</text>
+  <text x="500" y="462" font-size="12" fill="#444441" text-anchor="middle">내부 DB (MariaDB 후보)</text>
   <text x="500" y="480" font-size="12" fill="#5F5E5A" text-anchor="middle">+ FTP (내부 전용)</text>
   <text x="500" y="500" font-size="12" fill="#5F5E5A" text-anchor="middle">10.30.0.10</text>
   <text x="500" y="518" font-size="12" fill="#5F5E5A" text-anchor="middle">2 vCPU · 2GB · 30GB</text>
@@ -98,6 +98,9 @@
 
   <text x="820" y="600" font-size="12" fill="#3C3489" text-anchor="middle">SSH 22 → DMZ·내부 (관리망에서만)</text>
 
+  <path d="M105 570 V588 H500 V574" fill="none" stroke="#993556" stroke-width="1.6" stroke-dasharray="7 3 2 3" marker-end="url(#ar)"/>
+  <text x="180" y="609" font-size="12" font-weight="bold" fill="#993556" text-anchor="middle">설계 예외: 웹 → DB TCP 3306만</text>
+
   <rect x="30" y="644" width="18" height="14" rx="2" fill="#E1F5EE" stroke="#0F6E56"/>
   <text x="56" y="656" font-size="12" fill="#444441">기존 VM 재사용</text>
   <rect x="170" y="644" width="18" height="14" rx="2" fill="#F1EFE8" stroke="#888780" stroke-dasharray="3 2"/>
@@ -108,5 +111,7 @@
   <text x="528" y="656" font-size="12" fill="#444441">외부 시험 트래픽</text>
   <line x1="650" y1="651" x2="680" y2="651" stroke="#854F0B" stroke-width="1.5" stroke-dasharray="2 4"/>
   <text x="688" y="656" font-size="12" fill="#444441">로그 전송</text>
+  <line x1="770" y1="651" x2="800" y2="651" stroke="#993556" stroke-width="1.6" stroke-dasharray="7 3 2 3"/>
+  <text x="808" y="656" font-size="12" fill="#444441">설계 예외 (승인 전)</text>
   <text x="30" y="690" font-size="12" fill="#5F5E5A">IP 대역·인터페이스 이름은 계획 초안이며, 실제 OPNsense 인터페이스명(vmx0 등)은 설치 후 확정한다. 실제 VM·네트워크 변경은 별도 승인 후 진행.</text>
 </svg>

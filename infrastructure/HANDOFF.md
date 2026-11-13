@@ -176,6 +176,34 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 - 현재 `main`의 `remediation/engine.py`에 `str | None` 필드가 있다. 다만 조치 엔진이 어디서 실행되는지는 팀장 인터페이스 확정 후 다시 확인한다.
 - 대상 서버에서는 명령만 실행하고, 결과를 `central-mgmt`(3.12)에서 파싱하는 방식이면 이 문제는 없다.
 
+### 3-3. C 모듈(FILE/SVC/FW/LOG) 신규 VM 배치·실행 (2026-11-12, 팀장 조건부 승인)
+
+`secureops-scan` **일반 권한**으로만 실행했다(sudo 미사용, sudoers 변경 없음). C 담당 인수인계 패키지(README·MANIFEST·VERIFY_READONLY)의 절차를 따랐고, 배치 경로만 팀장 승인에 따라 scan 계정 홈으로 바꿨다.
+
+| 항목 | 값 |
+| --- | --- |
+| 기준 소스 | `main` `2fac2a02edb1edf08cf4435138f4a1d543e33ba2`, `checks/` 16개 파일 Git blob 일치 |
+| Runtime ZIP SHA-256 | `b5b413f72f9b8b9dad552ade1d5b46c0aa0e0796c243491e832c8cd1cbb78132` (전송 전후 두 대상에서 일치) |
+| 배치 경로 | `/home/secureops-scan/secureops-c-verify/2fac2a02/` (700), 배치 후 `VERIFY_READONLY` 통과(불일치 0, 추가 파일 0) |
+| 실행 | `central-mgmt` → `ssh -o BatchMode=yes <별칭>` → `python3 -B -m checks.system.<모듈> [--result-version 1.2]`, `umask 077` |
+| 실행 시각 | 2026-11-12T08:22:06Z (KST 17:22). `ubuntu-a` 신규 복구 기준(`01-…-passwd` 스냅샷 10:03, 백업 10:24) 이후 |
+| 실행 환경 | `ubuntu-a` Python 3.12.3 / `rocky-b` Python **3.9.25** (3.9 런타임 실행 확인), 두 대상 모두 `LANG=ko_KR.UTF-8`, `LC_ALL` 미설정 |
+| 증거 위치 | 각 대상 `~/secureops-c-evidence/2fac2a02-20261112T082206Z-<PID>/` (`ubuntu-a` 4832, `rocky-b` 7857). `central-mgmt` 회수본과 SHA-256 대조 일치(2026-11-13) |
+
+**결과 (두 대상 동일, 모듈 4개 × v1.1·v1.2 = 8회, 모두 exit 0·stderr 0바이트·JSON 정상)**
+
+| 항목 | status (v1.1 = v1.2) | 사유 |
+| --- | --- | --- |
+| FILE-01 | `needs_review` | `/etc/passwd` 소유자·권한 pass, ACL·링크 정책 pending. `/etc/shadow`는 후보 정책과 일치하나 정책 미승인(`candidate`) |
+| SVC-01 | `needs_review` | `policy_pending`, `target_context_missing` (위반·오류 0) |
+| FW-01 | `error` | `ubuntu-a`: `ufw`·`nft` permission_denied / `rocky-b`: `firewalld` exit 253, `nft` permission_denied. `ss` 리스너 수집은 성공 |
+| LOG-01 | `error` | `journal_disk_usage` 단계 실패 — `ubuntu-a` **ValueError**(출력 해석 오류로 보임), `rocky-b` exit 1(권한 부족) |
+
+- CLI exit 0은 정상 종료라는 뜻이다. `needs_review`·`error`는 **양호 판정이 아니다.** v1.2의 CVSS는 모두 `not_applicable`(null).
+- **로케일 주의 (미확인):** 비대화식 SSH 실행 환경이 `ko_KR.UTF-8`이라 명령 출력이 한국어로 나온다(같은 실행의 `stat` 출력 `일반 파일`). `ubuntu-a` LOG-01의 ValueError는 `journalctl --disk-usage` 한국어 출력 파싱 실패일 가능성이 있어 C 담당에 확인을 요청했다. 수동 원격 명령에는 `LC_ALL=C`를 붙인다.
+- C 담당 전달용 (2026-11-13 준비): 비식별본(호스트명·계정·사설 IP·MAC 치환, 잔여 검사 0건)과 요약 문서. 원시 결과는 저장소에 넣지 않는다.
+- 증거: `central-mgmt-c-deploy-261112.png`(전송·해시·VERIFY), `central-mgmt-c-file01-{ubuntu-a,rocky-b}-261112.png`(환경·FILE-01), `central-mgmt-c-rest-{ubuntu-a,rocky-b}-261112.png`(SVC·FW·LOG)
+
 ## 4. OS별 명령 경로와 `secureops-scan` 권한
 
 2026-11-11 14:34, `central-mgmt`에서 `secureops-scan`으로 실측했다. sudoers는 README 5-6의 **초안 v0**이며, 팀장 승인 없이 바꾸지 않는다.
@@ -248,12 +276,14 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | VM 백업 ZIP 내부 구성, 7-Zip 검사, 원본 비교 | **완료** (README 7-1) |
 | 백업 복원 시험 | **완료** (3대, README 7-2). 네트워크 격리는 작업자 확인 기준 |
 | sudoers 파일 권한 `0440`, `visudo -c` 증거 | **완료** (`<id>-sudoers-perm-261111.png`) |
-| `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | **완료** (2026-11-12, 팀장 승인, README 7-3). `ubuntu-a` 일반 복구 기준은 `01-ssh-security-configured-passwd` 스냅샷과 `Target-Ubuntu-261112.zip`. 기존 스냅샷 `00`·`01`과 기존 백업에는 과거 해시가 남아 있어 일반 복구에 쓰지 않음 |
+| `ubuntu-a` `autoinst.iso` 삭제, `user1` 비밀번호 변경 | **완료** (2026-11-12, 팀장 승인, README 7-3). `ubuntu-a` 일반 복구 기준은 `01-ssh-security-configured-passwd` 스냅샷과 `Target-Ubuntu.zip`(README 7-3 신규 백업). 기존 스냅샷 `00`·`01`과 기존 백업에는 과거 해시가 남아 있어 일반 복구에 쓰지 않음 |
 | 과거 해시가 남은 스냅샷·백업 삭제 | 팀장 별도 승인 대기 (현재 유지·접근 제한) |
 | SSH-01 수집기 `/usr/local/sbin/secureops-ssh01-read` 및 전용 sudoers | 팀장 검토 후 적용 예정. 2026-11-12 재확인 시에도 두 대상 모두 미설치, 전용 sudoers 없음, 기존 scan sudoers 보존(2-5). 실행 조건(`/usr/bin/python3`, `/usr/local/sbin`)은 충족. Rocky sudo `secure_path`에 `/usr/local/sbin`이 없으므로 전체 경로로 호출 |
 | `central-mgmt` 저장소 배치, 의존성 설치 | 미착수 (3-1의 결정 필요) |
 | 대상 서버에 실제 포트 접속 시험 | 미실시 |
 | sudoers 추가 후보 (4-3) | 팀장 승인 대기 |
+| C 모듈 신규 VM 실행 (3-3) | **완료** (2026-11-12, scan 일반 권한). FW-01·LOG-01 추가 권한은 팀장 결정으로 보류. C 담당 전달용 비식별 증거·요약 준비(2026-11-13) |
+| SSH-01 수집기 설치 전 스냅샷 | 이름 제안 `02-pre-ssh01-collector-20261116`(팀장). **설치 승인은 별도** |
 | `secureops-fix` 조치 경로 | SSH-01 경로만 있으며, `/etc/secureops/approved/`는 아직 만들지 않아 실제로는 동작하지 않음 |
 
 ## 변경 이력
@@ -267,3 +297,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-12 | 2-5 중앙 실행기 연동값·SSH-01 평가 문맥·수집기 현황 추가, 4-1 `getfacl`·journal `du` 실측, 4-3 C 요청 재측정 결과로 후보 확정(PR #24 수집기 포함), 6장 수집기 상태 갱신 |
 | 2026-11-12 | 팀장 결정 반영: `targets.json`·`ssh01_context` 확정, 전용 sudoers 경로 `secureops-ssh01-read`, C 추가 권한 보류. 신규 VM 대상 서버 scan 홈에 저장소 없음 확인 |
 | 2026-11-12 | 2-5 중앙 실행기 SSH 계층 사전 점검 결과와 실행 의존성·예상 결과 추가 |
+| 2026-11-13 | 3-3 C 모듈 신규 VM 배치·실행 결과(환경·status·사유·로케일 주의·증거 5장) 추가, 6장 신규 백업 파일명 `Target-Ubuntu.zip` 정정, SSH-01 설치 전 스냅샷 이름 제안 기록 |
