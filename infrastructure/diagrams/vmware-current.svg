@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="'Malgun Gothic','Noto Sans KR','Apple SD Gothic Neo',sans-serif">
-  <title>SecureOps 현재 구성 (VMware Workstation, 2026-11-12 실측)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" font-family="'Malgun Gothic','Noto Sans KR','Apple SD Gothic Neo',sans-serif">
+  <title>SecureOps 현재 구성 (VMware Workstation, 구축 완료, 2026-11-13 기준)</title>
   <defs>
     <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M2 1L8 5L2 9" fill="none" stroke="#534AB7" stroke-width="1.6"/>
     </marker>
   </defs>
-  <rect x="0" y="0" width="900" height="440" fill="#ffffff"/>
-  <text x="24" y="32" font-size="18" font-weight="bold" fill="#2C2C2A">현재 구성 — VMware Workstation (2026-11-12 실측)</text>
+  <rect x="0" y="0" width="900" height="560" fill="#ffffff"/>
+  <text x="24" y="32" font-size="18" font-weight="bold" fill="#2C2C2A">현재 구성 — VMware Workstation · 구축 완료 (2026-11-13 기준, 실측)</text>
 
   <rect x="20" y="50" width="860" height="370" rx="10" fill="#F7F8FA" stroke="#9AA3AD" stroke-dasharray="6 4"/>
   <text x="36" y="76" font-size="13" fill="#5F5E5A">호스트 PC · Windows 11 · VMware Workstation</text>
@@ -29,7 +29,7 @@
     <text x="190" y="270" font-size="12" fill="#0F6E56" text-anchor="middle">Ubuntu 24.04.5 Server</text>
     <text x="190" y="288" font-size="12" fill="#0F6E56" text-anchor="middle">192.168.10.10 · ens33</text>
     <text x="190" y="306" font-size="12" fill="#0F6E56" text-anchor="middle">2 vCPU · 4GB · 40GB</text>
-    <text x="190" y="326" font-size="12" fill="#085041" text-anchor="middle">중앙 실행기 · 결과 저장</text>
+    <text x="190" y="326" font-size="12" fill="#085041" text-anchor="middle">중앙 진단 · SSH 유일 출발지</text>
   </g>
   <g>
     <rect x="340" y="226" width="220" height="120" rx="8" fill="#E1F5EE" stroke="#0F6E56"/>
@@ -51,4 +51,17 @@
   <path d="M190 346 V370 H450 V350" fill="none" stroke="#534AB7" stroke-width="1.6" marker-end="url(#ar)"/>
   <path d="M450 370 H710 V350" fill="none" stroke="#534AB7" stroke-width="1.6" marker-end="url(#ar)"/>
   <text x="450" y="396" font-size="12" fill="#3C3489" text-anchor="middle">SSH 22 · 출발지 192.168.10.10 고정 · secureops-scan(scan 키, 진단·읽기) / secureops-fix(fix 키, 승인 후에만)</text>
+
+  <rect x="20" y="430" width="425" height="118" rx="8" fill="#E1F5EE" stroke="#0F6E56"/>
+  <text x="36" y="454" font-size="13" font-weight="bold" fill="#085041">구축 완료 (실측 증거 보유)</text>
+  <text x="36" y="476" font-size="12" fill="#085041">· VM 3대 · 고정 IP · VMnet8 NAT 단일망</text>
+  <text x="36" y="494" font-size="12" fill="#085041">· 전용 계정 scan/fix · Ed25519 키 인증 · sudoers v0</text>
+  <text x="36" y="512" font-size="12" fill="#085041">· 스냅샷 · 백업 SHA-256 · 복원 시험</text>
+  <text x="36" y="530" font-size="12" fill="#085041">· C 모듈 4종 대상 2대 실행 (일반 권한)</text>
+
+  <rect x="455" y="430" width="425" height="118" rx="8" fill="#F1EFE8" stroke="#888780" stroke-dasharray="5 3"/>
+  <text x="471" y="454" font-size="13" font-weight="bold" fill="#444441">예정 · 미구축</text>
+  <text x="471" y="476" font-size="12" fill="#5F5E5A">· 11/16 SSH-01 수집기 설치 (팀장 승인 후)</text>
+  <text x="471" y="494" font-size="12" fill="#5F5E5A">· 중앙 실행기 → B 판정 → D 저장·재조회</text>
+  <text x="471" y="512" font-size="12" fill="#5F5E5A">· 11/19~ GNS3 망 분리 (별도 계획도)</text>
 </svg>

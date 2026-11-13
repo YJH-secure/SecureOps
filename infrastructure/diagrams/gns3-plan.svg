@@ -54,11 +54,11 @@
   <text x="820" y="333" font-size="12" fill="#0C447C" text-anchor="middle">관리 스위치 (GNS3)</text>
 
   <rect x="30" y="370" width="300" height="250" rx="10" fill="#FDF3EE" stroke="#993C1D" stroke-dasharray="6 4"/>
-  <text x="44" y="392" font-size="13" font-weight="bold" fill="#712B13">DMZ · 10.20.0.0/24 · GW .1</text>
+  
   <rect x="350" y="370" width="300" height="250" rx="10" fill="#EEF7F2" stroke="#0F6E56" stroke-dasharray="6 4"/>
-  <text x="364" y="392" font-size="13" font-weight="bold" fill="#085041">내부 · 10.30.0.0/24 · GW .1</text>
+  
   <rect x="670" y="370" width="300" height="250" rx="10" fill="#F2F1FC" stroke="#534AB7" stroke-dasharray="6 4"/>
-  <text x="684" y="392" font-size="13" font-weight="bold" fill="#3C3489">관리 · 10.40.0.0/24 · GW .1</text>
+  
 
   <path d="M180 342 V404 M105 404 H255 M105 404 V420 M255 404 V420" fill="none" stroke="#185FA5" stroke-width="1.5"/>
   <line x1="500" y1="342" x2="500" y2="420" stroke="#185FA5" stroke-width="1.5"/>
@@ -114,4 +114,9 @@
   <line x1="770" y1="651" x2="800" y2="651" stroke="#993556" stroke-width="1.6" stroke-dasharray="7 3 2 3"/>
   <text x="808" y="656" font-size="12" fill="#444441">설계 예외 (승인 전)</text>
   <text x="30" y="690" font-size="12" fill="#5F5E5A">IP 대역·인터페이스 이름은 계획 초안이며, 실제 OPNsense 인터페이스명(vmx0 등)은 설치 후 확정한다. 실제 VM·네트워크 변경은 별도 승인 후 진행.</text>
+
+  <!-- zone headers drawn last so switch lines pass behind them -->
+  <text stroke="#FDF3EE" stroke-width="8" stroke-linejoin="round" paint-order="stroke" x="44" y="392" font-size="13" font-weight="bold" fill="#712B13">DMZ · 10.20.0.0/24 · GW .1</text>
+  <text stroke="#EEF7F2" stroke-width="8" stroke-linejoin="round" paint-order="stroke" x="364" y="392" font-size="13" font-weight="bold" fill="#085041">내부 · 10.30.0.0/24 · GW .1</text>
+  <text stroke="#F2F1FC" stroke-width="8" stroke-linejoin="round" paint-order="stroke" x="684" y="392" font-size="13" font-weight="bold" fill="#3C3489">관리 · 10.40.0.0/24 · GW .1</text>
 </svg>
