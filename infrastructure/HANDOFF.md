@@ -100,6 +100,7 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 - `UseDNS no`이면 sshd는 클라이언트 이름을 DNS로 찾지 않고, `Match Host`도 클라이언트 **IP 문자열**로 평가한다. 실제 출발지는 2-4의 `192.168.10.10`이다.
 - Rocky의 crypto-policies 파일은 시스템이 만드는 암호 알고리즘 목록이라 이번 검색 범위에 넣지 않았다.
 - 증거: `ubuntu-a-ssh01-context-261112.png`, `rocky-b-ssh01-context-261112.png`
+- **2026-11-13 재확인 (팀장 요청):** central 별칭 접속의 `SSH_CONNECTION` 출발지 `192.168.10.10`, `sudo -n /usr/sbin/sshd -T` 기준 `usedns no`·`permitrootlogin without-password`(두 대상), 대상 콘솔에서 `Match` 없음(`grep exit=1`)과 `sshd -T -C user=root,host=192.168.10.10,addr=192.168.10.10` → `without-password`. `UseDNS no`이므로 host도 IP 문자열로 평가되어 `ssh01_context`의 host·addr가 모두 `192.168.10.10`이다. PR #24 `520f3c9` 수집기 `ROOT_CONTEXT`(설치본)와 PR #26 `b3611d7` 스키마 기준 `targets.json` 초안의 `ssh01_context`가 글자 단위로 일치한다(초안·설치본은 저장소 밖 보관). 증거: `central-mgmt-ssh01-context-recheck-261113.png`, `ubuntu-a-ssh01-context-recheck-261113.png`, `rocky-b-ssh01-context-recheck-261113.png`
 
 **`targets.json` 값 (2026-11-12 팀장 확정, PR #26 `central_ssh01_runner.py` 기준)**
 
@@ -194,14 +195,17 @@ ssh rocky-b 'sudo -n /usr/bin/tail -n 200 /var/log/secure' | grep 'Accepted publ
 
 | 항목 | status (v1.1 = v1.2) | 사유 |
 | --- | --- | --- |
-| FILE-01 | `needs_review` | `/etc/passwd` 소유자·권한 pass, ACL·링크 정책 pending. `/etc/shadow`는 후보 정책과 일치하나 정책 미승인(`candidate`) |
+| FILE-01 | `needs_review` | `/etc/passwd`: owner·permissions·acl pass, **group needs_review**(그룹 승인 기준 미확정). `/etc/shadow`: 기본 ACL pass, 후보 owner·permissions·group과 최종 policy_approval이 needs_review. Rocky `0:0 0000`은 후보 일치일 뿐 운영 정책 승인이 아님 |
 | SVC-01 | `needs_review` | `policy_pending`, `target_context_missing` (위반·오류 0) |
-| FW-01 | `error` | `ubuntu-a`: `ufw`·`nft` permission_denied / `rocky-b`: `firewalld` exit 253, `nft` permission_denied. `ss` 리스너 수집은 성공 |
-| LOG-01 | `error` | `journal_disk_usage` 단계 실패 — `ubuntu-a` **ValueError**(출력 해석 오류로 보임), `rocky-b` exit 1(권한 부족) |
+| FW-01 | `error` | `ubuntu-a`: `ufw`·`nft` permission_denied / `rocky-b`: `firewalld` exit 253(**NOT_AUTHORIZED**, firewall-cmd 공식 정의), `nft` permission_denied. `ss` 리스너 수집은 성공 |
+| LOG-01 | `error` | `journal_disk_usage` 단계 실패 — `ubuntu-a` **ValueError**(원인 미확정), `rocky-b` exit 1 |
 
 - CLI exit 0은 정상 종료라는 뜻이다. `needs_review`·`error`는 **양호 판정이 아니다.** v1.2의 CVSS는 모두 `not_applicable`(null).
-- **로케일 주의 (미확인):** 비대화식 SSH 실행 환경이 `ko_KR.UTF-8`이라 명령 출력이 한국어로 나온다(같은 실행의 `stat` 출력 `일반 파일`). `ubuntu-a` LOG-01의 ValueError는 `journalctl --disk-usage` 한국어 출력 파싱 실패일 가능성이 있어 C 담당에 확인을 요청했다. 수동 원격 명령에는 `LC_ALL=C`를 붙인다.
-- C 담당 전달용 (2026-11-13 준비): 비식별본(호스트명·계정·사설 IP·MAC 치환, 잔여 검사 0건)과 요약 문서. 원시 결과는 저장소에 넣지 않는다.
+- **`ubuntu-a` LOG-01 ValueError (원인 미확정):** C 코드(`_read_command`)는 하위 명령에 이미 `LC_ALL=C`를 적용하므로 로케일 원인 가설은 철회한다. 이 코드는 하위 명령에 stderr가 있거나 출력 형식이 맞지 않으면 ValueError를 낸다. 일반 계정의 `journalctl`은 "다른 사용자·시스템 메시지가 보이지 않는다"는 안내(4-1)를 내므로, C 요청에 따라 `LC_ALL=C SYSTEMD_COLORS=0 /usr/bin/journalctl --no-pager --disk-usage`의 stdout·stderr·exit를 분리 수집해 구분한다. **팀장 승인(2026-11-13):** `ubuntu-a`에서 scan 일반 계정으로 1회, sudo·권한·설정 변경 없음, 결과는 C 담당에게 비공개 전달. Rocky 추가 실행은 Ubuntu 결과 확인 후 별도 협의.
+- **수집 결과 (2026-11-13 11:47, 1회):** exit `0`, stdout `Archived and active journals take up 38.3M in the file system.`, stderr 185바이트(일반 계정 권한 안내 `Hint: You are currently not seeing messages from other users and the system.` 등 3줄). 원본은 central에만 보관, C 담당에 비공개 전달. 원인 판단은 C 담당. 증거: `central-mgmt-c-journal-ubuntu-a-261113.png`
+- FW-01 `NOT_AUTHORIZED`·permission_denied는 **권한 부족으로 수집하지 못했다는 뜻**이며, 양호(pass)나 실제 취약점(vulnerable)으로 해석하지 않는다.
+- 비대화식 SSH 실행 환경은 `LANG=ko_KR.UTF-8`이다. 수동 원격 명령에는 `LC_ALL=C`를 붙인다.
+- C 담당 전달 (2026-11-13): 비식별본(호스트명·계정·사설 IP·MAC 치환, 잔여 검사 0건)과 요약 문서. C 검토 결과 ZIP SHA-256 일치, JSON 16개 v1.1/v1.2 스키마 통과, D `62d1bf7` `parse_result_json` 16/16 및 로컬 재생(수신·집계·저장·재조회) 통과. 이는 C 측 독립 검토·로컬 D 재생이며 중앙 실행기→D 실시간 통합 검증은 아니다. 원시 결과는 저장소·단체방에 올리지 않고 승인된 별도 경로로만 공유한다.
 - 증거: `central-mgmt-c-deploy-261112.png`(전송·해시·VERIFY), `central-mgmt-c-file01-{ubuntu-a,rocky-b}-261112.png`(환경·FILE-01), `central-mgmt-c-rest-{ubuntu-a,rocky-b}-261112.png`(SVC·FW·LOG)
 
 ## 4. OS별 명령 경로와 `secureops-scan` 권한
@@ -282,7 +286,7 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | `central-mgmt` 저장소 배치, 의존성 설치 | 미착수 (3-1의 결정 필요) |
 | 대상 서버에 실제 포트 접속 시험 | 미실시 |
 | sudoers 추가 후보 (4-3) | 팀장 승인 대기 |
-| C 모듈 신규 VM 실행 (3-3) | **완료** (2026-11-12, scan 일반 권한). FW-01·LOG-01 추가 권한은 팀장 결정으로 보류. C 담당 전달용 비식별 증거·요약 준비(2026-11-13) |
+| C 모듈 신규 VM 실행 (3-3) | **완료** (2026-11-12, scan 일반 권한). FW-01·LOG-01 추가 권한은 팀장 결정으로 보류. C 담당 전달·검토 완료(2026-11-13), `ubuntu-a` journal 하위 명령 분리 수집 대기 |
 | SSH-01 수집기 설치 전 스냅샷 | 이름 제안 `02-pre-ssh01-collector-20261116`(팀장). **설치 승인은 별도** |
 | `secureops-fix` 조치 경로 | SSH-01 경로만 있으며, `/etc/secureops/approved/`는 아직 만들지 않아 실제로는 동작하지 않음 |
 
@@ -298,3 +302,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-12 | 팀장 결정 반영: `targets.json`·`ssh01_context` 확정, 전용 sudoers 경로 `secureops-ssh01-read`, C 추가 권한 보류. 신규 VM 대상 서버 scan 홈에 저장소 없음 확인 |
 | 2026-11-12 | 2-5 중앙 실행기 SSH 계층 사전 점검 결과와 실행 의존성·예상 결과 추가 |
 | 2026-11-13 | 3-3 C 모듈 신규 VM 배치·실행 결과(환경·status·사유·로케일 주의·증거 5장) 추가, 6장 신규 백업 파일명 `Target-Ubuntu.zip` 정정, SSH-01 설치 전 스냅샷 이름 제안 기록 |
+| 2026-11-13 | 3-3 C 검토 반영: FILE-01 사유 정정(passwd group, shadow 후보·승인), firewalld 253 = NOT_AUTHORIZED, LOG-01 로케일 가설 철회, C 검토·D 로컬 재생 결과, 팀장 승인 journalctl 1회 수집 조건·FW 권한 부족 해석 원칙. 2-5 `ssh01_context` 실측 재확인·`ROOT_CONTEXT` 대조 |
