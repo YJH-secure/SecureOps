@@ -83,6 +83,8 @@ def compare_reports(before, after, check_id):
     """동일 항목의 조치 전후 결과와 개선 여부를 비교한다."""
     validate_report(before)
     validate_report(after)
+    if before["schema_version"] != after["schema_version"]:
+        raise ValueError("recheck schema version mismatch")
     if before["target_id"] != after["target_id"] or before["os"] != after["os"]:
         raise ValueError("recheck target/OS mismatch")
     if before["scan_id"] == after["scan_id"]:
@@ -109,7 +111,69 @@ class Remediator:
         self.verify_approval = verify_approval
         self._used = set()
 
-    def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None):
+    def run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
+            recheck_report=None, recheck_adapter=None, post_rollback_recheck=False):
+        """기존 조치 절차와 별도로 E 실행 ID·진단 연결·최종 보안 상태를 기록한다."""
+        started_at = datetime.now(timezone.utc).isoformat()
+        if type(post_rollback_recheck) is not bool:
+            raise ValueError("post_rollback_recheck must be boolean")
+        if post_rollback_recheck and recheck_adapter is None:
+            raise ValueError("post-rollback diagnosis requires the MOCK adapter")
+        if recheck_adapter is not None:
+            from .recheck import MockRecheckAdapter
+            if type(recheck_adapter) is not MockRecheckAdapter or recheck_report is not None:
+                raise ValueError("use one exact MockRecheckAdapter or the legacy callback")
+            if report.get("schema_version") != "1.2":
+                raise ValueError("MOCK adapter requires JSON v1.2")
+        before = deepcopy(report)
+        execution_id = str(uuid4())
+        attempts = []
+
+        def callback_for(phase):
+            def callback(request, state):
+                previous = deepcopy(attempts)
+                attempt = {"execution_id": execution_id, "phase": phase,
+                           "target_id": request["target_id"], "check_id": request["check_id"],
+                           "scan_id": None, "scanned_at": None,
+                           "save_status": "not_attempted", "load_status": "not_attempted",
+                           "report_verified": False, "failure_stage": None, "failure_reason": None}
+                attempts.append(attempt)
+                return recheck_adapter.recheck(request, state, attempt,
+                                               before_report=before, previous_attempts=previous)
+            return callback
+
+        selected = callback_for("after") if recheck_adapter is not None else recheck_report
+        result = self._run(before, plan, backend=backend, approval=approval, dry_run=dry_run,
+                           now=now, recheck_report=selected, execution_id=execution_id)
+        result.setdefault("after_scan_id", None)
+        result.update(post_rollback_scan_id=None, post_rollback_report=None,
+                      final_security_status=None, final_security_verified=False)
+        if result["outcome"] == "success":
+            result.update(final_security_status="pass", final_security_verified=True)
+        if (post_rollback_recheck and result["rollback"] == "verified"):
+            try:
+                post = backend.request_recheck(plan, callback_for("post_rollback"))
+                # 어댑터의 저장·조회 검증에 더해 기존 E 비교 규칙으로 다시 검사한다.
+                checked = compare_reports(before, post, plan.check_id)["after"]
+                result.update(post_rollback_report=post, final_security_status=checked["status"],
+                              final_security_verified=checked["status"] in {"pass", "vulnerable"})
+            except Exception as exc:
+                result["post_rollback_recheck_error"] = type(exc).__name__
+                # 복구 뒤 재진단 실패를 원래 조치의 성공으로 바꾸지 않는다.
+        for attempt in attempts:
+            field = "after_scan_id" if attempt["phase"] == "after" else "post_rollback_scan_id"
+            result[field] = attempt["scan_id"]
+        result["recheck_attempts"] = deepcopy(attempts)
+        # 승인 검증·사용을 통과한 ID만 연결한다. 거부·제외·Dry-run은 null이다.
+        result["schema_version"] = "1.0"  # E 실행 이력 자체의 승인된 버전
+        result["diagnosis_schema_version"] = before["schema_version"]
+        result["approval_id"] = result["approval"]["approval_id"] if result["approval"] else None
+        result["started_at"] = started_at
+        result["finished_at"] = datetime.now(timezone.utc).isoformat()
+        return result
+
+    def _run(self, report, plan, *, backend=None, approval=None, dry_run=True, now=None,
+             recheck_report=None, execution_id):
         """계획을 검증하고 Dry-run 또는 승인된 Mock 조치를 수행한다."""
         # 외부 승인 함수가 원본을 바꾸더라도 실행 입력이 변하지 않도록 복사한다.
         report = deepcopy(report)
@@ -121,7 +185,7 @@ class Remediator:
             raise ValueError("dry_run must be boolean")
         before_item = next((item for item in report["results"]
                             if item["check_id"] == plan.check_id), None)
-        result = {"mode": "dry_run" if dry_run else "mock", "plan_id": plan.plan_id, "execution_id": str(uuid4()),
+        result = {"mode": "dry_run" if dry_run else "mock", "plan_id": plan.plan_id, "execution_id": execution_id,
                   "target_id": plan.target_id, "check_id": plan.check_id,
                   "outcome": "planned", "backup": "not_attempted", "backup_id": None,
                   "rollback": "not_needed", "approval": None,
@@ -143,6 +207,10 @@ class Remediator:
         # 실제 서버 구현을 잘못 전달해도 실행되지 않도록 Mock만 명시적으로 허용한다.
         if type(backend) is not MockBackend:
             raise PermissionError("live remediation is disabled; only MockBackend is supported")
+        # 콜백은 신뢰된 테스트 코드에서만 전달한다. JSON 입력으로 선택하지 않는다.
+        if recheck_report is not None:
+            if report["schema_version"] != "1.2" or not callable(recheck_report):
+                raise ValueError("recheck_report requires JSON v1.2 and a callable")
         if backend.target_id != plan.target_id or backend.os != plan.os:
             raise ValueError("backend target/OS mismatch")
         now = datetime.now(timezone.utc) if now is None else now
@@ -205,13 +273,27 @@ class Remediator:
 
         # 설정 검증을 통과한 뒤에는 재진단 결과와 오류를 따로 기록한다.
         try:
-            item = backend.recheck(plan)
-            steps.append("recheck")
-            # 조치 전과 같은 서버에 새 진단 회차를 부여해 전후 결과를 구분한다.
-            after = {"schema_version": "1.1", "target_id": plan.target_id, "os": plan.os,
-                     "scan_id": str(uuid4()), "scanned_at": datetime.now(timezone.utc).isoformat(),
-                     "results": [item]}
+            if recheck_report is not None:
+                # 공통 실행 계층이 D에서 검증·저장·재조회한 전체 보고서를 받는다.
+                after = backend.request_recheck(plan, recheck_report)
+                steps.append("recheck")
+            elif report["schema_version"] == "1.2":
+                from core.main import DiagnosisAggregator
+                item = backend.recheck(plan, schema_version="1.2")
+                steps.append("recheck")
+                # D가 v1.2 보고서와 새 진단 ID·완료 시각을 생성한다.
+                after = DiagnosisAggregator.from_results(
+                    [item], [], target_id=plan.target_id, os=plan.os, schema_version="1.2",
+                ).get_report()
+            else:
+                item = backend.recheck(plan)
+                steps.append("recheck")
+                after = {"schema_version": "1.1", "target_id": plan.target_id, "os": plan.os,
+                         "scan_id": str(uuid4()), "scanned_at": datetime.now(timezone.utc).isoformat(),
+                         "results": [item]}
             comparison = compare_reports(report, after, plan.check_id)
+            item = comparison["after"]
+            result["after_scan_id"] = after["scan_id"]
             steps.append("compare")
         except Exception:
             reason = ("invalid_recheck_result" if "recheck" in steps else
@@ -227,7 +309,7 @@ class Remediator:
             self._restore_after_recheck_failure(backend, snapshot, result)
             return result
 
-        # 재진단 보고서만 공통 JSON v1.1이다. 조치·복구 상태는 바깥 결과에 남긴다.
+        # 재진단 보고서만 공통 진단 JSON 규격을 따른다. 조치·복구 상태는 바깥 결과에 남긴다.
         result.update(after_report=after, comparison=comparison)
         if comparison["improved"]:
             result["outcome"] = "success"

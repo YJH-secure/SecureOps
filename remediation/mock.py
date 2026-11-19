@@ -79,16 +79,42 @@ class MockBackend:
         if not self.service_running:
             raise MockFailure("mock_service_unhealthy_after_change")
 
-    def recheck(self, plan):
+    def recheck(self, plan, *, schema_version="1.1"):
         """동일 항목의 모의 진단 결과를 반환한다."""
+        if schema_version not in {"1.1", "1.2"}:
+            raise ValueError("unsupported recheck schema version")
         self._step("recheck")
         if self.recheck_callback is not None:
             return self.recheck_callback(self.target_id, plan.check_id,
                                          deepcopy(self.files), self.root_login)
-        return {"check_id": plan.check_id, "severity": "high",
+        item = {"check_id": plan.check_id,
                 "status": "pass" if self.root_login == "no" else "vulnerable",
                 "evidence": "MOCK: effective PermitRootLogin value rechecked",
                 "recommendation": "MOCK: review the change before any VM test"}
+        if schema_version == "1.1":
+            item["severity"] = "high"
+        else:
+            # 가상 설정의 판정만 제공한다. 점수나 Vector를 추측하지 않는다.
+            item["cvss"] = {
+                "assessment_status": "not_applicable" if item["status"] == "pass" else "pending",
+                "version": None, "vector": None, "base_score": None, "rating": None, "source": None,
+                "rationale": ("MOCK: no vulnerable finding after recheck" if item["status"] == "pass"
+                              else "MOCK: CVSS applicability and evidence await review"),
+            }
+        return item
+
+    def request_recheck(self, plan, callback):
+        """신뢰된 MOCK 콜백에 요청·가상 상태의 복사본을 전달하고 전체 보고서를 받는다.
+
+        실제 백엔드나 승인 객체를 넘기지 않는다. 콜백은 Python 테스트 코드이며
+        샌드박스가 아니므로 임의의 외부 코드나 원격 실행기를 전달하면 안 된다.
+        """
+        self._step("recheck")
+        request = {"target_id": plan.target_id, "os": plan.os,
+                   "check_id": plan.check_id, "before_scan_id": plan.scan_id,
+                   "schema_version": "1.2"}
+        state = {"files": deepcopy(self.files), "root_login": self.root_login}
+        return deepcopy(callback(request, state))
 
     def restore(self, token):
         """백업 식별자 token을 받아 파일 상태와 root 로그인 값을 복원한다."""

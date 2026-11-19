@@ -1,0 +1,187 @@
+{
+  "started_at": "2026-11-11T14:25:34.985913+09:00",
+  "main_sha": "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37",
+  "tested_head": "6df7caf6a895a919521fb4848ea3d8fc9b473412",
+  "branch": "feature/remediation-cvss-v12",
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "jsonschema": "4.26.0",
+    "dependency_path": "<USER_HOME>\\AppData\\Local\\Temp\\secureops-e-jsonschema"
+  },
+  "tests": [
+    {
+      "name": "01-v11-regression",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "tests/run_de_mock.py",
+        "--d-ref",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37"
+      ],
+      "started_at": "2026-11-11T14:25:35.279808+09:00",
+      "finished_at": "2026-11-11T14:25:36.422661+09:00",
+      "exit_code": 0,
+      "total": 24,
+      "passed": 24,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected": 24,
+      "log": "01-v11-regression.log"
+    },
+    {
+      "name": "02-v12-regression",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_v12.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T14:25:36.424173+09:00",
+      "finished_at": "2026-11-11T14:25:38.593501+09:00",
+      "exit_code": 0,
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected": 18,
+      "log": "02-v12-regression.log"
+    },
+    {
+      "name": "03-execution-mock",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_execution_integration.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T14:25:38.594507+09:00",
+      "finished_at": "2026-11-11T14:25:39.600642+09:00",
+      "exit_code": 0,
+      "total": 19,
+      "passed": 19,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected": 19,
+      "log": "03-execution-mock.log"
+    },
+    {
+      "name": "04-cvss-schema",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvss*.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T14:25:39.601642+09:00",
+      "finished_at": "2026-11-11T14:25:40.679482+09:00",
+      "exit_code": 0,
+      "total": 52,
+      "passed": 52,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected": 52,
+      "log": "04-cvss-schema.log"
+    }
+  ],
+  "backup_sha256_before": {
+    "remediation\\engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests\\test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "finished_at": "2026-11-11T14:25:40.680485+09:00",
+  "backup_sha256_after": {
+    "remediation\\engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests\\test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "git_checks": [
+    {
+      "args": [
+        "merge-base",
+        "--is-ancestor",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37",
+        "6df7caf6a895a919521fb4848ea3d8fc9b473412"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "32d5107",
+        "6df7caf6a895a919521fb4848ea3d8fc9b473412",
+        "--"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "feature/remediation-ptj",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37",
+        "--",
+        "remediation",
+        "tests/test_remediation.py",
+        "tests/test_remediation_core_integration.py",
+        "tests/run_de_mock.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37",
+        "6df7caf6a895a919521fb4848ea3d8fc9b473412",
+        "--",
+        "core",
+        "checks",
+        "tests/test_remediation.py",
+        "tests/test_remediation_core_integration.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--name-status",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37",
+        "6df7caf6a895a919521fb4848ea3d8fc9b473412"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "log",
+        "--oneline",
+        "b4bc7e7c1764e66e84367f6d34a3aee5b2a2ff37..6df7caf6a895a919521fb4848ea3d8fc9b473412"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifact_variant": "public-redacted",
+  "original_sha256": "6426f0e36a28fc1b75aebabb8323a19d38aada11240b884148e03e2ce81e2996"
+}

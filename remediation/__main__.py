@@ -13,6 +13,8 @@ def main():
     """실행 옵션에 따라 계획 또는 모의 조치 결과를 출력한다."""
     parser = _make_parser()
     args = parser.parse_args()
+    if args.report and args.result_version is not None:
+        parser.error("--result-version selects the built-in sample; --report uses its own version")
     if args.report and args.mock:
         parser.error("--report supports Dry-run only")
     if (args.fail_at or args.deny or args.skip) and not args.mock:
@@ -25,7 +27,8 @@ def main():
         except (OSError, ValueError, TypeError) as exc:
             parser.error(f"cannot plan from the report: {exc}")
     else:
-        result = _run_demo(dry_run=not args.mock, fail_at=args.fail_at, deny=args.deny, skip=args.skip)
+        result = _run_demo(dry_run=not args.mock, fail_at=args.fail_at, deny=args.deny, skip=args.skip,
+                           result_version=args.result_version or "1.1")
 
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
@@ -33,7 +36,9 @@ def main():
 def _make_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mock", action="store_true", help="simulate approved change in memory only")
-    parser.add_argument("--report", type=Path, help="read a v1.1 JSON file in Dry-run")
+    parser.add_argument("--report", type=Path, help="read a v1.1 or v1.2 JSON file in Dry-run")
+    parser.add_argument("--result-version", choices=("1.1", "1.2"),
+                        help="built-in sample version (default: 1.1)")
     parser.add_argument("--fail-at", choices=("backup", "apply", "validate", "recheck", "verify_service"),
                         help="inject a failure during the built-in Mock demo")
     scenarios = parser.add_mutually_exclusive_group()
@@ -44,17 +49,30 @@ def _make_parser():
 
 def _preview_report(path):
     """외부 보고서로 변경 계획을 미리 본다."""
-    before = json.loads(path.read_text(encoding="utf-8-sig"))
+    text = path.read_text(encoding="utf-8-sig")
+    before = json.loads(text)
+    if isinstance(before, dict) and before.get("schema_version") == "1.2":
+        from core.cvss_validation import loads_strict
+        before = loads_strict(text)
     plan = build_plan(before, "SSH-01")
     engine = Remediator(allowed_targets={plan.target_id}, allowed_checks={"SSH-01"})
     return engine.run(before, plan)
 
 
-def _run_demo(*, dry_run, fail_at, deny, skip):
+def _run_demo(*, dry_run, fail_at, deny, skip, result_version="1.1"):
     """가상 승인과 가상 서버를 준비해 예제 조치를 실행한다."""
     before = deepcopy(DEMO_REPORT)
+    if result_version == "1.2":
+        # 팀의 v1.2 MOCK 샘플을 사용한다. CVSS 점수를 추가로 만들지 않는다.
+        sample = Path(__file__).resolve().parents[1] / "tests/fixtures/sample-result-v1.2-MOCK.json"
+        from core.cvss_validation import loads_strict
+        before = loads_strict(sample.read_text(encoding="utf-8"))
     if skip:
         before["results"][0].update(status="needs_review", evidence="MOCK: policy review required")
+        if result_version == "1.2":
+            before["results"][0]["cvss"].update(
+                assessment_status="not_applicable", rationale="MOCK: policy review required before assessment",
+            )
     plan = build_plan(before, "SSH-01")
     # 시연용 가상 승인이다. 실제 관리자 승인 저장소를 대신하지 않는다.
     approval = Approval("demo-approval-MOCK", "demo-admin-MOCK", plan.target_id, plan.scan_id,

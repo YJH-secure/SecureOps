@@ -1,0 +1,18 @@
+artifact_variant: public-redacted
+original_sha256: 0957ff29161d86a8d4be1b6faad6efe2d4b069a774b831544e31a80b8457f36e
+started_at: 2026-11-11T15:52:36.615159+09:00
+finished_at: 2026-11-11T15:52:37.043872+09:00
+main_sha: e4af8a6659a695a5d7e0152b8c0d831e7736fef1
+tested_head: 511895598e988eb6eaee69b0395f7af48c2f6276
+command: <USER_HOME>\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B -m unittest discover -s tests -p test_remediation_b_v12_integration.py -v
+exit_code: 0
+
+test_b_legacy_output_still_builds_v11_plan (test_remediation_b_v12_integration.BContractIntegrationTests.test_b_legacy_output_still_builds_v11_plan) ... ok
+test_b_v12_statuses_and_cvss_are_accepted_without_conversion (test_remediation_b_v12_integration.BContractIntegrationTests.test_b_v12_statuses_and_cvss_are_accepted_without_conversion) ... ok
+test_real_b_nonpass_output_keeps_existing_mock_rollback (test_remediation_b_v12_integration.BContractIntegrationTests.test_real_b_nonpass_output_keeps_existing_mock_rollback) ... ok
+test_real_b_pure_output_through_d_e_callback_and_store (test_remediation_b_v12_integration.BContractIntegrationTests.test_real_b_pure_output_through_d_e_callback_and_store) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.096s
+
+OK

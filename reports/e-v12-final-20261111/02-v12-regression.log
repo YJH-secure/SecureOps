@@ -1,0 +1,31 @@
+artifact_variant: public-redacted
+original_sha256: c7c70d2f6088bdebe0b3eb57701f9d5ce75c01c0d74b6b8a48ada0dd46b5cb84
+started_at: 2026-11-11T14:25:36.424173+09:00
+finished_at: 2026-11-11T14:25:38.593501+09:00
+tested_head: 6df7caf6a895a919521fb4848ea3d8fc9b473412
+command: <USER_HOME>\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -B -m unittest discover -s tests -p test_remediation_v12.py -v
+exit_code: 0
+
+test_approval_denial_and_failure_recovery (test_remediation_v12.RemediationV12Tests.test_approval_denial_and_failure_recovery) ... ok
+test_callback_result_is_validated_and_keeps_details (test_remediation_v12.RemediationV12Tests.test_callback_result_is_validated_and_keeps_details) ... ok
+test_cli_rejects_duplicate_json_keys (test_remediation_v12.RemediationV12Tests.test_cli_rejects_duplicate_json_keys) ... ok
+test_cli_v12_denial_skip_and_failure_scenarios (test_remediation_v12.RemediationV12Tests.test_cli_v12_denial_skip_and_failure_scenarios) ... ok
+test_cli_v12_preview_and_mock (test_remediation_v12.RemediationV12Tests.test_cli_v12_preview_and_mock) ... ok
+test_cvss_update_requires_a_new_plan_and_approval (test_remediation_v12.RemediationV12Tests.test_cvss_update_requires_a_new_plan_and_approval) ... ok
+test_d_v12_save_load_and_compare_round_trip (test_remediation_v12.RemediationV12Tests.test_d_v12_save_load_and_compare_round_trip) ... ok
+test_high_scored_calculator_fixture_is_excluded (test_remediation_v12.RemediationV12Tests.test_high_scored_calculator_fixture_is_excluded) ... ok
+test_invalid_cvss_or_severity_is_rejected (test_remediation_v12.RemediationV12Tests.test_invalid_cvss_or_severity_is_rejected) ... ok
+test_legacy_report_does_not_accept_cvss (test_remediation_v12.RemediationV12Tests.test_legacy_report_does_not_accept_cvss) ... ok
+test_mixed_versions_cannot_be_compared (test_remediation_v12.RemediationV12Tests.test_mixed_versions_cannot_be_compared) ... ok
+test_nonvulnerable_states_are_excluded (test_remediation_v12.RemediationV12Tests.test_nonvulnerable_states_are_excluded) ... ok
+test_null_is_not_zero_and_scored_requires_a_score (test_remediation_v12.RemediationV12Tests.test_null_is_not_zero_and_scored_requires_a_score) ... ok
+test_pending_input_and_pass_recheck (test_remediation_v12.RemediationV12Tests.test_pending_input_and_pass_recheck) ... ok
+test_scored_fixture_and_evidence_are_preserved (test_remediation_v12.RemediationV12Tests.test_scored_fixture_and_evidence_are_preserved) ... ok
+test_unscored_vulnerable_item_is_still_eligible (test_remediation_v12.RemediationV12Tests.test_unscored_vulnerable_item_is_still_eligible) ... ok
+test_valid_zero_score_remains_distinct_from_null (test_remediation_v12.RemediationV12Tests.test_valid_zero_score_remains_distinct_from_null) ... ok
+test_wrong_version_callback_result_fails_and_restores (test_remediation_v12.RemediationV12Tests.test_wrong_version_callback_result_fails_and_restores) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 1.904s
+
+OK

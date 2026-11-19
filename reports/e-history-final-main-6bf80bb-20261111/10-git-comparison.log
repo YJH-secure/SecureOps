@@ -1,0 +1,61 @@
+artifact_variant: public-redacted
+original_sha256: 4c6aa6187f82ffe1ce43b12a78913de3a0d3bae387f0aab7190c05380c6d36f1
+git merge-base --is-ancestor 6bf80bb114458994bec7d640b4fe4ec53b97bb10 bb050165b21dade0285372745c92cd5dd996123d
+exit_code: 0
+
+git diff --exit-code 49c3e0f bb050165b21dade0285372745c92cd5dd996123d -- remediation tests
+exit_code: 0
+
+git diff --exit-code 6bf80bb114458994bec7d640b4fe4ec53b97bb10 bb050165b21dade0285372745c92cd5dd996123d -- checks core
+exit_code: 0
+
+git diff --name-status 49c3e0f bb050165b21dade0285372745c92cd5dd996123d
+exit_code: 0
+A	checks/system/FW_README.md
+A	checks/system/FW_VERIFICATION.md
+A	checks/system/LOG_README.md
+A	checks/system/evidence/fw-log/POLICY_STATUS.md
+A	checks/system/evidence/fw-log/TEST_RUN.md
+A	checks/system/evidence/fw-log/VM_RESULTS.md
+A	checks/system/evidence/fw-log/unit-tests-896022f.txt
+A	checks/system/firewall_check.py
+A	checks/system/log_check.py
+A	checks/system/policies/firewall_policy.json
+A	checks/system/policies/log_policy.json
+A	checks/system/tests/test_firewall_check.py
+A	checks/system/tests/test_log_check.py
+
+git diff --name-status 6bf80bb114458994bec7d640b4fe4ec53b97bb10 bb050165b21dade0285372745c92cd5dd996123d
+exit_code: 0
+M	remediation/README.md
+M	remediation/__init__.py
+M	remediation/__main__.py
+M	remediation/contract.py
+M	remediation/engine.py
+A	remediation/history.py
+M	remediation/mock.py
+A	remediation/recheck.py
+A	reports/e-v12-final-20261111/01-v11-regression.log
+A	reports/e-v12-final-20261111/02-v12-regression.log
+A	reports/e-v12-final-20261111/03-execution-mock.log
+A	reports/e-v12-final-20261111/04-cvss-schema.log
+A	reports/e-v12-final-20261111/05-git-comparison.log
+A	reports/e-v12-final-20261111/README.md
+A	reports/e-v12-final-20261111/original-evidence-manifest.json
+A	reports/e-v12-final-20261111/requirements-test.txt
+A	reports/e-v12-final-20261111/results.json
+A	reports/e-v12-pr23-feedback-20261111/01-v11-regression.log
+A	reports/e-v12-pr23-feedback-20261111/02-v12-regression.log
+A	reports/e-v12-pr23-feedback-20261111/03-execution-mock.log
+A	reports/e-v12-pr23-feedback-20261111/04-cvss-schema.log
+A	reports/e-v12-pr23-feedback-20261111/05-b-contract.log
+A	reports/e-v12-pr23-feedback-20261111/06-git-comparison.log
+A	reports/e-v12-pr23-feedback-20261111/README.md
+A	reports/e-v12-pr23-feedback-20261111/requirements-test.txt
+A	reports/e-v12-pr23-feedback-20261111/results.json
+M	tests/run_de_mock.py
+A	tests/test_execution_history_store.py
+A	tests/test_remediation_b_v12_integration.py
+A	tests/test_remediation_execution_history.py
+A	tests/test_remediation_execution_integration.py
+A	tests/test_remediation_v12.py

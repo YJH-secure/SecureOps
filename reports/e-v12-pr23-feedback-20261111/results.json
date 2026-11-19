@@ -1,0 +1,203 @@
+{
+  "artifact_variant": "public-redacted",
+  "started_at": "2026-11-11T15:52:31.882559+09:00",
+  "main_sha": "e4af8a6659a695a5d7e0152b8c0d831e7736fef1",
+  "tested_head": "511895598e988eb6eaee69b0395f7af48c2f6276",
+  "branch": "feature/remediation-cvss-v12",
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "jsonschema": "4.26.0",
+    "dependency_path": "<USER_HOME>\\AppData\\Local\\Temp\\secureops-e-jsonschema"
+  },
+  "tests": [
+    {
+      "name": "01-v11-regression",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "tests/run_de_mock.py",
+        "--d-ref",
+        "e4af8a6659a695a5d7e0152b8c0d831e7736fef1"
+      ],
+      "started_at": "2026-11-11T15:52:32.108585+09:00",
+      "finished_at": "2026-11-11T15:52:33.037429+09:00",
+      "exit_code": 0,
+      "expected": 24,
+      "total": 24,
+      "passed": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_log_sha256": "c50d08be3c4f58927d20d338edee29441d8a62c69a4fd8e2fb3a87c14089aa1f"
+    },
+    {
+      "name": "02-v12-regression",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_v12.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T15:52:33.039437+09:00",
+      "finished_at": "2026-11-11T15:52:34.805228+09:00",
+      "exit_code": 0,
+      "expected": 18,
+      "total": 18,
+      "passed": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_log_sha256": "da94aa1fe97080877dc82854427f2bf92b5b2bd26c935dc47b637c0dd23970f4"
+    },
+    {
+      "name": "03-execution-mock",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_execution_integration.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T15:52:34.806228+09:00",
+      "finished_at": "2026-11-11T15:52:35.589531+09:00",
+      "exit_code": 0,
+      "expected": 19,
+      "total": 19,
+      "passed": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_log_sha256": "5f6e1c5a987562c4ebcf3defdc19c8ae5d94e48a704a21c08fce49dcb0a43a68"
+    },
+    {
+      "name": "04-cvss-schema",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvss*.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T15:52:35.591531+09:00",
+      "finished_at": "2026-11-11T15:52:36.613154+09:00",
+      "exit_code": 0,
+      "expected": 52,
+      "total": 52,
+      "passed": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_log_sha256": "d7beb931e608c04acff47710c5b8a9abf7faaaa155ab4c12c0846b9fe3ed7942"
+    },
+    {
+      "name": "05-b-contract",
+      "command": [
+        "<USER_HOME>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_remediation_b_v12_integration.py",
+        "-v"
+      ],
+      "started_at": "2026-11-11T15:52:36.615159+09:00",
+      "finished_at": "2026-11-11T15:52:37.043872+09:00",
+      "exit_code": 0,
+      "expected": 4,
+      "total": 4,
+      "passed": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_log_sha256": "0957ff29161d86a8d4be1b6faad6efe2d4b069a774b831544e31a80b8457f36e"
+    }
+  ],
+  "backup_sha256_before": {
+    "remediation/engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests/test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "finished_at": "2026-11-11T15:52:37.045871+09:00",
+  "backup_sha256_after": {
+    "remediation/engine.py.before-feedback.bak": "d8619973792cfc6ab70605b1e79fe62045449ee75d1b570ebac16a0d38759bcb",
+    "tests/test_remediation.py.before-indent.bak": "30dce4b9743f07e85260a475d8fd30d75f0acb2d553cb7604216bc0e3e1b0d66"
+  },
+  "git_checks": [
+    {
+      "args": [
+        "merge-base",
+        "--is-ancestor",
+        "e4af8a6659a695a5d7e0152b8c0d831e7736fef1",
+        "511895598e988eb6eaee69b0395f7af48c2f6276"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "merge-base",
+        "--is-ancestor",
+        "d09d9900cff050b73162ac34a987eb8339ac5ceb",
+        "511895598e988eb6eaee69b0395f7af48c2f6276"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "7e33241",
+        "511895598e988eb6eaee69b0395f7af48c2f6276",
+        "--",
+        "remediation",
+        "core",
+        "tests/test_remediation.py",
+        "tests/test_remediation_core_integration.py",
+        "tests/test_remediation_v12.py",
+        "tests/test_remediation_execution_integration.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--exit-code",
+        "e4af8a6659a695a5d7e0152b8c0d831e7736fef1",
+        "511895598e988eb6eaee69b0395f7af48c2f6276",
+        "--",
+        "checks",
+        "core"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "diff",
+        "--name-status",
+        "e4af8a6659a695a5d7e0152b8c0d831e7736fef1",
+        "511895598e988eb6eaee69b0395f7af48c2f6276"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "original_sha256": "79fb2e054d53fa6deac37c2ccb83a39a3f132cd3274576bd39fe923289bcbf6d"
+}
