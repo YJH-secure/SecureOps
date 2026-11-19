@@ -1,0 +1,103 @@
+{
+  "kind": "Validation of E supplied logs, not D re-execution",
+  "groups": [
+    {
+      "name": "01-e-v11",
+      "actual_ran_summaries": [
+        22,
+        2
+      ],
+      "expected": 24,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "02-e-v12",
+      "actual_ran_summaries": [
+        18
+      ],
+      "expected": 18,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "03-e-execution",
+      "actual_ran_summaries": [
+        19
+      ],
+      "expected": 19,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "04-d-cvss",
+      "actual_ran_summaries": [
+        52
+      ],
+      "expected": 52,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "05-b-contract",
+      "actual_ran_summaries": [
+        4
+      ],
+      "expected": 4,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "06-e-history",
+      "actual_ran_summaries": [
+        20
+      ],
+      "expected": 20,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "07-e-store",
+      "actual_ran_summaries": [
+        18
+      ],
+      "expected": 18,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "08-c-firewall",
+      "actual_ran_summaries": [
+        17
+      ],
+      "expected": 17,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "09-c-log",
+      "actual_ran_summaries": [
+        12
+      ],
+      "expected": 12,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "10-e-history-fields",
+      "actual_ran_summaries": [
+        10
+      ],
+      "expected": 10,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "11-e-history-versions",
+      "actual_ran_summaries": [
+        10
+      ],
+      "expected": 10,
+      "raw_log_matches_declared_result": true
+    },
+    {
+      "name": "12-full-mock-flow",
+      "actual_ran_summaries": [
+        4
+      ],
+      "expected": 4,
+      "raw_log_matches_declared_result": true
+    }
+  ],
+  "total_from_raw_ran_summaries": 208
+}

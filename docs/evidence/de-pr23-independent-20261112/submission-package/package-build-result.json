@@ -1,0 +1,19 @@
+{
+  "built_at_utc": "2026-11-12T00:40:55.329145+00:00",
+  "old_evidence_files_unchanged": 59,
+  "copied_final_files": 42,
+  "old_results_modified": false,
+  "new_test_execution_performed_by_this_builder": false,
+  "overlap": {
+    "old_204_unique_ids": 204,
+    "independent_unique_ids": 8,
+    "combined_full_unique_ids": 181,
+    "old204_intersect_full": 76,
+    "independent_intersect_full": 8,
+    "old204_intersect_independent": 0,
+    "occurrences_across_six_runs": 393,
+    "unique_ids_across_six_runs": 309,
+    "unique_id_and_source_file_variants": 309,
+    "full_only_vs_204_and_independent": 97
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "core.cvss": {
+    "checkout": "D_MAIN",
+    "path": "core/cvss.py",
+    "sha256": "b2980db3eed36b54b04cd7b077e89e7827ac410dab782c333838c055690e885a"
+  },
+  "core.cvss_validation": {
+    "checkout": "D_MAIN",
+    "path": "core/cvss_validation.py",
+    "sha256": "d376a8ccf7f596e75022036242d8f5ffa95f5afdd5af9745cc143bd7dbf819cb"
+  },
+  "core.main": {
+    "checkout": "D_MAIN",
+    "path": "core/main.py",
+    "sha256": "a1e2ebaf74190aeb61555a79138ec9f60ec4e724802c19999c82c063d410a3fb"
+  },
+  "core.storage": {
+    "checkout": "D_MAIN",
+    "path": "core/storage.py",
+    "sha256": "2b62c1ea473175e69ba44c9bdb5432a98a0dee0082ea375f52092a25ff7cc3e4"
+  },
+  "remediation": {
+    "checkout": "E_PR23",
+    "path": "remediation/__init__.py",
+    "sha256": "3df3a3a9f184a4b4a86f5f64e9237cf6fd600993c41d0e5e1f12645f74955523"
+  },
+  "remediation.__main__": {
+    "checkout": "E_PR23",
+    "path": "remediation/__main__.py",
+    "sha256": "fb1e208d4829be2a4b86a1c6a5b786474c5571bd8f13298d199f091910e0d6b2"
+  },
+  "remediation.contract": {
+    "checkout": "E_PR23",
+    "path": "remediation/contract.py",
+    "sha256": "0b51c5e09775ef51e5aa77075cbfbee977b71d50257f388e55ee5ba0509f2991"
+  },
+  "remediation.engine": {
+    "checkout": "E_PR23",
+    "path": "remediation/engine.py",
+    "sha256": "78d785ba48e7d2c3fcb6a4850c3373a6704baab049d74e97b4d09ddcce7424dc"
+  },
+  "remediation.history": {
+    "checkout": "E_PR23",
+    "path": "remediation/history.py",
+    "sha256": "d947f63d844ddee772bad3d989aff0aabf3345423d298167d5971dd0da53a54b"
+  },
+  "remediation.mock": {
+    "checkout": "E_PR23",
+    "path": "remediation/mock.py",
+    "sha256": "c2fc239286590defb399a8b1a8b98dabbff74d2f0e4982c1f8ea9d53cede40d5"
+  },
+  "remediation.recheck": {
+    "checkout": "E_PR23",
+    "path": "remediation/recheck.py",
+    "sha256": "f4e1cd4f5e9b08adcb218da29f4e3738d68d80a536c639f19423cc5c0af914e2"
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "kind": "New read-only process verification of copied existing artifacts; not new remediation/test execution",
+  "e_histories": 9,
+  "d_reports": 16,
+  "json_equal": true,
+  "cases": [
+    {
+      "case": "denied",
+      "execution_id": "f7224fa7-b5c2-4c91-9480-c985e1870016",
+      "plan_id": "18e205435608fb4bbb80d14bbf5a0ddf8dff0fa151bdccbec4de4dcd89d391a8",
+      "approval_id": null,
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "rejected",
+      "rollback": "not_needed",
+      "final_security_status": null,
+      "final_security_verified": false,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "f1045c89-bc98-413a-9e80-c27544362165",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "dry-run",
+      "execution_id": "cb070894-fe39-4b58-8bac-cb1e9e1302f1",
+      "plan_id": "e5fa1d86cf83fbec8f278c38c83842e987b967d94058db906e14fef8f42dac9f",
+      "approval_id": null,
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "planned",
+      "rollback": "not_needed",
+      "final_security_status": null,
+      "final_security_verified": false,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "e423d51a-d786-4d7e-b4fc-5133b06b33a7",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "version-1.1",
+      "execution_id": "b1857cb3-5920-4a4c-beac-abe438abd71e",
+      "plan_id": "cea15d5814d31473c3d63773ca68248660f5c542c61ebbbff06affc59629b4af",
+      "approval_id": "demo-approval-MOCK",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.1",
+      "outcome": "success",
+      "rollback": "not_needed",
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "demo-before-MOCK",
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        },
+        "after_scan_id": {
+          "scan_id": "7a4b3c40-a08b-4a19-ae79-6063ac54a622",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "version-1.2",
+      "execution_id": "df7e7472-ddf0-48fe-a477-7826ae8011e5",
+      "plan_id": "7953a32db971b8fb297553b636e6156bf55b47918c9b6134160f235fef8cdc21",
+      "approval_id": "demo-approval-MOCK",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "success",
+      "rollback": "not_needed",
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "mock-cvss-20261110-001",
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        },
+        "after_scan_id": {
+          "scan_id": "5c514aec-fd45-4a5f-967c-e353d6172262",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "success",
+      "execution_id": "81783b39-d54d-4a9f-8767-4887a862838d",
+      "plan_id": "20083e5a5f0a47e3a71b6a82cb7cbc248db79cbf5e513cf21d866b76d0d22bc9",
+      "approval_id": "history-approval",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "success",
+      "rollback": "not_needed",
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "faeae332-44e6-41b5-ad34-20fd7a8f9ef7",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": "89cc6009-5824-41db-a77b-51d0fa329469",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "post-rollback-pass-action-failed",
+      "execution_id": "de18256e-041e-49e2-918b-719de1fa4131",
+      "plan_id": "d6275492b531158a598ae970c2e7f10bd84038c58fd2e8d7575cb4b1fe7e4a66",
+      "approval_id": "history-approval",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "failed",
+      "rollback": "verified",
+      "final_security_status": "pass",
+      "final_security_verified": true,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "7119389f-9031-46f7-850d-85a5ea9b0992",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": "a1a89102-2212-4085-9ccf-e78a81579cc2",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": "ec461879-59ab-496c-9d13-84981209ed57",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        }
+      }
+    },
+    {
+      "case": "post-rollback-load-failed",
+      "execution_id": "2c88ddb3-9220-467b-aaf1-a9049677d10f",
+      "plan_id": "c367fc6a651d8964c4748f6571babb2ebc22bfcccf0b12b659f864b34923ac29",
+      "approval_id": "history-approval",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "failed",
+      "rollback": "verified",
+      "final_security_status": null,
+      "final_security_verified": false,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "2ca35ee0-3081-4fb0-9745-6c05cdc6004e",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": "7eac6af9-471f-4c2f-a75a-d04e1ea0c14b",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": "c726c220-e074-4f92-b072-a859f57212e5",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        }
+      }
+    },
+    {
+      "case": "rollback-unknown",
+      "execution_id": "7f4d747e-a470-4bfd-85af-39f331983d1f",
+      "plan_id": "a181c2aee18a823ac69f1720baf2865010ce1b2c55e85b46ff39d303d4f773f5",
+      "approval_id": "history-approval",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "failed",
+      "rollback": "verified",
+      "final_security_status": null,
+      "final_security_verified": false,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "659771ee-218f-43e6-be00-3acd2209f98f",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": "95ee11c7-9789-4689-970e-f96a20f60d60",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    },
+    {
+      "case": "saved-but-load-failed",
+      "execution_id": "94ed8639-eb7e-4deb-ab4f-abcbea010a7a",
+      "plan_id": "548dedde65325371c2e326f8fa496aeb102cb6430a264388da1290d0784b2b43",
+      "approval_id": "history-approval",
+      "execution_schema_version": "1.0",
+      "diagnosis_schema_version": "1.2",
+      "outcome": "failed",
+      "rollback": "verified",
+      "final_security_status": null,
+      "final_security_verified": false,
+      "links": {
+        "before_scan_id": {
+          "scan_id": "02206477-f9a1-4257-90a0-478343396fc1",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "after_scan_id": {
+          "scan_id": "99f37f00-6f1a-4412-9cd4-bfaf17631c5c",
+          "report_snapshot_present": true,
+          "retrieved_equal": true
+        },
+        "post_rollback_scan_id": {
+          "scan_id": null,
+          "report_snapshot_present": false,
+          "retrieved_equal": null
+        }
+      }
+    }
+  ]
+}

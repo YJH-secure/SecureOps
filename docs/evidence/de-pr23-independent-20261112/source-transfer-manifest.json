@@ -1,0 +1,636 @@
+{
+  "original_d_evidence_untouched": true,
+  "transfers": [
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/build-package.py",
+      "original_sha256": "097a56cacb3722793a5d53f75599828021ec1362ec159a00543ed70f3f53138d",
+      "submitted_sha256": "097a56cacb3722793a5d53f75599828021ec1362ec159a00543ed70f3f53138d",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/comparison-for-e.md",
+      "original_sha256": "a65c21028093cc37549ffe9e6228ab0bdcdbee26166140be99a1f56f8afd4aff",
+      "submitted_sha256": "a65c21028093cc37549ffe9e6228ab0bdcdbee26166140be99a1f56f8afd4aff",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/copied-evidence-manifest.json",
+      "original_sha256": "6e6555ad3b93011f917e90c1375006049664f2050b0658a7ecd8e13ef2a9ccda",
+      "submitted_sha256": "6e6555ad3b93011f917e90c1375006049664f2050b0658a7ecd8e13ef2a9ccda",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/e-author-comparison.json",
+      "original_sha256": "f4c874e9daf097e675528d9d3693db27c51cf947230eb6e7ccf5d01f3e43322b",
+      "submitted_sha256": "f4c874e9daf097e675528d9d3693db27c51cf947230eb6e7ccf5d01f3e43322b",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/main-status.json",
+      "original_sha256": "4007d9a72d1a65c7262c488101ecbe8ca460f094d1490d6f582e9f1183114c07",
+      "submitted_sha256": "4007d9a72d1a65c7262c488101ecbe8ca460f094d1490d6f582e9f1183114c07",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/package-build-result.json",
+      "original_sha256": "ead28ca4718b8c9128280c99391e18ec96706f8dd34ca4c41a93f4e2ce21ac53",
+      "submitted_sha256": "ead28ca4718b8c9128280c99391e18ec96706f8dd34ca4c41a93f4e2ce21ac53",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/package-verification.json",
+      "original_sha256": "a5553c2de554d8c03328ce001201e44cae6d9aaff5bb7f442464a0e6366c8b6c",
+      "submitted_sha256": "a5553c2de554d8c03328ce001201e44cae6d9aaff5bb7f442464a0e6366c8b6c",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/preservation-baseline.json",
+      "original_sha256": "d2e93e27d43841ddf9a4c1a140cef029e539ed32f557e6d185231efc2222c352",
+      "submitted_sha256": "d2e93e27d43841ddf9a4c1a140cef029e539ed32f557e6d185231efc2222c352",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.12-availability.json",
+      "original_sha256": "633f2723cb5d31c870257cb5cf647ab03bc5e1d96b9cf6033341adbd27e317fa",
+      "submitted_sha256": "633f2723cb5d31c870257cb5cf647ab03bc5e1d96b9cf6033341adbd27e317fa",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/README.md",
+      "original_sha256": "013f49307eac9afacf8cbba322765dc971d6fd93acee7a7182e9e2ab54bb3cf6",
+      "submitted_sha256": "013f49307eac9afacf8cbba322765dc971d6fd93acee7a7182e9e2ab54bb3cf6",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/reproduction-inputs.json",
+      "original_sha256": "0db1ede0735517d75295f34df3ac5d14f6059ec030d662303f1684a6e940be34",
+      "submitted_sha256": "0db1ede0735517d75295f34df3ac5d14f6059ec030d662303f1684a6e940be34",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/scan-links-and-reload.json",
+      "original_sha256": "fd846925cd950cfebf3739bbce15881b09883d18caacc54457283188ab23b175",
+      "submitted_sha256": "fd846925cd950cfebf3739bbce15881b09883d18caacc54457283188ab23b175",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/test-id-inventory.json",
+      "original_sha256": "3674dcf03a9a8be2259e4f616b0f253d7f9d5d341269e796629b8ee69032d5d4",
+      "submitted_sha256": "3674dcf03a9a8be2259e4f616b0f253d7f9d5d341269e796629b8ee69032d5d4",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/test-overlap.json",
+      "original_sha256": "7a5567803d95033f498d228a3a8e46b95744b6862c8709604792f2d81209c1d5",
+      "submitted_sha256": "7a5567803d95033f498d228a3a8e46b95744b6862c8709604792f2d81209c1d5",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/environment-and-results.json",
+      "original_sha256": "ad8dd23ad74684aa7b7a4b68e5e907e169e3b68a5bcced8b3247a8bd2eee9946",
+      "submitted_sha256": "ad8dd23ad74684aa7b7a4b68e5e907e169e3b68a5bcced8b3247a8bd2eee9946",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/cross-process-verification.json",
+      "original_sha256": "bb15c419b81621af1bf2a427f6f19a57209df0404a4a0da8f6263d8fb7f45ec1",
+      "submitted_sha256": "bb15c419b81621af1bf2a427f6f19a57209df0404a4a0da8f6263d8fb7f45ec1",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/dependencies.txt",
+      "original_sha256": "f518e186817c49ca5dd2138afd5a36d75880fcf63abd8f36435feee9d2bf25b8",
+      "submitted_sha256": "f518e186817c49ca5dd2138afd5a36d75880fcf63abd8f36435feee9d2bf25b8",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/environment-and-results.json",
+      "original_sha256": "c5c342215657080e7b31635c35a3b3335d1b092a0ac18d055191f41a1a6a1af9",
+      "submitted_sha256": "c5c342215657080e7b31635c35a3b3335d1b092a0ac18d055191f41a1a6a1af9",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-c-fw-log.json",
+      "original_sha256": "0315b1cc0eec2833891a735e7bd6c00806eab36bfc0f8c70797cd6229ac9088d",
+      "submitted_sha256": "0315b1cc0eec2833891a735e7bd6c00806eab36bfc0f8c70797cd6229ac9088d",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-d-cvss.json",
+      "original_sha256": "46713e8839eb18d356b67ef9b217cfa19ae1aff3f3d83cce0db47fcb25d32ab3",
+      "submitted_sha256": "46713e8839eb18d356b67ef9b217cfa19ae1aff3f3d83cce0db47fcb25d32ab3",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-d-full.json",
+      "original_sha256": "d474e3a6e93d3cb6ccbd153d5cf9426a30933b6f9c9ebff93f41dfece9b0aa1f",
+      "submitted_sha256": "d474e3a6e93d3cb6ccbd153d5cf9426a30933b6f9c9ebff93f41dfece9b0aa1f",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-e-history.json",
+      "original_sha256": "52ce462c9e564959c2ee0ae84163a828956120075ad53453197e1ae5abd88eee",
+      "submitted_sha256": "52ce462c9e564959c2ee0ae84163a828956120075ad53453197e1ae5abd88eee",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-e-remediation.json",
+      "original_sha256": "1224aeeaab26b4ade9b7a033dfa482c803b624efacb50696bb88352a6e7fa3f1",
+      "submitted_sha256": "1224aeeaab26b4ade9b7a033dfa482c803b624efacb50696bb88352a6e7fa3f1",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/imports-independent.json",
+      "original_sha256": "52ce462c9e564959c2ee0ae84163a828956120075ad53453197e1ae5abd88eee",
+      "submitted_sha256": "52ce462c9e564959c2ee0ae84163a828956120075ad53453197e1ae5abd88eee",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/independent-results.json",
+      "original_sha256": "9e1919e6a4d6a87b7a597a234b86067ce0cf9a0359f5e59b99e0046a244965cd",
+      "submitted_sha256": "9e1919e6a4d6a87b7a597a234b86067ce0cf9a0359f5e59b99e0046a244965cd",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/verification.json",
+      "original_sha256": "cdf6f3199412080aa6c1e2c37e7cff5c45c3a037fc3c918bfb9211d18b7ebf33",
+      "submitted_sha256": "cdf6f3199412080aa6c1e2c37e7cff5c45c3a037fc3c918bfb9211d18b7ebf33",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/reproduction-sources/run-review.py",
+      "original_sha256": "81ec9cffb4a1a8d1297e81a0f26401c44fc8dce87828be27348eb89b11b546c5",
+      "submitted_sha256": "81ec9cffb4a1a8d1297e81a0f26401c44fc8dce87828be27348eb89b11b546c5",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/reproduction-sources/test_de_pr23_independent.py",
+      "original_sha256": "62d5185cc02708bec751f9e3dadce1343f1357d8d89467c1e8cf31441d7813e7",
+      "submitted_sha256": "62d5185cc02708bec751f9e3dadce1343f1357d8d89467c1e8cf31441d7813e7",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/1f238e76283aeae221dc2d5264218f5a6ddf037c161507287b2dbc8318d2675c.json",
+      "original_sha256": "87d1a1d31d5fcdad9bc6cbcd598b87a01d0823e8ee7b5779172908b638db1771",
+      "submitted_sha256": "26d12e9605483010d66937d0787b08b1040ba8945ef6a5a95cd7acaf32c5019f",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "87d1a1d31d5fcdad9bc6cbcd598b87a01d0823e8ee7b5779172908b638db1771"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/2c18e79ad62de3de38c9e9a3c8435275645a4bdc0ca0cb94c5df56b59893bda4.json",
+      "original_sha256": "a9585ef193330d9ea27c195d53d0914a037ec1a78a11edaf2f7e1ac2db760297",
+      "submitted_sha256": "7b85f55b3e4403455205d51580a04f69b65744c48dcfea4675ac5168f6a6ec69",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "a9585ef193330d9ea27c195d53d0914a037ec1a78a11edaf2f7e1ac2db760297"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/37693b0f8dd164e384feda6fd94c8be182bc56f00cfdd2f3406992e220cca2c3.json",
+      "original_sha256": "2c5a9e8601d5ec57e16a8ade7b9d9570068bf5a728ac688878dab78d51d39f40",
+      "submitted_sha256": "488be06286a60cd63814c5de9cbc11270fd87d3b1b6cb174ff82219eb318cd42",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "2c5a9e8601d5ec57e16a8ade7b9d9570068bf5a728ac688878dab78d51d39f40"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/5cdd0c4577cab3d2ab1ac8f156b957f8315fcca40f9ce84d4724b9b0be2296a4.json",
+      "original_sha256": "d998df76fa197d043f78e846e8768e3d1fc73c82448f28d12ed2e190dbec2d2f",
+      "submitted_sha256": "785e302556bb30b5b5e623b9c9b9509329ad46d330b3c4e7e1b4656805795cd2",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "d998df76fa197d043f78e846e8768e3d1fc73c82448f28d12ed2e190dbec2d2f"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/5e8210d1baea3b46e60823c3f42be2002833d69ef2d627aaafa6494dbdd92e8e.json",
+      "original_sha256": "7a9444231e07562ec2e29b9213b062b408c227e5429c8c0ee667ab91d8d0a965",
+      "submitted_sha256": "291f7d12378f51f47f27822380ea16bb5533a7933f668abd7619dadff91a6512",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "7a9444231e07562ec2e29b9213b062b408c227e5429c8c0ee667ab91d8d0a965"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/77753d4dd52b6305fefc544f91d4a8512ec6eaa5633b53c642327bf5a5667819.json",
+      "original_sha256": "22c7379193328ac80af398c191ea22a68d8819acd5e773935309930c2d6c302b",
+      "submitted_sha256": "0b6d109bc89fbbaa2271a71e4d94ec1fc5d60dceb4fe0b672286c8e060359418",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "22c7379193328ac80af398c191ea22a68d8819acd5e773935309930c2d6c302b"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/85dcd3a91745e4d40b0b63bced39c7db1c31de3f671a013457809d7f3d3d36dc.json",
+      "original_sha256": "63fe4b55e5f50b585b28bac68bc27e31f65586a580673db4879088520e9069f5",
+      "submitted_sha256": "b27ddebbf27aff0713d5ffff0cfae4b762126ba272afade2fc498b10bab4c270",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "63fe4b55e5f50b585b28bac68bc27e31f65586a580673db4879088520e9069f5"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/9ca8f47c6267904dc7cb1b5a5b03a0ee438968b16fb291238f13a38e5b16e496.json",
+      "original_sha256": "432c91ecbded4e0888fd5575716e9c62d9cc34a77510fb0c876ddadc000c1b28",
+      "submitted_sha256": "b2c4d72a5f763e73c2f66ec9f937525569f5bca42d588296f8bc989ca5d5e2c5",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "432c91ecbded4e0888fd5575716e9c62d9cc34a77510fb0c876ddadc000c1b28"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/a2a1aa0b74c6087ee8d93056edbbe519e6894c48ac02ce79e56cc96fc0e9de4c.json",
+      "original_sha256": "e97e99990fc591f292223317399bd7a6ef4862088784d9aee1ee4cf9bdd3b775",
+      "submitted_sha256": "c23eca6ebb5f68fe91c2f6ed7b6b12ad05c536bd18517a6036407bff589e8c4a",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "e97e99990fc591f292223317399bd7a6ef4862088784d9aee1ee4cf9bdd3b775"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/aa7e103b01424948c3fd13352541f5c590c35a316049bb4b2b494b6850873a0c.json",
+      "original_sha256": "f64b66e013d77a4e92641e870f4318c8d4b78b03179e2ce4a10eff13cbcdcfcc",
+      "submitted_sha256": "83b96eca3a9397cad900c509daa835a5ccd1760dc3bd417707f39edbba337a95",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "f64b66e013d77a4e92641e870f4318c8d4b78b03179e2ce4a10eff13cbcdcfcc"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/b68020d3ee0a6eecd027b4d6823736ef79623f4b4ea2f9e194dff8eba24a7de8.json",
+      "original_sha256": "8bc6e350ee3c5293015bd16bceb1a0d31dcc02582d9b2c39407dc5d231149cc4",
+      "submitted_sha256": "c0db2ccd69b3808fbc5a5cd077264a6d356177c541d31c33379fc319bc9ad6da",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "8bc6e350ee3c5293015bd16bceb1a0d31dcc02582d9b2c39407dc5d231149cc4"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/cb00de1d2a8087d29af12ac6b0848d9bd91d451ed570a01204f0646dbc3b0312.json",
+      "original_sha256": "68ce28d84ca6cbebfdcbf86e2f770c57b1e4d78da0730811220c340a235a232b",
+      "submitted_sha256": "0be4801cd6fab7e5e7599be1fb691f106c26e8761e6648562c330bfeb24cbad5",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "68ce28d84ca6cbebfdcbf86e2f770c57b1e4d78da0730811220c340a235a232b"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/cb7f946df24756a99cffadea046fb9dbbe98ab4dde99e24e4c4df8da6b7b5fdb.json",
+      "original_sha256": "fa36d5743cc99f1f137533d8b0f82831fe797963c7916d613d62f6305d05de08",
+      "submitted_sha256": "c55051bb4acea6dd9b9313827f9feb7f16e907f5e351338fbb0c406ccb8076c9",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "fa36d5743cc99f1f137533d8b0f82831fe797963c7916d613d62f6305d05de08"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/d06701956de598d18a2435c7aae283d839171695b47c1dbd65feb95032ea4eda.json",
+      "original_sha256": "957189be8b41e68bc86d2a5349d0396318194b37a458cb74f3f119f2e13b3180",
+      "submitted_sha256": "4bdb45a3125eeef9c9003e9f1f1c4a2c8ef6ad3ca656cd8df19b5982e412b735",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "957189be8b41e68bc86d2a5349d0396318194b37a458cb74f3f119f2e13b3180"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/dab62a52c8705da1fdfb5545bd93fa1404d860e39526fa0b1de049f7a86a98d1.json",
+      "original_sha256": "391374f2a231e0fd1d51668396972554cb9e3a70ae4551e78619f31200ac15ff",
+      "submitted_sha256": "d850dca44336772beca2f0b00c3de4d6129f73c192c60ddc389f285a5aecbfb0",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "391374f2a231e0fd1d51668396972554cb9e3a70ae4551e78619f31200ac15ff"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/d-diagnoses/e917cbc90e0c4098f1952f1504a3a6bd3d642c0f8feabc5bcc1c46a76bad8f30.json",
+      "original_sha256": "f29d0bac9d4a64b0323d5607f28337edd8908abe66eec0bed40857d59df2fc7d",
+      "submitted_sha256": "6fac480877a4fc3eeb4a366616f8effa7fa9af1f878ac14f87a5c3381d9f212b",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "f29d0bac9d4a64b0323d5607f28337edd8908abe66eec0bed40857d59df2fc7d"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/0ee41c803a3746bbeddbd24328ca9b3279ecec68c8d44d4ef5aa77ced217dfd7.json",
+      "original_sha256": "80d33a3d1125e759c9250cc583ac9096c1650d0725f6f69ba7c80e6c81f9d6f8",
+      "submitted_sha256": "f57d07dd04a1a225a22b6b6a3959fbe66162b797c5e0258c195aa0180c138c39",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "80d33a3d1125e759c9250cc583ac9096c1650d0725f6f69ba7c80e6c81f9d6f8"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/1a36f943edbb84934ae2764952cd29deeab4245ac00852871da15b42c9e3806e.json",
+      "original_sha256": "8ecc593d197200a5e09d5ecd6588b3e9f2d4bb88c56f79efff43c3a030f1bd9c",
+      "submitted_sha256": "42d82cc887ef73d7e9cd0619b685e995d316e459ff8bc1c01e9a9cf0fa1d84cd",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "8ecc593d197200a5e09d5ecd6588b3e9f2d4bb88c56f79efff43c3a030f1bd9c"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/21f26f371c3270630a00144bd507d5dffc23140a6b40cab822b1ab7a6a07ab4e.json",
+      "original_sha256": "21c369514fa4ececdf9fbfb62306dfdf9f26c58a046a530c49c79c8d75f037fa",
+      "submitted_sha256": "9c1c44e8c264b7a96501cd8f1ea680fdc785b77f3b80b4a197a3ecdb50d262c8",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "21c369514fa4ececdf9fbfb62306dfdf9f26c58a046a530c49c79c8d75f037fa"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/598be880e356e42add25dfed126b24d9cb28e306f7233a73747f18736941222e.json",
+      "original_sha256": "8a2053c5b5bcf8d8d0747aaa16db6f848a5aa3d60d1c7e91d1403c36b3a01f86",
+      "submitted_sha256": "d780a6fdf8e2b3cc6ad85e1080f55fd6d024e0266362de280c17586ea7aa90fa",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "8a2053c5b5bcf8d8d0747aaa16db6f848a5aa3d60d1c7e91d1403c36b3a01f86"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/79f0ee5d96c675e8b070a44a38be406eabf2120f0afb5ce36833d1edf903d334.json",
+      "original_sha256": "e254e95f20c23f33e00355a1f4b79c178013a646f952076b158df1093d5d9003",
+      "submitted_sha256": "0fc2ddab8cc15f40b60bedd23d377cfe48a2f6dab637a038d207fc68d28cc351",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "e254e95f20c23f33e00355a1f4b79c178013a646f952076b158df1093d5d9003"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/8a1f5168345af0cb572a7cb0f6f5f29add189316e2452c9821c491b052c37c40.json",
+      "original_sha256": "dc515057bb1d9457896f61e03e88d417883ebd609630f00f930a4b4c69232a6e",
+      "submitted_sha256": "6605465fae7d769faff447d1c5e5b177a1bd59bb46e2cd73d1519c8ae99e762d",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "dc515057bb1d9457896f61e03e88d417883ebd609630f00f930a4b4c69232a6e"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/b75ca5970a1a9bcbf60094268795cc4e251e844574a044f80cb19eed43a86749.json",
+      "original_sha256": "71e971a0aa303fc8ae4bc4238446027076b64c17f6904cf4717c108fcc59f2ce",
+      "submitted_sha256": "d6471e2c7308be9cab4bc7dee1c7432c529eef21e5e44be00584947191192148",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "71e971a0aa303fc8ae4bc4238446027076b64c17f6904cf4717c108fcc59f2ce"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/bd939f089916546ca760f1971bc2ad02bd2a639d0e55732a952f6cff65c08aba.json",
+      "original_sha256": "523e741212adefdc458b6ec7eae834dbab63083586c78b6344e881e2764b501d",
+      "submitted_sha256": "02ffaaf343f8c70846a5c42d42cbd4fce8611198ac6d3d4f2b7b11aa9a1d6c5b",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "523e741212adefdc458b6ec7eae834dbab63083586c78b6344e881e2764b501d"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/e-executions/f6d9017f6bd3d92870ca54facde2abe08e3f4bc041c4f1893f8f1a7a1d8717be.json",
+      "original_sha256": "9bac55cc3407d89d9e360096d4ada7288182d94d92eddbae7d704f76bf95e688",
+      "submitted_sha256": "2ba19133cc58e2000c1f846e3e185bbb4bafbbacd8c5d10dd5e2eda17979adc8",
+      "transformation": "none; publication UTF-8/LF and trailing whitespace normalization",
+      "selected_copy_sha256_before_publication": "9bac55cc3407d89d9e360096d4ada7288182d94d92eddbae7d704f76bf95e688"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/01-e-remediation.log",
+      "original_sha256": "ecbb44b43f7649d4f78f464c3da6d00cf72f166983fec983be404ac0747336a7",
+      "submitted_sha256": "ecbb44b43f7649d4f78f464c3da6d00cf72f166983fec983be404ac0747336a7",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/02-e-history.log",
+      "original_sha256": "2fef055ceeca6f0eb4d3ef2ec3f6f944f139f17402c2fcf6df9603ee55aaaf16",
+      "submitted_sha256": "2fef055ceeca6f0eb4d3ef2ec3f6f944f139f17402c2fcf6df9603ee55aaaf16",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/03-d-cvss.log",
+      "original_sha256": "acfbd469178101df1ac4d1caaf4e635e8b644764491b7c614b5973b42436021b",
+      "submitted_sha256": "acfbd469178101df1ac4d1caaf4e635e8b644764491b7c614b5973b42436021b",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/04-c-fw-log.log",
+      "original_sha256": "f7f001917b527af1b902e72384be7c85d014d91ce84b034099f1b6dfbebd0b9b",
+      "submitted_sha256": "f7f001917b527af1b902e72384be7c85d014d91ce84b034099f1b6dfbebd0b9b",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/05-independent.log",
+      "original_sha256": "679ae84f6fdcb068f375a2d65327c1cd2348138f8fd1939a6e2dc7c0eb866e7b",
+      "submitted_sha256": "679ae84f6fdcb068f375a2d65327c1cd2348138f8fd1939a6e2dc7c0eb866e7b",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/python-3.14/logs/06-d-full.log",
+      "original_sha256": "2da7370859c034d43af1e0a64070b2dc5bbe761856b6319743c4715c4091d37f",
+      "submitted_sha256": "2da7370859c034d43af1e0a64070b2dc5bbe761856b6319743c4715c4091d37f",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/01-e-remediation.log",
+      "original_sha256": "c0f49376b149affe816a241542e639279b6a3013ffa8abd3575abb79d0d86600",
+      "submitted_sha256": "c0f49376b149affe816a241542e639279b6a3013ffa8abd3575abb79d0d86600",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/02-e-history.log",
+      "original_sha256": "00238f512c7aac5507de414068cb2e6b40cb882753109b22cd65ed6d568c617f",
+      "submitted_sha256": "00238f512c7aac5507de414068cb2e6b40cb882753109b22cd65ed6d568c617f",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/03-d-cvss.log",
+      "original_sha256": "fdc55318c2a9fcde24cd91cf4a952808ae591b47ff3cb2d38047fa2a8d3ba848",
+      "submitted_sha256": "fdc55318c2a9fcde24cd91cf4a952808ae591b47ff3cb2d38047fa2a8d3ba848",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/04-c-fw-log.log",
+      "original_sha256": "40885d1e0a3ceb6083b6c67c1a7c42e99a69285b624f8ac184bcf28c8b44015b",
+      "submitted_sha256": "40885d1e0a3ceb6083b6c67c1a7c42e99a69285b624f8ac184bcf28c8b44015b",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/05-independent.log",
+      "original_sha256": "8b263b473572903fe095baef6ade8a861848264094dd2d8183eed6e0e48c5a63",
+      "submitted_sha256": "8b263b473572903fe095baef6ade8a861848264094dd2d8183eed6e0e48c5a63",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D existing package",
+      "path": "docs/evidence/de-pr23-independent-20261112/submission-package/initial-harness-diagnostics/logs/06-d-full.log",
+      "original_sha256": "c0780b6a5c1fd0a22719f17f7bd04a063b63ffe22834befb6cfd7f2bf9ec29ab",
+      "submitted_sha256": "c0780b6a5c1fd0a22719f17f7bd04a063b63ffe22834befb6cfd7f2bf9ec29ab",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "D original review",
+      "path": "docs/evidence/de-pr23-independent-20261112/report.md",
+      "original_sha256": "528072bd98aab970c57e0165aac65813a8dbbd30eb61352bc17dd0bdfdc71e01",
+      "submitted_sha256": "d77d4d664b3d1cfd4ff63edb13489fff9ce6107481e7055b72203eeacbf3bde2",
+      "transformation": "Relative evidence links adjusted only; original facts/results unchanged"
+    },
+    {
+      "source_kind": "D original review",
+      "path": "docs/evidence/de-pr23-independent-20261112/team-summary.md",
+      "original_sha256": "aaaf53e09af7d194d0f20382822e1975b4cab5f305946a066cb2b63799f3d81d",
+      "submitted_sha256": "42a36c36a9620771c70f8964afdf4aa233780ba986cbfd952d3f7b92bae79377",
+      "transformation": "Relative evidence links adjusted only; original facts/results unchanged"
+    },
+    {
+      "source_kind": "D original review",
+      "path": "docs/evidence/de-pr23-independent-20261112/run-review.py",
+      "original_sha256": "81ec9cffb4a1a8d1297e81a0f26401c44fc8dce87828be27348eb89b11b546c5",
+      "submitted_sha256": "81ec9cffb4a1a8d1297e81a0f26401c44fc8dce87828be27348eb89b11b546c5",
+      "transformation": "none"
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/04-d-cvss.log",
+      "original_sha256": "6bb00305cf1411e94aceb811c64d9686a56f35438ab49a14730b036ea92c7ddc",
+      "submitted_sha256": "31b719d2a38f87af49c0af151c5c21a76b14b48fda5d45323e88002d66a4b1b3",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/05-b-contract.log",
+      "original_sha256": "f31a0d5a487492a236d3f74b98fbe1f1cc10f0d3427e1cb03335091990c9c841",
+      "submitted_sha256": "53adb2330f027a43396a2e1b97d263797312fdbec2481f5d39150825950fe757",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/06-e-history.log",
+      "original_sha256": "b40dfd3792e3dadde534c2e0c67d0f9e00cff604d1c15428efa029e42ceb0dab",
+      "submitted_sha256": "4d88ded69d710433cea5c035eed2bda8de40c5507a9a797d8c26e34dfc13ee8a",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/07-e-store.log",
+      "original_sha256": "29837583d45c7637fe2a20fa5055747b40306a57ff3a01dc6d11c47d39407cc3",
+      "submitted_sha256": "6b7f418cdc10ad8321bf3c028a74162add96327494ba308981fb2950c3232979",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/08-c-firewall.log",
+      "original_sha256": "08c2dda7a7538b83900df6eb24e69aba07e4c2a55feb609fad54827c211d2168",
+      "submitted_sha256": "a86708f2b1c735745c413930038fe1e677d21833e752ccb898d2f6cafb32cd3b",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/09-c-log.log",
+      "original_sha256": "f04ee3ec50486a559a9acd2c13e7d9a6c3eff197ff5e0773d39365511994291d",
+      "submitted_sha256": "e8357e72e33e633ddf13a8557ecdddfc3d24256a9758ad90f24387c858dc2133",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/10-e-history-fields.log",
+      "original_sha256": "5ab92a8db81bb338191f6c3bf0d7b51710e837f159570045ff1abbea79ca2f0a",
+      "submitted_sha256": "48f1748bc99db32ca37eb128ca10811504cfcf315bcacc8f5d87c87dc36781c6",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/11-e-history-versions.log",
+      "original_sha256": "08bdedbfbcadb7a3ef8c9609c4506ab57f66ae8d18e6d5deaedb220d7fa356d5",
+      "submitted_sha256": "075f9f79b5f3f736c541d99c04a719adda58c7b2cb62314af7d9297143b600ad",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/12-full-mock-flow.log",
+      "original_sha256": "b88eadc40309a953c24e4b1b84ac4d897f7213d9368316063e235e8fb691d0df",
+      "submitted_sha256": "a86d940625f45f0fa19bed8405e2704028815a53f06e3d5d68b61d8f64081292",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/README.md",
+      "original_sha256": "ef45be58204bf7857fba2a6ee6fca3b6f462ad2785af3e95d169d1943d7a766a",
+      "submitted_sha256": "ef45be58204bf7857fba2a6ee6fca3b6f462ad2785af3e95d169d1943d7a766a",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": false
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/results.json",
+      "original_sha256": "a7b531bc690b765a0bfd2ec4f1995e561f753bd331d9f432aaa8619ea4cbb199",
+      "submitted_sha256": "7e7d3b64b071d8e60e0ec7a57cc33ff92b4bdd282e25e011c446d17e65e677ed",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/run_verification.py",
+      "original_sha256": "4286ff12271a95f5ecb34611ab3b602f1027aca1607af9a4df687eb094185268",
+      "submitted_sha256": "4286ff12271a95f5ecb34611ab3b602f1027aca1607af9a4df687eb094185268",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": false
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/verify_flow.py",
+      "original_sha256": "c437a13c10f808625200efeb4f523c759eab929aa6ffb803e67a57087f2db1f8",
+      "submitted_sha256": "c437a13c10f808625200efeb4f523c759eab929aa6ffb803e67a57087f2db1f8",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": false
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/01-e-v11.log",
+      "original_sha256": "907a6d79bfb33ce16451eb44f70f22f791dca38b8b50bdcc0572b1c1a9636583",
+      "submitted_sha256": "56d10e2dc6defa93f1578533b344a25aa8916f510f150bf0c06bbe925b9c255b",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/02-e-v12.log",
+      "original_sha256": "87f2dd7dedff44bacc7e1cb9e88f03e997d2c2a4076af4a82ca0bece0191970b",
+      "submitted_sha256": "95b42e6cc8d92015ff7e55146c223efc90fae102bd9ccf07462282e49272be1a",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    },
+    {
+      "source_kind": "E provided original ZIP member",
+      "path": "docs/evidence/de-pr23-independent-20261112/cross-check-e-python312/03-e-execution.log",
+      "original_sha256": "e6c0082c7eb9fc84bfea34bfd542e404bcb0c84b30309f2b59d43e715248483b",
+      "submitted_sha256": "c8666118660610c920ffff6018d72579922bc879ae64dac0de3d4fe602d1f5cf",
+      "transformation": "UTF-8/LF + trailing whitespace normalization; private paths/internal IP placeholders if present",
+      "content_changed": true
+    }
+  ],
+  "note": "Original bytes retained outside submission; normalization changes are presentation/redaction only, not new test results.",
+  "independent_test_submission": "Byte-identical existing evidence snapshot only: submission-package/reproduction-sources/test_de_pr23_independent.py; no tests/ discovery changes."
+}

@@ -1,0 +1,27 @@
+{
+  "base_main": "62d1bf72ef52c7455bc0c2dd624206eb8350f925",
+  "submission_kind": "Evidence only; no new test execution; no production/test discovery changes",
+  "related_prs": [
+    {
+      "number": 20,
+      "url": "https://github.com/YJH-secure/SecureOps/pull/20",
+      "head": "0ed1c5efd3fb4b6d0cc97e5df3bf0d0da6c56faa",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 25,
+      "url": "https://github.com/YJH-secure/SecureOps/pull/25",
+      "head": "34ebff62484f5f55f74013126c4631a6a78ac18d",
+      "draft": true,
+      "merged": false
+    },
+    {
+      "number": 23,
+      "url": "https://github.com/YJH-secure/SecureOps/pull/23",
+      "head": "b0ef73a1613ebc40fdd596edcbaf0413d32309b8",
+      "draft": false,
+      "merged": false
+    }
+  ]
+}
