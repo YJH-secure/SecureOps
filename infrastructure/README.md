@@ -498,6 +498,8 @@ done
 | [v] | SSH 별칭·SSH-01 문맥 (2026-11-12) | `ssh -G`, `sshd -T`(`usedns`), `Match` 검색, `sshd -T -C …` (대상은 `user1`) | 별칭 2-1과 일치, `usedns no`, `Match` 없음 (HANDOFF 2-5) | `central-mgmt-ssh-g-261112.png`, `<id>-ssh01-context-261112.png` (진단 대상 2대) |
 | [v] | C 요청 권한 재측정 (2026-11-12) | scan으로 `sudo -l`, `getfacl`, journal, firewalld 조회 | `sudo -l` v0과 같음, 분류는 HANDOFF 4-1·4-3 | `central-mgmt-c-permission-check-{1,2,3}-261112.png` |
 | [v] | `ubuntu-a` 신규 백업·복원 (2026-11-12) | SHA-256, `7z t`, 원본 비교, 복원 후 부팅·SSH | 7-3 4)·5) 표와 같음 | `ubuntu-a-restore-test-261112.png`, `central-mgmt-ubuntu-a-ssh-restore-261112.png` |
+| [v] | C 일반 권한 재검증 (2026-11-19, 실환경) | scan 일반 권한으로 C 모듈 4개 × v1.1·v1.2(`2fac2a02` 배치본), 실행 전후 코드 SHA-256, JSON 점검, 중앙 회수 후 `sha256sum -c` | 두 대상 16건 exit 0·validation 0, 전후 해시 일치, 회수 OK. status는 2026-11-12와 같음(FILE·SVC `needs_review`, FW·LOG `error`) | `central-mgmt-c-recheck-*-261119.png` 22장 |
+| [v] | GNS3 1단계 (2026-11-19, 호스트) | GNS3 2.2.61 설치, VMware VM 목록 인식(템플릿 미추가), VPCS ping·Wireshark, 설치 전후 VM NIC·VMware 망 설정 비교 | VM 3대 인식, ICMP 확인, 기존 VM·VMware 망 설정 차이 0건 (`GNS3-TOPOLOGY.md` 승인 현황) | `gns3-host-*-261119.png` 9장 |
 
 > 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
 >
@@ -506,6 +508,8 @@ done
 > **2026-11-12 추가 증거 26장** (`*-261112.png`, `central-mgmt` 17장, `ubuntu-a` 8장, `rocky-b` 1장. 처음 19장에 C 모듈 배치·실행 증거 7장을 더했다): IP, 계정명, 공개키 지문, 명령 결과, 스냅샷 화면만 담겨 있으며 비밀번호·해시·개인키·토큰이 없음을 직접 판독해 확인했다(C 모듈 관련 `central-mgmt-c-*-261112.png` 9장은 2026-11-16 다시 판독). `/etc/shadow`는 마지막 변경일 필드만 출력했다.
 >
 > **2026-11-13 추가 증거 4장** (`central-mgmt-c-journal-ubuntu-a-261113.png`, `<id>-ssh01-context-recheck-261113.png` 3장): 명령·IP·설정값·안내문만 있으며 비밀번호·키·토큰이 없음을 2026-11-16 판독해 확인했다.
+>
+> **2026-11-19 추가 증거 31장** (`central-mgmt-c-recheck-*-261119.png` 22장, `gns3-host-*-261119.png` 9장): 명령, 호스트명, IP, 계정명, 코드·증거 파일 SHA-256, 진단 status, GNS3 설정·시험 화면만 담겨 있으며 비밀번호·개인키·토큰이 없음을 직접 판독해 확인했다. Wireshark 캡처의 MAC은 VPCS 가상 장비 값이다. 호스트 PC(Windows)에서 한 작업은 서버 식별자 `gns3-host`로 `evidence/gns3-host/`에 둔다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
