@@ -165,6 +165,13 @@ def _observe(details, stage, read):
         error = {'stage': stage, 'kind': type(exc).__name__}
         if isinstance(exc, subprocess.CalledProcessError):
             error['exit_code'] = exc.returncode
+        if (stage == 'journal_disk_usage' and type(exc) is ValueError
+                and getattr(exc, 'collection_reason', None) == 'journal_visibility_limited'
+                and type(getattr(exc, 'command_exit_code', None)) is int
+                and exc.command_exit_code == 0
+                and getattr(exc, 'visibility', None) == 'partial'):
+            error.update(reason='journal_visibility_limited', command_exit_code=0,
+                         visibility='partial')
         details['errors'].append(error)
         return None
     details['observations'][stage] = value
