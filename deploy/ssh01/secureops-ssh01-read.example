@@ -1,0 +1,43 @@
+#!/usr/bin/python3
+import json
+import subprocess
+import sys
+
+SSHD = "/usr/sbin/sshd"
+ROOT_CONTEXT = "user=root,host=REPLACE_CLIENT_HOST,addr=REPLACE_CLIENT_IP"
+if "REPLACE_" in ROOT_CONTEXT:
+    raise SystemExit("Configure SSH-01 context before deployment")
+
+def read_permitrootlogin(*args):
+    result = subprocess.run(
+        [SSHD, "-T", *args],
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=10,
+    )
+
+    values = [
+        line.split(maxsplit=1)[1]
+        for line in result.stdout.splitlines()
+        if line.startswith("permitrootlogin ")
+    ]
+
+    if len(values) != 1:
+        raise ValueError("Unexpected PermitRootLogin result")
+
+    return values[0]
+
+try:
+    global_value = read_permitrootlogin()
+    root_value = read_permitrootlogin("-C", ROOT_CONTEXT)
+
+    print(json.dumps({
+        "check_id": "SSH-01",
+        "global_value": global_value,
+        "root_value": root_value,
+        "context": ROOT_CONTEXT,
+    }))
+except (OSError, ValueError, subprocess.SubprocessError):
+    print("SSH-01 collection failed", file=sys.stderr)
+    sys.exit(1)
