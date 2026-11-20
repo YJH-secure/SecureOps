@@ -1,7 +1,72 @@
-# SecureOps 프로젝트 진행 현황 — 2026-11-19 갱신
+# SecureOps 프로젝트 진행 현황 — 2026-11-20 갱신
+
+> **업데이트 기준:** 2026-11-20 (KST), 이 문서 작성 시작 당시 main `0cab3a247d2143fc5556e37f6651440e109eef70`. 11/20 팀원 제출 보고와 팀장 검토·허용 범위, WebLab 직접 실습에 근거한다. 신규 GitHub PR 병합/실서버 작업을 수행한 것처럼 표기하지 않는다.
+> **증거 등급:** [팀장 실습] 직접 시행·관찰 / [담당 보고] 제출된 결과·로그 설명 / [정적 검토] 코드·설계 확인 / [승인] 실행 허가이지 완료 증거 아님. 11/19 당시 상태와 11/12 역사적 스냅샷은 아래에 보존한다.
+
+## 1. 11/20 완료·진행·미완료 구분
+
+| 영역 | 11/20 기준 확인된 사실 | 완료라고 부를 수 없는 범위 |
+| --- | --- | --- |
+| 중간발표·일정 | 11/18 중간발표 완료. 기본 최종 제출 목표 12/01 18:00, 발표 12/02 | 최종 PPT·PDF·짧은 시연 MP4·README 제출 완료 아님 |
+| SSH-01 실환경 | 11/16 central→Ubuntu 및 central→Rocky **각각 독립** 읽기 전용 E2E [팀장 실측]. 양쪽 결과 vulnerable / CVSS pending·null / D 저장·재조회 | 두 대상 일괄 스캔, 추가 B/C 점검의 실환경 통합, SSH 정책 실제 조치 |
+| A GNS3 2단계 | 원본 VM 3대 정상 종료·파일별 SHA, ZIP 3개 압축 검사, central 복원 파일 54개 일치, Full Clone 3대 생성·NIC 자동연결 해제, 원본 부팅·SSH 재검증 [담당 보고] | ZIP 3개 모두 독립 복원 시험한 것은 아님. 복제본 부팅·GNS3 3단계(망 연결, OPNsense, IP 변경) 미승인 |
+| A 운영 이슈 | ubuntu-a VMware Tools 미설치 및 과거 강제 종료 원인 기록. 이번 종료는 게스트 poweroff 정상. 중앙/Ubuntu 아침 자동 업데이트 후 상태를 백업 기준으로 사용 [담당 보고] | Tools 설치, 자동 업데이트 비활성화는 별도 승인 |
+| A Git 작업 사고 | PowerShell 변수명 대소문자 충돌로 임시 복제본이 Git 작업 폴더에 생성됐다가 이동·해시 대조·삭제. A가 잔여 VM/키/ZIP 파일 및 stage·이력 재검사에서 문제 없음을 보고 | 모든 잠재 정보 노출에 대한 외부 독립 포렌식 완료라고 주장하지 않음 |
+| 중앙 D 준비 | T0 조회만: 중앙 디스크 여유 약 11GB, Python 3.12.3, Git 2.43.0, venv 관련 apt 시뮬레이션 신규 3개 [담당 보고]. C1/C2/C3/C5는 **조건부 설치 승인** | 해당 설치 실제 완료·D 173회 최신 중앙 회귀 완료 아님. C4 jsonschema extras 확정·설치 승인 대기 |
+| B SSH-02·ACC | 기존 PR #33·#36 Open. 종욱 B 어댑터 judge_payload() 및 MOCK 146건은 B 측 로컬 보고. B/D v2 중앙 payload 판정→D 검증·집계·저장 방향 조건부 설계 승인 | B 소스/146건 로그 D 독립 확보·재실행 미완료; 수집기 설치·sudoers/host/addr/root·계정 목록 미승인 |
+| C FILE/SVC/FW/LOG | 11/12 실제 VM CLI 16개 JSON·D 오프라인 수신 근거 유지. 서후가 C/E FILE-01 신규 14건 + Bridge 10건 = 24건 독립 재실행 PASS 보고; ZIP/핵심 파일 무결성 [담당 보고] | C 전항목 중앙 SSH 자동 수집, 미승인 FILE/SVC 기준, FW/LOG 추가 권한 미완료. 과거 실제 CLI 상태 needs_review/error 그대로 |
+| D/E 호출부 | D/E 공통 MOCK 단일 요청·post_rollback_recheck=False 소스 교차 검토에서 즉시 수정 확정 결함 0건 [담당 검토]. 기존 P01~P13 13건 및 결합 297건 실행 기록 대조 | E 측 297건 독립 재실행 아님. 요청 간 중복 조치 방지·예외 추적·P13 활성·실서버 E 조치 미완료 |
+| E FILE-01 | C/E 파일럿의 실행·복구·결과 매핑 및 D/E 연결 설계 [담당 보고]. 정책 레지스트리/운영 핸들러 FILE-01 미등록 | 정책 등록·D/E 정식 실행·실서버 파일 권한 변경 미승인 |
+| 대시보드 | 11/25 로컬 읽기 전용 4화면 MVP 범위 조건부 승인. Python 표준 라이브러리 + 동결 MOCK DTO→정적 HTML/CSS/JS를 1차 스택으로 결정 | UI·테스트·시연 미구현. Streamlit 사용·실데이터 연결·ReportStore 운영 root 초기화·SSH·저장·조치 호출 미승인 |
+| WEB-01 | 격리 WebLab Juice Shop 로그인 401 대비 특수문자 500/SQLITE_ERROR, 공개 SQL 구성 코드 검토, 별도 Python 매개변수화 질의 검증. 1차 분석 보고서 작성 [팀장 실습] | 로그인 우회 입증·원본 앱 패치/재검증 완료 아님 |
+| WEB-02 | 검색어 HTML을 실제 DOM 요소로 생성하는 현상, 공식 소스 HTML trust/innerHTML 구조, 별도 출력 인코딩 예제. 1차 위험 분석 보고서 작성 [팀장 실습] | JavaScript 실행 XSS 성공·원본 앱 패치/재검증 미실시 |
+| WEB-03 | Complaint 정상 PDF 제출, POST /file-upload 204·Complaints 201 및 multipart file 전송, 공개 파일형식 챌린지와 Multer fileSize 200000 검토. 1차 분석 보고서 작성 [팀장 실습] | 임의 파일 업로드 악용 입증·형식/내용 우회 실측·원본 앱 수정 미실시 |
+
+### 데이터·환경 표기의 주의
+
+- WEB-01~03은 Host-only/SSH 터널의 별도 `SecureOps-WebLab`에서 진행한 **교육용 Juice Shop 앱 분석**이며 central의 B/C/D/E 실서버 진단 체인에 연동한 것이 아니다. Juice Shop `20.4.0-SNAPSHOT`, 컨테이너 이미지 ID를 실습 증거로 기록했지만 공개 GitHub `master`의 정확한 빌드 대응 관계는 미확정이다.
+- B와 C의 수집·판정 위치를 혼동하지 않는다: **B는 대상에서 관측 payload 수집 → 중앙 B adapter 판정·v1.2 변환 1회 → D**, **C는 대상 VM에서 CLI 판정·v1.2 결과 JSON 전송 → D** 방향. 모두 중앙 실행 실패와 개별 진단 status를 분리한다.
+- D 결과 status는 `pass/vulnerable/error/not_applicable/needs_review`; CVSS pending/null과 점수 0.0을 혼동하지 않는다. `error/not_applicable/needs_review`는 이행률 분모에서 제외하며 분모 0은 N/A.
+
+## 2. 팀장 승인과 보류 — 11/20
+
+| 결정 | 허용 범위 | 명시적 제외 |
+| --- | --- | --- |
+| A GNS3 | 2단계 완료 보고 수용; 중앙 D T0 후 C1 스냅샷/C2 venv 관련 apt 3개/C3 검증된 main bundle clone/C5 테스트 폴더 **조건부 허가** | C4 jsonschema 추가 의존성 확정 전 설치, GNS3 3단계 복제본 부팅·망 변경·OPNsense |
+| B/D v2 | 관측 수집과 정책 판정의 계층 분리, 중앙 실행 metadata 별도, B v1.2 단일 변환, D 검증/ReportStore 등 **설계 원칙 승인**; B feature 브랜치 Draft PR 제출 조건부 허가 | 신규 수집기·sudoers 설치, root 자동 포함, 확정 안 된 host/addr·timeout·byte limit, main 병합 |
+| E/D | 신뢰된 단일 MOCK 호출부 조건부 수용, FILE-01 최소 MOCK 연결 설계 | FILE-01 운영 핸들러 등록, 중복 실행 보호 미완성 상태의 실제 조치, 원본 VM 변경 |
+| 대시보드 | 공식 MOCK `ubuntu-a-mock` v1.1/v1.2를 **서로 다른 스냅샷**으로 표시; `history-MOCK` v1.2 before/after는 E의 출처·해시·연계 재확인 후 MOCK 시연만 허용 | 공식 v1.1↔v1.2를 전후 개선으로 비교, C 오프라인 실서버 증거·E2E 데이터 기본 표시, 원문 evidence/details 일괄 노출 |
+
+### 대시보드 MVP 화면 승인 기준
+
+- 승인한 4화면: 서버 목록, 상태 집계, 결과 상세, 진단 이력·동일 스키마 MOCK 전후 비교.
+- 동결 사본만 입력으로 받아 해시/스키마/allowlist 검사 후 비민감 DTO 생성; 원본 JSON 수정·운영 ReportStore 생성자 호출·자동 저장/SSH/E.run/collector 금지.
+- `target_id/scan_id/check_id/schema_version/status/출처/검증된 CVSS` 등만 기본 표시. 원문 evidence/details·키·토큰·개인 경로·내부 접속정보 비표시, 허용 필드만 명시적으로 선택.
+- 같은 target_id여도 공식 v1.1과 v1.2 MOCK은 점검 항목 구성이 달라 전후 비교 금지. 9.8 CVSS는 합성 샘플이지 운영 서버 위험도 결과가 아님.
+- **11/23 구현·11/24 검증·11/25 로컬 시연 목표**이며, 11/20에 UI가 동작한다고 표기 금지.
+
+## 3. 우선 후속 작업 및 GitHub 검토
+
+| 우선 | 담당 | 다음 제출·결정 자료 |
+| --- | --- | --- |
+| P0 | A+D | 중앙 D C1~C3/C5 실제 변경 증거, 효민의 C4 `jsonschema` extras 확인 및 팀장 추가 승인, 최신 main 오프라인 재현 로그(실제 PASS/FAIL/SKIP/exit) |
+| P0 | B+D+A | B adapter 소스 SHA/146건 원본 로그, payload/context 필수/선택·chage 예외 표, SSH-02 평가 계정과 SSH 인증 계정 분리, host/addr 실측, 수집기 sudo 권한 최소안 |
+| P0 | C+D+A | C CLI 중앙 실행 계약·기존 role/network 및 필수/선택 파일·권한·stderr/timeout/절단 구분. 실제 서버 변경은 별도 승인 |
+| P0 | D+E | FILE-01 snapshot→정식 결과 연결안, 실행/스캔 ID/복구·이력, 실패 시 자동 재실행 금지 및 최종 결합 테스트 |
+| P0 | D | 읽기 전용 4화면 MVP의 출처 manifest/마스킹/무변경 테스트·시연 증거 |
+| P1 | 팀장 | WEB-01~03 1차 보고서 3건은 별도 보관. 최종 제출 전 요구된 취약점 입증·개선·재검증 충족 여부를 다시 판정 |
+| P1 | A+팀장 | GNS3 3단계 계획은 복제본 NIC/MAC·망 분리·복구·SSH 영향 근거를 받은 후 별도 승인 |
+
+**PR 메모:** 현재 main에는 11/20 D/E/B/C 신규 계약과 GNS3 2단계 산출물의 운영 코드가 병합된 상태가 아니다. 주요 Open: #9, #17, #20, #23, #24, #25, #26, #30, #33, #34, #35, #36. #24→#26, #23→#35 의존성 검토 후 팀장 승인 없이 merge 금지. 이 문서 업데이트는 **기록 변경**이며 실제 코드·VM·권한·JSON 계약의 승인이 아니다.
+
+---
+
+> **아래는 11/19 당시의 기록을 보존한 역사적 절이다. 11/20 기준 현황은 위 1~3장에 따른다.**
+
+# SecureOps 프로젝트 진행 현황 — 2026-11-19 기록(과거)
 
 > **기준일:** 2026-11-19 (KST) · **원본 main:** `2fac2a02edb1edf08cf4435138f4a1d543e33ba2` · **문서 상태:** docs 전용 PR 검토 중.  
-> 기존 11/12 기준 기록은 아래 부록에 내용 그대로 보존하되, 문서 안의 제목 계층만 조정했다. 현재 상태 판단은 **이 문서 상단의 11/19 기록과 [통합 검증 체크리스트](integration-checklist.md)**를 우선한다.  
+> 기존 11/12 기준 기록은 아래 부록에 내용 그대로 보존하되, 문서 안의 제목 계층만 조정했다. 11/19 시점의 상태 판단은 **아래 11/19 기록과 [통합 검증 체크리스트](integration-checklist.md)**를 우선한다.  
 > **증거 구분:** 팀장 직접 실행 보고 / 담당자 제출 증거 / GitHub PR 상태 / 향후 구축 계획을 구별한다. 신규 원본 로그·SHA 대조 또는 제3자 독립 재검증을 실시하지 않은 사항은 완료로 승격하지 않는다.
 
 ## 1. 11/19 전체 현황
