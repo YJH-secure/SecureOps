@@ -1,0 +1,40 @@
+﻿Central-Management-Ubuntu  ethernet0.connectionType = "custom"
+Central-Management-Ubuntu  ethernet0.addressType = "generated"
+Central-Management-Ubuntu  ethernet0.virtualDev = "e1000"
+Central-Management-Ubuntu  ethernet0.present = "TRUE"
+Central-Management-Ubuntu  ethernet0.pciSlotNumber = "33"
+Central-Management-Ubuntu  ethernet0.generatedAddress = "xx:xx:xx:xx:xx:xx (masked)"
+Central-Management-Ubuntu  ethernet0.generatedAddressOffset = "0"
+Central-Management-Ubuntu  ethernet0.vnet = "VMnet8"
+Central-Management-Ubuntu  ethernet0.displayName = "VMnet8"
+[Central-Management-Ubuntu snapshots]
+Total snapshots: 2
+00-initial-setup
+01-ssh-security-configured
+Target-Ubuntu  ethernet0.connectionType = "custom"
+Target-Ubuntu  ethernet0.addressType = "generated"
+Target-Ubuntu  ethernet0.virtualDev = "e1000"
+Target-Ubuntu  ethernet0.present = "TRUE"
+Target-Ubuntu  ethernet0.pciSlotNumber = "33"
+Target-Ubuntu  ethernet0.generatedAddress = "xx:xx:xx:xx:xx:xx (masked)"
+Target-Ubuntu  ethernet0.generatedAddressOffset = "0"
+Target-Ubuntu  ethernet0.vnet = "VMnet8"
+Target-Ubuntu  ethernet0.displayName = "VMnet8"
+[Target-Ubuntu snapshots]
+Total snapshots: 3
+00-initial-setup
+01-ssh-security-configured
+01-ssh-security-configured-passwd
+Target-Rocky  ethernet0.connectionType = "custom"
+Target-Rocky  ethernet0.addressType = "generated"
+Target-Rocky  ethernet0.virtualDev = "vmxnet3"
+Target-Rocky  ethernet0.present = "TRUE"
+Target-Rocky  ethernet0.pciSlotNumber = "160"
+Target-Rocky  ethernet0.generatedAddress = "xx:xx:xx:xx:xx:xx (masked)"
+Target-Rocky  ethernet0.generatedAddressOffset = "0"
+Target-Rocky  ethernet0.vnet = "VMnet8"
+Target-Rocky  ethernet0.displayName = "VMnet8"
+[Target-Rocky snapshots]
+Total snapshots: 2
+00-initial-setup
+01-ssh-security-configured

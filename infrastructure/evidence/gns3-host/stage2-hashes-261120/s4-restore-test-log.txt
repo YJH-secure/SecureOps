@@ -1,0 +1,4 @@
+﻿S4 restore test (Central-Management-Ubuntu.zip -> <restore-test dir>), 11:14:12-11:17:29
+Size: 7476265256  Compressed: 3368678073
+checked=54 problems=0 extra=0
+restore-test folder removed after check (left: 0)
