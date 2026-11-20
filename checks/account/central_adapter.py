@@ -267,11 +267,15 @@ def judge_payload(check_id, payload, context=None, *, policy_path=None,
         raise ValueError(f"unsupported check_id: {check_id!r}")
     if not isinstance(result_version, str) or result_version not in SUPPORTED_RESULT_VERSIONS:
         raise ValueError(f"unsupported result_version: {result_version!r}")
+    # policy_path : None일 때만 기본 정책. 그 외에는 비어 있지 않은 글자 경로만 허용
+    # (False, 0, [], {}, "" 같은 값이 "값 없음"으로 취급되어 기본 정책으로 바뀌는 것을 막음)
+    if policy_path is not None and (not isinstance(policy_path, str) or not policy_path.strip()):
+        raise ValueError(f"invalid policy_path: {policy_path!r}")
     load_policy, fallback_severity, make_result, to_v1_2 = CHECKS[check_id]
 
     # 1단계: 정책 읽기 (경로를 안 주면 각 모듈의 기본 정책 파일)
     try:
-        policy = load_policy(policy_path) if policy_path else load_policy()
+        policy = load_policy() if policy_path is None else load_policy(policy_path)
     except (OSError, ValueError) as e:
         policy = None
         result = make_result("error", fallback_severity, f"Policy load failed: {type(e).__name__}")

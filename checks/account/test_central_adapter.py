@@ -331,6 +331,25 @@ class EntryTest(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     adapter.judge_payload(check_id, {}, **kwargs)
 
+    def test_invalid_policy_path_raises(self):
+        # 효민님 재검증 탐침 4건(False, 0, [], {}) + 빈 문자열 등 경계 사례
+        # 예전에는 기본 정책으로 바뀌어 pass가 나올 수 있었음 -> 이제 호출 실수(ValueError)
+        payload = acc_payload(ubuntu_fs())
+        for bad in (False, 0, [], {}, "", "   ", True, 1, b"policy.json"):
+            with self.subTest(policy_path=bad):
+                with self.assertRaises(ValueError):
+                    adapter.judge_payload("ACC-02", payload, policy_path=bad)
+
+    def test_policy_path_none_and_valid_path_still_work(self):
+        payload = acc_payload(ubuntu_fs())
+        default = judge("ACC-02", payload)                                     # None -> 기본 정책
+        explicit = judge("ACC-02", payload, policy_path=adapter.acc02.POLICY_FILE)
+        self.assertEqual(default["status"], "pass")
+        self.assertEqual(explicit, default)
+        missing = judge("ACC-02", payload, policy_path="/no/such/policy.json", version="1.2")
+        self.assertEqual(missing["status"], "error")                          # 없는 경로는 기존대로 error 결과
+        self.assertIn("Policy load failed", missing["evidence"])
+
     def test_options_are_keyword_only(self):
         # 효민님 독립 검증 R1: 네 번째 위치 인자로 버전을 넘기는 실수를 막음
         with self.assertRaises(TypeError):
