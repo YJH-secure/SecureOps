@@ -7,7 +7,8 @@ B 판정 함수(check_ssh_02, check_acc_01, check_acc_02)가 받는 입력으로
   수집기(대상 서버) --payload--> [이 어댑터] --입력--> B 판정 함수 --결과--> D(저장·집계)
 
 원칙
-  - 이 파일은 명령을 실행하거나 파일을 읽지 않습니다. 받은 글자만 바꿉니다. (읽기 전용 수집은 수집기 담당)
+  - 이 파일은 명령 실행·SSH 연결·대상 서버 파일 읽기를 하지 않습니다. (읽기 전용 수집은 수집기 담당)
+    단, 판정 기준인 B 정책 JSON(로컬 파일)은 읽습니다.
   - 수집 실패를 "빈 값"이나 "pass"로 추정하지 않습니다. 실패는 error(또는 기준상 needs_review)로 넘깁니다.
   - 점검 계정은 정책 JSON의 목록만 씁니다. (payload에 다른 계정이 와도 판정에 쓰지 않음)
   - SSH-02 host/addr은 정책에 고정하지 않고, 실행할 때 검증된 값을 context로 받습니다.
@@ -22,9 +23,12 @@ B 판정 함수(check_ssh_02, check_acc_01, check_acc_02)가 받는 입력으로
   {"state": "timeout"}              명령 시간 초과
   {"state": "truncated"}            출력 절단
   (명령 실패는 "error", 종료 코드는 있으면 "exit_code"에 기록)
+  ok라도 exit_code가 0이 아니거나, timeout/truncated 표시가 true이면 error로 봅니다.
+  (중앙 실행 계층의 차단과 별개로, 항목 단위에서도 한 번 더 막는 안전장치)
 """
 
 import os
+import posixpath    # 대상 서버(리눅스) 경로를 PC 종류와 상관없이 "/" 기준으로 다루기
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -45,14 +49,25 @@ SUPPORTED_RESULT_VERSIONS = {"1.1", "1.2"}
 # 1. 수집 기록 -> B 상태값 ("ok" | "missing" | "error")
 # ==================================================
 
+# ok 기록이 실제로 "끝까지 정상 실행"됐는지 확인합니다.
+#   exit_code : 있으면 반드시 정수 0 (True/False는 정수로 인정하지 않음)
+#   timeout, truncated : 있으면 반드시 False
+def is_clean_ok(record):
+    if "exit_code" in record:
+        code = record["exit_code"]
+        if isinstance(code, bool) or not isinstance(code, int) or code != 0:
+            return False
+    return record.get("timeout", False) is False and record.get("truncated", False) is False
+
+
 # 수집 기록 1개를 (상태, 내용)으로 바꿉니다.
-# ok인데 내용이 글자가 아니면 형식 오류이므로 error 처리합니다.
+# ok인데 내용이 글자가 아니거나 실행 정보가 어긋나면 형식 오류이므로 error 처리합니다.
 # timeout, truncated, 알 수 없는 상태는 모두 error (불완전한 값으로 오판하지 않기 위해)
 def normalize_record(record):
     if not isinstance(record, dict):
         return "error", None
     state = record.get("state")
-    if state == "ok" and isinstance(record.get("text"), str):
+    if state == "ok" and isinstance(record.get("text"), str) and is_clean_ok(record):
         return "ok", record["text"]
     if state == "missing":
         return "missing", None
@@ -119,12 +134,16 @@ def adapt_ssh_02(policy, payload, context):
 # ==================================================
 
 # os-release 기록에서 OS를 꺼냅니다. 실패하면 (None, None, 오류 결과)
+#   OS를 알아낼 수 없음(읽기 실패, ID 없음) -> error
+#   OS는 확인됐지만 지원 대상이 아님         -> not_applicable
 def read_os(policy, payload, make_result):
     severity = policy["severity"]
     state, text = normalize_record(payload.get("os_release"))
     if state != "ok":
         return None, None, make_result("error", severity, "Failed to read /etc/os-release")
     os_id, os_version = common.parse_os_release(text)
+    if not os_id:
+        return None, None, make_result("error", severity, "Unable to determine OS (no ID in /etc/os-release)")
     if os_id not in policy["applies_to"]:
         return None, None, make_result("not_applicable", severity,
                                        f"OS not in applies_to: {os_id or 'unknown'}")
@@ -137,6 +156,18 @@ def pick_files(payload, paths):
     collected = get_dict(payload, "files")
     return {path: normalize_record(collected[path]) if path in collected else ("error", None)
             for path in dict.fromkeys(paths)}
+
+
+# conf.d 목록의 항목 1개가 "정책 폴더 바로 안의 *.conf 파일"인지 확인합니다.
+#   - 글자여야 함
+#   - 정리한 경로(normpath)가 원래 경로와 같아야 함 ("..", "//", "./" 같은 우회 표현 거부)
+#   - 부모 폴더가 정확히 정책 폴더여야 함 (하위 폴더나 다른 폴더 거부)
+def is_conf_d_path(path, conf_dir):
+    if not isinstance(path, str) or not path.endswith(".conf"):
+        return False
+    if posixpath.normpath(path) != path:
+        return False
+    return posixpath.dirname(path) == posixpath.normpath(conf_dir)
 
 
 # ==================================================
@@ -159,12 +190,18 @@ def adapt_acc_01(policy, payload):
 
     # conf.d 목록: 목록을 못 받으면 추가 설정을 놓칠 수 있으므로 error
     listing = payload.get("pwquality_conf_d")
-    conf_dir = profile["pwquality_conf_dir"].rstrip("/") + "/"
     if not isinstance(listing, dict) or listing.get("state") != "ok" \
-            or not isinstance(listing.get("paths"), list):
+            or not isinstance(listing.get("paths"), list) or not is_clean_ok(listing):
         return acc01.make_result("error", severity, f"Failed to list {profile['pwquality_conf_dir']}")
-    conf_d_paths = sorted(p for p in listing["paths"]
-                          if isinstance(p, str) and p.startswith(conf_dir) and p.endswith(".conf"))
+    # 목록 안에 형식이 이상한 항목이 하나라도 있으면 조용히 버리지 않고 error
+    # (버리면 추가 설정을 놓친 채 pass가 나올 수 있음)
+    conf_d_paths = []
+    for path in listing["paths"]:
+        if not is_conf_d_path(path, profile["pwquality_conf_dir"]):
+            return acc01.make_result("error", severity,
+                                     f"Invalid entry in {profile['pwquality_conf_dir']} listing")
+        conf_d_paths.append(path)
+    conf_d_paths = sorted(set(conf_d_paths))
 
     paths = [profile["login_defs"], *profile["password_files"], *profile["auth_files"],
              profile["pwquality_conf"], *conf_d_paths]
@@ -219,13 +256,17 @@ def adapt(check_id, policy, payload, context):
     return adapt_acc_02(policy, payload)
 
 
-def judge_payload(check_id, payload, context=None, policy_path=None,
+# policy_path, result_version은 이름을 붙여서만 받습니다. (* 뒤 = 키워드 전용)
+# 예: judge_payload("ACC-01", payload, result_version="1.1")
+# 위치로 넘기면 TypeError가 나서 "버전 값이 정책 경로로 들어가는" 실수를 막습니다.
+def judge_payload(check_id, payload, context=None, *, policy_path=None,
                   result_version=DEFAULT_RESULT_VERSION):
-    # 호출하는 쪽(중앙 코드)의 실수는 바로 알려야 하므로 예외로 알립니다.
-    if check_id not in CHECKS:
-        raise ValueError(f"unsupported check_id: {check_id}")
-    if result_version not in SUPPORTED_RESULT_VERSIONS:
-        raise ValueError(f"unsupported result_version: {result_version}")
+    # 호출하는 쪽(중앙 코드)의 실수는 바로 알려야 하므로 예외(ValueError)로 알립니다.
+    # 글자가 아닌 값(리스트 등)도 TypeError가 아니라 같은 ValueError로 통일합니다.
+    if not isinstance(check_id, str) or check_id not in CHECKS:
+        raise ValueError(f"unsupported check_id: {check_id!r}")
+    if not isinstance(result_version, str) or result_version not in SUPPORTED_RESULT_VERSIONS:
+        raise ValueError(f"unsupported result_version: {result_version!r}")
     load_policy, fallback_severity, make_result, to_v1_2 = CHECKS[check_id]
 
     # 1단계: 정책 읽기 (경로를 안 주면 각 모듈의 기본 정책 파일)

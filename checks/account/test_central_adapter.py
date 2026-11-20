@@ -80,7 +80,8 @@ def ssh_payload(**changes):
 # 실제 명령이 실행되면 바로 실패하도록 막고 어댑터를 부릅니다.
 def judge(check_id, payload, context=None, version="1.1", policy_path=None):
     with mock.patch("subprocess.run", side_effect=AssertionError("no real command")):
-        return adapter.judge_payload(check_id, payload, context, policy_path, version)
+        return adapter.judge_payload(check_id, payload, context,
+                                     policy_path=policy_path, result_version=version)
 
 
 # ==================================================
@@ -96,6 +97,14 @@ class RecordTest(unittest.TestCase):
             ({"state": "truncated", "text": "part"}, ("error", None)),   # 절단 출력은 쓰지 않음
             ({"state": "unknown"}, ("error", None)),
             ({"state": "ok"}, ("error", None)),                          # ok인데 내용 없음
+            ({"state": "ok", "text": "x", "exit_code": 0}, ("ok", "x")),
+            ({"state": "ok", "text": "x", "exit_code": 1}, ("error", None)),     # ok와 종료 코드 불일치
+            ({"state": "ok", "text": "x", "exit_code": None}, ("error", None)),  # 종료 코드 미확인
+            ({"state": "ok", "text": "x", "exit_code": False}, ("error", None)), # bool은 종료 코드 아님
+            ({"state": "ok", "text": "x", "exit_code": "0"}, ("error", None)),
+            ({"state": "ok", "text": "x", "timeout": True}, ("error", None)),
+            ({"state": "ok", "text": "x", "truncated": True}, ("error", None)),
+            ({"state": "ok", "text": "x", "timeout": False, "truncated": False}, ("ok", "x")),
             (None, ("error", None)),
             ("text", ("error", None)),
         ]
@@ -153,6 +162,15 @@ class SshAdapterTest(unittest.TestCase):
         self.assertEqual([f["user"] for f in missing], SSH_USERS[1:])   # 수집 안 된 계정은 error 항목
         self.assertEqual(result["status"], "error")
 
+    def test_item_error_and_overall_status_are_different(self):
+        # 효민님 독립 검증 R5: 한 계정 수집 실패 + 다른 계정 취약 -> 전체 vulnerable, 실패는 항목에 남음
+        outputs = {SSH_USERS[0]: {"state": "timeout"},
+                   SSH_USERS[1]: ok(make_output(passwordauthentication="yes"))}
+        result = judge("SSH-02", ssh_payload(sshd_T_C=outputs), CONTEXT)
+        self.assertEqual(result["status"], "vulnerable")
+        statuses = {f["status"] for f in result["details"]["findings"]}
+        self.assertIn("error", statuses)
+
     def test_v1_2_format(self):
         result = judge("SSH-02", ssh_payload(sshd_T_C={u: ok(make_output(passwordauthentication="yes"))
                                                        for u in SSH_USERS}), CONTEXT, version="1.2")
@@ -207,12 +225,42 @@ class Acc01AdapterTest(unittest.TestCase):
         payload["pwquality_conf_d"] = {"state": "error"}
         self.assertEqual(judge("ACC-01", payload, policy_path=self.policy_path)["status"], "error")
 
-    def test_conf_d_path_outside_directory_is_ignored(self):
-        payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
-        payload["pwquality_conf_d"]["paths"] = ["/tmp/evil.conf"]
-        payload["files"]["/tmp/evil.conf"] = ok("minlen = 1\n")
+    def test_invalid_conf_d_entries_are_error(self):
+        # 효민님 독립 검증 R2·R3: 이상한 항목을 조용히 버리거나 그대로 쓰지 않고 error
+        bad_entries = [
+            [1],                                                    # 숫자 항목 (R2)
+            [None],
+            ["/etc/security/pwquality.conf.d/../outside.conf"],     # 경로 우회 (R3)
+            ["/etc/security/pwquality.conf.d/./50.conf"],
+            ["/etc/security/pwquality.conf.d//50.conf"],
+            ["/etc/security/pwquality.conf.d/sub/50.conf"],         # 하위 폴더
+            ["/tmp/evil.conf"],                                     # 다른 폴더
+            ["/etc/security/pwquality.conf.d/50.txt"],              # 확장자
+            ["/etc/security/pwquality.conf.d/50.conf", 1],          # 정상 + 이상 섞임
+        ]
+        for paths in bad_entries:
+            with self.subTest(paths=paths):
+                payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
+                payload["pwquality_conf_d"]["paths"] = paths
+                for p in paths:
+                    if isinstance(p, str):
+                        payload["files"][p] = ok("minlen = 12\n")
+                result = judge("ACC-01", payload, policy_path=self.policy_path)
+                self.assertEqual(result["status"], "error")
+                self.assertIn("Invalid entry", result["evidence"])
+
+    def test_valid_conf_d_entry_is_used(self):
+        conf = "/etc/security/pwquality.conf.d/50-local.conf"
+        payload = acc_payload(ubuntu_fs(), {conf: "minlen = 12\n"}, {"user1": ok(CHAGE_GOOD)})
         result = judge("ACC-01", payload, policy_path=self.policy_path)
         self.assertEqual(result["status"], "pass")
+        self.assertEqual(result["details"]["pwquality_effective"]
+                         ["/etc/pam.d/common-password"]["minlen"], "12")
+
+    def test_conf_d_listing_with_failed_execution_is_error(self):
+        payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
+        payload["pwquality_conf_d"]["exit_code"] = 2
+        self.assertEqual(judge("ACC-01", payload, policy_path=self.policy_path)["status"], "error")
 
     def test_chage_failure_is_needs_review(self):
         for record in ({"state": "error"}, {"state": "timeout"}, ok("unexpected format\n"), None):
@@ -233,11 +281,20 @@ class Acc01AdapterTest(unittest.TestCase):
         self.assertEqual(result["status"], "needs_review")
 
     def test_os_checks(self):
-        payload = acc_payload(ubuntu_fs())
-        payload["os_release"] = ok('ID=debian\nVERSION_ID="12"\n')
-        self.assertEqual(judge("ACC-01", payload)["status"], "not_applicable")
-        payload["os_release"] = {"state": "error"}
-        self.assertEqual(judge("ACC-01", payload)["status"], "error")
+        # 지원 대상이 아닌 OS (확인됨) -> not_applicable
+        # OS를 알 수 없음 (읽기 실패, ID 없음) -> error
+        cases = [
+            (ok('ID=debian\nVERSION_ID="12"\n'), "not_applicable"),
+            ({"state": "error"}, "error"),
+            (ok('NAME="Something"\nVERSION_ID="1"\n'), "error"),
+            (ok(""), "error"),
+        ]
+        for check_id in ("ACC-01", "ACC-02"):
+            for record, expected in cases:
+                with self.subTest(check_id=check_id, record=record):
+                    payload = acc_payload(ubuntu_fs())
+                    payload["os_release"] = record
+                    self.assertEqual(judge(check_id, payload)["status"], expected)
 
 
 # ==================================================
@@ -265,10 +322,19 @@ class Acc02AdapterTest(unittest.TestCase):
 # ==================================================
 class EntryTest(unittest.TestCase):
     def test_caller_mistakes_raise(self):
-        with self.assertRaises(ValueError):
-            adapter.judge_payload("SSH-01", {})
-        with self.assertRaises(ValueError):
-            adapter.judge_payload("ACC-02", {}, result_version="2.0")
+        # 호출 실수는 종류와 상관없이 ValueError (효민님 독립 검증 R4)
+        for kwargs in ({"check_id": "SSH-01"}, {"check_id": []}, {"check_id": None},
+                       {"check_id": "ACC-02", "result_version": "2.0"},
+                       {"check_id": "ACC-02", "result_version": []}):
+            with self.subTest(kwargs=kwargs):
+                check_id = kwargs.pop("check_id")
+                with self.assertRaises(ValueError):
+                    adapter.judge_payload(check_id, {}, **kwargs)
+
+    def test_options_are_keyword_only(self):
+        # 효민님 독립 검증 R1: 네 번째 위치 인자로 버전을 넘기는 실수를 막음
+        with self.assertRaises(TypeError):
+            adapter.judge_payload("ACC-02", {}, None, "1.1")
 
     def test_broken_payload_never_raises(self):
         for check_id in ("SSH-02", "ACC-01", "ACC-02"):
