@@ -167,10 +167,10 @@ class SshAdapterTest(unittest.TestCase):
 # ==================================================
 class Acc01AdapterTest(unittest.TestCase):
     def setUp(self):
-        # 대화형 계정 1개(cju)를 넣은 임시 정책 (실제 정책 파일은 바꾸지 않음)
+        # 대화형 계정 1개(user1)를 넣은 임시 정책 (실제 정책 파일은 바꾸지 않음)
         with open(acc01.POLICY_FILE, encoding="utf-8") as f:
             data = json.load(f)
-        data["policies"][0]["criteria"]["interactive_accounts"] = ["cju"]
+        data["policies"][0]["criteria"]["interactive_accounts"] = ["user1"]
         handle, self.policy_path = tempfile.mkstemp(suffix=".json")
         with os.fdopen(handle, "w", encoding="utf-8") as f:
             json.dump(data, f)
@@ -187,28 +187,28 @@ class Acc01AdapterTest(unittest.TestCase):
         }
         for name, (fs, conf_d) in cases.items():
             with self.subTest(case=name):
-                with FakeSystem(fs, conf_d, {"cju": GOOD_AGING}):
+                with FakeSystem(fs, conf_d, {"user1": GOOD_AGING}):
                     expected = acc01.run_check(self.policy_path)
-                payload = acc_payload(fs, conf_d, {"cju": ok(CHAGE_GOOD)})
+                payload = acc_payload(fs, conf_d, {"user1": ok(CHAGE_GOOD)})
                 self.assertEqual(judge("ACC-01", payload, policy_path=self.policy_path), expected)
 
     def test_pwquality_conf_missing_uses_defaults(self):
         fs = ubuntu_fs(**{"/etc/security/pwquality.conf": None})
-        result = judge("ACC-01", acc_payload(fs, chage={"cju": ok(CHAGE_GOOD)}), policy_path=self.policy_path)
+        result = judge("ACC-01", acc_payload(fs, chage={"user1": ok(CHAGE_GOOD)}), policy_path=self.policy_path)
         self.assertNotEqual(result["status"], "error")
 
     def test_required_file_not_sent_is_error(self):
-        payload = acc_payload(ubuntu_fs(), chage={"cju": ok(CHAGE_GOOD)})
+        payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
         del payload["files"]["/etc/login.defs"]       # 보냈는데 없음인지 알 수 없음 -> error
         self.assertEqual(judge("ACC-01", payload, policy_path=self.policy_path)["status"], "error")
 
     def test_conf_d_listing_failure_is_error(self):
-        payload = acc_payload(ubuntu_fs(), chage={"cju": ok(CHAGE_GOOD)})
+        payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
         payload["pwquality_conf_d"] = {"state": "error"}
         self.assertEqual(judge("ACC-01", payload, policy_path=self.policy_path)["status"], "error")
 
     def test_conf_d_path_outside_directory_is_ignored(self):
-        payload = acc_payload(ubuntu_fs(), chage={"cju": ok(CHAGE_GOOD)})
+        payload = acc_payload(ubuntu_fs(), chage={"user1": ok(CHAGE_GOOD)})
         payload["pwquality_conf_d"]["paths"] = ["/tmp/evil.conf"]
         payload["files"]["/tmp/evil.conf"] = ok("minlen = 1\n")
         result = judge("ACC-01", payload, policy_path=self.policy_path)
@@ -217,14 +217,14 @@ class Acc01AdapterTest(unittest.TestCase):
     def test_chage_failure_is_needs_review(self):
         for record in ({"state": "error"}, {"state": "timeout"}, ok("unexpected format\n"), None):
             with self.subTest(record=record):
-                chage = {} if record is None else {"cju": record}
+                chage = {} if record is None else {"user1": record}
                 result = judge("ACC-01", acc_payload(ubuntu_fs(), chage=chage), policy_path=self.policy_path)
                 self.assertEqual(result["status"], "needs_review")
 
     def test_only_policy_accounts_are_used(self):
-        chage = {"cju": ok(CHAGE_GOOD), "root": ok(CHAGE_GOOD.replace(": 90", ": 99999"))}
+        chage = {"user1": ok(CHAGE_GOOD), "root": ok(CHAGE_GOOD.replace(": 90", ": 99999"))}
         result = judge("ACC-01", acc_payload(ubuntu_fs(), chage=chage), policy_path=self.policy_path)
-        self.assertEqual(result["details"]["accounts"], ["cju"])
+        self.assertEqual(result["details"]["accounts"], ["user1"])
         self.assertEqual(result["status"], "pass")
 
     def test_empty_account_list_is_needs_review(self):
