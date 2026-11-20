@@ -1,0 +1,5 @@
+1947  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1948, si_uid=1000, si_status=0, si_utime=1 /* 0.01 s */, si_stime=1 /* 0.01 s */} ---
+1947  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1949, si_uid=1000, si_status=1, si_utime=2 /* 0.02 s */, si_stime=1 /* 0.01 s */} ---
+1947  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1950, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+1947  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1953, si_uid=1000, si_status=0, si_utime=2 /* 0.02 s */, si_stime=2 /* 0.02 s */} ---
+1947  --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1954, si_uid=1000, si_status=0, si_utime=2 /* 0.02 s */, si_stime=2 /* 0.02 s */} ---

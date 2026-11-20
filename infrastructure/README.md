@@ -503,6 +503,9 @@ done
 | [v] | GNS3 2단계 (2026-11-20, 호스트) | 사전 점검 → 원본 정상 종료 → 파일별 SHA-256 → VM별 ZIP·`7z t` → 1개 복원 시험 → Full Clone·복제본 NIC 자동 연결 해제 → 원본 재가동·전후 비교·SSH | ZIP 3개 OK, 복원 `problems=0 extra=0`, 복제본 `startConnected FALSE`·부팅 안 함, 원본 NIC·스냅샷 차이 0·SSH 정상. 운영 확인 사항 O1~O3 (`GNS3-TOPOLOGY.md` 9장) | `gns3-host-stage2-*-261120.png` 5장, `stage2-hashes-261120/`, `central-mgmt-stage2-*-261120.png` 6장, `ubuntu-a-stage2-*-261120.png` 3장 |
 | [v] | 계정·SSH 인증 실측 (2026-11-19~20, 조회만) | 두 대상 계정 목록, `passwd -S`(`user1` sudo, 상태 글자만), `sshd -T` 인증 항목, 설정·PAM 파일 권한, `pwquality.conf.d`, Rocky `authselect current` | B(SSH-02·ACC) 협의 자료로 전달. 해시·키 출력 없음 | `central-mgmt-acc-recheck-{1,2}-261119.png`, `<id>-acc-passwd-status-261119.png` (진단 대상 2대), `central-mgmt-acc-extra-261120.png` |
 | [v] | 중앙 D 준비 T0 (2026-11-20, 조회만) | `df`, `git --version`, `ensurepip`, `apt-get -s install python3.12-venv` | 여유 11G, git 2.43.0, 새 설치 3개·제거 0 (설치는 별도 승인 대기) | `central-mgmt-d-prep-t0-261120.png` |
+| [v] | 중앙 D 준비 C1·C2·C3·C5 (2026-11-20, 원본 central, 팀장 승인 예외) | 게스트 안 종료 → 스냅샷 `02-pre-d-prep-261120` → `python3.12-venv` 등 3개 설치 → `/var/lib/secureops`(755 root)·`reports/`(700 user1) → main `0cab3a2` git bundle 반입(SHA-256·verify·tree 해시 대조) → 사전·사후 비교 | `PM Soft Off`, 설치 전후 패키지 차이 3줄만, bundle 해시·HEAD·tree·커밋 66·파일 194 일치, 시스템 jsonschema·SSH 설정·sudoers.d·대상 SSH 변화 없음. GNS3 원본 보존 원칙(`GNS3-TOPOLOGY.md` 7장)의 승인된 예외 | `central-mgmt-d-prep-*-261120.png` 13장 (`c4-*` 제외) |
+| [v] | 중앙 D venv·jsonschema (C4, 2026-11-20) | 격리 venv(`include-system-site-packages = false`) → `pip --dry-run --only-binary=:all: --report` → 승인 후 해시 고정 설치(`--require-hashes --no-deps`) | 승인 6개(jsonschema 4.25.1 등) wheel만, `pip check` 정상, date-time FormatChecker 미등록(False), 시스템 Python·dpkg·SSH·Git 변화 없음 | `central-mgmt-d-prep-c4-*-261120.png` 4장 |
+| [v] | 중앙 D 173 오프라인 회귀 (2026-11-20, **오프라인**) | `env -i` + 전용 TMPDIR로 `python -B -m unittest discover -s tests -v`, 실행 전 로더 테스트 ID, strace connect 관측(기설치, 일반 권한) | `Ran 173` OK·exit 0, FAIL·ERROR·SKIP 0, 로더 ID = 실행 ID, connect 0건(1회 관측, 부재 입증 아님), Git·임시 폴더·ReportStore 경로 변화 없음. B/C/D/E 실제 통합 완료를 뜻하지 않음 | `central-mgmt-d-r173-*-261120.png` 7장, 로그 `central-mgmt/r173-261120/` 9개 |
 
 > 신규 VM 증거는 `*-261111.png` **43장**이다 (`central-mgmt` 17장, `ubuntu-a` 13장, `rocky-b` 13장). 재구축 전 증거(`*-261105.png`, `*-261106.png`)는 삭제된 VM의 기록이며 신규 VM의 근거로 쓰지 않는다.
 >
@@ -515,6 +518,8 @@ done
 > **2026-11-19 추가 증거 31장** (`central-mgmt-c-recheck-*-261119.png` 22장, `gns3-host-*-261119.png` 9장): 명령, 호스트명, IP, 계정명, 코드·증거 파일 SHA-256, 진단 status, GNS3 설정·시험 화면만 담겨 있으며 비밀번호·개인키·토큰이 없음을 직접 판독해 확인했다. Wireshark 캡처의 MAC은 VPCS 가상 장비 값이다. 호스트 PC(Windows)에서 한 작업은 서버 식별자 `gns3-host`로 `evidence/gns3-host/`에 둔다.
 >
 > **2026-11-19·20 추가 증거 20장** (`*-261119.png` 계정 실측 4장, `*-261120.png` 16장)과 해시 목록 폴더 `gns3-host/stage2-hashes-261120/`: 명령, 호스트명, IP, 계정명, 패키지 이름, 파일·ZIP SHA-256, 설정 파일 권한, 파일시스템 UUID·부팅 ID만 담겨 있으며 비밀번호·해시·개인키·토큰이 없음을 직접 판독해 확인했다. **호스트 캡처 4장과 텍스트 기록은 저장소 사본에서 백업·복제본 저장 경로와 VM MAC 주소를 가렸다**(원본은 작성자 PC에만 보관).
+>
+> **2026-11-20 중앙 D 증거 24장** (`central-mgmt-d-prep-*-261120.png` 17장, `central-mgmt-d-r173-*-261120.png` 7장)과 로그 폴더 `central-mgmt/r173-261120/`(9개, SHA-256은 중앙·호스트 일치): 명령, 패키지 이름·버전, 파일·wheel·bundle SHA-256, 디렉터리 권한, 테스트 ID·결과, 연결 시도 집계만 담겨 있으며 비밀번호·개인키·토큰이 없음을 직접 판독해 확인했다. strace 기록은 연결 시도 0건이며 자식 프로세스 종료 신호 5줄뿐이다. 백업·복제본 경로와 MAC은 나오지 않는다. `r3-after.txt`는 R2 종료 뒤 16:32에 조회만으로 다시 확인한 기록이다.
 
 중앙 관리 서버에서 진단 대상 2대의 정보와 SSH 연결을 한 번에 확인할 수 있다.
 
@@ -787,6 +792,7 @@ VM 자체가 필요한 경우 VMware **File → Export to OVF**로 `.ova` 파일
 | v0.7 | 2026-11-12 | `NETWORK-PLAN.md` v0.2와 `diagrams/` 구성도 SVG 2개 추가 (현재 VMware 구성, GNS3 6대 계획: IP 대역·인터페이스·통신 정책 초안, IDS/WAF·로그, 서비스-진단 모듈 연결, 자원, 기본·심화 범위, 전환 절차). 8장 디렉터리 구조 갱신, 증거 1장(`central-mgmt-c-deploy-precheck-261112.png`) |
 | v0.8 | 2026-11-13 | 7-3 신규 백업 파일명 `Target-Ubuntu.zip`으로 정정(이름만 변경), C 모듈 신규 VM 배치·실행 증거 5장(`central-mgmt-c-*-261112.png`) 추가(상세는 HANDOFF 3-3), `NETWORK-PLAN.md` v0.3(내부 DB·WEB→DB 3306 설계 예외·역할 분담) |
 | v0.9 | 2026-11-20 | 6장 체크리스트에 GNS3 2단계(상세 `GNS3-TOPOLOGY.md` 9장), 계정·SSH 인증 실측, 중앙 D 준비 T0 추가, 11/19·11/20 증거 20장·해시 목록 추가(경로·MAC 가림) |
+| v0.10 | 2026-11-20 | 6장 체크리스트에 중앙 D 준비 C1·C2·C3·C5, C4(venv·jsonschema), 173 오프라인 회귀 추가, 증거 24장·R173 로그 9개 추가 |
 
 ---
 
