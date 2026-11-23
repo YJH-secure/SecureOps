@@ -2,7 +2,7 @@
 
 **작성:** 김민우 (A · 서버·네트워크 인프라) · 2026-11-19  
 **기준:** `NETWORK-PLAN.md` v0.3(2026-11-12 6대 구성 채택, 11-13 WEB→DB 설계 예외 승인)을 실제 구축용으로 구체화했다.  
-**상태:** **1단계 완료(11/19), 2단계 완료(11/20, 결과 수용).** 3단계(OPNsense 구축·복제본 GNS3 연결·IP 변경)는 아직 승인 전이며, 이후 단계도 단계별 검증 후 승인한다(아래 승인 현황, 7장, 9장).
+**상태:** **1단계 완료(11/19), 2단계 완료(11/20, 결과 수용), 3-A 완료(11/23, OPNsense, 10장), 3-B 완료(11/23, 복제본 MAC·UUID 분리·IP 변경, 12장).** 3-C-1(관리·DMZ 연결·시험)은 11/24 오전 진행 예정, 3-C-2(내부·외부)는 3-C-1 검토 후 판단. 내부 서비스용 신규 VM `rocky-int`는 기본 설정까지 완료(11장).
 
 ## 승인 현황 (2026-11-19 팀장 회신)
 
@@ -309,10 +309,50 @@ VM을 켜거나 설정을 바꾸지 않고 `vmrun`·VMX 파일·Windows 정보�
 - `evidence/central-mgmt/central-mgmt-scan-sudo-recheck-261123.png` — `secureops-scan` sudo 목록 재확인(C/D 계약용)
 - `evidence/central-mgmt/central-mgmt-targets-reboot-check-261123.png` — O4 재기동 후 상태
 
+## 11. `rocky-int` 생성·기본 설정 (2026-11-23, 내부 DB·FTP용 신규 VM)
+
+팀장 조건부 수용. **서비스(DB·FTP)는 설치하지 않았다**(설치는 별도 승인, 현재 보류).
+
+| 항목 | 결과 |
+| --- | --- |
+| VM | Rocky Linux 9.8, vCPU 2, RAM 2GB, 디스크 30GB, NIC 1개 vmxnet3 **`startConnected = "FALSE"`**, 클립보드·USB·사운드 끔, 접근 제한 E 드라이브 폴더 |
+| 게스트 | 호스트명 `rocky-int`, `ens192` `10.30.0.10/24`(링크 없음), SELinux Enforcing, 기본 target `multi-user.target`(GUI 끔, 메모리 사용 1261MB → 412MB) |
+| 계정 | `secureops-scan`(1001)·`secureops-fix`(1002), wheel 아님, 비밀번호 잠금, 공개키 등록(해시는 원본과 일치 확인). sudoers 없음 |
+| 시간 | Asia/Seoul, RTC 현지 시간 모드, 동기화 안 됨(망 미연결). 시간원·UTC RTC 기준은 결정 대기 |
+| 스냅샷 | `00-initial-setup-261123` 1개(전원 끈 상태) |
+| 디스크 | 기본 → `-000001`(스냅샷) → `-000002`(현재). **`snapshot.needConsolidate = TRUE` 미해소** — 팀장 정리안 A: 통합·삭제·VMDK 이동 금지, 체인 유지 |
+| 백업 | VM 종료 상태 콜드 전체 사본 1개(파일 12개, 복사 전후 원본·사본 SHA-256 전수 일치, 읽기 전용, 등록·부팅 안 함). 백업이 `needConsolidate` 해결을 뜻하지 않음. 저장소 미업로드 |
+
+- **사고 기록(정정):** 게스트 종료 중 `vmrun`으로 스냅샷을 찍어 메모리 포함 스냅샷이 생겼고, 이를 지우는 과정이 VMware 화면 프로그램의 잠금 때문에 실패해 통합 대기가 남았다. 당시 "아무도 쓰지 않는 잠금"이라 판단한 것은 틀렸다(소유 프로세스 실행 중). 옛 잠금 파일은 삭제하지 않고 증거로 보존(해시 기록)했다. 재발 방지: 스냅샷 전 `vmrun list`·탭 확인, VMware 화면이 연 VM에 `vmrun` 스냅샷 금지, 소유 프로세스가 살아 있는 잠금은 건드리지 않음.
+- 증거: `evidence/rocky-int/rocky-int-{vm-settings,setup-accounts-fail,setup-accounts,time-fix,snapshot-manager,multi-user-change,multi-user-verify}-261123.png`(setup-accounts는 키 파일 해시 가림)
+
+## 12. 3-B 실행 기록 (2026-11-23 16:40~17:21, 복제본 MAC·UUID 분리·IP 변경)
+
+팀장 조기 착수 조건부 승인(원본 보호, 착수 전 점검, 완료 기준). **결과: 완료, 예상 밖 오류 없음.** 3-C-1은 18:00 안 안전 완료가 어려워 착수하지 않았다(팀장 지시).
+
+| 항목 | 결과 |
+| --- | --- |
+| 원본 보호 | 협업자 원본 사용 없음 확인. 11/20 백업 ZIP 3개 SHA-256 재계산 일치. 원본 3대 게스트 정상 종료(`VMX exit (0)`, 강제 종료 없음) |
+| 착수 전 점검 | 실행 VM 0, 복제본 잠금 0·NIC `FALSE`·자기 디스크 참조·스냅샷 0, MAC이 원본과 같음(분리 대상) |
+| B1 | 복제본 3대 스냅샷 `00-clone-baseline-261123`, VMX MAC 줄 삭제. 스냅샷·잠금 오류 없음 |
+| B2 | VMware 화면에서 한 대씩 부팅. 복제본 `uuid.bios`가 비어 있어 "moved or copied?" 창 없이 새 UUID 생성 |
+| B3 | `central-mgmt-g` `10.40.0.10/24`(netplan, cloud-init 비활성 확인), SSH 별칭 4개 새 주소 / `ubuntu-a-g` `10.20.0.10/24`(NetworkManager "Profile 1") / `rocky-b-g` `10.20.0.20/24`(nmcli `ens160`). 게이트웨이·DNS는 각 구간 `.1`. 세 대 모두 MAC 묶임 없음, 변경 전 설정 백업 |
+| B4 | 3대 모두 **새 MAC·새 UUID, 원본 3대·복제본끼리 모두 다름**. NIC `FALSE`, 정상 종료. 절차서의 추가 스냅샷 `01`은 만들지 않음(팀장 지시) |
+| 원본 무변경 | 디스크 참조·스냅샷 트리·NIC·호스트 VMnet 작업 전과 같음. VMDK 용량 증가는 현재 차분 디스크에만 있고 마지막 기록 시각이 게스트 종료 시각과 같음 |
+
+- IP는 NIC가 끊긴 상태라 설정 파일 기준으로 확인했다. 실제 링크·주소는 3-C-1 T0에서 확인한다.
+- 3-C-1 선행: 호스트 여유 메모리 약 14GB(4대 동시 실행), GNS3 vmnet 설정(관리자 권한), 호스트 관리 어댑터.
+- DNS: 11/24~25 DMZ `rocky-b-g`에 BIND 1개 우선 구축 방향(Unbound 유지). 1단계는 로컬(127.0.0.1·::1) 응답만, 실습 존 후보 `secureops.test`(C 검토 완료). **설치는 3-C-1 완료 → 콜드 백업 → 별도 승인 뒤.**
+- 증거:
+  - `evidence/central-mgmt/central-mgmt-stage3b-{link,netplan-before,netplan-after,cloudinit,ssh-config}-261123.png`(link는 MAC 가림)
+  - `evidence/ubuntu-a/ubuntu-a-stage3b-{netplan-before-1,netplan-before-2,ip}-261123.png`(before-2는 MAC 가림)
+  - `evidence/rocky-b/rocky-b-stage3b-{nm-before,ip}-261123.png`(nm-before는 MAC 가림)
+
 ## 변경 이력
 
 | 버전 | 일자 | 내용 |
 | --- | --- | --- |
+| v1.0 | 2026-11-23 | 상단 상태 갱신, 11장 `rocky-int` 생성·기본 설정·사고 정정·콜드 백업, 12장 3-B 실행 기록(원본 보호, B1~B4, 원본 무변경, DNS 방향), 증거 17장 |
 | v1.0 | 2026-11-23 | 10장 3-A 실행 기록(OPNsense 26.7 설치·초기 설정, NIC 대응, O4 강제 종료 원인, O5 자동 업데이트, 증거) |
 | v1.0 | 2026-11-20 | 2단계 완료·결과 수용 반영(상단 상태, 승인 현황, 7장 진행 현황), 3단계 전 복제본 격리 조건, 9장 2단계 실행 기록(사전 점검, 단계별 결과, ZIP SHA-256, 운영 확인 사항 O1~O3, 증거) |
 | v1.0 | 2026-11-19 | 1단계 결과 접수·2단계 조건부 승인 반영(승인 현황 표) |

@@ -289,6 +289,9 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | C 모듈 신규 VM 실행 (3-3) | **완료** (2026-11-12, scan 일반 권한). FW-01·LOG-01 추가 권한은 팀장 결정으로 보류. C 담당 전달·검토 완료(2026-11-13), `ubuntu-a` journal 하위 명령 분리 수집 대기 |
 | SSH-01 수집기 설치 전 스냅샷 | 이름 제안 `02-pre-ssh01-collector-20261116`(팀장). **설치 승인은 별도** |
 | `secureops-fix` 조치 경로 | SSH-01 경로만 있으며, `/etc/secureops/approved/`는 아직 만들지 않아 실제로는 동작하지 않음 |
+| A SSH 전송 계층(FILE-01) | Draft PR #40(`aeeaf1b`, 검토용). C·D 독립 검증·추가 검토 완료. 실제 SSH 실행·central 배포·main 병합은 별도 승인. 연결 10초·전체 60초 실측과 리눅스 `killpg` 미검증 |
+| GNS3 복제본(3-B 완료) | 새 주소 `central-mgmt-g` `10.40.0.10`, `ubuntu-a-g` `10.20.0.10`, `rocky-b-g` `10.20.0.20`(NIC 미연결). 복제본 `central-mgmt-g`의 SSH 별칭은 새 주소, known_hosts는 3-C-1에서 지문 대조 후 추가. 이 문서의 원본 VM 값은 그대로(`GNS3-TOPOLOGY.md` 12장) |
+| 확인 필요 미커밋 파일 | 11/16 생성 증거 8장(`central-mgmt-ssh01-*-261116.png` 4장, `ubuntu-a-ssh01-*-261116.png` 4장)과 `diagrams/vmware-current.{svg,png}` 11/16 수정분이 커밋되지 않은 채 남아 있음. 출처·내용 정확성(다이어그램의 "SSH-01 실환경 E2E 2대" 문구 등) 확인 전까지 커밋하지 않음 |
 
 ## 변경 이력
 
@@ -303,3 +306,4 @@ C 담당 검토(FW-01, LOG-01) 결과 팀장 승인을 요청할 후보다. 승�
 | 2026-11-12 | 2-5 중앙 실행기 SSH 계층 사전 점검 결과와 실행 의존성·예상 결과 추가 |
 | 2026-11-13 | 3-3 C 모듈 신규 VM 배치·실행 결과(환경·status·사유·로케일 주의·증거 5장) 추가, 6장 신규 백업 파일명 `Target-Ubuntu.zip` 정정, SSH-01 설치 전 스냅샷 이름 제안 기록 |
 | 2026-11-13 | 3-3 C 검토 반영: FILE-01 사유 정정(passwd group, shadow 후보·승인), firewalld 253 = NOT_AUTHORIZED, LOG-01 로케일 가설 철회, C 검토·D 로컬 재생 결과, 팀장 승인 journalctl 1회 수집 조건·FW 권한 부족 해석 원칙. 2-5 `ssh01_context` 실측 재확인·`ROOT_CONTEXT` 대조 |
+| 2026-11-23 | 6장에 A SSH 전송 계층(PR #40), GNS3 복제본 3-B 결과 주소, 확인 필요 미커밋 파일 추가 |
