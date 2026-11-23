@@ -17,22 +17,30 @@ B/D 매핑표 v1 모양의 payload JSON 1개를 표준 출력으로 내보냅니
 - 비밀번호 해시를 읽지 않음 (/etc/shadow 직접 읽지 않음, chage -l은 기간 정보만)
 - stderr 내용은 payload에 넣지 않음 (내부 정보 노출 방지)
 - 항목 하나가 실패해도 멈추지 않고 그 항목만 error / missing / timeout / truncated로 기록
-- 명령별 10초, 전체 50초 예산 (A 전송 계층 전체 60초 안에 끝나도록)
+- 명령별 10초, 전체 40초 예산 (A 전송 계층 60초 = SSH 연결 최대 10초 + 수집 + 여유)
 - 출력 전체 1MiB 미만 (A 전송 계층 stdout 상한)
+- 실행 인자를 받지 않음 (sudoers에서 인자 금지 "" 와 함께 사용)
+- host/addr는 대상 서버의 root 소유 설정 파일에서만 읽음 (/etc/secureops/b-read.json)
+  소유자 root, 그룹·기타 쓰기 불가, 심볼릭 링크 아님을 확인하고 아니면 거부
+- 표준 오류(stderr)에 아무것도 쓰지 않음 (A·D는 stderr가 있으면 STOP)
+
+[설정 파일 예] /etc/secureops/b-read.json  (root:root, 0644, 폴더 /etc/secureops도 root 소유·0755)
+{"host": "192.0.2.10", "addr": "192.0.2.10"}
 
 [종료 코드]
 0 : payload 출력 (항목별 실패는 payload 안의 state로 전달)
-2 : 실행 인자 오류 (host/addr 형식)
+1 : 예상하지 못한 오류
+2 : 실행 인자가 있음 (인자는 받지 않음)
 3 : 출력이 상한을 넘음
-4 : 정책 파일 오류 (설치 문제)
+4 : 설정·정책 파일 오류 (설치 문제)
 
-[실행 예]
-sudo python3 b_collector.py --host 192.0.2.10 --addr 192.0.2.10
+[설치 예 (승인 후, SSH-01 수집기와 같은 절차)]
+install -o root -g root -m 0755 b_collector.py /usr/local/sbin/secureops-b-read  (함께 쓰는 모듈 배치는 승인 요청서에서 확정)
+/etc/sudoers.d/secureops-b-read (0440) : secureops-scan ALL=(root) NOPASSWD: /usr/local/sbin/secureops-b-read ""
 
-※ 설치 위치, sudoers, host/addr 전달 방식(인자 / 대상 서버 설정 파일)은 승인 전 미확정입니다.
+※ 설치 위치·대상 환경·sudoers는 승인 전 미확정입니다.
 """
 
-import argparse
 import fnmatch     # Include 파일 이름 패턴(*.conf) 맞추기
 import json
 import os
@@ -60,10 +68,12 @@ SSHD_PATH = "/usr/sbin/sshd"          # Ubuntu·Rocky 공통 위치 (PATH 검색
 CHAGE_PATH = "/usr/bin/chage"
 SSHD_CONFIG = "/etc/ssh/sshd_config"
 OS_RELEASE = "/etc/os-release"
+CONFIG_PATH = "/etc/secureops/b-read.json"   # host/addr 설정 (root 소유)
+CONFIG_KEYS = {"host", "addr"}
 SAFE_ENV = {"LC_ALL": "C", "PATH": "/usr/sbin:/usr/bin:/sbin:/bin"}   # 영어 출력, 고정 경로
 
 COMMAND_TIMEOUT = 10                  # 명령 1개 최대 시간(초)
-TOTAL_BUDGET = 50                     # 수집 전체 최대 시간(초)
+TOTAL_BUDGET = 40                     # 수집 전체 최대 시간(초), A 60초 안에서 연결 10초 + 여유
 MAX_ITEM_BYTES = 256 * 1024           # 파일·명령 출력 1개 최대 크기
 MAX_OUTPUT_BYTES = 1024 * 1024 - 1    # 최종 JSON 최대 크기 (1MiB 미만)
 
@@ -98,6 +108,43 @@ def _run(argv, timeout):
 
 def _now():
     return time.monotonic()
+
+
+def _lstat(path):
+    return os.lstat(path)                      # 링크를 따라가지 않고 링크 자체 정보
+
+
+# ==================================================
+# 1-1. 설정 파일 (host/addr) 읽기
+#   - 파일과 폴더 모두 : 심볼릭 링크 아님, 소유자 root, 그룹·기타 쓰기 불가
+#   - 내용 : {"host": ..., "addr": ...} 정확히 두 키, 공백·쉼표 없는 글자
+#   - 하나라도 어긋나면 ValueError (종료 코드 4)
+# ==================================================
+
+def _check_owner(path, want_dir):
+    info = _lstat(path)
+    if stat.S_ISLNK(info.st_mode):
+        raise ValueError(f"symlink not allowed: {path}")
+    if want_dir != stat.S_ISDIR(info.st_mode) or (not want_dir and not stat.S_ISREG(info.st_mode)):
+        raise ValueError(f"unexpected file type: {path}")
+    if info.st_uid != 0:
+        raise ValueError(f"owner is not root: {path}")
+    if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
+        raise ValueError(f"writable by group or others: {path}")
+
+
+def load_config(path=CONFIG_PATH):
+    _check_owner(posixpath.dirname(path), want_dir=True)
+    _check_owner(path, want_dir=False)
+    record = read_file(path)
+    if record["state"] != "ok":
+        raise ValueError("config unreadable")
+    data = json.loads(record["text"])
+    if not isinstance(data, dict) or set(data) != CONFIG_KEYS:
+        raise ValueError("config must have exactly host and addr")
+    if not all(ssh02.is_safe_name(data[key]) for key in CONFIG_KEYS):
+        raise ValueError("invalid host/addr")
+    return {"host": data["host"], "addr": data["addr"]}
 
 
 # ==================================================
@@ -294,27 +341,31 @@ def collect(context, ssh_policy_path=None, acc_policy_path=None):
     return document
 
 
-def main(argv=None, out=None):
+# 오류일 때도 표준 출력에 짧은 JSON 1줄만 씁니다. (stderr는 쓰지 않음)
+def _fail(out, code, reason):
+    out.write(json.dumps({"collector": {"name": COLLECTOR_NAME, "version": COLLECTOR_VERSION},
+                          "error": reason}) + "\n")
+    return code
+
+
+def main(argv=None, out=None, config_path=CONFIG_PATH):
     out = out or sys.stdout
-    parser = argparse.ArgumentParser(description="B 읽기 전용 수집기 (SSH-02, ACC-01, ACC-02)")
-    parser.add_argument("--host", required=True, help="sshd -T -C host 값 (중앙이 검증한 접속 문맥)")
-    parser.add_argument("--addr", required=True, help="sshd -T -C addr 값 (중앙이 검증한 접속 문맥)")
+    argv = sys.argv[1:] if argv is None else argv
+    if argv:                                           # 인자는 받지 않음
+        return _fail(out, 2, "arguments not allowed")
     try:
-        args = parser.parse_args(argv)
-    except SystemExit:
-        return 2
-    if not (ssh02.is_safe_name(args.host) and ssh02.is_safe_name(args.addr)):
-        out.write(json.dumps({"collector": {"name": COLLECTOR_NAME}, "error": "invalid host/addr"}) + "\n")
-        return 2
-    try:
-        document = collect({"host": args.host, "addr": args.addr})
+        context = load_config(config_path)
     except (OSError, ValueError):
-        out.write(json.dumps({"collector": {"name": COLLECTOR_NAME}, "error": "policy load failed"}) + "\n")
-        return 4
+        return _fail(out, 4, "config invalid")
+    try:
+        document = collect(context)
+    except (OSError, ValueError):
+        return _fail(out, 4, "policy load failed")
+    except Exception:                                  # noqa: BLE001  예상 못 한 오류도 stderr 없이 종료
+        return _fail(out, 1, "unexpected error")
     text = json.dumps(document, ensure_ascii=False)
     if len(text.encode("utf-8")) + 1 > MAX_OUTPUT_BYTES:
-        out.write(json.dumps({"collector": {"name": COLLECTOR_NAME}, "error": "output too large"}) + "\n")
-        return 3
+        return _fail(out, 3, "output too large")
     out.write(text + "\n")
     return 0
 

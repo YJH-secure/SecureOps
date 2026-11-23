@@ -6,7 +6,7 @@ B 읽기 전용 수집기 Mock 테스트
   1) 수집기 출력 -> 어댑터 판정 = 기존 단독 실행(run_check) / 순수 판정 결과
   2) 실패를 빈 값·정상으로 바꾸지 않고 항목 state로 기록
   3) 허용된 명령(sshd -T, sshd -T -C, chage -l)만 실행, 정책 계정만 조회
-  4) 시간 예산·출력 상한·인자 검사
+  4) 시간 예산·출력 상한, 인자 금지, root 소유 설정 파일 검사
 
 실행: python -m unittest test_b_collector -v
 """
@@ -14,6 +14,7 @@ B 읽기 전용 수집기 Mock 테스트
 import io
 import json
 import os
+import stat
 import subprocess
 import tempfile
 import unittest
@@ -38,6 +39,15 @@ GOOD_SSHD = make_output(allowusers=["secureops-scan", "secureops-fix"])
 SSHD_CONFIG_TEXT = "Include /etc/ssh/sshd_config.d/*.conf\nPermitRootLogin no\n"
 DROPIN_TEXT = "PasswordAuthentication no\n"
 TIMEOUT = object()      # 명령 시간 초과 표시
+CONFIG = collector.CONFIG_PATH
+CONFIG_DIR = "/etc/secureops"
+CONFIG_TEXT = json.dumps(CONTEXT)
+
+
+# 가짜 파일 정보 (종류, 권한, 소유자)
+def fake_stat(kind="file", mode=0o644, uid=0):
+    type_bits = {"file": stat.S_IFREG, "dir": stat.S_IFDIR, "link": stat.S_IFLNK}[kind]
+    return os.stat_result((type_bits | mode, 0, 0, 1, uid, 0, 0, 0, 0, 0))
 
 
 def spec(user, context=CONTEXT):
@@ -50,12 +60,18 @@ class FakeTarget:
     dirs     : {폴더: [이름...] | ERROR}  (없으면 폴더 없음)
     commands : {(명령...): 출력 | (종료코드, 출력) | TIMEOUT}  (없으면 실행 실패)"""
 
-    def __init__(self, files, dirs=None, commands=None, clock=None):
+    def __init__(self, files, dirs=None, commands=None, clock=None, stats=None):
         self.files = dict(files)
         self.dirs = dict(dirs or {})
         self.commands = dict(commands or {})
         self.ran = []
         self.clock = clock or [0.0]
+        self.stats = dict(stats or {})        # 설정 파일·폴더의 소유자·권한
+
+    def lstat(self, path):
+        if path not in self.stats:
+            raise FileNotFoundError(path)
+        return self.stats[path]
 
     def read_bytes(self, path, limit):
         value = self.files.get(path)
@@ -92,6 +108,7 @@ class FakeTarget:
             mock.patch.object(collector, "_is_regular", side_effect=self.is_regular),
             mock.patch.object(collector, "_run", side_effect=self.run),
             mock.patch.object(collector, "_now", side_effect=lambda: self.clock[0]),
+            mock.patch.object(collector, "_lstat", side_effect=self.lstat),
             mock.patch("subprocess.run", side_effect=AssertionError("no real command")),
         ]
         for p in self.patches:
@@ -104,10 +121,12 @@ class FakeTarget:
 
 
 # 정상 상태의 가짜 서버 (ACC 파일 + SSH 설정 + 명령 결과)
-def target(acc_fs=None, ssh_files=None, dirs=None, commands=None, **kw):
+def target(acc_fs=None, ssh_files=None, dirs=None, commands=None, stats=None, **kw):
     files = dict(acc_fs if acc_fs is not None else ubuntu_fs())
     files.update({SSHD: "binary", "/etc/ssh/sshd_config": SSHD_CONFIG_TEXT,
-                  "/etc/ssh/sshd_config.d/50-local.conf": DROPIN_TEXT})
+                  "/etc/ssh/sshd_config.d/50-local.conf": DROPIN_TEXT, CONFIG: CONFIG_TEXT})
+    all_stats = {CONFIG_DIR: fake_stat("dir", 0o755), CONFIG: fake_stat("file", 0o644)}
+    all_stats.update(stats or {})
     files.update(ssh_files or {})
     all_dirs = {"/etc/ssh/sshd_config.d": ["50-local.conf"]}
     all_dirs.update(dirs or {})
@@ -115,7 +134,7 @@ def target(acc_fs=None, ssh_files=None, dirs=None, commands=None, **kw):
     all_commands.update({(SSHD, "-T", "-C", spec(u)): GOOD_SSHD for u in SSH_USERS})
     all_commands[(CHAGE, "-l", "user1")] = CHAGE_GOOD
     all_commands.update(commands or {})
-    return FakeTarget(files, all_dirs, all_commands, **kw)
+    return FakeTarget(files, all_dirs, all_commands, stats=all_stats, **kw)
 
 
 def write_policy(path_holder, mutate):
@@ -294,9 +313,14 @@ class SafetyTest(CollectorBase):
         self.assertFalse(any(cmd[0] == CHAGE for cmd in fake.ran))
         self.assertEqual(set(document["payloads"]["SSH-02"]["sshd_T_C"]), set(SSH_USERS))
 
-    def test_no_account_option(self):
-        out = io.StringIO()
-        self.assertEqual(collector.main(["--host", "h", "--addr", "a", "--user", "root"], out=out), 2)
+    def test_any_argument_is_rejected(self):
+        # sudoers 인자 금지("")와 같은 기준 : 수집기도 인자를 받지 않음
+        for args in (["--user", "root"], ["--host", "h", "--addr", "a"], ["x"]):
+            with self.subTest(args=args):
+                out = io.StringIO()
+                with target() as fake:
+                    self.assertEqual(collector.main(args, out=out), 2)
+                self.assertEqual(fake.ran, [])
 
     def test_context_is_reflected(self):
         with target():
@@ -327,33 +351,82 @@ class LimitTest(CollectorBase):
     def test_main_outputs_single_json(self):
         out = io.StringIO()
         with target():
-            code = collector.main(["--host", CONTEXT["host"], "--addr", CONTEXT["addr"]], out=out)
+            code = collector.main([], out=out)
         self.assertEqual(code, 0)
         lines = out.getvalue().splitlines()
         self.assertEqual(len(lines), 1)
         document = json.loads(lines[0])
         self.assertEqual(set(document["payloads"]), {"SSH-02", "ACC-01", "ACC-02"})
+        self.assertEqual(document["context_used"], CONTEXT)              # 설정 파일 값 사용
 
-    def test_invalid_context_arguments(self):
-        for args in (["--host", "a,b", "--addr", "1"], ["--host", "h", "--addr", "1 2"], ["--host", "h"]):
-            with self.subTest(args=args):
-                out = io.StringIO()
-                with target() as fake:
-                    self.assertEqual(collector.main(args, out=out), 2)
-                self.assertEqual(fake.ran, [])                  # 명령 실행 전 중단
+    def test_budget_is_within_a_transport_limit(self):
+        # A 전체 60초 = SSH 연결 최대 10초 + 수집 + 여유 -> 수집 예산 45초 이하
+        self.assertLessEqual(collector.TOTAL_BUDGET, 45)
 
     def test_output_too_large(self):
         out = io.StringIO()
         with target(), mock.patch.object(collector, "MAX_OUTPUT_BYTES", 100):
-            code = collector.main(["--host", "h", "--addr", "a"], out=out)
+            code = collector.main([], out=out)
         self.assertEqual(code, 3)
         self.assertIn("output too large", out.getvalue())
 
     def test_policy_failure(self):
         out = io.StringIO()
         with target(), mock.patch.object(collector.acc01, "load_policy", side_effect=ValueError("bad")):
-            code = collector.main(["--host", "h", "--addr", "a"], out=out)
+            code = collector.main([], out=out)
         self.assertEqual(code, 4)
+
+    def test_unexpected_error_writes_no_stderr(self):
+        out, err = io.StringIO(), io.StringIO()
+        with target(), mock.patch.object(collector, "collect", side_effect=RuntimeError("boom")), \
+                mock.patch("sys.stderr", err):
+            code = collector.main([], out=out)
+        self.assertEqual(code, 1)
+        self.assertEqual(err.getvalue(), "")
+        self.assertIn("unexpected error", out.getvalue())
+
+
+# ==================================================
+# 5. root 소유 설정 파일 (/etc/secureops/b-read.json)
+# ==================================================
+class ConfigTest(CollectorBase):
+    def run_main(self, **target_kw):
+        out = io.StringIO()
+        with target(**target_kw) as fake:
+            code = collector.main([], out=out)
+        return code, out.getvalue(), fake
+
+    def test_invalid_config_is_rejected_before_any_command(self):
+        cases = {
+            "file_unreadable": {"ssh_files": {CONFIG: ERROR}},
+            "file_symlink": {"stats": {CONFIG: fake_stat("link", 0o777)}},
+            "file_not_root": {"stats": {CONFIG: fake_stat("file", 0o644, uid=1000)}},
+            "file_group_writable": {"stats": {CONFIG: fake_stat("file", 0o664)}},
+            "file_other_writable": {"stats": {CONFIG: fake_stat("file", 0o646)}},
+            "dir_symlink": {"stats": {CONFIG_DIR: fake_stat("link", 0o777)}},
+            "dir_not_root": {"stats": {CONFIG_DIR: fake_stat("dir", 0o755, uid=1000)}},
+            "dir_other_writable": {"stats": {CONFIG_DIR: fake_stat("dir", 0o757)}},
+            "not_json": {"ssh_files": {CONFIG: "host=a"}},
+            "extra_key": {"ssh_files": {CONFIG: json.dumps(dict(CONTEXT, user="root"))}},
+            "missing_addr": {"ssh_files": {CONFIG: json.dumps({"host": "h"})}},
+            "bad_host": {"ssh_files": {CONFIG: json.dumps({"host": "a,b", "addr": "1"})}},
+            "bad_addr": {"ssh_files": {CONFIG: json.dumps({"host": "h", "addr": "1 2"})}},
+            "not_object": {"ssh_files": {CONFIG: json.dumps(["h", "a"])}},
+        }
+        for name, kw in cases.items():
+            with self.subTest(case=name):
+                code, output, fake = self.run_main(**kw)
+                self.assertEqual(code, 4)
+                self.assertIn("config invalid", output)
+                self.assertEqual(fake.ran, [])                  # 명령 실행 전 중단
+
+    def test_missing_config_is_rejected(self):
+        out = io.StringIO()
+        with target() as fake:
+            del fake.stats[CONFIG]                               # 설정 파일이 아예 없음
+            code = collector.main([], out=out)
+        self.assertEqual(code, 4)
+        self.assertEqual(fake.ran, [])
 
 
 if __name__ == "__main__":
