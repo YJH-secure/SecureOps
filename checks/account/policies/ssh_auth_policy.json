@@ -1,0 +1,43 @@
+{
+  "policy_version": "1.0",
+  "policies": [
+    {
+      "check_id": "SSH-02",
+      "description": "SSH 인증 방식 및 정책 점검: 승인된 인증 방식(공개키)만 열려 있고 접속 허용 계정 범위가 정의되어 있는지 확인",
+      "severity": "medium",
+      "applies_to": ["ubuntu", "rocky"],
+      "cvss_assessment": {
+        "vulnerable_assessment_status": "pending",
+        "rationale": "SSH-02 위반 유형(비밀번호 인증 허용, 미승인 인증 방식 활성화 등)별 CVSS 벡터 근거가 확정되지 않아 평가 보류 (CVSS 정책 v1.2)"
+      },
+      "criteria": {
+        "type": "sshd_auth_policy",
+        "settings": {
+          "passwordauthentication": {"expected": "no", "reason": "비밀번호 인증이 허용됨 (키 인증 전용 정책 위반)"},
+          "kbdinteractiveauthentication": {"expected": "no", "reason": "키보드 대화형 인증이 허용됨 (비밀번호 입력 경로)"},
+          "pubkeyauthentication": {"expected": "yes", "reason": "공개키 인증이 꺼져 있음 (키 인증 전용 정책 위반)"},
+          "permitemptypasswords": {"expected": "no", "reason": "빈 비밀번호 로그인이 허용됨"},
+          "hostbasedauthentication": {"expected": "no", "reason": "호스트 기반 인증이 허용됨 (미승인 인증 방식)"},
+          "gssapiauthentication": {"expected": "no", "reason": "GSSAPI 인증이 허용됨 (미승인 인증 방식)"},
+          "kerberosauthentication": {"expected": "no", "reason": "Kerberos 인증이 허용됨 (미승인 인증 방식)"}
+        },
+        "authentication_methods": {
+          "setting": "authenticationmethods",
+          "approved_methods": ["publickey"]
+        },
+        "access_control": {
+          "settings": ["allowusers", "allowgroups"],
+          "approved_accounts": ["secureops-scan", "secureops-fix"],
+          "pending_accounts": ["user1"]
+        },
+        "evidence_only": ["maxauthtries", "usepam"],
+        "test_connection": {
+          "users": ["secureops-scan", "secureops-fix"],
+          "host": "secureops-check",
+          "addr": "192.0.2.10"
+        }
+      },
+      "reference": "판정 기준: 취약점 점검 기준표 v1.1 SSH-02 (2026-11-12 팀장 판정 기준 승인) / 관리자 계정 user1은 A 확인 후 확정 예정(pending_accounts) / policy_version 1.0은 정책 파일 형식 버전"
+    }
+  ]
+}
