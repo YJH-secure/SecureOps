@@ -279,10 +279,41 @@ VM을 켜거나 설정을 바꾸지 않고 `vmrun`·VMX 파일·Windows 정보�
 - `evidence/central-mgmt/central-mgmt-stage2-{precheck,precheck-fs,autoupdate,autoupdate-full,sessions,ssh-after}-261120.png`
 - `evidence/ubuntu-a/ubuntu-a-stage2-{precheck,tools-cause,autoupdate}-261120.png`
 
+## 10. 3-A 실행 기록 (2026-11-23, OPNsense 설치·콘솔 초기 설정)
+
+팀장 조건부 승인(11/20) 범위: 공식 배포본 확보 → SHA-256 대조 → 격리된 신규 VM 설치 → 콘솔 초기 설정. **결과: 3-A 구축 완료로 수용(11/23).** NIC 연결과 구간별 통신 검증은 3-C 범위이며 아직 하지 않았다.
+
+### 10-1. 결과
+
+| 항목 | 결과 |
+| --- | --- |
+| 설치 파일 | OPNsense 26.7 `dvd-amd64` ISO(bz2, 494,298,945 bytes). SHA-256 `95cafedda6d5b22ce832e249dc2309110fbee19f813ad78cf28bb3d387186bfb` — 공식 체크섬 파일·공식 릴리스 노트 두 곳과 일치 |
+| VM `opnsense-g` | FreeBSD 14 64-bit, vCPU 2, RAM 4GB, 디스크 32GB, 복제본과 같은 접근 제한 E 드라이브 폴더. 클립보드·공유폴더·USB·사운드 끔 |
+| NIC | vmxnet3 5개, **모두 `startConnected = "FALSE"`**(링크 `no carrier`) |
+| 인터페이스·IP | WAN `vmx0` `192.168.10.100/24` GW `.2`(값만, 미연결) / LAN `vmx1` `10.40.0.1/24` / OPT1 `vmx2` `10.20.0.1/24` / OPT2 `vmx3` `10.30.0.1/24` / OPT3 `vmx4` `10.10.0.1/24`. IPv6 없음, DHCP 서버 없음(67·547 리스너 0) |
+| NIC 대응 | MAC 대조 결과 **LAN `vmx1` = VMware 어댑터 5**(ethernet4, PCI 슬롯 순서 때문), 나머지는 vmx0=1, vmx2=2, vmx3=3, vmx4=4. 3-C 연결 때 반영 |
+| 스냅샷 | `00-initial-setup-261123`(전원 끈 상태) |
+| 사전·사후 비교 | VMnet1·VMnet8 호스트 어댑터, VMware 망 설정 파일 해시, 원본·복제본 VMX NIC 줄 차이 0. Windows IP 포워딩 켜진 어댑터 0 |
+
+### 10-2. 운영 중 확인한 사항
+
+| # | 내용 | 영향 | 처리 |
+| --- | --- | --- | --- |
+| O4 | **원본 대상 2대 강제 종료(09:44).** OPNsense 첫 기동 직후 일시정지하자 VMware가 그 탭을 닫고 화면을 `Target-Rocky` 탭으로 자동 전환 → 이어진 전원 메뉴 클릭이 `rocky-b`(전원 끄기)·`ubuntu-a`(게스트 종료 → Tools 없어 강제 종료)에 적용됨(UI 로그 `MenuButtonClicked`). 10:02 재기동 | Windows 이벤트 오류 없음, vmrun 호출 없음. 재기동 후 failed unit 0, 파일시스템 오류 0, C 16개 해시 일치, 원본 NIC 설정 같음 | 원본이 켜진 동안 GNS3 노드를 켜지 않음(팀장 지시). GNS3 노드는 다른 VMware 창에서 조작, 원본 종료는 콘솔 `sudo poweroff`만, 일시정지 사용 안 함 |
+| O5 | `ubuntu-a` 11/23 09:35 자동 업데이트 `python3-jwt` 1개 | openssh·커널·Python 변화 없음, C 진단 코드 무관 | 기록만. 자동 업데이트 비활성화는 보류 유지 |
+
+### 10-3. 증거
+
+- `evidence/gns3-host/gns3-host-stage3a-vm-settings-nic{1..5}-261123.png` — NIC 5개 연결 안 함
+- `evidence/gns3-host/gns3-host-stage3a-console-{menu,assign,ip,check}-261123.png` — 설치 직후, 할당, IP, 버전·링크·DHCP(check는 MAC 가림)
+- `evidence/central-mgmt/central-mgmt-scan-sudo-recheck-261123.png` — `secureops-scan` sudo 목록 재확인(C/D 계약용)
+- `evidence/central-mgmt/central-mgmt-targets-reboot-check-261123.png` — O4 재기동 후 상태
+
 ## 변경 이력
 
 | 버전 | 일자 | 내용 |
 | --- | --- | --- |
+| v1.0 | 2026-11-23 | 10장 3-A 실행 기록(OPNsense 26.7 설치·초기 설정, NIC 대응, O4 강제 종료 원인, O5 자동 업데이트, 증거) |
 | v1.0 | 2026-11-20 | 2단계 완료·결과 수용 반영(상단 상태, 승인 현황, 7장 진행 현황), 3단계 전 복제본 격리 조건, 9장 2단계 실행 기록(사전 점검, 단계별 결과, ZIP SHA-256, 운영 확인 사항 O1~O3, 증거) |
 | v1.0 | 2026-11-19 | 1단계 결과 접수·2단계 조건부 승인 반영(승인 현황 표) |
 | v1.0 | 2026-11-19 | 팀장 회신 반영: 승인 현황 표(1단계 승인, 2·3단계 단계별 승인, VMnet 대체안 즉시 전환 금지, GUI WAN 개방 불승인, SSH-01 문맥 B·D 협의) |

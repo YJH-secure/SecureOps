@@ -13,7 +13,7 @@
 | `target_id` | JSON `os` 값 | 호스트명 | OS (실측) | 커널 | IP | 역할 |
 | --- | --- | --- | --- | --- | --- | --- |
 | `central-mgmt` | `ubuntu-24.04` | central-management-ubuntu | Ubuntu 24.04.5 LTS Server | 6.8.0-149-generic | `192.168.10.10` | 중앙 관리: 진단 실행, 결과 수집·집계 |
-| `ubuntu-a` | `ubuntu-24.04` | Target-Ubuntu | Ubuntu 24.04.5 LTS Desktop | 7.0.0-42-generic | `192.168.10.20` | 진단 대상 A |
+| `ubuntu-a` | `ubuntu-24.04` | Target-Ubuntu | Ubuntu 24.04.5 LTS Desktop | 7.0.0-43-generic (11/16 자동 업데이트) | `192.168.10.20` | 진단 대상 A |
 | `rocky-b` | `rocky-9.8` | Target-Rocky | Rocky Linux 9.8 (Blue Onyx) Desktop | 5.14.0-687.66.1.el9_8.x86_64 | `192.168.10.30` | 진단 대상 B |
 
 - `os` 값은 JSON v1.2 계약의 예시 형식(`ubuntu-24.04`, `rocky-9.8`)을 따랐다.
