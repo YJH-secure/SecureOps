@@ -160,6 +160,24 @@ class FailureMappingTests(Base):
         self.assertEqual((ex["metadata"]["execution_succeeded"], ex["metadata"]["exit_code"]), (False, 1))
         self.assertEqual(self.a_meta(eid)["a_reason"], "remote_nonzero")
 
+    def test_read_error_is_not_normal_eof(self):
+        class Broken(io.BytesIO):
+            def read1(self, n=-1):
+                raise OSError("EIO")
+
+        class Proc(cli._FakeProc):
+            def __init__(self):
+                super().__init__(stdout=b"", returncode=0)
+                self.stdout = Broken()
+
+        eid, ex = self.run_t(lambda argv, **kw: Proc())
+        m = ex["metadata"]
+        self.assertEqual((m["execution_succeeded"], m["exit_code"], m["timeout"], m["truncated"]),
+                         (False, None, False, False))
+        meta = self.a_meta(eid)
+        self.assertEqual(meta["a_reason"], "stdout_read_error")
+        self.assertTrue(meta["killed"])
+
     def test_spawn_failure_does_not_raise(self):
         def popen(argv, **kw):
             raise FileNotFoundError("ssh")
@@ -327,6 +345,53 @@ class CliTests(unittest.TestCase):
                 summary = json.loads(out)
                 self.assertEqual(summary["mode"], "MOCK:" + scenario)
                 self.assertIn("a-file01-mock-", summary["record_dir"])
+
+    def test_mock_stdout_file_passed_through_raw(self):
+        sample = Path(self.tmp.name) / "c-sample.json"
+        sample.write_bytes(b'{"check_id": "FILE-01", "cvss": {}}\r\n')
+        code, out, err = self.call("--mock", "ok", "--mock-stdout", str(sample))
+        summary = json.loads(out)
+        self.assertEqual(code, cli.EXIT_OK)
+        self.assertEqual(summary["mock_stdout"]["source"], "file")
+        self.assertEqual(summary["execution"]["stdout"]["bytes"], len(sample.read_bytes()))
+
+    def fake_adapter(self, response):
+        import types
+        mod = types.ModuleType("integration.cd_file01_adapter")
+        seen = []
+
+        def receive_file01_result(execution, *, approved_target_id, store):
+            seen.append((execution, approved_target_id, store))
+            return response
+        mod.receive_file01_result = receive_file01_result
+        sys.modules["integration.cd_file01_adapter"] = mod
+        self.addCleanup(sys.modules.pop, "integration.cd_file01_adapter", None)
+        return seen
+
+    def test_d_failure_is_not_integration_success(self):
+        for response in ({"integration_success": False, "error_stage": "parse", "error_code": "parse_failed"},
+                         {"integration_success": None}, {}, None):
+            with self.subTest(response=response):
+                seen = self.fake_adapter(response)
+                code, out, err = self.call("--mock", "ok", "--deliver-to-d")
+                self.assertEqual(code, cli.EXIT_D_FAILED)
+                self.assertIn("STOP", err)
+                summary = json.loads(out)
+                self.assertIs(summary["integration_success"], False)
+                self.assertEqual(summary["cli_exit"], cli.EXIT_D_FAILED)
+                self.assertEqual(seen[0][1], "ubuntu-a")
+                self.assertIs(type(seen[0][0]["stdout"]), bytes)
+
+    def test_d_success_exit_zero(self):
+        self.fake_adapter({"integration_success": True})
+        code, out, err = self.call("--mock", "ok", "--deliver-to-d")
+        self.assertEqual(code, cli.EXIT_OK)
+        self.assertIs(json.loads(out)["integration_success"], True)
+
+    def test_transport_failure_with_d_still_not_success(self):
+        self.fake_adapter({"integration_success": False, "error_stage": "execution"})
+        code, out, err = self.call("--mock", "timeout", "--deliver-to-d")
+        self.assertNotEqual(code, cli.EXIT_OK)
 
     def test_deliver_to_d_without_adapter(self):
         try:

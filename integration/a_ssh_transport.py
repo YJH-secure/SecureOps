@@ -154,7 +154,9 @@ def run_file01(*, execution_id, target_id, ssh_alias, remote_argv, preflight,
     stderr = bytes(outcome["stderr"])
     timed_out = outcome["reason"] == "timeout"
     truncated = outcome["reason"] in ("stdout_over", "stderr_over")
-    exit_code = None if (timed_out or truncated or outcome["returncode"] is None) else outcome["returncode"]
+    # Only a process that ended on its own reports a real exit code; any stop
+    # we forced (timeout, over limit, read error) or a failed spawn is null.
+    exit_code = outcome["returncode"] if outcome["reason"] == "exited" else None
     succeeded = exit_code == 0 and not timed_out and not truncated
 
     execution = {
@@ -223,18 +225,21 @@ def _execute(ssh_argv, *, popen, clock, sleep):
         result["elapsed"] = clock() - start
         return result
 
-    over = threading.Event()
-    over_name = []
+    stop = threading.Event()
+    closing = threading.Event()
+    stop_reasons = []
     readers = [
-        _reader(proc.stdout, result["stdout"], LIMITS["stdout_max_bytes"], "stdout_over", over, over_name),
-        _reader(proc.stderr, result["stderr"], LIMITS["stderr_max_bytes"], "stderr_over", over, over_name),
+        _reader(proc.stdout, result["stdout"], LIMITS["stdout_max_bytes"], "stdout",
+                stop, stop_reasons, closing),
+        _reader(proc.stderr, result["stderr"], LIMITS["stderr_max_bytes"], "stderr",
+                stop, stop_reasons, closing),
     ]
     for thread in readers:
         thread.start()
 
     while True:
-        if over.is_set():
-            result["reason"] = over_name[0]
+        if stop.is_set():
+            result["reason"] = stop_reasons[0]
             break
         if clock() >= deadline:
             result["reason"] = "timeout"
@@ -250,6 +255,7 @@ def _execute(ssh_argv, *, popen, clock, sleep):
         proc.wait(timeout=_KILL_WAIT_SECONDS)
     except subprocess.TimeoutExpired:
         pass
+    closing.set()
     for stream in (proc.stdout, proc.stderr):
         try:
             stream.close()
@@ -262,22 +268,32 @@ def _execute(ssh_argv, *, popen, clock, sleep):
     return result
 
 
-def _reader(stream, buf, limit, over_reason, over, over_name):
+def _reader(stream, buf, limit, name, stop, stop_reasons, closing):
+    """Stream one pipe into ``buf``; EOF is the only quiet exit.
+
+    Over limit -> ``<name>_over``. An I/O error before we close the pipes
+    ourselves -> ``<name>_read_error`` (never treated as a normal EOF).
+    """
+    def flag(reason):
+        if not stop.is_set():
+            stop_reasons.append(reason)
+            stop.set()
+
     def run():
         read = getattr(stream, "read1", None) or stream.read
-        while not over.is_set():
+        while not stop.is_set():
             try:
                 chunk = read(_CHUNK)
             except (OSError, ValueError):
+                if not closing.is_set():
+                    flag(name + "_read_error")
                 return
             if not chunk:
                 return
             room = limit - len(buf)
             if len(chunk) > room:
                 buf.extend(chunk[:max(room, 0)])
-                if not over.is_set():
-                    over_name.append(over_reason)
-                    over.set()
+                flag(name + "_over")
                 return
             buf.extend(chunk)
     return threading.Thread(target=run, daemon=True)

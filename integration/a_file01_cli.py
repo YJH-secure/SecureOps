@@ -27,7 +27,11 @@ EXIT_OK = 0
 EXIT_TRANSPORT_FAILED = 1
 EXIT_USAGE = 2
 EXIT_D_UNAVAILABLE = 3
+EXIT_D_FAILED = 4
 
+# Transport-only placeholder (no cvss / details.environment): D v1.2 receive
+# rejects it with parse_failed by design. For A/D connection MOCK pass a
+# C-provided v1.2 FILE-01 sample with --mock-stdout instead.
 MOCK_FILE01 = {
     "check_id": "FILE-01",
     "status": "needs_review",
@@ -49,6 +53,8 @@ def main(argv=None):
                         help="JSON file with the preflight attestation dict")
     parser.add_argument("--mock", choices=MOCK_SCENARIOS,
                         help="run against a fake ssh process (required in this version)")
+    parser.add_argument("--mock-stdout", type=Path,
+                        help="raw bytes used as remote stdout in MOCK (e.g. C v1.2 FILE-01 sample)")
     parser.add_argument("--deliver-to-d", action="store_true",
                         help="pass the execution to integration.cd_file01_adapter")
     args = parser.parse_args(argv)
@@ -61,6 +67,7 @@ def main(argv=None):
         raw = args.preflight.read_bytes()
         preflight = json.loads(raw.decode("utf-8"))
         transport.validate_preflight(preflight)
+        mock_stdout = args.mock_stdout.read_bytes() if args.mock_stdout else None
     except (OSError, ValueError) as exc:
         print("input rejected: {}".format(exc), file=sys.stderr)
         return EXIT_USAGE
@@ -70,7 +77,7 @@ def main(argv=None):
     runs.mkdir()
     execution_id = str(uuid.uuid4())
     clock = _FakeClock() if args.mock == "timeout" else None
-    kwargs = {"popen": _mock_popen(args.mock, clock)}
+    kwargs = {"popen": _mock_popen(args.mock, clock, mock_stdout)}
     if clock is not None:
         kwargs.update(clock=clock.now, sleep=clock.sleep)
     execution = transport.run_file01(
@@ -80,6 +87,8 @@ def main(argv=None):
 
     summary = {
         "mode": "MOCK:" + args.mock,
+        "mock_stdout": ({"source": "file", "sha256": hashlib.sha256(mock_stdout).hexdigest()}
+                        if mock_stdout is not None else {"source": "builtin_transport_only"}),
         "record_dir": str(runs / execution_id),
         "preflight_file_sha256": hashlib.sha256(raw).hexdigest(),
         "execution": _describe(execution),
@@ -94,9 +103,19 @@ def main(argv=None):
             code = EXIT_D_UNAVAILABLE
         else:
             store = ReportStore(work / "store")
-            summary["d_response"] = receive_file01_result(
+            response = receive_file01_result(
                 execution, approved_target_id=args.target, store=store)
+            summary["d_response"] = response
+            # Transport success is not integration success: anything short of an
+            # explicit D integration_success=True (parse/save/load) is a STOP.
+            if not (isinstance(response, dict) and response.get("integration_success") is True):
+                code = EXIT_D_FAILED
+    summary["integration_success"] = (summary.get("d_response") or {}).get("integration_success") is True \
+        if args.deliver_to_d else None
+    summary["cli_exit"] = code
     print(json.dumps(summary, ensure_ascii=False, indent=2, default=str))
+    if code == EXIT_D_FAILED:
+        print("STOP: D integration not successful", file=sys.stderr)
     return code
 
 
@@ -143,8 +162,9 @@ class _FakeProc:
         self.killed = True
 
 
-def _mock_popen(scenario, clock):
-    ok = (json.dumps(MOCK_FILE01, ensure_ascii=False) + "\n").encode("utf-8")
+def _mock_popen(scenario, clock, mock_stdout=None):
+    ok = mock_stdout if mock_stdout is not None else \
+        (json.dumps(MOCK_FILE01, ensure_ascii=False) + "\n").encode("utf-8")
     table = {
         "ok": dict(stdout=ok),
         "timeout": dict(hang=True),
