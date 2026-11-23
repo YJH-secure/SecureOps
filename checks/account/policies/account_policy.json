@@ -1,0 +1,77 @@
+{
+  "policy_version": "1.0",
+  "policies": [
+    {
+      "check_id": "ACC-01",
+      "description": "비밀번호 정책 적용 여부: 최소 길이, 복잡도, 사용 기간, 빈 비밀번호 허용(nullok) 확인",
+      "severity": "high",
+      "applies_to": ["ubuntu", "rocky"],
+      "cvss_assessment": {
+        "vulnerable_assessment_status": "pending",
+        "rationale": "ACC-01 위반 유형(길이·복잡도 미강제, 사용 기간 무제한, nullok 등)별 CVSS 벡터 근거가 확정되지 않아 평가 보류 (CVSS 정책 v1.2)"
+      },
+      "criteria": {
+        "type": "password_policy",
+        "min_length": 8,
+        "min_classes": 3,
+        "max_days": 90,
+        "min_days": 1,
+        "forbid_nullok": true,
+        "complexity_modules": ["pam_pwquality.so"],
+        "manual_review_modules": ["pam_cracklib.so", "pam_passwdqc.so", "pam_sss.so", "pam_krb5.so", "pam_ldap.so", "pam_winbind.so"],
+        "interactive_accounts": [],
+        "profiles": {
+          "ubuntu": {
+            "login_defs": "/etc/login.defs",
+            "password_files": ["/etc/pam.d/common-password"],
+            "auth_files": ["/etc/pam.d/common-auth"],
+            "pwquality_conf": "/etc/security/pwquality.conf",
+            "pwquality_conf_dir": "/etc/security/pwquality.conf.d"
+          },
+          "rocky": {
+            "login_defs": "/etc/login.defs",
+            "password_files": ["/etc/pam.d/system-auth", "/etc/pam.d/password-auth"],
+            "auth_files": ["/etc/pam.d/system-auth", "/etc/pam.d/password-auth"],
+            "pwquality_conf": "/etc/security/pwquality.conf",
+            "pwquality_conf_dir": "/etc/security/pwquality.conf.d"
+          }
+        }
+      },
+      "reference": "판정 기준: 2026-11-12 팀장 승인 (KISA 2021 U-02, U-46~48 참고) / 프로젝트 우선 기준 8자 이상·3종류 이상 (KISA 참고 기준의 10자 이상·2종류 조합은 문서에만 기록) / interactive_accounts는 승인된 로컬 대화형 로그인 계정 확정 후 등록 / policy_version 1.0은 정책 파일 형식 버전"
+    },
+    {
+      "check_id": "ACC-02",
+      "description": "계정 잠금 정책 적용 여부: pam_faillock 인증 흐름 연결과 deny, unlock_time, fail_interval 확인",
+      "severity": "medium",
+      "applies_to": ["ubuntu", "rocky"],
+      "cvss_assessment": {
+        "vulnerable_assessment_status": "pending",
+        "rationale": "ACC-02 위반 유형(잠금 미적용, 임계값 초과 등)별 CVSS 벡터 근거가 확정되지 않아 평가 보류 (CVSS 정책 v1.2)"
+      },
+      "criteria": {
+        "type": "account_lockout",
+        "deny_min": 1,
+        "deny_max": 10,
+        "deny_recommended": 5,
+        "unlock_time_min": 600,
+        "fail_interval_recommended": 900,
+        "profiles": {
+          "ubuntu": {
+            "faillock_conf": "/etc/security/faillock.conf",
+            "stacks": [
+              {"auth": "/etc/pam.d/common-auth", "account": "/etc/pam.d/common-account"}
+            ]
+          },
+          "rocky": {
+            "faillock_conf": "/etc/security/faillock.conf",
+            "stacks": [
+              {"auth": "/etc/pam.d/system-auth", "account": "/etc/pam.d/system-auth"},
+              {"auth": "/etc/pam.d/password-auth", "account": "/etc/pam.d/password-auth"}
+            ]
+          }
+        }
+      },
+      "reference": "판정 기준: 2026-11-12 팀장 승인 (KISA 2021 U-03 참고) / deny 1~10회(권장 5회), unlock_time 600초 이상 또는 승인된 관리자 수동 해제, fail_interval 프로젝트 권장 900초 / policy_version 1.0은 정책 파일 형식 버전"
+    }
+  ]
+}
