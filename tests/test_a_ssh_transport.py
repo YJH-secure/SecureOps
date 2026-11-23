@@ -208,6 +208,22 @@ class InputGateTests(Base):
         with self.assertRaises(ValueError):
             t.fixed_remote_argv("ubuntu-a", "../../etc/passwd")
 
+    def test_bad_types_raise_value_error_not_type_error(self):
+        # AD26: unhashable target_id must stay inside the ValueError contract.
+        for bad in ([], {}, set(), None, 1, b"ubuntu-a", ["ubuntu-a"]):
+            with self.subTest(target_id=bad):
+                self.assert_rejected("target_not_allowed", target_id=bad)
+                with self.assertRaises(ValueError):
+                    t.fixed_remote_argv(bad, POLICY)
+        for bad in (None, 1, "x", {}, b"x"):
+            with self.subTest(remote_argv=bad):
+                self.assert_rejected("remote_argv_not_allowed", remote_argv=bad)
+                with self.assertRaises(ValueError):
+                    t.build_remote_command("/w", bad)
+        for bad in ([], {}, None, 1):
+            with self.subTest(ssh_alias=bad):
+                self.assert_rejected("ssh_alias_not_allowed", ssh_alias=bad)
+
     def test_preflight(self):
         for key in t.PREFLIGHT_FLAGS:
             for bad in (False, 1, "true", None):

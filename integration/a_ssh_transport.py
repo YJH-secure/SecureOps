@@ -77,6 +77,8 @@ def fixed_remote_argv(target_id, policy):
 
 def build_remote_command(workdir, remote_argv):
     """Join fixed cwd/argv into the single string OpenSSH will send."""
+    if not isinstance(remote_argv, (list, tuple)) or not remote_argv:
+        raise ValueError("remote_argv_must_be_list")
     for token in [workdir] + list(remote_argv):
         if not isinstance(token, str) or not _SAFE_TOKEN.match(token):
             raise ValueError("unsafe_remote_token")
@@ -132,7 +134,7 @@ def run_file01(*, execution_id, target_id, ssh_alias, remote_argv, preflight,
     if ssh_alias != profile["ssh_alias"]:
         raise ValueError("ssh_alias_not_allowed")
     expected_argv = fixed_remote_argv(target_id, profile["policy"])
-    if list(remote_argv) != expected_argv:
+    if not isinstance(remote_argv, (list, tuple)) or list(remote_argv) != expected_argv:
         raise ValueError("remote_argv_not_allowed")
     validate_preflight(preflight)
     remote_command = build_remote_command(profile["workdir"], expected_argv)
@@ -337,7 +339,8 @@ def _check_execution_id(value):
 
 
 def _profile(target_id):
-    if target_id not in TARGETS:
+    # Unhashable inputs ([] / {}) must not leak TypeError past the input gate.
+    if not isinstance(target_id, str) or target_id not in TARGETS:
         raise ValueError("target_not_allowed")
     return TARGETS[target_id]
 
