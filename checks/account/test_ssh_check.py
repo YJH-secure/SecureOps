@@ -194,7 +194,7 @@ class PolicyTest(unittest.TestCase):
             self.bad_policy(lambda p: p["criteria"]["vulnerable_values"].update(yes="")),
             self.bad_policy(lambda p: p["criteria"].pop("test_connection")),
             self.bad_policy(lambda p: p["criteria"]["test_connection"].update(addr="1.1.1.1,user=x")),
-            self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="cju")),
+            self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="user1")),
             self.bad_policy(lambda p: p["criteria"]["test_connection"].update(user="ROOT")),
         ]
         for text in cases:
