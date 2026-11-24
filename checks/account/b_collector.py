@@ -33,6 +33,12 @@ B/D 매핑표 v1 모양의 payload JSON 1개를 표준 출력으로 내보냅니
 2 : 실행 인자가 있음 (인자는 받지 않음)
 3 : 출력이 상한을 넘음
 4 : 설정·정책 파일 오류 (설치 문제)
+※ sudo -n 거부(sudoers 없음·비밀번호 요구)도 종료 코드 1이지만 sudo가 stderr에 메시지를 씀
+   -> 1 + stderr 있음 = sudo 거부 / 1 + stderr 없음 = B 내부 오류 (둘 다 A·D STOP)
+※ 255는 A 전송 계층에서 SSH 자체 오류로 분류하므로 B는 사용하지 않음 (0~4만 사용)
+
+[A 전송 계층 실행 모양 (operation 후보 b_read_v1, A 별도 변경·승인 후)]
+cd -- / && exec /usr/bin/sudo -n /usr/local/sbin/secureops-b-read
 
 [설치 예 (승인 후, SSH-01 수집기와 같은 절차)]
 install -o root -g root -m 0755 b_collector.py /usr/local/sbin/secureops-b-read  (함께 쓰는 모듈 배치는 승인 요청서에서 확정)
@@ -75,7 +81,7 @@ SAFE_ENV = {"LC_ALL": "C", "PATH": "/usr/sbin:/usr/bin:/sbin:/bin"}   # 영어 �
 COMMAND_TIMEOUT = 10                  # 명령 1개 최대 시간(초)
 TOTAL_BUDGET = 40                     # 수집 전체 최대 시간(초), A 60초 안에서 연결 10초 + 여유
 MAX_ITEM_BYTES = 256 * 1024           # 파일·명령 출력 1개 최대 크기
-MAX_OUTPUT_BYTES = 1024 * 1024 - 1    # 최종 JSON 최대 크기 (1MiB 미만)
+MAX_OUTPUT_BYTES = 1000 * 1000       # 최종 JSON 최대 크기 (A 1MiB 상한보다 약 48KiB 여유, B 종료 코드 3이 먼저 걸리게)
 
 
 # ==================================================

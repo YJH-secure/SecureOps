@@ -359,6 +359,26 @@ class LimitTest(CollectorBase):
         self.assertEqual(set(document["payloads"]), {"SSH-02", "ACC-01", "ACC-02"})
         self.assertEqual(document["context_used"], CONTEXT)              # 설정 파일 값 사용
 
+    def test_output_limit_is_below_a_transport_limit(self):
+        # B 상한(종료 코드 3)이 A 상한(1MiB, 절단 후 실행 실패)보다 먼저 걸려야 함
+        self.assertLess(collector.MAX_OUTPUT_BYTES, 1024 * 1024)
+        self.assertGreaterEqual(1024 * 1024 - collector.MAX_OUTPUT_BYTES, 32 * 1024)
+
+    def test_exit_codes_stay_in_0_to_4(self):
+        # 255는 A에서 SSH 자체 오류로 분류하므로 사용하지 않음
+        cases = [
+            ([], {}),                                                           # 정상 0
+            (["x"], {}),                                                        # 인자 2
+            ([], {"stats": {CONFIG: fake_stat("file", 0o666)}}),               # 설정 4
+        ]
+        for args, kw in cases:
+            with self.subTest(args=args, kw=kw):
+                out = io.StringIO()
+                with target(**kw):
+                    code = collector.main(args, out=out)
+                self.assertIn(code, {0, 1, 2, 3, 4})
+                self.assertNotEqual(code, 255)
+
     def test_budget_is_within_a_transport_limit(self):
         # A 전체 60초 = SSH 연결 최대 10초 + 수집 + 여유 -> 수집 예산 45초 이하
         self.assertLessEqual(collector.TOTAL_BUDGET, 45)
