@@ -449,5 +449,52 @@ class ConfigTest(CollectorBase):
         self.assertEqual(fake.ran, [])
 
 
+# ==================================================
+# 6. 설치 형태로 실제 실행 (python3 -I -B, A 의견 반영)
+#   -I 는 스크립트가 있는 폴더를 import 경로에서 빼므로,
+#   수집기가 자기 폴더의 B 모듈을 직접 찾는지 실제 프로세스로 확인합니다.
+#   대상 서버 명령(sshd, chage)은 실행되지 않습니다. (인자 거부·설정 파일 확인 단계에서 끝남)
+# ==================================================
+INSTALL_FILES = ["b_collector.py", "ssh_check.py", "ssh_auth_check.py", "account_common.py",
+                 "acc_password_check.py", "acc_lockout_check.py"]
+
+
+class InstalledLayoutTest(unittest.TestCase):
+    def setUp(self):
+        import shutil
+        here = os.path.dirname(os.path.abspath(__file__))
+        self.tmp = tempfile.mkdtemp()
+        self.lib = os.path.join(self.tmp, "b-read")              # /usr/local/lib/secureops/b-read 역할
+        os.makedirs(os.path.join(self.lib, "policies"))
+        for name in INSTALL_FILES:
+            shutil.copy(os.path.join(here, name), self.lib)
+        for name in os.listdir(os.path.join(here, "policies")):
+            shutil.copy(os.path.join(here, "policies", name), os.path.join(self.lib, "policies"))
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmp)
+
+    def run_installed(self, *args):
+        # 실제 설치와 같은 방식 : 다른 폴더(/)에서 python3 -I -B <절대 경로>
+        import sys
+        return subprocess.run([sys.executable, "-I", "-B", os.path.join(self.lib, "b_collector.py"), *args],
+                              capture_output=True, timeout=30, cwd=os.path.abspath(os.sep))
+
+    def test_imports_work_under_isolated_mode(self):
+        done = self.run_installed("extra")                       # 인자 -> 설정 확인 전에 종료 코드 2
+        self.assertEqual(done.returncode, 2)
+        self.assertEqual(done.stderr, b"")                       # ModuleNotFoundError 등 stderr 없음
+        self.assertEqual(json.loads(done.stdout.decode("utf-8"))["error"], "arguments not allowed")
+        self.assertFalse(os.path.exists(os.path.join(self.lib, "__pycache__")))   # -B : 캐시 안 만듦
+
+    @unittest.skipIf(os.path.exists(collector.CONFIG_PATH), "real config exists on this machine")
+    def test_missing_config_under_isolated_mode(self):
+        done = self.run_installed()                              # 설정 파일 없음 -> 종료 코드 4
+        self.assertEqual(done.returncode, 4)
+        self.assertEqual(done.stderr, b"")
+        self.assertEqual(len(done.stdout.decode("utf-8").splitlines()), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
