@@ -348,10 +348,63 @@ VM을 켜거나 설정을 바꾸지 않고 `vmrun`·VMX 파일·Windows 정보�
   - `evidence/ubuntu-a/ubuntu-a-stage3b-{netplan-before-1,netplan-before-2,ip}-261123.png`(before-2는 MAC 가림)
   - `evidence/rocky-b/rocky-b-stage3b-{nm-before,ip}-261123.png`(nm-before는 MAC 가림)
 
+## 13. 3-C-1 실행 기록 (2026-11-24, 관리·DMZ 연결과 C3·C4 시험)
+
+팀장 단계별 승인(권장안 A, 관리 경로 변경, VMnet15~17 추가, 복제본 VMX 최소 수정). **결과: C4(T0·T1·T2·T3·T4·T8) 완료.** 중간에 관리 경로 실패와 VMnet8 오연결로 STOP 여러 번, 모두 원인 확인 후 승인 범위 안에서 재개했다. 모든 VM 정상 종료(20:05), 원본 3대 VMX·VMnet1·VMnet8 무변경(사후 비교).
+
+### 13-1. 시험 결과
+
+| 항목 | 결과 | 근거 |
+| --- | --- | --- |
+| T0 매핑 | PASS | 아래 13-2 표. OPNsense `vmx1`(LAN)=e4, `vmx2`(OPT1)=e1, MAC으로 대조 |
+| T1 IP·게이트웨이 | PASS ×3 | central `10.40.0.10`→`10.40.0.1`, ubuntu-a `10.20.0.10`·rocky-b `10.20.0.20`→`10.20.0.1`, 각 ping 3/3 |
+| 관리 경로 | PASS | 호스트 `10.40.0.250`(VMnet14)→OPNsense ping·443. 호스트→방화벽 80·22 차단(anti-lockout 끔 확인) |
+| T2 SSH | PASS | 새 주소 ED25519 지문이 원 주소 지문과 같음을 확인한 뒤에만 known_hosts 추가. 별칭 4개(scan·fix × 2) 접속, 출발지 `10.40.0.10` |
+| T3 sudo | 기록 | 두 대상 scan(읽기 전용 조회)·fix(설정 배치·reload) NOPASSWD 목록. 변경 없음 |
+| T4 DMZ→관리 차단 | PASS | ubuntu-a→`10.40.0.10:22`·`10.20.0.1:443` BLOCKED, OPNsense 로그 D4a·D4c block |
+| T8 출발지·sshd | PASS(기록) | 인증 로그 `Accepted publickey … from 10.40.0.10`. `sshd -T`: permitrootlogin without-password, passwordauthentication yes, usedns no(현재 상태 기록) |
+| 호스트→central·DMZ | 차단 | ping·SSH 실패(GNS3 호스트 트래픽 차단, 10.20 경로 없음) |
+| T5·T6 | 미실시 | 3-C-2 범위 |
+
+### 13-2. 실제 VMnet 할당 (GNS3 로그 `PCAP filter applied on`)
+
+| 노드 | VMnet | 스위치 |
+| --- | --- | --- |
+| opnsense-g | e4=VMnet14(LAN), e1=VMnet11(OPT1), e0·e2·e3=VMnet10·12·13(미연결) | SW-MGMT / SW-DMZ |
+| central-mgmt-g | VMnet15 | SW-MGMT |
+| ubuntu-a-g | VMnet16 | SW-DMZ |
+| rocky-b-g | VMnet17 | SW-DMZ |
+
+### 13-3. 확인된 GNS3·호스트 동작 (재현 절차에 반영)
+
+- GNS3는 VMnet마다 Windows 호스트 가상 어댑터가 있어야 사용한다 → VMnet10~17 호스트 어댑터 켬, IPv4·IPv6 바인딩 해제(Npcap만 유지). 남는 링크 로컬 주소는 예외로 기록.
+- GNS3 Cloud(Npcap)는 패킷을 어댑터 송신 방향으로 넣어 **호스트 자신은 받지 못한다**(pktmon 확인) → 관리 경로는 VMnet14에 호스트 주소를 직접 두는 방식.
+- GNS3는 켜진 VM의 어댑터마다 VMnet 1개를 할당한다(OPNsense 5개). custom으로 지정된 vnet이 관리 범위 밖이면 그대로 쓴다(GNS3 2.2.61 소스) → 3-B에서 custom VMnet8로 둔 복제본이 VMnet8에 연결됨(아래 13-4). 복제본 3대 VMX를 host-only로 바꾸고 any adapter를 켜서 해결.
+- GNS3는 `startConnected=FALSE`를 켜지 않는다 → 할당 확인 뒤 승인된 NIC만 `vmrun connectNamedDevice`. 관리 통신은 연결 후 약 3분 뒤 시작(2회 동일, 원인 미확정).
+- OPNsense는 VMware Tools가 없어 GNS3 Stop이 듣지 않는다 → 게스트 `poweroff`. GNS3 종료는 켜진 노드를 강제 종료하므로 먼저 게스트 종료.
+- GNS3 설정(범위·UDP 포트) 변경은 로컬 서버 재시작 후 적용. NVIDIA가 UDP 10010~10012를 점유해 GNS3 UDP 범위를 20000~30000으로 옮김.
+
+### 13-4. VMnet8 오연결 (보존 기록)
+
+| 차수 | 연결 | 차단 | 시간 | 확인 |
+| --- | --- | --- | --- | --- |
+| 1차 | 19:05:28 | 19:06:44(노드 정지) | 약 76초 | central NIC 미연결, 원본 꺼짐, OPNsense ARP에 LAN 외부 학습 없음 |
+| 2차 | 19:17:12 | 19:20:37(링크 삭제) | 약 3분 25초 | 같음 |
+
+- ARP 기록 없음은 근거로만 남기며 영향이 전혀 없었다고 단정하지 않는다. 노출 시 노드 정지보다 링크 삭제가 즉시 차단된다.
+
+### 13-5. 남은 호스트·VM 변경 (원복 기준)
+
+- VMnet10~17(VMnet14만 IPv4 `10.40.0.250/24`), VMnet19(미사용), KM-TEST 루프백(주소 없음, 미사용), GNS3 범위 10~17·UDP 20000~30000·호스트 트래픽 차단 켬.
+- 복제본 3대 VMX: 수정 전 원본 `.vmx.bak-261124`(해시 기록)로 되돌릴 수 있음. 현재는 GNS3 정지 기본값(`custom`·`vmnet1`)이며 다음 기동 때 다시 할당된다.
+- OPNsense 설정 XML 백업은 E 드라이브(저장소 미반영).
+- 증거(`*-stage3c-*-261124.png`): `evidence/gns3-host/`(VMnet·바인딩·루프백·Npcap·pktmon), `evidence/opnsense-g/`(콘솔·ifconfig·tcpdump·별칭·규칙·T4 로그·ARP, MAC·인증서 지문 가림), `evidence/central-mgmt/`(T1·T2, 호스트 키 지문·IPv6 가림), `evidence/ubuntu-a/`(T1·T3·T4·T8), `evidence/rocky-b/`(T1·T3·T8, 키 지문·IPv6 가림)
+
 ## 변경 이력
 
 | 버전 | 일자 | 내용 |
 | --- | --- | --- |
+| v1.0 | 2026-11-24 | 13장 3-C-1 실행 기록(C4 결과, 실제 VMnet 할당, GNS3·호스트 동작, VMnet8 오연결 1·2차, 남은 변경·원복), 증거 추가 |
 | v1.0 | 2026-11-23 | 상단 상태 갱신, 11장 `rocky-int` 생성·기본 설정·사고 정정·콜드 백업, 12장 3-B 실행 기록(원본 보호, B1~B4, 원본 무변경, DNS 방향), 증거 17장 |
 | v1.0 | 2026-11-23 | 10장 3-A 실행 기록(OPNsense 26.7 설치·초기 설정, NIC 대응, O4 강제 종료 원인, O5 자동 업데이트, 증거) |
 | v1.0 | 2026-11-20 | 2단계 완료·결과 수용 반영(상단 상태, 승인 현황, 7장 진행 현황), 3단계 전 복제본 격리 조건, 9장 2단계 실행 기록(사전 점검, 단계별 결과, ZIP SHA-256, 운영 확인 사항 O1~O3, 증거) |
