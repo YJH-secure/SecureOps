@@ -56,6 +56,13 @@ TARGETS = {
         "workdir": "/home/secureops-scan/secureops-c-verify/2fac2a02",
         "policy": "checks/system/policies/file_policy.ubuntu-24.04.json",
     },
+    # Rocky FILE-01 (A/C/D agreement 2026-11-25): same C commit, cwd and argv
+    # shape; only the policy differs (SHA-256 20fcc6ba...9037, target_os rocky/9.8).
+    "rocky-b": {
+        "ssh_alias": "rocky-b",
+        "workdir": "/home/secureops-scan/secureops-c-verify/2fac2a02",
+        "policy": "checks/system/policies/file_policy.rocky-9.8.json",
+    },
 }
 _REMOTE_PREFIX = ("/usr/bin/python3", "-B", "-m", "checks.system.file_check", "--policy")
 _REMOTE_SUFFIX = ("--result-version", "1.2")

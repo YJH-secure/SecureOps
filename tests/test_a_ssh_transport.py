@@ -202,8 +202,10 @@ class InputGateTests(Base):
         self.assert_rejected("execution_id_must_be_str", execution_id=None)
 
     def test_target_alias_argv_policy(self):
-        self.assert_rejected("target_not_allowed", target_id="rocky-b")
+        self.assert_rejected("target_not_allowed", target_id="rocky-x")
+        self.assert_rejected("target_not_allowed", target_id="rocky-b-fix")
         self.assert_rejected("ssh_alias_not_allowed", ssh_alias="rocky-b")
+        self.assert_rejected("ssh_alias_not_allowed", ssh_alias="ubuntu-a-fix")
         argv = t.fixed_remote_argv("ubuntu-a", POLICY)
         self.assert_rejected("remote_argv_not_allowed", remote_argv=argv + ["--extra"])
         self.assert_rejected("remote_argv_not_allowed", remote_argv=["/bin/sh", "-c", "id"])
@@ -285,6 +287,73 @@ class CommandTests(unittest.TestCase):
         self.assertNotIn("shell", kwargs)
 
 
+ROCKY_POLICY = "checks/system/policies/file_policy.rocky-9.8.json"
+
+
+class RockyTargetTests(Base):
+    """rocky-b profile (A/C/D agreement 2026-11-25); ubuntu-a must stay unchanged."""
+
+    def test_targets_are_exactly_two_read_only_profiles(self):
+        self.assertEqual(sorted(t.TARGETS), ["rocky-b", "ubuntu-a"])
+        self.assertEqual(t.TARGETS["ubuntu-a"], {
+            "ssh_alias": "ubuntu-a",
+            "workdir": "/home/secureops-scan/secureops-c-verify/2fac2a02",
+            "policy": POLICY})
+        self.assertEqual(t.TARGETS["rocky-b"], {
+            "ssh_alias": "rocky-b",
+            "workdir": "/home/secureops-scan/secureops-c-verify/2fac2a02",
+            "policy": ROCKY_POLICY})
+        for profile in t.TARGETS.values():
+            self.assertNotIn("fix", profile["ssh_alias"])
+
+    def test_rocky_fixed_argv_and_command(self):
+        argv = t.fixed_remote_argv("rocky-b", ROCKY_POLICY)
+        self.assertEqual(argv, ["/usr/bin/python3", "-B", "-m", "checks.system.file_check",
+                                "--policy", ROCKY_POLICY, "--result-version", "1.2"])
+        cmd = t.build_remote_command(t.TARGETS["rocky-b"]["workdir"], argv)
+        self.assertEqual(cmd, "cd -- /home/secureops-scan/secureops-c-verify/2fac2a02 && exec "
+                              "/usr/bin/python3 -B -m checks.system.file_check --policy "
+                              + ROCKY_POLICY + " --result-version 1.2")
+
+    def test_target_policy_cross_combinations_refused(self):
+        for target, policy in (("rocky-b", POLICY), ("ubuntu-a", ROCKY_POLICY),
+                               ("rocky-b", "checks/system/policies/file_policy.json")):
+            with self.subTest(target=target, policy=policy), self.assertRaises(ValueError) as ctx:
+                t.fixed_remote_argv(target, policy)
+            self.assertEqual(str(ctx.exception), "policy_not_allowed")
+
+    def test_rocky_alias_and_argv_must_match_target(self):
+        rec = Recorder(stdout=b"{}")
+        with self.assertRaises(ValueError) as ctx:
+            self.run_t(rec, target_id="rocky-b", ssh_alias="ubuntu-a",
+                       remote_argv=t.fixed_remote_argv("rocky-b", ROCKY_POLICY))
+        self.assertEqual(str(ctx.exception), "ssh_alias_not_allowed")
+        with self.assertRaises(ValueError) as ctx:
+            self.run_t(rec, target_id="rocky-b", ssh_alias="rocky-b",
+                       remote_argv=t.fixed_remote_argv("ubuntu-a", POLICY))
+        self.assertEqual(str(ctx.exception), "remote_argv_not_allowed")
+        with self.assertRaises(ValueError) as ctx:
+            self.run_t(rec, target_id="ubuntu-a", ssh_alias="rocky-b")
+        self.assertEqual(str(ctx.exception), "ssh_alias_not_allowed")
+        self.assertEqual(rec.calls, [])
+
+    def test_rocky_ok_run_shape_and_single_ssh(self):
+        rec = Recorder(stdout=b'{"check_id": "FILE-01"}\n')
+        eid, execution = self.run_t(rec, target_id="rocky-b", ssh_alias="rocky-b",
+                                    remote_argv=t.fixed_remote_argv("rocky-b", ROCKY_POLICY))
+        self.assertEqual(len(rec.calls), 1)
+        argv, _ = rec.calls[0]
+        self.assertEqual(argv[-2:], ["rocky-b", t.build_remote_command(
+            t.TARGETS["rocky-b"]["workdir"], t.fixed_remote_argv("rocky-b", ROCKY_POLICY))])
+        self.assertEqual(execution["target_id"], "rocky-b")
+        self.assertEqual(set(execution["metadata"]), META_KEYS)
+        self.assertIs(execution["metadata"]["execution_succeeded"], True)
+        self.assertEqual(execution["execution_id"], eid)
+        meta = self.a_meta(eid)
+        self.assertEqual(meta["target_id"], "rocky-b")
+        self.assertEqual(meta["remote_argv"], t.fixed_remote_argv("rocky-b", ROCKY_POLICY))
+
+
 class RealProcessTests(Base):
     """Exercise real pipes, streaming limits and kill with a local child (no ssh)."""
 
@@ -363,6 +432,23 @@ class CliTests(unittest.TestCase):
                 summary = json.loads(out)
                 self.assertEqual(summary["mode"], "MOCK:" + scenario)
                 self.assertIn("a-file01-mock-", summary["record_dir"])
+
+    def test_rocky_target_mock_ok_and_policy_fixed(self):
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(["--target", "rocky-b", "--policy", ROCKY_POLICY,
+                             "--preflight", str(self.pf), "--mock", "ok"])
+        self.assertEqual(code, cli.EXIT_OK, err.getvalue())
+        self.assertEqual(json.loads(out.getvalue())["mode"], "MOCK:ok")
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(["--target", "rocky-b", "--policy", POLICY,
+                             "--preflight", str(self.pf), "--mock", "ok"])
+        self.assertEqual(code, cli.EXIT_USAGE)
+        self.assertIn("policy_not_allowed", err.getvalue())
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            cli.main(["--target", "rocky-b-fix", "--policy", ROCKY_POLICY,
+                      "--preflight", str(self.pf), "--mock", "ok"])
 
     def test_mock_stdout_file_passed_through_raw(self):
         sample = Path(self.tmp.name) / "c-sample.json"
@@ -604,6 +690,23 @@ class RealCliTests(unittest.TestCase):
         self.assertEqual(link["record_execution_id"], execution["execution_id"])
         self.assertEqual(link["preflight_file_sha256"],
                          hashlib.sha256(self.pf.read_bytes()).hexdigest())
+
+    def test_real_rocky_passes_rocky_target_to_d(self):
+        seen = self.adapter({"integration_success": True, "target_id": "rocky-b"})
+        args = ["--target", "rocky-b", "--policy", ROCKY_POLICY, "--preflight", str(self.pf), "--real",
+                "--record-dir", str(self.runs), "--store-dir", str(self.store)]
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(args)
+        self.assertEqual(code, cli.EXIT_OK, err.getvalue())
+        self.assertEqual(len(self.popen.calls), 1)
+        self.assertEqual(self.popen.calls[0][0][-2:], ["rocky-b", t.build_remote_command(
+            t.TARGETS["rocky-b"]["workdir"], t.fixed_remote_argv("rocky-b", ROCKY_POLICY))])
+        execution, target, _ = seen[0]
+        self.assertEqual(target, "rocky-b")
+        self.assertEqual(execution["target_id"], "rocky-b")
+        link = json.loads((self.runs / execution["execution_id"] / "d_response.json").read_text(encoding="utf-8"))
+        self.assertEqual(link["target_id"], "rocky-b")
 
     def test_real_d_failure_is_stop_and_still_linked(self):
         for response in ({"integration_success": False, "error_stage": "transport",
