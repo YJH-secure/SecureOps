@@ -1,0 +1,25 @@
+drwx------ 3 user1 user1 4096 Nov 20 16:11 /home/user1/secureops/r173-261120
+drwx------ 2 user1 user1 4096 Nov 20 16:11 /home/user1/secureops/r173-261120/tmp
+environ [('HOME', '/home/user1'), ('LANG', 'C.UTF-8'), ('PATH', '/usr/bin:/bin'), ('PYTHONDONTWRITEBYTECODE', '1'), ('PYTHONIOENCODING', 'utf-8'), ('PYTHONUTF8', '1'), ('SECUREOPS_B_SOURCE_ROOT', '/home/user1/secureops/0cab3a24'), ('SECUREOPS_C_SOURCE_ROOT', '/home/user1/secureops/0cab3a24'), ('SECUREOPS_D_SOURCE', '/home/user1/secureops/0cab3a24'), ('TMPDIR', '/home/user1/secureops/r173-261120/tmp')]
+tempdir /home/user1/secureops/r173-261120/tmp
+exe /home/user1/secureops/0cab3a24/.venv/bin/python
+ver 3.12.3
+path ['', '/usr/lib/python312.zip', '/usr/lib/python3.12', '/usr/lib/python3.12/lib-dynload', '/home/user1/secureops/0cab3a24/.venv/lib/python3.12/site-packages']
+core.main /home/user1/secureops/0cab3a24/core/main.py
+core.storage /home/user1/secureops/0cab3a24/core/storage.py
+jsonschema /home/user1/secureops/0cab3a24/.venv/lib/python3.12/site-packages/jsonschema/__init__.py
+referencing /home/user1/secureops/0cab3a24/.venv/lib/python3.12/site-packages/referencing/__init__.py
+jsonschema 4.25.1 | date-time False
+test-ids=173 loader-errors=0
+0cab3a247d2143fc5556e37f6651440e109eef70
+0cab3a247d2143fc5556e37f6651440e109eef70
+git-dirty=0 pycache=0 strace=/usr/bin/strace ptrace_scope=1
+/home/user1/secureops/r173-261120/tmp:
+total 8
+drwx------ 2 user1 user1 4096 Nov 20 16:11 .
+drwx------ 3 user1 user1 4096 Nov 20 16:11 ..
+
+/var/lib/secureops/reports:
+total 8
+drwx------ 2 user1 user1 4096 Nov 20 15:06 .
+drwxr-xr-x 3 root  root  4096 Nov 20 15:06 ..

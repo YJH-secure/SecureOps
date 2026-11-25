@@ -1,0 +1,30 @@
+﻿11:02:13
+== Central-Management-Ubuntu
+Files read from disk: 54
+Archive size: 3368678073 bytes (3213 MiB)
+Everything is Ok
+== Target-Ubuntu
+Files read from disk: 55
+Archive size: 5303208076 bytes (5058 MiB)
+Everything is Ok
+== Target-Rocky
+Files read from disk: 45
+Archive size: 7372541016 bytes (7032 MiB)
+Everything is Ok
+11:10:16
+== test Central-Management-Ubuntu
+Everything is Ok
+Folders: 1
+Files: 54
+== test Target-Ubuntu
+Everything is Ok
+Folders: 1
+Files: 55
+== test Target-Rocky
+Everything is Ok
+Folders: 1
+Files: 45
+Central-Management-Ubuntu.zip  3.1GB  47C51EC0C4B2160B6711CE47FE8C56704D46F22A9DC4B39281359ADD6109A52F
+Target-Rocky.zip  6.9GB  4505D3847A5F62C5B7814B5F59727A36AAA98B44445E234C2176D7C6058FCB0E
+Target-Ubuntu.zip  4.9GB  6F80CCDA65C1B5E794EA20416A6FF405ABA491D716D6CADD982DC1CDFC43AFFB
+11:14:05

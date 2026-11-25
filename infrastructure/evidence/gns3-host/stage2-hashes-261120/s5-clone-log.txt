@@ -1,0 +1,5 @@
+﻿S5 full clone 11:17:39-11:21:45 (vmrun clone full, exit=0 x3)
+NOTE: clone destination resolved to repo working dir (PowerShell $G/$g same variable) -> copied to <clone dir> 11:22:33-11:32:25, SHA-256 compare diff=0 (16/13/13 files), repo copies removed, git untracked only (never committed)
+central-mgmt-g 6.3GB files=16 snapshots=0 | ubuntu-a-g 8.5GB files=13 snapshots=0 | rocky-b-g 10.2GB files=13 snapshots=0
+ethernet0.startConnected = "FALSE" on all 3 clones; NIC type same as originals (e1000/e1000/vmxnet3); MAC same as originals in VMX (regenerated at first boot, stage 3)
+vmrun list after clone: 0

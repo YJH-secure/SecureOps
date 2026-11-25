@@ -1,0 +1,19 @@
+# r3-after: R2(16:17:01) 이후 재확인, 조회만
+checked 2026-11-20 16:32:36
+0cab3a247d2143fc5556e37f6651440e109eef70
+0cab3a247d2143fc5556e37f6651440e109eef70
+git-dirty=0 pycache=0 tmp-left=0
+/home/user1/secureops/r173-261120/tmp:
+total 8
+drwx------ 2 user1 user1 4096 Nov 20 16:17 .
+drwx------ 3 user1 user1 4096 Nov 20 16:32 ..
+
+/var/lib/secureops/reports:
+total 8
+drwx------ 2 user1 user1 4096 Nov 20 15:06 .
+drwxr-xr-x 3 root  root  4096 Nov 20 15:06 ..
+755 root root /var/lib/secureops
+700 user1 user1 /var/lib/secureops/reports
+sys jsonschema 4.10.3
+4f89d75167441054776f356c90d35c0836ee2510b20cb01dea884258a50219f9  /home/user1/.ssh/config
+44c781e43ff5ec562e1d1ad507f5ee28a0aec9f7ed038a1094064cc69e4ae0fc  /home/user1/.ssh/known_hosts
