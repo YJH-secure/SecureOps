@@ -1,8 +1,10 @@
 """MOCK tests for the A SSH transport (no real ssh, no network)."""
 
 import contextlib
+import hashlib
 import io
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -418,6 +420,245 @@ class CliTests(unittest.TestCase):
             self.assertEqual(json.loads(out)["d_response"]["error"], "d_adapter_unavailable")
         else:
             self.skipTest("D adapter present; covered by A/D integration MOCK")
+
+
+class _Stat:
+    def __init__(self, mode, uid=1000):
+        self.st_mode = mode
+        self.st_uid = uid
+
+
+DIR_0700 = _Stat(0o040700)
+
+
+class RealCliTests(unittest.TestCase):
+    """--real gates and flow. ssh is a recorded fake; POSIX/stat are patched."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        base = Path(self.tmp.name)
+        self.pf = base / "preflight.json"
+        self.pf.write_text(json.dumps(PREFLIGHT), encoding="utf-8")
+        self.runs = base / "runs"
+        self.store = base / "reports"
+        self.runs.mkdir()
+        self.store.mkdir()
+        self.overrides = {}
+        self.popen = Recorder(stdout=b'{"check_id": "FILE-01"}\n')
+        self._saved = (cli._is_posix, cli._euid, cli._lstat, cli._real_popen)
+        cli._is_posix = lambda: True
+        cli._euid = lambda: 1000
+        cli._lstat = self.fake_lstat
+        cli._real_popen = self.popen
+
+    def tearDown(self):
+        cli._is_posix, cli._euid, cli._lstat, cli._real_popen = self._saved
+        sys.modules.pop("integration.cd_file01_adapter", None)
+        self.tmp.cleanup()
+
+    def fake_lstat(self, path):
+        value = self.overrides.get(Path(path))
+        if isinstance(value, BaseException):
+            raise value
+        if value is None and not os.path.lexists(path):
+            raise FileNotFoundError(path)
+        return value or DIR_0700
+
+    def adapter(self, response):
+        import types
+        mod = types.ModuleType("integration.cd_file01_adapter")
+        seen = []
+
+        def receive_file01_result(execution, *, approved_target_id, store):
+            seen.append((execution, approved_target_id, store))
+            return response
+        mod.receive_file01_result = receive_file01_result
+        sys.modules["integration.cd_file01_adapter"] = mod
+        return seen
+
+    def call(self, *extra, dirs=True):
+        args = ["--target", "ubuntu-a", "--policy", POLICY, "--preflight", str(self.pf), "--real"]
+        if dirs:
+            args += ["--record-dir", str(self.runs), "--store-dir", str(self.store)]
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(args + list(extra))
+        return code, out.getvalue(), err.getvalue()
+
+    def assert_refused(self, code_expected, fragment, *extra, dirs=True):
+        code, out, err = self.call(*extra, dirs=dirs)
+        self.assertEqual(code, code_expected)
+        self.assertIn(fragment, err)
+        self.assertEqual(self.popen.calls, [], "ssh must not start when a gate fails")
+        self.assertEqual(list(self.runs.iterdir()), [])
+        return err
+
+    def test_real_and_mock_are_exclusive(self):
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            cli.main(["--target", "ubuntu-a", "--policy", POLICY, "--preflight", str(self.pf),
+                      "--real", "--mock", "ok"])
+
+    def test_real_requires_both_dirs(self):
+        self.adapter({"integration_success": True})
+        self.assert_refused(cli.EXIT_USAGE, "real_requires_record_and_store_dir", dirs=False)
+        self.assert_refused(cli.EXIT_USAGE, "real_requires_record_and_store_dir",
+                            "--record-dir", str(self.runs), dirs=False)
+
+    def test_real_refused_on_non_posix(self):
+        self.adapter({"integration_success": True})
+        cli._is_posix = lambda: False
+        self.assert_refused(cli.EXIT_USAGE, "real_requires_posix")
+
+    def test_mock_only_and_real_only_options(self):
+        sample = Path(self.tmp.name) / "s.json"
+        sample.write_bytes(b"{}")
+        self.assert_refused(cli.EXIT_USAGE, "mock_stdout_not_allowed_in_real",
+                            "--mock-stdout", str(sample))
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(["--target", "ubuntu-a", "--policy", POLICY, "--preflight", str(self.pf),
+                             "--mock", "ok", "--record-dir", str(self.runs)])
+        self.assertEqual(code, cli.EXIT_USAGE)
+        self.assertIn("record_or_store_dir_only_in_real", err.getvalue())
+
+    def test_bad_preflight_refused_before_dir_gate(self):
+        self.pf.write_text(json.dumps(dict(PREFLIGHT, apt_state_verified="true")), encoding="utf-8")
+        self.assert_refused(cli.EXIT_USAGE, "preflight_flag_not_true:apt_state_verified")
+
+    def test_dir_gate_codes(self):
+        self.adapter({"integration_success": True})
+        cases = {
+            "dir_missing": FileNotFoundError(),
+            "dir_symlink_in_path": _Stat(0o120777),
+            "dir_not_directory": _Stat(0o100700),
+            "dir_mode_not_0700": _Stat(0o040755),
+            "dir_owner_mismatch": _Stat(0o040700, uid=0),
+        }
+        for fragment, value in cases.items():
+            for which in (self.store, self.runs):
+                with self.subTest(case=fragment, dir=which.name):
+                    self.overrides = {which: value}
+                    self.assert_refused(cli.EXIT_USAGE, fragment)
+        self.overrides = {}
+
+    def test_symlink_in_parent_refused(self):
+        self.adapter({"integration_success": True})
+        self.overrides = {self.store.parent: _Stat(0o120777)}
+        self.assert_refused(cli.EXIT_USAGE, "dir_symlink_in_path")
+
+    def test_relative_or_same_dir_refused(self):
+        self.adapter({"integration_success": True})
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = cli.main(["--target", "ubuntu-a", "--policy", POLICY, "--preflight", str(self.pf),
+                             "--real", "--record-dir", "runs", "--store-dir", str(self.store)])
+        self.assertEqual(code, cli.EXIT_USAGE)
+        self.assertIn("dir_must_be_absolute", err.getvalue())
+        self.assertEqual(self.popen.calls, [])
+        self.store = self.runs
+        self.assert_refused(cli.EXIT_USAGE, "record_and_store_dir_must_differ")
+
+    def test_missing_store_dir_is_not_created(self):
+        self.adapter({"integration_success": True})
+        missing = Path(self.tmp.name) / "not-approved"
+        self.store = missing
+        self.assert_refused(cli.EXIT_USAGE, "dir_missing")
+        self.assertFalse(missing.exists())
+
+    def test_real_without_d_adapter_stops_before_ssh(self):
+        sys.modules["integration.cd_file01_adapter"] = None  # forces ImportError
+        self.assert_refused(cli.EXIT_D_UNAVAILABLE, "d_adapter_unavailable")
+
+    def test_real_success_one_ssh_call_and_link_record(self):
+        response = {"execution_id": None, "target_id": "ubuntu-a", "scan_id": "scan-1",
+                    "scanned_at": "2026-11-25T00:00:00Z", "diagnosis_status": "needs_review",
+                    "save_status": "success", "load_status": "success", "report_verified": True,
+                    "saved_path": "/x/abc.json", "integration_success": True,
+                    "error_stage": None, "error_code": None, "report": {"secret": 1}, "summary": {}}
+        seen = self.adapter(response)
+        code, out, err = self.call()
+        self.assertEqual(code, cli.EXIT_OK, err)
+        self.assertEqual(len(self.popen.calls), 1)
+        argv, kwargs = self.popen.calls[0]
+        self.assertEqual(argv[0], "ssh")
+        self.assertEqual(argv[-2:], ["ubuntu-a", t.build_remote_command(
+            t.TARGETS["ubuntu-a"]["workdir"], t.fixed_remote_argv("ubuntu-a", POLICY))])
+        summary = json.loads(out)
+        self.assertEqual(summary["mode"], "REAL")
+        self.assertIsNone(summary["mock_stdout"])
+        self.assertIs(summary["integration_success"], True)
+        execution, target, store = seen[0]
+        self.assertEqual(target, "ubuntu-a")
+        from core.storage import ReportStore
+        self.assertIsInstance(store, ReportStore)
+        self.assertEqual(store.root, self.store.absolute())
+        run_dir = self.runs / execution["execution_id"]
+        self.assertEqual(summary["record_dir"], str(run_dir))
+        self.assertEqual(sorted(p.name for p in run_dir.iterdir()),
+                         ["a_meta.json", "d_response.json", "stderr.bin", "stdout.bin"])
+        link = json.loads((run_dir / "d_response.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(link), set(cli.D_LINK_KEYS) | {
+            "record_execution_id", "d_response_type", "mode", "preflight_file", "preflight_file_sha256"})
+        self.assertNotIn("report", link)
+        self.assertEqual(link["scan_id"], "scan-1")
+        self.assertEqual(link["record_execution_id"], execution["execution_id"])
+        self.assertEqual(link["preflight_file_sha256"],
+                         hashlib.sha256(self.pf.read_bytes()).hexdigest())
+
+    def test_real_d_failure_is_stop_and_still_linked(self):
+        for response in ({"integration_success": False, "error_stage": "transport",
+                          "error_code": "nonempty_stderr"}, None):
+            with self.subTest(response=response):
+                self.popen.calls.clear()
+                self.adapter(response)
+                code, out, err = self.call()
+                self.assertEqual(code, cli.EXIT_D_FAILED)
+                self.assertIn("STOP", err)
+                rid = json.loads(out)["execution"]["execution_id"]
+                link = json.loads((self.runs / rid / "d_response.json").read_text(encoding="utf-8"))
+                self.assertIs(link["integration_success"], response and response["integration_success"])
+                self.assertEqual(link["d_response_type"], type(response).__name__)
+
+    def test_real_transport_failure_goes_to_d_once_no_retry(self):
+        self.popen = Recorder(stderr=b"Permission denied (publickey).\r\n", returncode=255)
+        cli._real_popen = self.popen
+        seen = self.adapter({"integration_success": False, "error_stage": "transport",
+                             "error_code": "execution_failed"})
+        code, out, err = self.call()
+        self.assertEqual(code, cli.EXIT_D_FAILED)
+        self.assertEqual(len(self.popen.calls), 1)
+        self.assertEqual(seen[0][0]["metadata"]["exit_code"], 255)
+
+    def test_link_write_failure_is_stop(self):
+        self.adapter({"integration_success": True})
+        saved = cli._write_d_link
+
+        def boom(*a, **k):
+            raise PermissionError("no")
+        cli._write_d_link = boom
+        try:
+            code, out, err = self.call()
+        finally:
+            cli._write_d_link = saved
+        self.assertEqual(code, cli.EXIT_RECORD_FAILED)
+        self.assertIn("d_response.json could not be written", err)
+        self.assertEqual(json.loads(out)["d_link_record_error"], "PermissionError")
+
+
+class MockLinkTests(unittest.TestCase):
+    setUp = CliTests.setUp
+    tearDown = CliTests.tearDown
+    call = CliTests.call
+    fake_adapter = CliTests.fake_adapter
+
+    def test_mock_deliver_writes_link_in_temp_only(self):
+        self.fake_adapter({"integration_success": True, "scan_id": "s"})
+        code, out, err = self.call("--mock", "ok", "--deliver-to-d")
+        self.assertEqual(code, cli.EXIT_OK)
+        run_dir = Path(json.loads(out)["record_dir"])
+        self.assertIn("a-file01-mock-", str(run_dir))
+        link = json.loads((run_dir / "d_response.json").read_text(encoding="utf-8"))
+        self.assertEqual(link["mode"], "MOCK:ok")
 
 
 if __name__ == "__main__":
