@@ -170,8 +170,8 @@ class FakeSystem:
             p.stop()
 
 
-def run01(files, accounts=("cju",), aging=None, conf_d=None, version="1.1"):
-    aging = {"cju": GOOD_AGING} if aging is None else aging
+def run01(files, accounts=("user1",), aging=None, conf_d=None, version="1.1"):
+    aging = {"user1": GOOD_AGING} if aging is None else aging
     with FakeSystem(files, conf_d, aging) as fake:
         return acc01.run_check(accounts=list(accounts), result_version=version), fake
 
@@ -241,10 +241,10 @@ class Acc01Test(unittest.TestCase):
         self.assertEqual(result["severity"], "high")
 
     def test_current_vm_state_is_vulnerable(self):
-        result, _ = run01(ubuntu_vm_fs(), aging={"cju": {"min_days": 0, "max_days": 99999}})
+        result, _ = run01(ubuntu_vm_fs(), aging={"user1": {"min_days": 0, "max_days": 99999}})
         self.assertEqual(result["status"], "vulnerable")
         for name in ("min_length", "complexity_classes", "PASS_MAX_DAYS", "PASS_MIN_DAYS", "nullok",
-                     "account_max_days(cju)", "account_min_days(cju)"):
+                     "account_max_days(user1)", "account_min_days(user1)"):
             with self.subTest(name):
                 self.assertEqual(status_of(result, name), {"vulnerable"})
         self.assertEqual(items(result, "min_length")[0]["actual"], 6)
@@ -315,10 +315,10 @@ class Acc01Test(unittest.TestCase):
         self.assertEqual(status_of(result, "nullok"), {"pass"})
 
     def test_account_aging(self):
-        result, _ = run01(ubuntu_fs(), aging={"cju": None})
+        result, _ = run01(ubuntu_fs(), aging={"user1": None})
         self.assertEqual(result["status"], "needs_review")       # 못 읽으면 pass로 추정하지 않음
-        result, _ = run01(ubuntu_fs(), aging={"cju": {"min_days": 1, "max_days": -1}})
-        self.assertEqual(status_of(result, "account_max_days(cju)"), {"vulnerable"})
+        result, _ = run01(ubuntu_fs(), aging={"user1": {"min_days": 1, "max_days": -1}})
+        self.assertEqual(status_of(result, "account_max_days(user1)"), {"vulnerable"})
         result, _ = run01(ubuntu_fs(), accounts=(), aging={})
         self.assertEqual(status_of(result, "account_aging"), {"needs_review"})
 
@@ -340,7 +340,7 @@ class Acc01Test(unittest.TestCase):
     def test_unsupported_os_and_bad_override(self):
         result, _ = run01(ubuntu_fs(**{"/etc/os-release": "ID=debian\n"}))
         self.assertEqual(result["status"], "not_applicable")
-        result, _ = run01(ubuntu_fs(), accounts=("cju;id",))
+        result, _ = run01(ubuntu_fs(), accounts=("user1;id",))
         self.assertEqual(result["status"], "error")
 
     def test_reads_only_expected_files(self):
@@ -349,7 +349,7 @@ class Acc01Test(unittest.TestCase):
             "/etc/os-release", "/etc/login.defs", "/etc/pam.d/common-password", "/etc/pam.d/common-auth",
             "/etc/security/pwquality.conf"})
         self.assertNotIn("/etc/shadow", fake.read_paths)
-        self.assertEqual(fake.chage_accounts, ["cju"])
+        self.assertEqual(fake.chage_accounts, ["user1"])
 
 
 # ==================================================
@@ -445,6 +445,41 @@ class Acc02Test(unittest.TestCase):
 # ==================================================
 # 결과 형식 (v1.1 / v1.2) 및 민감정보
 # ==================================================
+class OsBoundaryTest(unittest.TestCase):
+    # OS를 알 수 없음 -> error / 확인된 지원 대상 외 OS -> not_applicable / 지원 OS -> 정상 판정
+    CASES = [
+        ('ID=debian\nVERSION_ID="12"\n', "not_applicable"),     # 확인된 미지원 OS
+        ('ID="centos"\n', "not_applicable"),
+        ('NAME="Something"\nVERSION_ID="1"\n', "error"),          # ID 줄 없음
+        ("ID=\n", "error"),                                         # ID 값이 비어 있음
+        ('ID=""\n', "error"),
+        ("", "error"),                                               # 빈 파일
+        ("# comment only\n", "error"),
+        ('ID_LIKE="rhel centos fedora"\n', "error"),                 # 계열(ID_LIKE)만 있고 ID 없음
+        (ERROR, "error"),                                            # 읽기 실패
+        (None, "error"),                                             # 파일 없음
+    ]
+
+    def test_acc01_os_boundary(self):
+        for os_text, expected in self.CASES:
+            with self.subTest(os_release=os_text):
+                result, _ = run01(ubuntu_fs(**{"/etc/os-release": os_text}))
+                self.assertEqual(result["status"], expected)
+                if expected == "error":
+                    self.assertNotIn("not_applicable", result["evidence"])
+
+    def test_acc02_os_boundary(self):
+        for os_text, expected in self.CASES:
+            with self.subTest(os_release=os_text):
+                result, _ = run02(ubuntu_fs(**{"/etc/os-release": os_text}))
+                self.assertEqual(result["status"], expected)
+
+    def test_supported_os_unchanged(self):
+        self.assertNotIn(run01(ubuntu_fs())[0]["status"], {"error", "not_applicable"})
+        self.assertNotIn(run02(ubuntu_fs())[0]["status"], {"error", "not_applicable"})
+        self.assertNotIn(run02(rocky_fs(ROCKY_SYSTEM_AUTH_FAILLOCK))[0]["status"], {"error", "not_applicable"})
+
+
 class ResultFormatTest(unittest.TestCase):
     SECRET_TEXT = re.compile(r"\b(?:password|token|api[_-]?key|secret|cookie)\s*[:=]\s*\S+", re.I)
     SECRET_KEY = re.compile(r"^(?:password|passwd|token|access_token|refresh_token|api_key|"
@@ -452,7 +487,7 @@ class ResultFormatTest(unittest.TestCase):
 
     def all_results(self, version):
         vm = ubuntu_vm_fs()
-        return [run01(vm, aging={"cju": {"min_days": 0, "max_days": 99999}}, version=version)[0],
+        return [run01(vm, aging={"user1": {"min_days": 0, "max_days": 99999}}, version=version)[0],
                 run01(ubuntu_fs(), version=version)[0],
                 run02(vm, version=version)[0],
                 run02(ubuntu_fs(), version=version)[0]]
@@ -514,7 +549,7 @@ class CommonTest(unittest.TestCase):
 
     def test_run_chage_rejects_bad_names(self):
         with mock.patch("subprocess.run", side_effect=AssertionError("must not run")):
-            self.assertIsNone(account_common.run_chage("cju;id"))
+            self.assertIsNone(account_common.run_chage("user1;id"))
             self.assertIsNone(account_common.run_chage("../root"))
 
 

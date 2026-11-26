@@ -21,7 +21,7 @@
 
 [실행 방법]
 sudo python3 acc_password_check.py
-sudo python3 acc_password_check.py --account cju     (개발용: 사용 기간을 확인할 계정 지정)
+sudo python3 acc_password_check.py --account user1   (개발용: 사용 기간을 확인할 계정 지정)
 sudo python3 acc_password_check.py --result-version 1.2
 
 이 프로그램은 설정을 읽기만 하고, 서버 설정을 바꾸지 않습니다.
@@ -360,6 +360,9 @@ def collect_and_check(policy, accounts):
     if state != "ok":
         return make_result("error", severity, "Failed to read /etc/os-release")
     os_id, os_version = common.parse_os_release(text)
+    # OS를 알 수 없음(ID 없음) -> error / OS는 확인됐지만 지원 대상이 아님 -> not_applicable
+    if not os_id:
+        return make_result("error", severity, "Unable to determine OS (no ID in /etc/os-release)")
     if os_id not in policy["applies_to"]:
         return make_result("not_applicable", severity, f"OS not in applies_to: {os_id or 'unknown'}")
     profile = criteria["profiles"][os_id]
