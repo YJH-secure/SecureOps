@@ -396,6 +396,19 @@ class LimitTest(CollectorBase):
             code = collector.main([], out=out)
         self.assertEqual(code, 4)
 
+    def test_real_stdout_is_forced_to_utf8(self):
+        # Rocky sudo는 사용자 언어 설정(LC_*)을 넘겨서 stdout이 UTF-8이 아닐 수 있음 (11/25 발견)
+        # 실제 실행(out 미지정)이면 언어 설정과 상관없이 UTF-8로 나가야 함
+        raw = io.BytesIO()
+        fake_stdout = io.TextIOWrapper(raw, encoding="latin-1")        # UTF-8이 아닌 출력 통로
+        korean = SSHD_CONFIG_TEXT + "# 한글 주석\n"
+        with target(ssh_files={"/etc/ssh/sshd_config": korean}), mock.patch("sys.stdout", fake_stdout):
+            code = collector.main([])
+            fake_stdout.flush()
+        self.assertEqual(code, 0)
+        document = json.loads(raw.getvalue().decode("utf-8"))           # UTF-8로 읽혀야 함
+        self.assertIn("# 한글 주석", document["payloads"]["SSH-02"]["sshd_config"]["text"])
+
     def test_unexpected_error_writes_no_stderr(self):
         out, err = io.StringIO(), io.StringIO()
         with target(), mock.patch.object(collector, "collect", side_effect=RuntimeError("boom")), \

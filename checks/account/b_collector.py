@@ -355,7 +355,9 @@ def _fail(out, code, reason):
 
 
 def main(argv=None, out=None, config_path=CONFIG_PATH):
-    out = out or sys.stdout
+    if out is None:
+        sys.stdout.reconfigure(encoding="utf-8")
+        out = sys.stdout
     argv = sys.argv[1:] if argv is None else argv
     if argv:                                           # 인자는 받지 않음
         return _fail(out, 2, "arguments not allowed")
