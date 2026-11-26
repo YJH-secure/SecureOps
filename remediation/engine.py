@@ -10,6 +10,7 @@ from uuid import uuid4
 from .contract import timestamp, validate_report
 from .mock import MockBackend, MockFailure
 from .policies import REMEDIATION_POLICIES
+from .file01 import PATH as FILE01_PATH, permission as file01_permission, plan_reason as file01_reason
 
 SUPPORTED_OS = set(REMEDIATION_POLICIES["SSH-01"].supported_os)
 
@@ -58,6 +59,8 @@ def build_plan(report, check_id):
         skip_reason = "unsupported_os"
     elif item is None:
         skip_reason = "check_not_found"
+    elif check_id == "FILE-01":
+        skip_reason = file01_reason(report, item)
     elif item["status"] != "vulnerable":
         skip_reason = "check_not_vulnerable"
 
@@ -126,6 +129,9 @@ class Remediator:
             if report.get("schema_version") != "1.2":
                 raise ValueError("MOCK adapter requires JSON v1.2")
         before = deepcopy(report)
+        if (plan.check_id == "FILE-01" and not plan.skip_reason and not dry_run
+                and recheck_adapter is None):
+            raise ValueError("FILE-01 requires MockRecheckAdapter; no legacy callback")
         execution_id = str(uuid4())
         attempts = []
 
@@ -145,6 +151,9 @@ class Remediator:
         selected = callback_for("after") if recheck_adapter is not None else recheck_report
         result = self._run(before, plan, backend=backend, approval=approval, dry_run=dry_run,
                            now=now, recheck_report=selected, execution_id=execution_id)
+        if plan.check_id == "FILE-01":
+            return self._finish_file01(before, plan, backend, result, callback_for,
+                                       attempts, started_at)
         result.setdefault("after_scan_id", None)
         result.update(post_rollback_scan_id=None, post_rollback_report=None,
                       final_security_status=None, final_security_verified=False)
@@ -230,6 +239,18 @@ class Remediator:
                               "scan_id": approval.scan_id}
         steps = result["completed_steps"]
         steps.append("approval")
+        if plan.check_id == "FILE-01":
+            backend._file01_execution = {"execution_id": execution_id, "approval_id": approval.approval_id,
+                "approved_plan_id": plan.plan_id, "approved_target_id": plan.target_id,
+                "approved_scan_id": plan.scan_id, "approved_check_id": plan.check_id,
+                "permission_subcheck_id": "permissions", "before_report": deepcopy(report),
+                "before_report_digest": plan.source_digest,
+                "approval_evidence": {"approved": True, "approval_id": approval.approval_id,
+                    "approved_by": approval.approved_by, "target_id": approval.target_id,
+                    "scan_id": approval.scan_id, "plan_id": approval.plan_id,
+                    "expires_at": approval.expires_at, "verified_at": now.isoformat(),
+                    "verification": "e_verify_approval_callback"}}
+            backend._file01_phase = "after"
         # 백업 이후 조치·설정 검증이 실패하면 백업으로 복구한다.
         snapshot = None
         stage = "preflight"
@@ -253,6 +274,8 @@ class Remediator:
             if stage == "backup":
                 result["backup"] = "failed"
             if snapshot is not None:
+                if plan.check_id == "FILE-01":
+                    result["_file01_rollback_before"] = deepcopy(backend.files.get(FILE01_PATH))
                 try:
                     recovery_step = "restore"
                     backend.restore(snapshot)
@@ -269,6 +292,8 @@ class Remediator:
                     reason = str(exc) if isinstance(exc, MockFailure) else f"{recovery_step}_failed"
                     result.update(outcome="failed", rollback="failed",
                                   rollback_failed_stage=recovery_step, rollback_failure_reason=reason)
+                if plan.check_id == "FILE-01":
+                    result["_file01_rollback_after"] = deepcopy(backend.files.get(FILE01_PATH))
             return result
 
         # 설정 검증을 통과한 뒤에는 재진단 결과와 오류를 따로 기록한다.
@@ -311,7 +336,16 @@ class Remediator:
 
         # 재진단 보고서만 공통 진단 JSON 규격을 따른다. 조치·복구 상태는 바깥 결과에 남긴다.
         result.update(after_report=after, comparison=comparison)
-        if comparison["improved"]:
+        improved = comparison["improved"]
+        if plan.check_id == "FILE-01":
+            try:
+                file01_permission(item, mode="0644", status="pass")
+                backend.validate(plan)
+                improved = item["status"] in {"pass", "needs_review"}
+                result["permission_improved"] = improved
+            except (ValueError, TypeError, KeyError, AttributeError, MockFailure):
+                improved = False
+        if improved:
             result["outcome"] = "success"
         else:
             result.update(outcome="failed", failed_stage="recheck",
@@ -319,9 +353,81 @@ class Remediator:
             self._restore_after_recheck_failure(backend, snapshot, result)
         return result
 
+    def _finish_file01(self, before, plan, backend, result, callback_for, attempts, started_at):
+        """FILE 전용 종료: 개선 보고서와 복구 이후 최종 상태를 분리한다."""
+        from .file01 import initial_snapshot, validate_snapshot
+        result.update(normal_restore_result={"status": "not_attempted"},
+                      failure_rollback_result={"status": "not_attempted"},
+                      normal_restore_scan_id=None, normal_restore_report=None,
+                      post_rollback_scan_id=None, post_rollback_report=None,
+                      final_security_status=None, final_security_verified=False,
+                      final_state_verified=False)
+        apply_status = ("success" if "apply" in result["completed_steps"] else
+                        "failed" if result.get("failed_stage") == "apply" else "not_attempted")
+        result["action_result"] = {"apply_status": apply_status,
+                                   "permission_improved": result.get("permission_improved", False)}
+        rollback_before = result.pop("_file01_rollback_before", None)
+        rollback_after = result.pop("_file01_rollback_after", None)
+        phase = None
+        if result["outcome"] == "success":
+            phase = "normal_restore"
+        elif result["rollback"] == "verified":
+            phase = "post_rollback"
+        if phase is not None:
+            field = "normal_restore_result" if phase == "normal_restore" else "failure_rollback_result"
+            stage = phase
+            result[field] = {"status": "failed", "before_snapshot": (
+                rollback_before if phase == "post_rollback" else deepcopy(backend.files.get(FILE01_PATH)))}
+            try:
+                if phase == "normal_restore":
+                    backend._step("normal_restore")
+                    backend.restore(result["backup_id"])
+                    backend.verify_restore(result["backup_id"])
+                    backend.verify_service()
+                backend._file01_phase = "post_restore" if phase == "normal_restore" else phase
+                stage = phase + "_recheck"
+                backend._step(stage)
+                report = backend.request_recheck(plan, callback_for(backend._file01_phase))
+                checked = compare_reports(before, report, plan.check_id)["after"]
+                file01_permission(checked, mode="0666", status="vulnerable")
+                if checked["status"] not in {"vulnerable", "needs_review"}:
+                    raise ValueError("restoration diagnosis contradicts vulnerable permissions")
+                validate_snapshot(backend.files.get(FILE01_PATH), mode="0666")
+                result[field].update(status="verified", after_snapshot=deepcopy(backend.files[FILE01_PATH]))
+                report_field = "normal_restore_report" if phase == "normal_restore" else "post_rollback_report"
+                result[report_field] = report
+                result.update(final_security_status=checked["status"],
+                              final_security_verified=checked["status"] in {"pass", "vulnerable"},
+                              final_state_verified=True)
+            except Exception as exc:
+                result[field].update(failure_stage=stage, failure_reason=type(exc).__name__,
+                                     after_snapshot=deepcopy(backend.files.get(FILE01_PATH)))
+                if phase == "normal_restore":
+                    result.update(outcome="failed", failed_stage=stage, failure_reason="normal_restore_unverified")
+                else:
+                    result.update(rollback="failed", rollback_failed_stage=stage,
+                                  rollback_failure_reason="post_rollback_unverified")
+        elif result["rollback"] == "failed":
+            result["failure_rollback_result"] = {"status": "failed",
+                "failure_stage": result.get("rollback_failed_stage"),
+                "failure_reason": result.get("rollback_failure_reason"),
+                "before_snapshot": rollback_before, "after_snapshot": rollback_after}
+        for attempt in attempts:
+            field = {"after": "after_scan_id", "post_restore": "normal_restore_scan_id",
+                     "post_rollback": "post_rollback_scan_id"}[attempt["phase"]]
+            result[field] = attempt["scan_id"]
+        result.setdefault("after_scan_id", None)
+        result["recheck_attempts"] = deepcopy(attempts)
+        result.update(schema_version="1.0", diagnosis_schema_version=before["schema_version"],
+                      approval_id=result["approval"]["approval_id"] if result["approval"] else None,
+                      started_at=started_at, finished_at=datetime.now(timezone.utc).isoformat())
+        return result
+
 
     def _restore_after_recheck_failure(self, backend, snapshot, result):
         steps = result["completed_steps"]
+        if result["check_id"] == "FILE-01":
+            result["_file01_rollback_before"] = deepcopy(backend.files.get(FILE01_PATH))
         recovery_step = "restore"
         try:
             backend.restore(snapshot)
@@ -340,6 +446,8 @@ class Remediator:
                 rollback_failed_stage=recovery_step,
                 rollback_failure_reason=reason,
             )
+        if result["check_id"] == "FILE-01":
+            result["_file01_rollback_after"] = deepcopy(backend.files.get(FILE01_PATH))
 
     def _approval_rejection(self, approval, plan, now):
         """승인을 사용할 수 없으면 사유 코드를 반환한다."""

@@ -29,6 +29,14 @@ class MockBackend:
         self.match_present = match_present
         self.events = []
         self._backups = {}
+        self._backup_contexts = {}
+        self._backup_owner = str(uuid4())
+        self._active_plan_id = None
+        self._active_check_id = None
+        self._file01_execution = None
+        self._file01_context = None
+        self._file01_bound_context = None
+        self._file01_phase = "after"
 
     def _step(self, name):
         """단계 이름 name을 기록한다. 반환은 None이며 지정된 실패 단계면 예외를 낸다."""
@@ -39,6 +47,8 @@ class MockBackend:
     def preflight(self, plan):
         """입력 Plan의 접근 유지·복구 준비·파일 상태를 확인한다."""
         self._step("preflight")
+        self._active_plan_id = plan.plan_id
+        self._active_check_id = plan.check_id
         # 관리 접근과 VM 복구 경로를 확보하지 못한 상태에서는 변경을 시작하지 않는다.
         if not self.access_verified or not self.snapshot_verified:
             raise MockFailure("access_or_snapshot_unverified")
@@ -48,7 +58,17 @@ class MockBackend:
         """입력 Plan 실행 전 가상 파일 상태와 root 로그인 값을 복사해 보관한다."""
         self._step("backup")
         token = "mock-backup-" + str(uuid4())
-        self._backups[token] = REMEDIATION_POLICIES[plan.check_id].handler.snapshot(self)
+        handler = REMEDIATION_POLICIES[plan.check_id].handler
+        self._active_plan_id = plan.plan_id
+        self._active_check_id = plan.check_id
+        # SSH-01의 기존 snapshot 형태를 유지하고 token 문맥은 별도 보관한다.
+        self._backups[token] = handler.snapshot(self)
+        self._backup_contexts[token] = dict(owner=self._backup_owner, target_id=plan.target_id,
+            os=plan.os, check_id=plan.check_id, plan_id=plan.plan_id, handler=handler,
+            execution=deepcopy(self._file01_execution) if plan.check_id == "FILE-01" else None)
+        if plan.check_id == "FILE-01":
+            self._file01_context["backup_token"] = token
+            self._file01_bound_context = deepcopy(self._file01_context)
         return token
 
     def apply(self, plan):
@@ -83,17 +103,44 @@ class MockBackend:
                    "check_id": plan.check_id, "before_scan_id": plan.scan_id,
                    "schema_version": "1.2"}
         state = {"files": deepcopy(self.files), "root_login": self.root_login}
+        if plan.check_id == "FILE-01":
+            self._bound_backup(self._file01_context["backup_token"])
+            if self._file01_context != self._file01_bound_context:
+                raise ValueError("FILE-01 trusted execution context changed")
+            context = deepcopy(self._file01_context)
+            if (context["plan_id"], context["target_id"], context["before_scan_id"]) != (
+                    plan.plan_id, plan.target_id, plan.scan_id):
+                raise ValueError("FILE-01 recheck context mismatch")
+            context["phase"] = self._file01_phase
+            state["file01_context"] = context
+            from .file01 import validate_callback_context
+            validate_callback_context(request, state)
         return deepcopy(callback(request, state))
+
+    def _bound_backup(self, token):
+        record = dict(self._backup_contexts[token], snapshot=self._backups[token])
+        if (record["owner"] != self._backup_owner or record["target_id"] != self.target_id
+                or record["os"] != self.os or record["plan_id"] != self._active_plan_id
+                or record["check_id"] != self._active_check_id):
+            raise ValueError("backup token target/plan binding mismatch")
+        if record["check_id"] == "FILE-01":
+            if record["execution"] != self._file01_execution:
+                raise ValueError("backup token execution/approval mismatch")
+            if self._file01_context is None or record["plan_id"] != self._file01_context["plan_id"]:
+                raise ValueError("backup token check binding mismatch")
+        return record
 
     def restore(self, token):
         """백업 식별자 token을 받아 파일 상태와 root 로그인 값을 복원한다."""
         self._step("restore")
-        SSH01MockHandler.restore(self, self._backups[token])
+        record = self._bound_backup(token)
+        record["handler"].restore(self, record["snapshot"])
 
     def verify_restore(self, token):
         """백업 식별자 token의 원본과 현재 가상 상태가 일치하는지 검증한다."""
         self._step("verify_restore")
-        SSH01MockHandler.verify_restore(self, self._backups[token])
+        record = self._bound_backup(token)
+        record["handler"].verify_restore(self, record["snapshot"])
 
     def verify_service(self):
         """복구 후 가상 SSH 서비스 상태를 확인한다."""
