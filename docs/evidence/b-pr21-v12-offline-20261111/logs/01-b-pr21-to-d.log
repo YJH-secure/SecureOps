@@ -1,0 +1,57 @@
+{"label": "01-b-pr21-to-d", "command": "python -B -X utf8 docs/evidence/b-pr21-v12-offline-20261111/run-evidence.py --worker integration", "scope": "Actual B run_check with synthetic collection only", "started_at_kst": "2026-11-11T10:34:15+09:00", "finished_at_kst": "2026-11-11T10:34:16+09:00", "exit_code": 1, "tests": 10, "log": "logs/01-b-pr21-to-d.log", "skipped": 0, "failures": 0, "errors": 4, "passed": 6}
+
+test_collection_failure_is_diagnosis_error (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_collection_failure_is_diagnosis_error) ... ok
+test_connection_identifiers_not_exported (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_connection_identifiers_not_exported) ... ok
+test_early_error_and_not_applicable_without_details (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_early_error_and_not_applicable_without_details) ... ok
+test_execution_failure_and_malformed_json_rejected (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_execution_failure_and_malformed_json_rejected) ... ok
+test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) ... 
+  test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='pass') ... ERROR
+  test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='vulnerable') ... ERROR
+  test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='error') ... ERROR
+  test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='needs-review') ... ERROR
+test_four_policy_vulnerable_values_stay_pending (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_policy_vulnerable_values_stay_pending) ... ok
+test_inappropriate_cvss_objects_rejected (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_inappropriate_cvss_objects_rejected) ... ok
+test_nested_details_independence_after_save (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_nested_details_independence_after_save) ... ok
+test_root_effective_match_details_preserved (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_root_effective_match_details_preserved) ... ok
+test_v11_default_and_v12_identical_judgement (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_v11_default_and_v12_identical_judgement) ... ok
+
+======================================================================
+ERROR: test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='pass')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_b_pr21_v12_offline_integration.py", line 123, in test_four_actual_states_through_d
+    self.assertEqual(metrics[state + "_count"], int(state == status))
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'not_applicable_count'
+
+======================================================================
+ERROR: test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='vulnerable')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_b_pr21_v12_offline_integration.py", line 123, in test_four_actual_states_through_d
+    self.assertEqual(metrics[state + "_count"], int(state == status))
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'not_applicable_count'
+
+======================================================================
+ERROR: test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='error')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_b_pr21_v12_offline_integration.py", line 123, in test_four_actual_states_through_d
+    self.assertEqual(metrics[state + "_count"], int(state == status))
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'not_applicable_count'
+
+======================================================================
+ERROR: test_four_actual_states_through_d (test_b_pr21_v12_offline_integration.BPr21V12OfflineTests.test_four_actual_states_through_d) (case='needs-review')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPO>\tests\test_b_pr21_v12_offline_integration.py", line 123, in test_four_actual_states_through_d
+    self.assertEqual(metrics[state + "_count"], int(state == status))
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'not_applicable_count'
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.656s
+
+FAILED (errors=4)

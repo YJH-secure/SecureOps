@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "pass-1",
+  "target_id": "mock-b-pr21",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T11:00:00+09:00",
+  "results": [
+    {
+      "check_id": "SSH-01",
+      "status": "pass",
+      "evidence": "Effective SSH setting for root (sshd -T -C): permitrootlogin no",
+      "recommendation": "현재 설정 유지",
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "진단 상태가 pass이므로 CVSS 평가 대상 아님"
+      },
+      "details": {
+        "setting": "permitrootlogin",
+        "expected": "no",
+        "global_value": "no",
+        "root_value": "no",
+        "root_evaluation": "sshd -T -C user=root",
+        "match_rules": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{"label": "02-original-b-unit", "command": "python -B -X utf8 docs/evidence/b-pr21-v12-offline-20261111/run-evidence.py --worker b-unit", "scope": "Unmodified B original 47 unit tests, process/network fallbacks blocked", "started_at_kst": "2026-11-11T10:35:59+09:00", "finished_at_kst": "2026-11-11T10:36:01+09:00", "exit_code": 0, "tests": 47, "log": "logs/02-original-b-unit.log", "skipped": 0, "failures": 0, "errors": 0, "passed": 47}
+
+test_empty_or_missing_output_is_error (test_ssh_check.ApprovedCriteriaTest.test_empty_or_missing_output_is_error) ... ok
+test_evidence_has_value_and_violation_reason (test_ssh_check.ApprovedCriteriaTest.test_evidence_has_value_and_violation_reason) ... ok
+test_four_values_are_vulnerable (test_ssh_check.ApprovedCriteriaTest.test_four_values_are_vulnerable) ... ok
+test_no_is_pass (test_ssh_check.ApprovedCriteriaTest.test_no_is_pass) ... ok
+test_result_has_only_contract_fields (test_ssh_check.ApprovedCriteriaTest.test_result_has_only_contract_fields) ... ok
+test_unknown_value_is_needs_review (test_ssh_check.ApprovedCriteriaTest.test_unknown_value_is_needs_review) ... ok
+test_without_root_output_and_no_match_uses_global (test_ssh_check.ApprovedCriteriaTest.test_without_root_output_and_no_match_uses_global) ... ok
+test_command_uses_dash_c (test_ssh_check.CollectTest.test_command_uses_dash_c) ... ok
+test_config_read_failed (test_ssh_check.CollectTest.test_config_read_failed) ... ok
+test_connection_spec_comes_from_policy (test_ssh_check.CollectTest.test_connection_spec_comes_from_policy) ... ok
+test_invalid_override_is_error (test_ssh_check.CollectTest.test_invalid_override_is_error) ... ok
+test_root_condition_failed (test_ssh_check.CollectTest.test_root_condition_failed) ... ok
+test_run_check_uses_root_condition (test_ssh_check.CollectTest.test_run_check_uses_root_condition) ... ok
+test_runtime_override_of_host_and_addr (test_ssh_check.CollectTest.test_runtime_override_of_host_and_addr) ... ok
+test_sshd_failed (test_ssh_check.CollectTest.test_sshd_failed) ... ok
+test_sshd_not_installed (test_ssh_check.CollectTest.test_sshd_not_installed) ... ok
+test_address_match_that_may_allow_root_is_review (test_ssh_check.MatchRuleTest.test_address_match_that_may_allow_root_is_review) ... ok
+test_address_match_that_only_blocks_is_pass (test_ssh_check.MatchRuleTest.test_address_match_that_only_blocks_is_pass) ... ok
+test_conditional_match_never_wrong_pass (test_ssh_check.MatchRuleTest.test_conditional_match_never_wrong_pass) ... ok
+test_confirmed_vulnerable_is_not_hidden_by_match (test_ssh_check.MatchRuleTest.test_confirmed_vulnerable_is_not_hidden_by_match) ... ok
+test_equals_sign_syntax (test_ssh_check.MatchRuleTest.test_equals_sign_syntax) ... ok
+test_host_match_that_may_allow_root_is_review (test_ssh_check.MatchRuleTest.test_host_match_that_may_allow_root_is_review) ... ok
+test_include_with_match (test_ssh_check.MatchRuleTest.test_include_with_match) ... ok
+test_match_for_other_user_is_ignored (test_ssh_check.MatchRuleTest.test_match_for_other_user_is_ignored) ... ok
+test_match_user_root_allows_root (test_ssh_check.MatchRuleTest.test_match_user_root_allows_root) ... ok
+test_match_user_root_blocks_root (test_ssh_check.MatchRuleTest.test_match_user_root_blocks_root) ... ok
+test_match_without_root_output_is_review (test_ssh_check.MatchRuleTest.test_match_without_root_output_is_review) ... ok
+test_negated_address_match_is_review (test_ssh_check.MatchRuleTest.test_negated_address_match_is_review) ... ok
+test_unrelated_match_keeps_judgement (test_ssh_check.MatchRuleTest.test_unrelated_match_keeps_judgement) ... ok
+test_user_match_hidden_by_address_match_is_review (test_ssh_check.MatchRuleTest.test_user_match_hidden_by_address_match_is_review) ... ok
+test_bad_policies_are_errors (test_ssh_check.PolicyTest.test_bad_policies_are_errors) ... ok
+test_missing_policy_file_hides_path (test_ssh_check.PolicyTest.test_missing_policy_file_hides_path) ... ok
+test_non_root_test_user_is_policy_error (test_ssh_check.PolicyTest.test_non_root_test_user_is_policy_error) ... ok
+test_real_policy_file_loads (test_ssh_check.PolicyTest.test_real_policy_file_loads) ... ok
+test_default_output_is_still_v1_1 (test_ssh_check.ResultV12Test.test_default_output_is_still_v1_1) ... ok
+test_details_do_not_include_test_connection_address_or_host (test_ssh_check.ResultV12Test.test_details_do_not_include_test_connection_address_or_host) ... ok
+test_details_keep_actual_values_and_match_evidence (test_ssh_check.ResultV12Test.test_details_keep_actual_values_and_match_evidence) ... ok
+test_errors_before_collection_have_no_details (test_ssh_check.ResultV12Test.test_errors_before_collection_have_no_details) ... ok
+test_invalid_cvss_assessment_policy_is_error (test_ssh_check.ResultV12Test.test_invalid_cvss_assessment_policy_is_error) ... ok
+test_missing_cvss_assessment_defaults_to_pending (test_ssh_check.ResultV12Test.test_missing_cvss_assessment_defaults_to_pending) ... ok
+test_non_vulnerable_statuses_are_cvss_not_applicable (test_ssh_check.ResultV12Test.test_non_vulnerable_statuses_are_cvss_not_applicable) ... ok
+test_same_judgement_in_both_versions (test_ssh_check.ResultV12Test.test_same_judgement_in_both_versions) ... ok
+test_severity_is_not_converted_to_cvss_rating (test_ssh_check.ResultV12Test.test_severity_is_not_converted_to_cvss_rating) ... ok
+test_unsupported_result_version_is_rejected (test_ssh_check.ResultV12Test.test_unsupported_result_version_is_rejected) ... ok
+test_v1_2_has_no_severity_and_has_cvss (test_ssh_check.ResultV12Test.test_v1_2_has_no_severity_and_has_cvss) ... ok
+test_vulnerable_can_be_marked_not_applicable_by_policy (test_ssh_check.ResultV12Test.test_vulnerable_can_be_marked_not_applicable_by_policy) ... ok
+test_vulnerable_uses_policy_assessment_status (test_ssh_check.ResultV12Test.test_vulnerable_uses_policy_assessment_status) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 0.120s
+
+OK
