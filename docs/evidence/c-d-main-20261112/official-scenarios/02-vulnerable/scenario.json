@@ -1,0 +1,102 @@
+{
+  "id": "02-vulnerable",
+  "title": "취약",
+  "runner": "service",
+  "execution_kind": "C_DIAGNOSIS_WITH_MOCK_INPUT",
+  "condition": "OS·역할·망이 일치하는 합성 승인 정책이 금지한 example.service가 활성 상태로 관측된다.",
+  "reason": "실제 SVC 판정 함수가 명시적 유닛 금지 위반을 판정한다.",
+  "limitations": "미등록 항목 전체를 취약 처리하는 예시가 아니다. 정책 승인은 MOCK 안에서만 가정한다.",
+  "inputs": {
+    "os": {
+      "id": "ubuntu",
+      "version_id": "24.04"
+    },
+    "target": {
+      "target_id": "scenario-target-mock",
+      "role": "service-mock",
+      "network_context": "mock-network"
+    },
+    "active_units_stdout": "example.service loaded active running MOCK example\n",
+    "unit_files_stdout": "example.service enabled enabled\n",
+    "listeners_stdout": "",
+    "policy": {
+      "check_id": "SVC-01",
+      "description": "MOCK explicitly forbidden unit",
+      "severity": "medium",
+      "criteria": {
+        "profiles": [
+          {
+            "os_id": "ubuntu",
+            "os_version": "24.04",
+            "role": "service-mock",
+            "network_context": "mock-network",
+            "approval_status": "approved",
+            "unit_rules": {
+              "example.service": "forbidden"
+            },
+            "listener_rules": []
+          }
+        ]
+      }
+    }
+  },
+  "expected": {
+    "check_id": "SVC-01",
+    "status": "vulnerable",
+    "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+    "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+    "cvss": {
+      "assessment_status": "pending",
+      "version": null,
+      "vector": null,
+      "base_score": null,
+      "rating": null,
+      "source": null,
+      "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+    }
+  },
+  "details_checks": [
+    {
+      "path": [
+        "details",
+        "violations",
+        0,
+        "unit"
+      ],
+      "equals": "example.service"
+    },
+    {
+      "path": [
+        "details",
+        "violations",
+        0,
+        "rule"
+      ],
+      "equals": "forbidden"
+    },
+    {
+      "path": [
+        "details",
+        "violations",
+        0,
+        "active"
+      ],
+      "equals": true
+    },
+    {
+      "path": [
+        "details",
+        "errors"
+      ],
+      "equals": []
+    }
+  ],
+  "expected_v11": {
+    "check_id": "SVC-01",
+    "status": "vulnerable",
+    "severity": "medium",
+    "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+    "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요."
+  },
+  "scenario_contract": "1.2"
+}

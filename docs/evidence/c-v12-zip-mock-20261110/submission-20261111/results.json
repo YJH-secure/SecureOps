@@ -1,0 +1,59 @@
+{
+  "started_at_kst": "2026-11-11T09:36:34+09:00",
+  "base_commit": "f7e4f16d94e68e408087de2cf34a9337a4f63ddf",
+  "origin_main": "f7e4f16d94e68e408087de2cf34a9337a4f63ddf",
+  "branch": "feature/c-d-v12-zip-integration-jhm",
+  "python": "3.14.2",
+  "platform": "Windows 11",
+  "jsonschema": "4.25.1",
+  "c_source_kind": "supplied ZIP; not official C Git verification",
+  "zip_sha256": "636bca49f28eca129ad973fd0479d7d8b87acc7513ec7fa41b2b4485781999c8",
+  "c_files_hash_matched": 57,
+  "actual_ssh_vm": false,
+  "runs": [
+    {
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test_c_zip_v12_integration.py -v",
+      "started_at_kst": "2026-11-11T09:36:35+09:00",
+      "finished_at_kst": "2026-11-11T09:36:36+09:00",
+      "exit_code": 0,
+      "tests": 9,
+      "log": "01-c-zip-nine.log",
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 9
+    },
+    {
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "started_at_kst": "2026-11-11T09:36:36+09:00",
+      "finished_at_kst": "2026-11-11T09:36:43+09:00",
+      "exit_code": 0,
+      "tests": 158,
+      "log": "02-default-full.log",
+      "skipped": 22,
+      "failures": 0,
+      "errors": 0,
+      "passed": 136
+    },
+    {
+      "command": "python -B -X utf8 -m unittest discover -s tests -p test*.py -v",
+      "started_at_kst": "2026-11-11T09:36:43+09:00",
+      "finished_at_kst": "2026-11-11T09:36:48+09:00",
+      "exit_code": 0,
+      "tests": 158,
+      "log": "03-all-offline.log",
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 158
+    }
+  ],
+  "git_source_commits": [
+    "cfbd37b4dbd102ec894a2150d47f751ad5c74afa",
+    "6bb330feccfc6541bc145db9b6e18f24b4bce394",
+    "3eda5a56ed3e9fd56d162676507c526ea0d1a1c1"
+  ],
+  "existing_files_unchanged": true,
+  "zip_unchanged": true,
+  "finished_at_kst": "2026-11-11T09:36:48+09:00"
+}

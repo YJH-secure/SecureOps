@@ -1,0 +1,672 @@
+{
+  "historical_source_evidence_untouched": true,
+  "new_tests_executed_for_submission": false,
+  "source_report_directory": "docs/evidence/c-d-main-recheck-20261112/",
+  "submitted_directory": "docs/evidence/c-d-main-20261112/",
+  "files": [
+    {
+      "source_relative_path": "c-author-evidence-summary.json",
+      "submitted_relative_path": "c-author-evidence-summary.json",
+      "original_sha256": "45fb6262b28eae7f1b4c3d6ffa2bdab92649a4442cdc55631d5d30d237a9b9ff",
+      "submitted_sha256": "45fb6262b28eae7f1b4c3d6ffa2bdab92649a4442cdc55631d5d30d237a9b9ff",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "c-d-result-comparison.json",
+      "submitted_relative_path": "c-d-result-comparison.json",
+      "original_sha256": "fbf2bf603af97f1da813d0a0942cebb4238b11491fa76aa948b3e6b71e8e3559",
+      "submitted_sha256": "fbf2bf603af97f1da813d0a0942cebb4238b11491fa76aa948b3e6b71e8e3559",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "dependencies.txt",
+      "submitted_relative_path": "dependencies.txt",
+      "original_sha256": "f518e186817c49ca5dd2138afd5a36d75880fcf63abd8f36435feee9d2bf25b8",
+      "submitted_sha256": "f518e186817c49ca5dd2138afd5a36d75880fcf63abd8f36435feee9d2bf25b8",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "environment-and-results.json",
+      "submitted_relative_path": "environment-and-results.json",
+      "original_sha256": "3424ef9108bf9e492963da8dd352271c3bad23d46d9b4c4f3a5c89ce40096923",
+      "submitted_sha256": "3424ef9108bf9e492963da8dd352271c3bad23d46d9b4c4f3a5c89ce40096923",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "four-module-results.json",
+      "submitted_relative_path": "four-module-results.json",
+      "original_sha256": "7321b0b31b81b9dd8d71df0ca9c5e0f00172403ce075fced8c1aafe4db3b58b9",
+      "submitted_sha256": "7321b0b31b81b9dd8d71df0ca9c5e0f00172403ce075fced8c1aafe4db3b58b9",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "four-module-store/mock/099f93c8dc696d39d1e46022e342f7e95687345e5b43a5234531c3b204391296.json",
+      "submitted_relative_path": "four-module-store/mock/099f93c8dc696d39d1e46022e342f7e95687345e5b43a5234531c3b204391296.json",
+      "original_sha256": "67a02d2a93b97c62f7e4afb9cc34d9d79b4d0f0424280fa772b515fabc0db159",
+      "submitted_sha256": "6203a4714b05222a81e943f96904cf2c4f90b17db1146775b24bc4649d23ca8a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/046977fe25d893edf85927c4a038248b161c4b13431d0b5b9489e8bf179d89ae.json",
+      "submitted_relative_path": "independent-reports/046977fe25d893edf85927c4a038248b161c4b13431d0b5b9489e8bf179d89ae.json",
+      "original_sha256": "222d469c66a8b7186b74a6947a9a007c0eaf01225ddf569a6b46df4f0af645eb",
+      "submitted_sha256": "ec8f4290d5dfb21fc9e1e27214286155b40381d07baca819268ab710b86a0575",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/22a8a4e05eca6cb7faa95c82452bff35d68aa152cc1bc149fcd33e2f78bf8024.json",
+      "submitted_relative_path": "independent-reports/22a8a4e05eca6cb7faa95c82452bff35d68aa152cc1bc149fcd33e2f78bf8024.json",
+      "original_sha256": "ceb1e9896c50a46ced13498087b88f80bd48dd5eb3c7ef2472131ee9e70a6f31",
+      "submitted_sha256": "e69657bc7be1c34972cdc014702181b5ca7cbda75d75c60749f8f9a757218592",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/3e8ceaf68a161f9dabda59e03b5ab8ec86aa5af0f4c2c92a5e633d2a379a6297.json",
+      "submitted_relative_path": "independent-reports/3e8ceaf68a161f9dabda59e03b5ab8ec86aa5af0f4c2c92a5e633d2a379a6297.json",
+      "original_sha256": "b9178c54fb2be3fd70205e5f200518e78142b185f479d9f696faa58ed7b63aa7",
+      "submitted_sha256": "9328d8b02a68767f6e2d7a60a63c05e1413c9172c06f2270bebaf896c8ab5fec",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/41ffd8b76afc92a65758fd9a080ae80421c196f251263b87cbfb6e567dda0879.json",
+      "submitted_relative_path": "independent-reports/41ffd8b76afc92a65758fd9a080ae80421c196f251263b87cbfb6e567dda0879.json",
+      "original_sha256": "fba73bb877f5afa87b58f407d00158e948e36585f2dc560c4e354d38057db8c8",
+      "submitted_sha256": "30c78ab2a9248d7b302aa61932847fac89a52c706344753af1ef8038a1317b44",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/4cefe3f00029ec94bf7071c7ce0fbe939bebdd387c3ff4c80b3dcecee5bd0f0f.json",
+      "submitted_relative_path": "independent-reports/4cefe3f00029ec94bf7071c7ce0fbe939bebdd387c3ff4c80b3dcecee5bd0f0f.json",
+      "original_sha256": "5cbb95166422fad0f1385f68b4371d0311693df13d88c512d616a607eb6cc770",
+      "submitted_sha256": "11075625067d57943f3f840c4c48832565aff3e0fde1ab4741586a8cd2b1dc9f",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/77ed3a9b72a40ad19be7c10c749cb109682974fab4c189a5756253459a143fab.json",
+      "submitted_relative_path": "independent-reports/77ed3a9b72a40ad19be7c10c749cb109682974fab4c189a5756253459a143fab.json",
+      "original_sha256": "9defa1059982f6518a4288ac4a55064c3155bf1beffa7e30d301c82b78076287",
+      "submitted_sha256": "d3e7ebf3c28f798cf402b3b92bc6637bb9bbc8d2b8a3528223f36f6e45d9cbf8",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/87eabe39411d53a93c72c69395fc5bf4f3de1345c14348964a3adb2cc736c234.json",
+      "submitted_relative_path": "independent-reports/87eabe39411d53a93c72c69395fc5bf4f3de1345c14348964a3adb2cc736c234.json",
+      "original_sha256": "a61cf38bb5375859f59ce178f148aee22619ef86ed9afece4d509a6349d70194",
+      "submitted_sha256": "60972c021fcb2a9df75a87c3dc9ce0707e13c50559a85a732cd83db9dade4194",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/8d924681e729ef569db85944a263056fdc5738968d03da01ad7ebfd73e1a05b9.json",
+      "submitted_relative_path": "independent-reports/8d924681e729ef569db85944a263056fdc5738968d03da01ad7ebfd73e1a05b9.json",
+      "original_sha256": "cfcc183bf7fb7ce2f44d07773bacafd072be8732d72a09e8946d0cc8a7aa881d",
+      "submitted_sha256": "eaade7292a4941bc030ccb1492a84962cda229c7adac920f11c5abc239da4324",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/a00f04b0bccc4799ff0dfe8763ec6c792ba4624366ff555453d68dc3601310f0.json",
+      "submitted_relative_path": "independent-reports/a00f04b0bccc4799ff0dfe8763ec6c792ba4624366ff555453d68dc3601310f0.json",
+      "original_sha256": "3076698fc9a6f303cb9aa584a02ab476448838310b30361a2b65f670d37f5f0f",
+      "submitted_sha256": "0a7d7e370566b435665dfe0f6712672f4d80e248834034a41550a3e9517129f9",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/a08890b6bca55357fd063483d1ced1c076b89f15c07fee163fdc5eb431314d34.json",
+      "submitted_relative_path": "independent-reports/a08890b6bca55357fd063483d1ced1c076b89f15c07fee163fdc5eb431314d34.json",
+      "original_sha256": "3c368e1525b03a30a0f1ba701a8d46ade909b64e8d973d73ace0200aa4411e0c",
+      "submitted_sha256": "bc4dfcd3322e3e96425523f447c913c8ff140c3d9debaac145bf702ec0fc7c27",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/a657432188122afb797ed1ff7eb06da3b6bb9a6e376af7f98d64c21449e2d6db.json",
+      "submitted_relative_path": "independent-reports/a657432188122afb797ed1ff7eb06da3b6bb9a6e376af7f98d64c21449e2d6db.json",
+      "original_sha256": "138bd0ea4a446faa95b8b652a0019be81d69637bf530fd405caf99824e3e0af5",
+      "submitted_sha256": "648f16eca1644f247a2838291f365a17fd2807b7dc2f7cc3ba704fb68e896356",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/b3981dd56644c58edad1e5cf5d1e7345e3ef906d2ea07ab08fdfc4be48e85049.json",
+      "submitted_relative_path": "independent-reports/b3981dd56644c58edad1e5cf5d1e7345e3ef906d2ea07ab08fdfc4be48e85049.json",
+      "original_sha256": "59c9c4930db5f59fa57ce1d4f53310629aada854986af921e859d8bfbb12335b",
+      "submitted_sha256": "8b06d3048c744a31970725c7fb36d1fb7b8c46b8ef38a7283390c127dd395a2e",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-reports/f36b45ae818809ee24ae2489edabfe3cf2a12627b6929c07fc7a3b885d414d44.json",
+      "submitted_relative_path": "independent-reports/f36b45ae818809ee24ae2489edabfe3cf2a12627b6929c07fc7a3b885d414d44.json",
+      "original_sha256": "bc62955041ae3f4010bb3ddb07a3aba911f69368039ef3536bf202e3cf3af3e9",
+      "submitted_sha256": "3b09bca3e556ac83d41c719c37b4e96f0a9c672d2a45a5784949f7371c66b91a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "independent-results.json",
+      "submitted_relative_path": "independent-results.json",
+      "original_sha256": "8e8622881ed0fcc0f5c2b6818bf8bc922f4bf4c986db1dbd97000ee62ea2b166",
+      "submitted_sha256": "8e8622881ed0fcc0f5c2b6818bf8bc922f4bf4c986db1dbd97000ee62ea2b166",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "input-zip-manifest.json",
+      "submitted_relative_path": "input-zip-manifest.json",
+      "original_sha256": "f3a9057d1e93575807ee4f4ed6bfc638c37db585c9279824dc462e157185f658",
+      "submitted_sha256": "f3a9057d1e93575807ee4f4ed6bfc638c37db585c9279824dc462e157185f658",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/01-c-unit.log",
+      "submitted_relative_path": "logs/01-c-unit.log",
+      "original_sha256": "d2b1409e446048929af8b06656270ec153f5f305ef7fd820a951da0bdebd99f2",
+      "submitted_sha256": "d2b1409e446048929af8b06656270ec153f5f305ef7fd820a951da0bdebd99f2",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/02-scenario-help.log",
+      "submitted_relative_path": "logs/02-scenario-help.log",
+      "original_sha256": "a367ceb1e3da394c5496c128d775d3c09af1790ba9225b2de554304e570a0553",
+      "submitted_sha256": "a367ceb1e3da394c5496c128d775d3c09af1790ba9225b2de554304e570a0553",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/03-c-scenarios.log",
+      "submitted_relative_path": "logs/03-c-scenarios.log",
+      "original_sha256": "25fb43722938f96fd54e6d704515544640e0442e5e3df331da5816f128b95da8",
+      "submitted_sha256": "25fb43722938f96fd54e6d704515544640e0442e5e3df331da5816f128b95da8",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/04-d-default.log",
+      "submitted_relative_path": "logs/04-d-default.log",
+      "original_sha256": "9a1d54f0c263dbe10fc5b9bc6e44a3ed528279cc8ac9d9b180a3c1d6a0a03087",
+      "submitted_sha256": "9a1d54f0c263dbe10fc5b9bc6e44a3ed528279cc8ac9d9b180a3c1d6a0a03087",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/05-d-source-specified.log",
+      "submitted_relative_path": "logs/05-d-source-specified.log",
+      "original_sha256": "3f6745c5172b56286e50fa8860a7c0f318cbe8ab094d427b1c4b56a297bd08a3",
+      "submitted_sha256": "3f6745c5172b56286e50fa8860a7c0f318cbe8ab094d427b1c4b56a297bd08a3",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/06-pr20-nine.log",
+      "submitted_relative_path": "logs/06-pr20-nine.log",
+      "original_sha256": "c7a9237c232ef7301717fb8992bff4c258b9f6e3d0472cc9dede53c904b827b1",
+      "submitted_sha256": "c7a9237c232ef7301717fb8992bff4c258b9f6e3d0472cc9dede53c904b827b1",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "logs/07-d-independent-eight.log",
+      "submitted_relative_path": "logs/07-d-independent-eight.log",
+      "original_sha256": "4787eb3d11e7ce8479224f7ead54e60ff29c414120d744d03dfb6cb5a54cffbc",
+      "submitted_sha256": "4787eb3d11e7ce8479224f7ead54e60ff29c414120d744d03dfb6cb5a54cffbc",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/01-pass-report.json",
+      "submitted_relative_path": "official-scenarios/01-pass/01-pass-report.json",
+      "original_sha256": "60cb21db62a38c5e577444240813698f6bec23e338249d66f29bd47f3202c61f",
+      "submitted_sha256": "7a30054fbd656a92ab4b4dcc9eef9088e9283560d323142cd88bd88471b05f81",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/actual-v11.json",
+      "submitted_relative_path": "official-scenarios/01-pass/actual-v11.json",
+      "original_sha256": "f5f960e587c4fdb4a41a736d867a944c248553332a05bf2bc4ba10694e66f4ab",
+      "submitted_sha256": "4bef501d0e39a53ed90ba24bedc5e8f320fdc0c2ae928f1e5c40ec473726adbd",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/actual-v12.json",
+      "submitted_relative_path": "official-scenarios/01-pass/actual-v12.json",
+      "original_sha256": "451201811e7b9257d7d8d0fd33bee14efd2174915cd6d41e05fd079b2b3521e5",
+      "submitted_sha256": "1f998b7b83aab644adca6f340935f061cfd5af8c19ecaea979df06ffc5ce8a49",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/expected-v11.json",
+      "submitted_relative_path": "official-scenarios/01-pass/expected-v11.json",
+      "original_sha256": "33794bb3e7c876054d2d149190bc8b9c33b9a36a099739f59e5fdbf3678cdde0",
+      "submitted_sha256": "f609ce9f9b460abf42834e7d3a67d3750268a661a4f0a466480920882f26da84",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/expected-v12.json",
+      "submitted_relative_path": "official-scenarios/01-pass/expected-v12.json",
+      "original_sha256": "697c2f8e0afe250562369810371857c05bf1003fcb2e12197abaec933b6b6e71",
+      "submitted_sha256": "266252f60ce7019e7f056551eb121581bffb790adfd39042541938083598c659",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/input.json",
+      "submitted_relative_path": "official-scenarios/01-pass/input.json",
+      "original_sha256": "78277cd1465e23b8514432df69e5108b895dd24035fbe12077e57947079ddbd1",
+      "submitted_sha256": "46add5cb222f57c68c13ab702a8ccbbd32a68151b9772a8edf8de65499e26ca6",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/mock/91af9d059c595664277db5329baa6ed85037d66c1c450dff7e6f365c78d882c3.json",
+      "submitted_relative_path": "official-scenarios/01-pass/mock/91af9d059c595664277db5329baa6ed85037d66c1c450dff7e6f365c78d882c3.json",
+      "original_sha256": "df4aa49f625f1b688a7b9e1fa973744f40f4eb0f9b105c0efd971396e2b1d049",
+      "submitted_sha256": "fe41586f6118d113598faa19f511ffebd15af80955b35a633bfa60a42b1627cd",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/scenario.json",
+      "submitted_relative_path": "official-scenarios/01-pass/scenario.json",
+      "original_sha256": "1511eb3d13ddea6524763961a78bb02452a28a168489c0aaab3ef73728cbd4f7",
+      "submitted_sha256": "94235a8b40bb7c6d257346a917e86cdbed71c0aa897ebd6a7e9db789cea2ef98",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/01-pass/test-result.json",
+      "submitted_relative_path": "official-scenarios/01-pass/test-result.json",
+      "original_sha256": "3bd9f18ace8d398e72d32a4fc0c0f1eb5acf0a8fc8a910d56780905a42595495",
+      "submitted_sha256": "64d008fc93d3eefaddbd2e04ab15fad11c3b2f8be4d3c26a03a366568a30dbf7",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/02-vulnerable-report.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/02-vulnerable-report.json",
+      "original_sha256": "b68ea52fbbfacc308f6764f644600ef59ff71c518c4959f6ff2976a9c2ec1815",
+      "submitted_sha256": "897df74ead44129abb3178b84c0876348d07e6c867552e7bf780d247b9916831",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/actual-v11.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/actual-v11.json",
+      "original_sha256": "2a8d4326455d48a753c0107895275f97dd41459dd2baf8dacfee8ce18b3ff1d0",
+      "submitted_sha256": "e1e6ce8642244eb07d1836001aaee21d47a003a195ad8e9ac30d9b9c89cee785",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/actual-v12.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/actual-v12.json",
+      "original_sha256": "abab546ebbc3f2100f0e33b38ca7c866e224d5f4672e57a533cd04413cd3da18",
+      "submitted_sha256": "55ea75a3c7f12b45e3290cde9e1fd59c456637ebb7d3647f983530f0c599af45",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/expected-v11.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/expected-v11.json",
+      "original_sha256": "7ef954208c05eb99576792ba433e9ad5fd1aeb83795b84070a10d9a02f918d4a",
+      "submitted_sha256": "ebfa33c06af8978f93fe29cd1705452c9add7e083c0cce300daa78b9823aaa20",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/expected-v12.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/expected-v12.json",
+      "original_sha256": "07b4aef1ed6a040d13e43dd122025018367711c7adbefd07bf55ad5e26bcbbda",
+      "submitted_sha256": "81f54f9be8a7ebd2ee02ecf0871212fec26c5ec0e57c73b9631664cbd776c9d9",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/input.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/input.json",
+      "original_sha256": "349e9198ac200474c11fc5ddd5f61bf082fcba244ac1e15938802db3c1ddfb4b",
+      "submitted_sha256": "b2100447a049b34573eaa0e67afd30d7bee9aaf2a9fe55b12bd1e766531efe7c",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/mock/671a4aef1eee707810b36b3cf0a093b21e77ec017080f847aa2cd732655bdac4.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/mock/671a4aef1eee707810b36b3cf0a093b21e77ec017080f847aa2cd732655bdac4.json",
+      "original_sha256": "f193c325730c0eb39d93d12ce258cd82e18adae16a73490473001a742bdcf3ae",
+      "submitted_sha256": "f703f39e875a30fb90afa632af136cfa57c9bc2ac73e3e784dc3fa712b666610",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/scenario.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/scenario.json",
+      "original_sha256": "3a50437c307051bf516e914b4f6e116b1981d00f0e114acc575133e5fb72b48f",
+      "submitted_sha256": "ac7f19e0c57166be05422b6124527990a33655758888f6fa6a23ae4347cb892e",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/02-vulnerable/test-result.json",
+      "submitted_relative_path": "official-scenarios/02-vulnerable/test-result.json",
+      "original_sha256": "82e22774339074fc95bee22c235305618fc549ac24ac580eb70884ec8ea45c20",
+      "submitted_sha256": "49eb28faae5b3e5d89a94bcf6846d4412dfe847f38d89b82fa33a1134048b333",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/03-error-report.json",
+      "submitted_relative_path": "official-scenarios/03-error/03-error-report.json",
+      "original_sha256": "05898aaac4ccf0d49018aea2506c4c120284f48e806910f06b96884d5d95c8a7",
+      "submitted_sha256": "5c529a44b3eb642905923cf713c94f3780f9fb91e38aee9fde771421599b9c4a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/actual-v11.json",
+      "submitted_relative_path": "official-scenarios/03-error/actual-v11.json",
+      "original_sha256": "8d34ba232aa12d64b0fa055d7c0483047b3530f1da2499842c82738c9fddeb42",
+      "submitted_sha256": "2de8f0df782bec5311415eba5c7d2814967bc1464a904576c353f3994fbd9a9c",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/actual-v12.json",
+      "submitted_relative_path": "official-scenarios/03-error/actual-v12.json",
+      "original_sha256": "323d9145fa6a1397e0208c31e7133a1786ea992c2ca94413ca7aa43c9dfb914e",
+      "submitted_sha256": "384b9bc8c101e43563f01145d4ba91ea52f00b9cc1b27830b9f4f09d89812dad",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/expected-v11.json",
+      "submitted_relative_path": "official-scenarios/03-error/expected-v11.json",
+      "original_sha256": "536061d1977bdf8530ed41fd787558e198f318fea21c979540be33e02a26ef87",
+      "submitted_sha256": "dfd4e50cebda89e27287215762cf7edc0ff25e510a3fb6ccf603a79717668ea4",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/expected-v12.json",
+      "submitted_relative_path": "official-scenarios/03-error/expected-v12.json",
+      "original_sha256": "f27823210a4b8bec00f03330b3cb2cec6befce76f15bed5febd0ae5aa2dc2adc",
+      "submitted_sha256": "914e44e27b3e955ec981c88606ab7b918825be247cb74eb92dd73815bc004391",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/input.json",
+      "submitted_relative_path": "official-scenarios/03-error/input.json",
+      "original_sha256": "56f907ff25318ac738313e38726534db635892d59655537271efd5555888e8e7",
+      "submitted_sha256": "e805d028155895c4fb650528ebf6b24af9e80f222c27ee1dc47b6ff08848b570",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/mock/ac0259c3059d3fd5b6ddf872fbd520c95687f0d5d30501c4bad126d370840e3d.json",
+      "submitted_relative_path": "official-scenarios/03-error/mock/ac0259c3059d3fd5b6ddf872fbd520c95687f0d5d30501c4bad126d370840e3d.json",
+      "original_sha256": "155befa7c974c2935a269fa8975a58e6081dd5ad5c92acaf7c2ebb0e02164b4e",
+      "submitted_sha256": "9a0112f634f76e50266726f0d79e81220db4d2a17df474fefbee0d6706f46edf",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/scenario.json",
+      "submitted_relative_path": "official-scenarios/03-error/scenario.json",
+      "original_sha256": "90c0c3bd1ceb35a36a78431590ad42a8285df3b6a99c5308dd914035aa44f9fa",
+      "submitted_sha256": "600e0c8dbc95802fffcb5c6877d8b47706b923b4195fbf66893d7161d131eede",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/03-error/test-result.json",
+      "submitted_relative_path": "official-scenarios/03-error/test-result.json",
+      "original_sha256": "f58d92cd5909a60710f3c524be2cdb6d4ad0a9bbea14f5626aff90a815463e48",
+      "submitted_sha256": "97a5e68741b0f47f0f4131d5344d64b381fedf80bd04d9225dd6532fa48b380a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/04-needs-review-report.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/04-needs-review-report.json",
+      "original_sha256": "32168b0ea73ec7bb747bac517dbbf8e6b0e4cf5c2e3c37c4a2b70c1409c685ac",
+      "submitted_sha256": "4baf17bbf3b07e35a57ad9b9e4e635b8a81b7a6f518bcd54bfa9d86390cd25eb",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/actual-v11.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/actual-v11.json",
+      "original_sha256": "42c07d9d33b66c3b8b20de39b349121caf22936907f879c5baf23db4c3c399c6",
+      "submitted_sha256": "cfc1a674d522a3df317a5cbe28cb0dae08d1ef1ae96781bc69abdc84029524b4",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/actual-v12.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/actual-v12.json",
+      "original_sha256": "a5ab20133910e44ecd5c301d913db4538efb5c9c8bc954d88b6826585af08b0e",
+      "submitted_sha256": "ef192a979587ac57b4b64f12a9674f811bdf73c5b52507bf84a8ea601c4ae58c",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/expected-v11.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/expected-v11.json",
+      "original_sha256": "f520ca142d89966708ee29d238eb1489b72a36cadd0bfa69825b4399d1d30921",
+      "submitted_sha256": "3378cc171d4ec9df57969818e95353a7b134a0971b0c606278ad6b21a04d6599",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/expected-v12.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/expected-v12.json",
+      "original_sha256": "688130125585c7a0a7c695258750398cb483383f608cf671e1ecef4d47353296",
+      "submitted_sha256": "b57bec309ab251e264667244905f5a7876eff1e508eaa3e5bb4b36e4e438e7ee",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/input.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/input.json",
+      "original_sha256": "06c81e2e382c08700165e0a38fb2b5db206787193708249b681a6153454081ea",
+      "submitted_sha256": "64e321e9383741944d86b28338d0f1fc50c7db229a4f7d7955a63c3557fb6cf0",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/mock/ffae03933887d946f408d482a3dc7caee2921a10b1e5619a6da4bfd869d9f50b.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/mock/ffae03933887d946f408d482a3dc7caee2921a10b1e5619a6da4bfd869d9f50b.json",
+      "original_sha256": "6b53ae74a5838efa3353b21eb5e818fe6aaa03b5e5b0b241d1b3b74a7d2390d2",
+      "submitted_sha256": "c8cb545e66ce4d8bd1aa5c3a08cdb06696e355ef827ca55fd8bf502e4a3bc528",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/scenario.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/scenario.json",
+      "original_sha256": "e14bd2de74979a10bfe0ec02601cb7b4f6f86cad2173ac63009cdf7a0822cefd",
+      "submitted_sha256": "d42dd3edc8af3acc86eae2dcb8deea53af1151b428ddea2d0687752e1b23e22c",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/04-needs-review/test-result.json",
+      "submitted_relative_path": "official-scenarios/04-needs-review/test-result.json",
+      "original_sha256": "9f3a00f9bf6ba00e0035abd86e24a429cadbb96a2fcde2e93bd687fc6cb773fa",
+      "submitted_sha256": "53edeec1504d86789506908597900ead46095e52e5fb452c5535ae2cd91f09ad",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/05-not-applicable-report.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/05-not-applicable-report.json",
+      "original_sha256": "12c0e14f91065841548c00e930f92f78522019210120fb80f7c37ae1cac029e5",
+      "submitted_sha256": "ea13bda6c8112fb4a630f1eb7ea3925e3b1bb523b67a55dff547aa8c926c72f0",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/actual-v11.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/actual-v11.json",
+      "original_sha256": "a315fc826e67963eb81d2bfa49d70999d37553a8288b4d5ffc053735e510dac1",
+      "submitted_sha256": "525d33c72c46e6de504c4f10f2892deeb8c88d0ee48b7460ccd3c458452cf205",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/actual-v12.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/actual-v12.json",
+      "original_sha256": "fdad1a7c3293013b1a5d0947808c51c255311d9a53644201eb53b2b6250468f2",
+      "submitted_sha256": "b72455dcd367838901ec0f2bd613674136b7496c89617e9af4c2e2033836f067",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/expected-v11.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/expected-v11.json",
+      "original_sha256": "967dd5aa48e7f0807154c268fdd24f7e68390590bf1c88612beacfa768e3a89b",
+      "submitted_sha256": "f24a8a6d8a7e8300ed63c9ceed5ae3c0d5d3df891c6f127d4f7973d675299b98",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/expected-v12.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/expected-v12.json",
+      "original_sha256": "e56752dc34b80d8684e4fb0786aaaaff7dc4952f0ca10d76bb12e8ad8e88ad32",
+      "submitted_sha256": "45993b78d63a5e9b44c75dd18f6255d6431fc44acf863c650898e77129a655c4",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/input.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/input.json",
+      "original_sha256": "b715c812e4fd4ac28262376297871335f1271d22d0f58deb080aec9e6dbc7bfe",
+      "submitted_sha256": "4b4da7dfc32e5268516a95e3a474c1cb16754dc21d3c06724165d90c9146c609",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/mock/c364a44d1a32c9a167659ab6a2c82706905a7e9824487f356f00b588815a20e4.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/mock/c364a44d1a32c9a167659ab6a2c82706905a7e9824487f356f00b588815a20e4.json",
+      "original_sha256": "1fd94cf4717c231e77b4fd63ece5a421928d054dcf76d955f7018c72dee55655",
+      "submitted_sha256": "4f894b36dcc943bc56c80d32a17eb4e71387af72cab3b2e91a6b401b26316e8a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/scenario.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/scenario.json",
+      "original_sha256": "6c9ef7a00ac1833d7665160ba01e76d5cd8136e3de892eaa855c0012cfd855d1",
+      "submitted_sha256": "9502c2ee7375b21dd51eed9d0ab11096a4e38bf09b3c411dd7b532ff2d072bd0",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/05-not-applicable/test-result.json",
+      "submitted_relative_path": "official-scenarios/05-not-applicable/test-result.json",
+      "original_sha256": "12b356690a264562d4c1823c546637ad3d07277e1c6e85809d8f3ae05d0d6e21",
+      "submitted_sha256": "9fbc7ca750d8f09fa13e93b6ffbccc42d45951de3899ddf91aef67f67bc627df",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/rejection-tests.json",
+      "submitted_relative_path": "official-scenarios/rejection-tests.json",
+      "original_sha256": "a189bc4bf58ddaea0b9dcccd637bcb080e4d0124ff87233fa4c27710d7788cc5",
+      "submitted_sha256": "6bace30591c7fc23582e9596fcca1c35ed82e93310b23e2e66b8c74ca5557c1a",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "official-scenarios/summary.json",
+      "submitted_relative_path": "official-scenarios/summary.json",
+      "original_sha256": "cbc09f511bace7a1f9e073383e4b9551a6a4a19d559190d288e15b4b2639aa6d",
+      "submitted_sha256": "bf75932a53f0d49b3c86481a5b48934e7299243de8df984ab2038882ab1fe614",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "pr20-reports/8c6fba8c3bea2128fb4c5f6dc8ee67fa7f4b850cddbd483003d7a5b3be4212db.json",
+      "submitted_relative_path": "pr20-reports/8c6fba8c3bea2128fb4c5f6dc8ee67fa7f4b850cddbd483003d7a5b3be4212db.json",
+      "original_sha256": "10856eeece6a2a2b3d6c4e0df70abb35156e1b2a76f0bee38294be6a59bf87cf",
+      "submitted_sha256": "e8eb079433505124c6c8aac71990b4d3266ffc2a4efe67f665ad0b3f8cb5e3a1",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "pr20-reports/b633a87395f01825945ea261cea6e43ad22faee0ff84379129a1b4e62c867aa0.json",
+      "submitted_relative_path": "pr20-reports/b633a87395f01825945ea261cea6e43ad22faee0ff84379129a1b4e62c867aa0.json",
+      "original_sha256": "865bee7e3f730c88778c1248773a6d1fb303fca86750a9d3fb10b7e69df7138e",
+      "submitted_sha256": "5483dacecadb9e9275b603330f31e440e8855dc51df9f5ddbfac4877646a5717",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "pr20-results.json",
+      "submitted_relative_path": "pr20-results.json",
+      "original_sha256": "3d8a7d0673dd6abf1410a40aed71f1187c68954ac563be30ee05befe7d7eb038",
+      "submitted_sha256": "3d8a7d0673dd6abf1410a40aed71f1187c68954ac563be30ee05befe7d7eb038",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "report.md",
+      "submitted_relative_path": "report.md",
+      "original_sha256": "b7ae3ea0f1d45422bace14bf467e27130baf694b2ba16fc1c45a40e94cc74066",
+      "submitted_sha256": "b7ae3ea0f1d45422bace14bf467e27130baf694b2ba16fc1c45a40e94cc74066",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "run-recheck.py",
+      "submitted_relative_path": "run-recheck.py",
+      "original_sha256": "e66cd8e14b3a95f7ed9208b53cb61c3eaf1198a113e6db01b9c68bec2147815c",
+      "submitted_sha256": "800ca8abf4d2072e5d9076a17b745f6c79b2ba0d0079704587da496ee24a7153",
+      "changed": true,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "team-summary.md",
+      "submitted_relative_path": "team-summary.md",
+      "original_sha256": "1c03f253020652ae74ec5979e2bf0d3cbd7a5d5085dd8eb6f431a494c43184cf",
+      "submitted_sha256": "1c03f253020652ae74ec5979e2bf0d3cbd7a5d5085dd8eb6f431a494c43184cf",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "verification.json",
+      "submitted_relative_path": "verification.json",
+      "original_sha256": "2f3dcc5791e8990cade5e65387967d27084d4eb149b6fd866b554c7593d25785",
+      "submitted_sha256": "2f3dcc5791e8990cade5e65387967d27084d4eb149b6fd866b554c7593d25785",
+      "changed": false,
+      "transformation": "UTF-8/LF, trailing spaces; source checkout absolute paths -> placeholders; results/times unchanged"
+    },
+    {
+      "source_relative_path": "tests/test_c_pr27_independent.py",
+      "submitted_relative_path": "reproduction-sources/test_c_pr27_independent.py",
+      "original_sha256": "511b72deb951a6f8f699bf61728e59759bb72ae1728e151d29b6bd0fcff07781",
+      "submitted_sha256": "511b72deb951a6f8f699bf61728e59759bb72ae1728e151d29b6bd0fcff07781",
+      "changed": false,
+      "transformation": "Evidence snapshot only; not added to tests/"
+    }
+  ]
+}

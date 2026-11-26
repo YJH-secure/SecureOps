@@ -1,0 +1,321 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "c-cli-delivery-1.2",
+  "target_id": "mock-c-cli",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-10T12:00:00+09:00",
+  "results": [
+    {
+      "check_id": "FILE-01",
+      "status": "error",
+      "evidence": "FILE-01: /etc/passwd=error; /etc/shadow=error. 세부 오류 2건, 검토 필요 0건.",
+      "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+      "details": {
+        "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+        "environment": {
+          "id": "ubuntu",
+          "version_id": "24.04",
+          "named_groups": {
+            "shadow": 42
+          },
+          "group_lookup_state": "collected"
+        },
+        "files": [
+          {
+            "path": "/etc/passwd",
+            "status": "error",
+            "actual": null,
+            "expected": {
+              "path": "/etc/passwd",
+              "expected_uid": 0,
+              "allowed_permission_bits": "0644",
+              "reference_gid": null,
+              "approval_status": "approved",
+              "allowed_groups": null,
+              "acl_policy": {
+                "approval_status": "pending",
+                "users": null,
+                "groups": null,
+                "other_max_bits": null
+              },
+              "link_policy": {
+                "approval_status": "pending",
+                "allowed_targets": null
+              }
+            },
+            "checks": [
+              {
+                "name": "metadata",
+                "status": "error",
+                "actual": "MOCK metadata unavailable",
+                "expected": "readable file metadata",
+                "reason": "file observation failed"
+              }
+            ]
+          },
+          {
+            "path": "/etc/shadow",
+            "status": "error",
+            "actual": null,
+            "expected": {
+              "path": "/etc/shadow",
+              "expected_uid": 0,
+              "allowed_permission_bits": "0640",
+              "reference_gid": null,
+              "approval_status": "candidate",
+              "allowed_groups": [
+                {
+                  "kind": "gid",
+                  "value": 0
+                },
+                {
+                  "kind": "name",
+                  "value": "shadow"
+                }
+              ],
+              "acl_policy": {
+                "approval_status": "pending",
+                "users": null,
+                "groups": null,
+                "other_max_bits": null
+              },
+              "link_policy": {
+                "approval_status": "pending",
+                "allowed_targets": null
+              }
+            },
+            "checks": [
+              {
+                "name": "metadata",
+                "status": "error",
+                "actual": "MOCK metadata unavailable",
+                "expected": "readable file metadata",
+                "reason": "file observation failed"
+              }
+            ]
+          }
+        ],
+        "policy_version": "file-01-v1.1-candidate-20261106",
+        "policy_metadata": {
+          "source_document": "SecureOps v1.1",
+          "source_section": "9.1-9.4, page 5",
+          "proposed_on": "2026-11-06",
+          "approval_status": "candidate",
+          "approved_on": null,
+          "official_benchmark_edition": null,
+          "official_benchmark_clause": null,
+          "validation": "mock fixtures only; OS validation pending",
+          "prior_passwd_basis": "team message: UID 0 and 0644 subset; group pending"
+        }
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+      }
+    },
+    {
+      "check_id": "SVC-01",
+      "status": "error",
+      "evidence": "SVC-01: 필수 조회 또는 파싱에 실패했습니다. 조회 오류 3건.",
+      "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+      "details": {
+        "policy_version": "prototype-unapproved",
+        "approval_status": "pending",
+        "target": {
+          "target_id": null,
+          "role": null,
+          "network_context": null,
+          "hostname": "mock-c-cli",
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "named_groups": {
+              "shadow": 42
+            },
+            "group_lookup_state": "collected"
+          }
+        },
+        "observations": {},
+        "violations": [],
+        "review": [
+          {
+            "reason": "policy_pending"
+          },
+          {
+            "reason": "target_context_missing"
+          }
+        ],
+        "errors": [
+          {
+            "stage": "active_units",
+            "command": [
+              "systemctl",
+              "--system",
+              "--no-pager",
+              "--no-legend",
+              "--plain",
+              "--full",
+              "list-units",
+              "--type=service",
+              "--state=active"
+            ],
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "unit_files",
+            "command": [
+              "systemctl",
+              "--system",
+              "--no-pager",
+              "--no-legend",
+              "--plain",
+              "--full",
+              "list-unit-files",
+              "*.service"
+            ],
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "listeners",
+            "command": [
+              "ss",
+              "-H",
+              "-lntup"
+            ],
+            "kind": "PermissionError"
+          }
+        ]
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+      }
+    },
+    {
+      "check_id": "FW-01",
+      "status": "error",
+      "evidence": "FW-01: 조회 또는 파싱 오류 3건을 기록했습니다.",
+      "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+      "details": {
+        "policy_version": "prototype-unapproved",
+        "observations": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "named_groups": {
+              "shadow": 42
+            },
+            "group_lookup_state": "collected"
+          }
+        },
+        "errors": [
+          {
+            "stage": "ufw",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "nftables",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "listeners",
+            "kind": "PermissionError"
+          }
+        ],
+        "review": [
+          "policy_pending"
+        ]
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+      }
+    },
+    {
+      "check_id": "LOG-01",
+      "status": "error",
+      "evidence": "LOG-01: 필수 상태 또는 설정 조회 오류 5건을 기록했습니다.",
+      "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+      "details": {
+        "policy_version": "prototype-unapproved",
+        "observations": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "named_groups": {
+              "shadow": 42
+            },
+            "group_lookup_state": "collected"
+          },
+          "path:/var/log/journal": {
+            "path": "/var/log/journal",
+            "state": "missing"
+          },
+          "path:/run/log/journal": {
+            "path": "/run/log/journal",
+            "state": "missing"
+          },
+          "path:/var/log/auth.log": {
+            "path": "/var/log/auth.log",
+            "state": "missing"
+          },
+          "path:/var/log/syslog": {
+            "path": "/var/log/syslog",
+            "state": "missing"
+          },
+          "rsyslog_config_hints": [],
+          "logrotate_config_hints": []
+        },
+        "errors": [
+          {
+            "stage": "unit:systemd-journald.service",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "unit:rsyslog.service",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "unit:logrotate.timer",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "journald_settings",
+            "kind": "PermissionError"
+          },
+          {
+            "stage": "journal_disk_usage",
+            "kind": "PermissionError"
+          }
+        ],
+        "review": [
+          "policy_pending"
+        ]
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.1",
+  "scan_id": "legacy-4",
+  "target_id": "mock-official-c",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T18:00:00+09:00",
+  "results": [
+    {
+      "check_id": "FILE-01",
+      "status": "not_applicable",
+      "severity": "high",
+      "evidence": "MOCK contract fixture exemption",
+      "recommendation": "MOCK verify approval separately",
+      "details": {
+        "fixture_only": true
+      }
+    }
+  ]
+}

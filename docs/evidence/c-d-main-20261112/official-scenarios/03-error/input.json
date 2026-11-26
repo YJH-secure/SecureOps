@@ -1,0 +1,14 @@
+{
+  "os": {
+    "id": "ubuntu",
+    "version_id": "24.04"
+  },
+  "ufw_stdout": "Status: inactive\n",
+  "listeners_stdout": "",
+  "nft_exception": {
+    "kind": "CalledProcessError",
+    "exit_code": 1,
+    "stderr": "Operation not permitted (MOCK)"
+  },
+  "policy_approval": "pending"
+}

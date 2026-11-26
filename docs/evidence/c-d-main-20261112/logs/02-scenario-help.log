@@ -1,0 +1,16 @@
+{"label": "02-scenario-help", "command": "python -B -X utf8 -m checks.system.verify_json_scenarios --help", "scope": "Actual CLI options", "started_at_kst": "2026-11-12T09:59:42+09:00", "finished_at_kst": "2026-11-12T09:59:44+09:00", "exit_code": 0, "tests_run": null, "ok_method_lines": 0, "log": "logs/02-scenario-help.log", "failures": 0, "errors": 0, "skipped": 0}
+
+usage: python.exe -m checks.system.verify_json_scenarios [-h]
+                                                         [--output-dir OUTPUT_DIR]
+                                                         [--d-root D_ROOT]
+                                                         [--code-commit CODE_COMMIT]
+
+Verify C JSON v1.2 MOCK scenarios against an explicitly selected D checkout.
+
+options:
+  -h, --help            show this help message and exit
+  --output-dir OUTPUT_DIR
+                        New folder, must not exist
+  --d-root D_ROOT
+  --code-commit CODE_COMMIT
+                        Reference label only; verify source hashes separately

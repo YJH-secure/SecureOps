@@ -1,0 +1,70 @@
+{
+  "id": "04-needs-review",
+  "title": "정책 미승인",
+  "runner": "log",
+  "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+  "condition": "로그 서비스·명시 설정·사용량은 MOCK 조회되지만 운영 정책 목록은 비어 있다.",
+  "reason": "실제 LOG 수집 함수가 조회 성공과 운영 정책 미승인을 구분한다.",
+  "limitations": "로그 경로는 fixture에서 missing이다. 실제 이벤트 보관이나 LOG의 pass/vulnerable 판정을 입증하지 않는다.",
+  "inputs": {
+    "os": {
+      "id": "ubuntu",
+      "version_id": "24.04"
+    },
+    "unit_stdout": "LoadState=loaded\nActiveState=active\nUnitFileState=enabled\n",
+    "journald_stdout": "[Journal]\nStorage=persistent\n",
+    "usage_stdout": "Archived and active journals take up 8.0M in the file system.\n",
+    "path_metadata": "All known log paths are missing in the synthetic fixture",
+    "policy_approval": "pending"
+  },
+  "expected": {
+    "check_id": "LOG-01",
+    "status": "needs_review",
+    "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+    "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+    "cvss": {
+      "assessment_status": "not_applicable",
+      "version": null,
+      "vector": null,
+      "base_score": null,
+      "rating": null,
+      "source": null,
+      "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+    }
+  },
+  "details_checks": [
+    {
+      "path": [
+        "details",
+        "errors"
+      ],
+      "equals": []
+    },
+    {
+      "path": [
+        "details",
+        "review"
+      ],
+      "equals": [
+        "policy_pending"
+      ]
+    },
+    {
+      "path": [
+        "details",
+        "observations",
+        "journald_settings",
+        "Storage"
+      ],
+      "equals": "persistent"
+    }
+  ],
+  "expected_v11": {
+    "check_id": "LOG-01",
+    "status": "needs_review",
+    "severity": "medium",
+    "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+    "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요."
+  },
+  "scenario_contract": "1.2"
+}

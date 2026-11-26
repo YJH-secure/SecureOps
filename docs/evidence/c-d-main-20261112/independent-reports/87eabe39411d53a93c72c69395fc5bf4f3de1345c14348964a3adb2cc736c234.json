@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.1",
+  "scan_id": "legacy-3",
+  "target_id": "mock-official-c",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T18:00:00+09:00",
+  "results": [
+    {
+      "check_id": "LOG-01",
+      "status": "needs_review",
+      "severity": "medium",
+      "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+      "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+      "details": {
+        "policy_version": "MOCK-only",
+        "observations": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04",
+            "collection_origin": "MOCK"
+          },
+          "unit:systemd-journald.service": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "unit:rsyslog.service": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "unit:logrotate.timer": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "journald_settings": {
+            "Storage": "persistent"
+          },
+          "journal_disk_usage": "8.0M",
+          "path:/var/log/journal": {
+            "path": "/var/log/journal",
+            "state": "missing"
+          },
+          "path:/run/log/journal": {
+            "path": "/run/log/journal",
+            "state": "missing"
+          },
+          "path:/var/log/auth.log": {
+            "path": "/var/log/auth.log",
+            "state": "missing"
+          },
+          "path:/var/log/syslog": {
+            "path": "/var/log/syslog",
+            "state": "missing"
+          },
+          "rsyslog_config_hints": [],
+          "logrotate_config_hints": []
+        },
+        "errors": [],
+        "review": [
+          "policy_pending"
+        ]
+      }
+    }
+  ]
+}

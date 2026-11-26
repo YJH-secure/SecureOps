@@ -1,0 +1,7 @@
+{
+  "check_id": "FW-01",
+  "status": "error",
+  "severity": "high",
+  "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+  "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요."
+}

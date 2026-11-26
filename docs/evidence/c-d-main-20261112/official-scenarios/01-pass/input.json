@@ -1,0 +1,29 @@
+{
+  "policy": {
+    "check_id": "FILE-01",
+    "description": "MOCK approved policy for demonstration only",
+    "severity": "high",
+    "criteria": {
+      "files": [
+        {
+          "path": "/etc/passwd",
+          "expected_uid": 0,
+          "allowed_permission_bits": "0644",
+          "reference_gid": 0,
+          "approval_status": "approved"
+        }
+      ]
+    }
+  },
+  "observation": {
+    "path": "/etc/passwd",
+    "uid": 0,
+    "gid": 0,
+    "mode": "0644",
+    "file_type": "regular",
+    "acl": {
+      "state": "collected",
+      "raw": "user::rw-\ngroup::r--\nother::r--\n"
+    }
+  }
+}

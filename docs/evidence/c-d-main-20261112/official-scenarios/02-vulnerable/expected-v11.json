@@ -1,0 +1,7 @@
+{
+  "check_id": "SVC-01",
+  "status": "vulnerable",
+  "severity": "medium",
+  "evidence": "SVC-01: 승인된 유닛 또는 바인딩 정책 위반 1건.",
+  "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요."
+}

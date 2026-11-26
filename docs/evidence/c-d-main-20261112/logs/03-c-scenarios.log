@@ -1,0 +1,10 @@
+{"label": "03-c-scenarios", "command": "python -B -X utf8 -m checks.system.verify_json_scenarios --code-commit 62d1bf72ef52c7455bc0c2dd624206eb8350f925 --d-root <OFFICIAL_MAIN> --output-dir <OFFICIAL_MAIN>\\docs\\evidence\\c-d-main-recheck-20261112\\official-scenarios", "scope": "C-authored verifier independently rerun by D", "started_at_kst": "2026-11-12T09:59:44+09:00", "finished_at_kst": "2026-11-12T09:59:46+09:00", "exit_code": 0, "tests_run": null, "ok_method_lines": 0, "log": "logs/03-c-scenarios.log", "failures": 0, "errors": 0, "skipped": 0}
+
+[OK] 01-pass: pass / not_applicable
+[OK] 02-vulnerable: vulnerable / pending
+[OK] 03-error: error / not_applicable
+[OK] 04-needs-review: needs_review / not_applicable
+[OK] 05-not-applicable: not_applicable / not_applicable
+v1.2 scenarios passed: 5/5
+Invalid inputs rejected: 28/28
+Evidence folder: <OFFICIAL_MAIN>\docs\evidence\c-d-main-recheck-20261112\official-scenarios

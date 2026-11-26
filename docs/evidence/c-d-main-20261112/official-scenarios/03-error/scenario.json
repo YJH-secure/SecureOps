@@ -1,0 +1,75 @@
+{
+  "id": "03-error",
+  "title": "조회 오류",
+  "runner": "firewall",
+  "execution_kind": "C_COLLECTION_WITH_MOCK_INPUT",
+  "condition": "UFW와 소켓 조회는 MOCK으로 성공하고 nft -j list ruleset은 권한 부족 오류를 반환한다.",
+  "reason": "실제 FW 수집 함수가 필수 조회 오류와 수집된 다른 관측값을 보존한다.",
+  "limitations": "FW의 운영 정책 기반 pass/vulnerable 판정 기능을 시연하는 것이 아니다.",
+  "inputs": {
+    "os": {
+      "id": "ubuntu",
+      "version_id": "24.04"
+    },
+    "ufw_stdout": "Status: inactive\n",
+    "listeners_stdout": "",
+    "nft_exception": {
+      "kind": "CalledProcessError",
+      "exit_code": 1,
+      "stderr": "Operation not permitted (MOCK)"
+    },
+    "policy_approval": "pending"
+  },
+  "expected": {
+    "check_id": "FW-01",
+    "status": "error",
+    "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+    "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요.",
+    "cvss": {
+      "assessment_status": "not_applicable",
+      "version": null,
+      "vector": null,
+      "base_score": null,
+      "rating": null,
+      "source": null,
+      "rationale": "v1.1 error. 진단 오류가 발생해 취약 사례가 확인되지 않았습니다."
+    }
+  },
+  "details_checks": [
+    {
+      "path": [
+        "details",
+        "errors",
+        0,
+        "stage"
+      ],
+      "equals": "nftables"
+    },
+    {
+      "path": [
+        "details",
+        "errors",
+        0,
+        "reason"
+      ],
+      "equals": "permission_denied"
+    },
+    {
+      "path": [
+        "details",
+        "observations",
+        "ufw",
+        "state"
+      ],
+      "equals": "inactive"
+    }
+  ],
+  "expected_v11": {
+    "check_id": "FW-01",
+    "status": "error",
+    "severity": "high",
+    "evidence": "FW-01: 조회 또는 파싱 오류 1건을 기록했습니다.",
+    "recommendation": "조회·권한·파싱 오류를 확인하고 수정 후 다시 진단하세요."
+  },
+  "scenario_contract": "1.2"
+}

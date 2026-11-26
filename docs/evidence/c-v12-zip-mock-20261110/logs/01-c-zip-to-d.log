@@ -1,0 +1,19 @@
+Started (KST): 2026-11-10T19:02:53+09:00
+Command: python -B -X utf8 docs/evidence/c-v12-zip-mock-20261110/run-c-zip-evidence.py --worker
+Scope: Actual supplied C diagnosis/adapter functions; synthetic inputs; v1.1/v1.2
+Exit code: 0
+
+test_c_cli_version_selection_defaults_to_v11 (test_c_zip_v12_integration.CZipV12IntegrationTests.test_c_cli_version_selection_defaults_to_v11) ... ok
+test_deep_details_and_input_independence (test_c_zip_v12_integration.CZipV12IntegrationTests.test_deep_details_and_input_independence) ... ok
+test_diagnosis_error_is_valid_delivered_json (test_c_zip_v12_integration.CZipV12IntegrationTests.test_diagnosis_error_is_valid_delivered_json) ... ok
+test_execution_failure_rejected_without_report (test_c_zip_v12_integration.CZipV12IntegrationTests.test_execution_failure_rejected_without_report) ... ok
+test_existing_scored_fixture_is_separate_from_c_outputs (test_c_zip_v12_integration.CZipV12IntegrationTests.test_existing_scored_fixture_is_separate_from_c_outputs) ... ok
+test_four_actual_c_v12_results_to_d_storage (test_c_zip_v12_integration.CZipV12IntegrationTests.test_four_actual_c_v12_results_to_d_storage) ... ok
+test_invalid_cvss_rejected_without_repair (test_c_zip_v12_integration.CZipV12IntegrationTests.test_invalid_cvss_rejected_without_repair) ... ok
+test_malformed_json_rejected_without_report (test_c_zip_v12_integration.CZipV12IntegrationTests.test_malformed_json_rejected_without_report) ... ok
+test_v11_default_adapter_and_d_default_contract (test_c_zip_v12_integration.CZipV12IntegrationTests.test_v11_default_adapter_and_d_default_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.313s
+
+OK

@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "duplicate-scan",
+  "target_id": "mock-official-c",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T18:00:00+09:00",
+  "results": [
+    {
+      "check_id": "FILE-01",
+      "status": "pass",
+      "evidence": "FILE-01: /etc/passwd=pass. 세부 오류 0건, 검토 필요 0건.",
+      "recommendation": "승인된 설정을 유지하고 변경 후 다시 진단하세요.",
+      "details": {
+        "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+        "environment": {
+          "id": "ubuntu",
+          "version_id": "24.04",
+          "collection_origin": "MOCK"
+        },
+        "files": [
+          {
+            "path": "/etc/passwd",
+            "actual": {
+              "path": "/etc/passwd",
+              "uid": 0,
+              "gid": 0,
+              "mode": "0644",
+              "file_type": "regular",
+              "acl": {
+                "state": "collected",
+                "raw": "user::rw-\ngroup::r--\nother::r--\n"
+              }
+            },
+            "expected": {
+              "path": "/etc/passwd",
+              "expected_uid": 0,
+              "allowed_permission_bits": "0644",
+              "reference_gid": 0,
+              "approval_status": "approved"
+            },
+            "checks": [
+              {
+                "name": "owner",
+                "status": "pass",
+                "actual": 0,
+                "expected": 0,
+                "reason": "compare numeric UID"
+              },
+              {
+                "name": "permissions",
+                "status": "pass",
+                "actual": "0644",
+                "expected": {
+                  "allowed_permission_bits": "0644",
+                  "unexpected_bits": "0000"
+                },
+                "reason": "actual & ~allowed within 07777; special bits included"
+              },
+              {
+                "name": "acl",
+                "status": "pass",
+                "actual": {
+                  "state": "collected",
+                  "raw": "user::rw-\ngroup::r--\nother::r--\n",
+                  "effective_entries": [
+                    {
+                      "kind": "user",
+                      "qualifier": "",
+                      "declared_bits": 6,
+                      "effective_bits": 6
+                    },
+                    {
+                      "kind": "group",
+                      "qualifier": "",
+                      "declared_bits": 4,
+                      "effective_bits": 4
+                    },
+                    {
+                      "kind": "other",
+                      "qualifier": "",
+                      "declared_bits": 4,
+                      "effective_bits": 4
+                    }
+                  ]
+                },
+                "expected": "base ACL consistent with mode",
+                "reason": "no extended ACL; access represented by mode bits"
+              },
+              {
+                "name": "group",
+                "status": "pass",
+                "actual": 0,
+                "expected": {
+                  "reference_gid": 0,
+                  "enforced": false
+                },
+                "reason": "project strengthening reference only; mismatch is not a violation"
+              }
+            ],
+            "policy_approval_status": "approved",
+            "status": "pass"
+          }
+        ]
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 pass. 승인 기준을 충족해 CVSS 평가 대상이 아닙니다."
+      }
+    }
+  ]
+}

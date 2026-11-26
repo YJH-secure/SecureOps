@@ -1,0 +1,15 @@
+{"label": "07-d-independent-eight", "command": "python -B -X utf8 docs/evidence/c-d-main-recheck-20261112/run-recheck.py --worker independent", "scope": "Original D independent 8 methods unchanged plus separate four-module roundtrip", "started_at_kst": "2026-11-12T10:00:00+09:00", "finished_at_kst": "2026-11-12T10:00:02+09:00", "exit_code": 0, "tests_run": 8, "ok_method_lines": 8, "log": "logs/07-d-independent-eight.log", "failures": 0, "errors": 0, "skipped": 0}
+
+test_details_and_original_fields_are_independent (test_c_pr27_independent.OfficialCIndependentTests.test_details_and_original_fields_are_independent) ... ok
+test_duplicate_check_id_rejected_before_save (test_c_pr27_independent.OfficialCIndependentTests.test_duplicate_check_id_rejected_before_save) ... ok
+test_duplicate_scan_id_preserves_original (test_c_pr27_independent.OfficialCIndependentTests.test_duplicate_scan_id_preserves_original) ... ok
+test_five_statuses_cvss_nulls_and_roundtrip (test_c_pr27_independent.OfficialCIndependentTests.test_five_statuses_cvss_nulls_and_roundtrip) ... ok
+test_invalid_cvss_combinations_rejected (test_c_pr27_independent.OfficialCIndependentTests.test_invalid_cvss_combinations_rejected) ... ok
+test_malformed_and_duplicate_json_rejected (test_c_pr27_independent.OfficialCIndependentTests.test_malformed_and_duplicate_json_rejected) ... ok
+test_v11_default_output_and_roundtrip (test_c_pr27_independent.OfficialCIndependentTests.test_v11_default_output_and_roundtrip) ... ok
+test_valid_diagnosis_error_and_delivery_failure_differ (test_c_pr27_independent.OfficialCIndependentTests.test_valid_diagnosis_error_and_delivery_failure_differ) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.531s
+
+OK

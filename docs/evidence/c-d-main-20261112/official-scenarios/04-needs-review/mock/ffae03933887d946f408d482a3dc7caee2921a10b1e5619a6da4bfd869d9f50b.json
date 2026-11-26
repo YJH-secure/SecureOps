@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.2",
+  "scan_id": "scan-v12-04-needs-review",
+  "target_id": "scenario-target-mock",
+  "os": "ubuntu-24.04",
+  "scanned_at": "2026-11-11T00:00:00Z",
+  "results": [
+    {
+      "check_id": "LOG-01",
+      "status": "needs_review",
+      "evidence": "LOG-01: 로그 수집 상태와 보관 설정을 조회했습니다. 운영 기준과 이벤트 기록 검증이 필요합니다.",
+      "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+      "details": {
+        "policy_version": "MOCK-scenarios-v1",
+        "observations": {
+          "os": {
+            "id": "ubuntu",
+            "version_id": "24.04"
+          },
+          "unit:systemd-journald.service": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "unit:rsyslog.service": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "unit:logrotate.timer": {
+            "LoadState": "loaded",
+            "ActiveState": "active",
+            "UnitFileState": "enabled"
+          },
+          "journald_settings": {
+            "Storage": "persistent"
+          },
+          "journal_disk_usage": "8.0M",
+          "path:/var/log/journal": {
+            "path": "/var/log/journal",
+            "state": "missing"
+          },
+          "path:/run/log/journal": {
+            "path": "/run/log/journal",
+            "state": "missing"
+          },
+          "path:/var/log/auth.log": {
+            "path": "/var/log/auth.log",
+            "state": "missing"
+          },
+          "path:/var/log/syslog": {
+            "path": "/var/log/syslog",
+            "state": "missing"
+          },
+          "rsyslog_config_hints": [],
+          "logrotate_config_hints": []
+        },
+        "errors": [],
+        "review": [
+          "policy_pending"
+        ]
+      },
+      "cvss": {
+        "assessment_status": "not_applicable",
+        "version": null,
+        "vector": null,
+        "base_score": null,
+        "rating": null,
+        "source": null,
+        "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "Different synthetic input harnesses; compare verdicts and identify details differences",
+  "modules": [
+    {
+      "module": "file_check",
+      "status_equal": true,
+      "evidence_equal": true,
+      "recommendation_equal": true,
+      "cvss_equal": true,
+      "details_difference_paths": []
+    },
+    {
+      "module": "service_check",
+      "status_equal": true,
+      "evidence_equal": true,
+      "recommendation_equal": true,
+      "cvss_equal": true,
+      "details_difference_paths": [
+        "details.policy_version",
+        "details.target.hostname",
+        "details.target.os.collection_origin"
+      ]
+    },
+    {
+      "module": "firewall_check",
+      "status_equal": true,
+      "evidence_equal": true,
+      "recommendation_equal": true,
+      "cvss_equal": true,
+      "details_difference_paths": [
+        "details.errors[0].exit_code",
+        "details.errors[0].kind",
+        "details.errors[0].reason",
+        "details.observations.os.collection_origin",
+        "details.policy_version"
+      ]
+    },
+    {
+      "module": "log_check",
+      "status_equal": true,
+      "evidence_equal": true,
+      "recommendation_equal": true,
+      "cvss_equal": true,
+      "details_difference_paths": [
+        "details.observations.os.collection_origin",
+        "details.policy_version"
+      ]
+    }
+  ]
+}
