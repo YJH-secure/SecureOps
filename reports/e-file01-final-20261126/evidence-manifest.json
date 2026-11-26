@@ -1,0 +1,36 @@
+{
+  "submission_branch_base": "03573429825e02e6400257f19c67f337e454dd71",
+  "verified_e_source": "2d776a52faf692f13ebca2f00a591bcfa805b8fb",
+  "verification_scope": {
+    "recorded_unique_tests": 304,
+    "pass": 304,
+    "fail": 0,
+    "error": 0,
+    "skip": 0,
+    "composition": "E/C 266 + D callback 38",
+    "selected_reruns": "D04 and D05: one PASS each; repeated IDs, not additional unique tests",
+    "rerun_during_submission_preparation": false,
+    "real_vm_or_ssh_changes": false
+  },
+  "source_sha256": {
+    "remediation/engine.py": "52545439540d73ce3d66b2081befd9d728a5afebe9beeb94491b894374c2c89e",
+    "remediation/file01.py": "314f1ee08d939fb0785d430619c162d0e0d7c1d8d21845165acd4ab990606199",
+    "remediation/mock.py": "e7d86409b176a44e8ee2a0a088976935b3cc7200128bedd214a10ca9df8d53f7",
+    "remediation/policies.py": "0de3de2f80f9c27bfec969aa3bb746a1297b35b7012cd9dd572d8ef6ec6e7d03",
+    "tests/file01_callback_stub.py": "d11b9869f4270e75e6ab109e9741578079fbeae8d5c0541cdd2b1bf0f3ab53a5",
+    "tests/test_file01_callback_contract.py": "c0c1b8f822e653b314c62ef40050379d903c4b31369350cecf92227c5665d321",
+    "tests/test_file01_integration.py": "f33cd21deb14ad140757fc8eb56d6cb1e0d72961580b41b5f49fa94b68d57cd1",
+    "tests/test_remediation_policy_handler.py": "ee17ac39111bc839f28b84637a12d7608d4b25504d43d70cdb796695c8fb8d90"
+  },
+  "evidence_archive": {
+    "path": "evidence/SecureOps_E_FILE01_Final_Evidence_20261126.zip",
+    "sha256": "3cc048595d67f9270755169e806dcc90a40ae7b6ad48e679237139508cb81f91",
+    "contents": "304 test result bundle, D04/D05 selected reruns, five presentation screenshots and per-file original/shared hashes",
+    "privacy": "Personal-name and local-user-path redactions apply to shared copies only; source evidence originals were not changed."
+  },
+  "provenance_limits": [
+    "D Core commit/tree linkage is not established by this package.",
+    "The saved results are historical execution evidence, not a run performed on this submission commit.",
+    "The C Bridge's valid-input permissions.error behavior was not demonstrated; synthetic error cases are identified separately in the logs."
+  ]
+}

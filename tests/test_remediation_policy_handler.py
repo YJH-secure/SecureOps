@@ -52,8 +52,8 @@ class PolicyHandlerTests(unittest.TestCase):
         cls.old_engine = baseline_module("engine")
         cls.old_mock = baseline_module("mock")
 
-    def test_registry_contains_only_original_ssh01_policy(self):
-        self.assertEqual(set(REMEDIATION_POLICIES), {"SSH-01"})
+    def test_registry_preserves_original_ssh01_and_adds_approved_file01(self):
+        self.assertEqual(set(REMEDIATION_POLICIES), {"SSH-01", "FILE-01"})
         policy = REMEDIATION_POLICIES["SSH-01"]
         self.assertEqual(policy.check_id, "SSH-01")
         self.assertEqual(policy.policy_version, "ssh-01-proposal-v1")
@@ -114,14 +114,15 @@ class PolicyHandlerTests(unittest.TestCase):
         )
         self.assert_same_plan(incoming, "SSH-01")
 
-    def test_other_seven_checks_remain_excluded(self):
+    def test_other_checks_and_untrusted_file01_remain_excluded(self):
         incoming = report()
         engine = Remediator(allowed_targets={incoming["target_id"]}, allowed_checks={"SSH-01"})
         current = backend(incoming)
         for check_id in ("SSH-02", "ACC-01", "ACC-02", "FILE-01", "SVC-01", "FW-01", "LOG-01"):
             with self.subTest(check_id=check_id):
                 plan = build_plan(incoming, check_id)
-                self.assertEqual(plan.skip_reason, "check_policy_not_allowed")
+                self.assertEqual(plan.skip_reason, "file01_requires_v12" if check_id == "FILE-01"
+                                 else "check_policy_not_allowed")
                 result = engine.run(incoming, plan, backend=current, dry_run=False)
                 self.assertEqual(result["outcome"], "skipped")
                 self.assertEqual(result["backup"], "not_attempted")
