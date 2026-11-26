@@ -23,14 +23,26 @@
     "tests/test_remediation_policy_handler.py": "ee17ac39111bc839f28b84637a12d7608d4b25504d43d70cdb796695c8fb8d90"
   },
   "evidence_archive": {
-    "path": "evidence/SecureOps_E_FILE01_Final_Evidence_20261126.zip",
-    "sha256": "3cc048595d67f9270755169e806dcc90a40ae7b6ad48e679237139508cb81f91",
-    "contents": "304 test result bundle, D04/D05 selected reruns, five presentation screenshots and per-file original/shared hashes",
+    "path": "evidence/SecureOps_E_FILE01_Final_Evidence_20261126_rev1.zip",
+    "sha256": "fa3c960784a1555ee73e00b11ca5bc85f1b3951c8158364b04ee2612e3d1528f",
+    "preserved_original": {
+      "filename": "SecureOps_E_FILE01_Final_Evidence_20261126.zip",
+      "storage": "Local archive outside the submission tree",
+      "sha256": "3cc048595d67f9270755169e806dcc90a40ae7b6ad48e679237139508cb81f91"
+    },
+    "contents": "Corrected copy of the 304 test result bundle, D04/D05 selected reruns, five presentation screenshots and per-file original/shared hashes; archive-relative references and two byte counts corrected.",
     "privacy": "Personal-name and local-user-path redactions apply to shared copies only; source evidence originals were not changed."
   },
   "provenance_limits": [
-    "D Core commit/tree linkage is not established by this package.",
+    "D Core baseline commit existence and six Core/spec blobs were confirmed in follow-up review; linkage of the delivered callback and tests to that commit/final integrated tree remains unverified.",
     "The saved results are historical execution evidence, not a run performed on this submission commit.",
     "The C Bridge's valid-input permissions.error behavior was not demonstrated; synthetic error cases are identified separately in the logs."
-  ]
+  ],
+  "independent_audit_follow_up": {
+    "blocker": 0,
+    "major": 1,
+    "minor": 4,
+    "approval_callback_target_os_mutation": "Static defense-in-depth observation only; not reproduced and not introduced by PR #43. No code/test change made for freeze.",
+    "reviewer_reproduction": "Imports and loaded file hashes were verified for both routes in the 2026-11-25 isolated src with dependencies-readable. README.md documents the source layout, commands, and required external files. The test suites were not rerun during follow-up; teammate access to external files is not confirmed."
+  }
 }

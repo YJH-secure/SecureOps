@@ -22,7 +22,7 @@ SSH-01 기존 API와 동작을 유지한다. 공통 JSON v1.2, CVSS, D Core, Rep
 
 ## 발표 자료
 
-증거 ZIP에는 SSH-01 3장과 FILE-01 2장의 기존 캡처가 있다. FILE-01 이미지는 D04/D05 결과 JSON을 요약해 출력한 화면으로, 실시간 테스트 화면이 아니다. 발표 진행 순서와 예상 질문은 `presentation-guide-20261126.md`를 참조한다.
+제출 증거 `evidence/SecureOps_E_FILE01_Final_Evidence_20261126_rev1.zip`에는 SSH-01 3장과 FILE-01 2장의 기존 캡처가 있다. FILE-01 이미지는 D04/D05 결과 JSON을 요약해 출력한 화면으로, 실시간 테스트 화면이 아니다. 발표 진행 순서와 예상 질문은 `presentation-guide-20261126.md`를 참조한다.
 
 ## 잔여 한계
 
@@ -30,7 +30,15 @@ SSH-01 기존 API와 동작을 유지한다. 공통 JSON v1.2, CVSS, D Core, Rep
 2. **실제 C Bridge의 `permissions.error` 연동:** 기존 고정 Bridge 유효 입력에서는 생성되지 않았음. 합성 error fixture 검증과 실제 Bridge 동작을 구분함.
 3. **E phase별 오류 보고서 누락 가능성:** 기존 결과 구조의 한계로 남아 있으며 이번 제출에서 변경하지 않음.
 4. **rollback 실패 상태 표현:** 기존 rollback 표현의 한계를 해결하지 않았으며 성공으로 재해석하지 않음.
-5. **D Core commit/tree 연결:** D callback 전달본 및 callback 테스트 증거는 있으나 D Core 기준 commit/tree의 로컬 객체 연결은 미확인.
+5. **D Core와 전달 callback의 출처 연결:** D Core 기준 commit `0cab3a247d2143fc5556e37f6651440e109eef70`의 존재와 `core/main.py`, `core/storage.py`, `core/cvss_validation.py`, `core/cvss_assessment.py`, `core/cvss.py`, JSON Schema 파일의 blob 일치는 후속 검토에서 확인됨. 전달 callback 및 테스트가 그 commit tree에 포함되거나 최종 통합 tree에 연결된 사실은 미확인.
+
+## 감사 관찰 사항
+
+최종 독립 감사에서 BLOCKER 0건, MAJOR 1건, MINOR 4건으로 기록됨. 승인 확인 callback 실행 중 동일 MOCK 객체의 `target_id` 또는 `os`를 callback이 직접 바꾼다는 가정은 기존 검증 범위에서 재현된 결함이 아니며 PR #43에서 새로 도입된 동작도 아님. 신뢰된 로컬 승인 확인 함수가 해당 객체를 부수 효과로 변경하는 상황에 대한 방어 강화 관찰로만 남김. 이번 개발 동결에서 코드 수정 및 신규 테스트 추가는 하지 않음. 이 관찰을 기존 잔여 한계 5개에 포함하지 않음.
+
+## 재현 자료 한계
+
+증거 ZIP을 검토하고 실행을 재현하려면 `README.md`를 참조한다. 11/25 격리 `src`와 `dependencies-readable`에서 E stub 및 전달 D callback의 import와 로딩 파일 해시를 확인했다. 선택 테스트와 304건 회귀의 실행 기록은 11/25 증거다. 팀원 재현에는 담당자가 제공하는 고정 C/D 자료와 Windows x64 Python 3.12.14·`jsonschema` 4.26.0 의존 환경이 필요하다.
 
 ## 제출 전 검토 사항
 
