@@ -1,0 +1,69 @@
+{
+  "d": "0cab3a247d2143fc5556e37f6651440e109eef70",
+  "e": "57362706701a540247d2eb448099400e6b561749",
+  "e35": "03573429825e02e6400257f19c67f337e454dd71",
+  "e23": "b0ef73a1613ebc40fdd596edcbaf0413d32309b8",
+  "c": "2fac2a02edb1edf08cf4435138f4a1d543e33ba2",
+  "files": [
+    {
+      "root": "E_ROOT",
+      "path": "remediation/__init__.py",
+      "git_blob_lf": "4d66abd97878ef3470b88cbe1e5ab21c229a2ffe"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/contract.py",
+      "git_blob_lf": "5e3e81e9f95170e151792b666e672032c8e23e42"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/engine.py",
+      "git_blob_lf": "9d9e6c42eb51624c4c21ec721af6380b7373e331"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/file01.py",
+      "git_blob_lf": "70252cff1e929c2cbc7bf2dd534c2b6c27f8b64a"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/handlers.py",
+      "git_blob_lf": "2e3485d25260bcad45853b9aa20b04d77fb6254e"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/history.py",
+      "git_blob_lf": "558a9a32af7a8ea46a65343af0e83d9ba61e7124"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/mock.py",
+      "git_blob_lf": "f2d3afb5407ca3389c27951ab6b6cf59d2040571"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/policies.py",
+      "git_blob_lf": "26b202734b2a2790a3ebd9ffaf00dce624f1f045"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/recheck.py",
+      "git_blob_lf": "1db44f73ee9288fd49215b68a0eee2fd3fce81ae"
+    },
+    {
+      "root": "C_ROOT",
+      "path": "checks/system/file_check.py",
+      "sha256": "26c2ed2c553e4031317933af512e887739be5601cf22dd54fdf416685dc29cd2"
+    },
+    {
+      "root": "BRIDGE_ROOT",
+      "path": "file01_pilot/c_mock_bridge.py",
+      "sha256": "497ac6a21270f517ad94041dcd7769eef3aa2a1c16b956df81e931fb1d698714"
+    },
+    {
+      "root": "CALLBACK_FILE",
+      "path": "core/file01_mock_callback.py",
+      "sha256": "4812dc4da5b660fbc5e4eb5c349905f6ccc28cbdcd8b0acb7b949d9c0f26ad58"
+    }
+  ]
+}

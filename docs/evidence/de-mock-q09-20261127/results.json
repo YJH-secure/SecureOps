@@ -1,0 +1,212 @@
+{
+  "python": "3.14.2",
+  "platform": "Windows",
+  "tested": 26,
+  "passed": 26,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "exit_code": 0,
+  "tests": [
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q01_normal_restore_phase_counts_roundtrip_and_immutable_before",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q02_failed_apply_verified_rollback_rechecks_despite_generic_false",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q03_unverified_rollback_has_no_callback_or_success",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q04_wrong_after_mode_blocked_then_valid_rollback_rechecked",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q05_snapshot_identity_digest_plan_phase_binding_rejected",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q06_reused_before_scan_id_rejected_before_save",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q07_save_failure_not_success_no_retry",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q08_load_failure_preserves_saved_id_and_original",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q09_history_failure_never_replays_e_or_changes_outcome",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q10_duplicate_history_id_preserves_record_without_reexecution",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q11_duplicate_phase_scan_id_rejected_without_second_save",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q12_normal_restore_failure_has_no_successful_final_recheck",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_file01_integration.Q09File01Tests.test_Q13_target_and_cvss_corruption_fail_validation_before_save",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P01_success_and_dry_run_history",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P02_approval_denied_expired_and_binding",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P03_unsupported_check_is_skipped",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P04_action_failure_and_single_rollback",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P05_diagnosis_exception_and_invalid_candidate",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P06_d_save_failure_keeps_candidate_id",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P07_d_load_failure_keeps_saved_report",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P08_history_save_failure_and_publication_probe",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P09_duplicate_execution_id_never_runs_e_again",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P10_one_owner_for_recheck_and_d_persistence",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P11_after_id_without_verification_is_not_success",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P12_history_load_and_content_failure",
+      "result": "PASS"
+    },
+    {
+      "id": "test_de_mock_operations.DEMockOperationsTests.test_P13_rollback_stays_unknown_without_authorized_recheck",
+      "result": "PASS"
+    }
+  ],
+  "imports": {
+    "core.main": "<D_ROOT>\\core\\main.py",
+    "core.storage": "<D_ROOT>\\core\\storage.py",
+    "core.file01_mock_callback": "<CALLBACK_FILE>\\file01_mock_callback.py",
+    "remediation.engine": "<E_ROOT>\\remediation\\engine.py",
+    "remediation.recheck": "<E_ROOT>\\remediation\\recheck.py",
+    "checks.system.file_check": "<C_ROOT>\\checks\\system\\file_check.py",
+    "file01_pilot.c_mock_bridge": "<BRIDGE_ROOT>\\file01_pilot\\c_mock_bridge.py"
+  },
+  "sources": [
+    {
+      "root": "E_ROOT",
+      "path": "remediation/__init__.py",
+      "git_blob_lf": "4d66abd97878ef3470b88cbe1e5ab21c229a2ffe",
+      "actual_sha256": "9b46b9c3ff8b3fec0a46eb372ec1653d505e555f45ee0902c6d8a91d2aaaf434",
+      "actual_lf_blob": "4d66abd97878ef3470b88cbe1e5ab21c229a2ffe"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/contract.py",
+      "git_blob_lf": "5e3e81e9f95170e151792b666e672032c8e23e42",
+      "actual_sha256": "59b2c9305ba1ad5d77c1c93c66fc472b9b50f566b7b0e8ef74f5791dbf370832",
+      "actual_lf_blob": "5e3e81e9f95170e151792b666e672032c8e23e42"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/engine.py",
+      "git_blob_lf": "9d9e6c42eb51624c4c21ec721af6380b7373e331",
+      "actual_sha256": "52545439540d73ce3d66b2081befd9d728a5afebe9beeb94491b894374c2c89e",
+      "actual_lf_blob": "9d9e6c42eb51624c4c21ec721af6380b7373e331"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/file01.py",
+      "git_blob_lf": "70252cff1e929c2cbc7bf2dd534c2b6c27f8b64a",
+      "actual_sha256": "314f1ee08d939fb0785d430619c162d0e0d7c1d8d21845165acd4ab990606199",
+      "actual_lf_blob": "70252cff1e929c2cbc7bf2dd534c2b6c27f8b64a"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/handlers.py",
+      "git_blob_lf": "2e3485d25260bcad45853b9aa20b04d77fb6254e",
+      "actual_sha256": "b875dfbb2caccca45f691b717e5f47060c30e1400ed6cb2c0b008d2bbdaf2c21",
+      "actual_lf_blob": "2e3485d25260bcad45853b9aa20b04d77fb6254e"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/history.py",
+      "git_blob_lf": "558a9a32af7a8ea46a65343af0e83d9ba61e7124",
+      "actual_sha256": "269271add9e7c682498cb18b2f282c71a6a59878298d7581f12fab5c9590f9e7",
+      "actual_lf_blob": "558a9a32af7a8ea46a65343af0e83d9ba61e7124"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/mock.py",
+      "git_blob_lf": "f2d3afb5407ca3389c27951ab6b6cf59d2040571",
+      "actual_sha256": "e7d86409b176a44e8ee2a0a088976935b3cc7200128bedd214a10ca9df8d53f7",
+      "actual_lf_blob": "f2d3afb5407ca3389c27951ab6b6cf59d2040571"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/policies.py",
+      "git_blob_lf": "26b202734b2a2790a3ebd9ffaf00dce624f1f045",
+      "actual_sha256": "0de3de2f80f9c27bfec969aa3bb746a1297b35b7012cd9dd572d8ef6ec6e7d03",
+      "actual_lf_blob": "26b202734b2a2790a3ebd9ffaf00dce624f1f045"
+    },
+    {
+      "root": "E_ROOT",
+      "path": "remediation/recheck.py",
+      "git_blob_lf": "1db44f73ee9288fd49215b68a0eee2fd3fce81ae",
+      "actual_sha256": "ef079b4b2400a3575a52795e39b9f436f302544f89c719f40461b4ff5ac602b5",
+      "actual_lf_blob": "1db44f73ee9288fd49215b68a0eee2fd3fce81ae"
+    },
+    {
+      "root": "C_ROOT",
+      "path": "checks/system/file_check.py",
+      "sha256": "26c2ed2c553e4031317933af512e887739be5601cf22dd54fdf416685dc29cd2",
+      "actual_sha256": "26c2ed2c553e4031317933af512e887739be5601cf22dd54fdf416685dc29cd2",
+      "actual_lf_blob": "672e76092ed53942ab0caf6aab8593aa7b80297c"
+    },
+    {
+      "root": "BRIDGE_ROOT",
+      "path": "file01_pilot/c_mock_bridge.py",
+      "sha256": "497ac6a21270f517ad94041dcd7769eef3aa2a1c16b956df81e931fb1d698714",
+      "actual_sha256": "497ac6a21270f517ad94041dcd7769eef3aa2a1c16b956df81e931fb1d698714",
+      "actual_lf_blob": "62e50ff070a085fda9fd8ab5bc1889f0de20b2a6"
+    },
+    {
+      "root": "CALLBACK_FILE",
+      "path": "core/file01_mock_callback.py",
+      "sha256": "4812dc4da5b660fbc5e4eb5c349905f6ccc28cbdcd8b0acb7b949d9c0f26ad58",
+      "actual_sha256": "4812dc4da5b660fbc5e4eb5c349905f6ccc28cbdcd8b0acb7b949d9c0f26ad58",
+      "actual_lf_blob": "d887a3d2818585e58d180af175bfe70338ba0875"
+    }
+  ],
+  "command": "python -B tests/offline_de/run_tests.py"
+}

@@ -1,0 +1,1312 @@
+{
+  "before": {
+    "schema_version": "1.2",
+    "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+    "target_id": "file01-MOCK",
+    "os": "ubuntu-24.04",
+    "scanned_at": "2026-11-27T05:45:58.335226+00:00",
+    "results": [
+      {
+        "check_id": "FILE-01",
+        "status": "vulnerable",
+        "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+        "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+        "details": {
+          "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+          "environment": {
+            "system": "MOCK",
+            "reason": "synthetic metadata only"
+          },
+          "files": [
+            {
+              "path": "/mock/secureops-file01/fixture.txt",
+              "actual": {
+                "path": "/mock/secureops-file01/fixture.txt",
+                "uid": 1001,
+                "gid": 1001,
+                "mode": "0666",
+                "file_type": "regular",
+                "acl": {
+                  "state": "collected",
+                  "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                }
+              },
+              "expected": {
+                "path": "/mock/secureops-file01/fixture.txt",
+                "expected_uid": 1001,
+                "reference_gid": null,
+                "allowed_permission_bits": "0644",
+                "approval_status": "approved"
+              },
+              "checks": [
+                {
+                  "name": "owner",
+                  "status": "pass",
+                  "actual": 1001,
+                  "expected": 1001,
+                  "reason": "compare numeric UID"
+                },
+                {
+                  "name": "permissions",
+                  "status": "vulnerable",
+                  "actual": "0666",
+                  "expected": {
+                    "allowed_permission_bits": "0644",
+                    "unexpected_bits": "0022"
+                  },
+                  "reason": "actual & ~allowed within 07777; special bits included"
+                },
+                {
+                  "name": "acl",
+                  "status": "pass",
+                  "actual": {
+                    "state": "collected",
+                    "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                    "effective_entries": [
+                      {
+                        "kind": "user",
+                        "qualifier": "",
+                        "declared_bits": 6,
+                        "effective_bits": 6
+                      },
+                      {
+                        "kind": "group",
+                        "qualifier": "",
+                        "declared_bits": 6,
+                        "effective_bits": 6
+                      },
+                      {
+                        "kind": "other",
+                        "qualifier": "",
+                        "declared_bits": 6,
+                        "effective_bits": 6
+                      }
+                    ]
+                  },
+                  "expected": "base ACL consistent with mode",
+                  "reason": "no extended ACL; access represented by mode bits"
+                },
+                {
+                  "name": "group",
+                  "status": "needs_review",
+                  "actual": 1001,
+                  "expected": null,
+                  "reason": "approved group criterion pending"
+                }
+              ],
+              "policy_approval_status": "approved",
+              "status": "vulnerable"
+            }
+          ]
+        },
+        "cvss": {
+          "assessment_status": "pending",
+          "version": null,
+          "vector": null,
+          "base_score": null,
+          "rating": null,
+          "source": null,
+          "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+        }
+      }
+    ]
+  },
+  "callback_calls": [
+    {
+      "request": {
+        "target_id": "file01-MOCK",
+        "os": "ubuntu-24.04",
+        "check_id": "FILE-01",
+        "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+        "schema_version": "1.2"
+      },
+      "state": {
+        "files": {
+          "/mock/secureops-file01/fixture.txt": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0644",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          }
+        },
+        "root_login": "yes",
+        "file01_context": {
+          "original_snapshot": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          },
+          "expected_identity": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          },
+          "snapshot_digest": "6b9ae3b3f7c9fa73feb941ac8489f8191a65aec1117d7e69a918e09b856246e6",
+          "target_mode": "0644",
+          "target_id": "file01-MOCK",
+          "os": "ubuntu-24.04",
+          "check_id": "FILE-01",
+          "plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+          "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+          "policy_version": "file01-offline-mock-20261123",
+          "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+          "approval_id": "q09-approval-MOCK",
+          "approved_plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+          "approved_target_id": "file01-MOCK",
+          "approved_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+          "approved_check_id": "FILE-01",
+          "permission_subcheck_id": "permissions",
+          "before_report": {
+            "schema_version": "1.2",
+            "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+            "target_id": "file01-MOCK",
+            "os": "ubuntu-24.04",
+            "scanned_at": "2026-11-27T05:45:58.335226+00:00",
+            "results": [
+              {
+                "check_id": "FILE-01",
+                "status": "vulnerable",
+                "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+                "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+                "details": {
+                  "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+                  "environment": {
+                    "system": "MOCK",
+                    "reason": "synthetic metadata only"
+                  },
+                  "files": [
+                    {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "actual": {
+                        "path": "/mock/secureops-file01/fixture.txt",
+                        "uid": 1001,
+                        "gid": 1001,
+                        "mode": "0666",
+                        "file_type": "regular",
+                        "acl": {
+                          "state": "collected",
+                          "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                        }
+                      },
+                      "expected": {
+                        "path": "/mock/secureops-file01/fixture.txt",
+                        "expected_uid": 1001,
+                        "reference_gid": null,
+                        "allowed_permission_bits": "0644",
+                        "approval_status": "approved"
+                      },
+                      "checks": [
+                        {
+                          "name": "owner",
+                          "status": "pass",
+                          "actual": 1001,
+                          "expected": 1001,
+                          "reason": "compare numeric UID"
+                        },
+                        {
+                          "name": "permissions",
+                          "status": "vulnerable",
+                          "actual": "0666",
+                          "expected": {
+                            "allowed_permission_bits": "0644",
+                            "unexpected_bits": "0022"
+                          },
+                          "reason": "actual & ~allowed within 07777; special bits included"
+                        },
+                        {
+                          "name": "acl",
+                          "status": "pass",
+                          "actual": {
+                            "state": "collected",
+                            "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                            "effective_entries": [
+                              {
+                                "kind": "user",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              },
+                              {
+                                "kind": "group",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              },
+                              {
+                                "kind": "other",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              }
+                            ]
+                          },
+                          "expected": "base ACL consistent with mode",
+                          "reason": "no extended ACL; access represented by mode bits"
+                        },
+                        {
+                          "name": "group",
+                          "status": "needs_review",
+                          "actual": 1001,
+                          "expected": null,
+                          "reason": "approved group criterion pending"
+                        }
+                      ],
+                      "policy_approval_status": "approved",
+                      "status": "vulnerable"
+                    }
+                  ]
+                },
+                "cvss": {
+                  "assessment_status": "pending",
+                  "version": null,
+                  "vector": null,
+                  "base_score": null,
+                  "rating": null,
+                  "source": null,
+                  "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+                }
+              }
+            ]
+          },
+          "before_report_digest": "1d89485a31f5e9f78eef213bff6d2910a8c208d651cfcd12b5f878a466165381",
+          "approval_evidence": {
+            "approved": true,
+            "approval_id": "q09-approval-MOCK",
+            "approved_by": "admin-MOCK",
+            "target_id": "file01-MOCK",
+            "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+            "plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+            "expires_at": "2099-01-01T00:00:00Z",
+            "verified_at": "2026-11-27T05:45:58.395267+00:00",
+            "verification": "e_verify_approval_callback"
+          },
+          "backup_token": "mock-backup-4f387e0f-ce1b-4334-81a5-c5866ff12aed",
+          "phase": "after"
+        }
+      },
+      "report": {
+        "schema_version": "1.2",
+        "scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+        "target_id": "file01-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-27T05:45:58.399607+00:00",
+        "results": [
+          {
+            "check_id": "FILE-01",
+            "status": "needs_review",
+            "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=needs_review. 세부 오류 0건, 검토 필요 1건.",
+            "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+            "details": {
+              "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+              "environment": {
+                "system": "MOCK",
+                "reason": "synthetic metadata only"
+              },
+              "files": [
+                {
+                  "path": "/mock/secureops-file01/fixture.txt",
+                  "actual": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "uid": 1001,
+                    "gid": 1001,
+                    "mode": "0644",
+                    "file_type": "regular",
+                    "acl": {
+                      "state": "collected",
+                      "raw": "user::rw-\ngroup::r--\nother::r--"
+                    }
+                  },
+                  "expected": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "expected_uid": 1001,
+                    "reference_gid": null,
+                    "allowed_permission_bits": "0644",
+                    "approval_status": "approved"
+                  },
+                  "checks": [
+                    {
+                      "name": "owner",
+                      "status": "pass",
+                      "actual": 1001,
+                      "expected": 1001,
+                      "reason": "compare numeric UID"
+                    },
+                    {
+                      "name": "permissions",
+                      "status": "pass",
+                      "actual": "0644",
+                      "expected": {
+                        "allowed_permission_bits": "0644",
+                        "unexpected_bits": "0000"
+                      },
+                      "reason": "actual & ~allowed within 07777; special bits included"
+                    },
+                    {
+                      "name": "acl",
+                      "status": "pass",
+                      "actual": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::r--\nother::r--",
+                        "effective_entries": [
+                          {
+                            "kind": "user",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "group",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          },
+                          {
+                            "kind": "other",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          }
+                        ]
+                      },
+                      "expected": "base ACL consistent with mode",
+                      "reason": "no extended ACL; access represented by mode bits"
+                    },
+                    {
+                      "name": "group",
+                      "status": "needs_review",
+                      "actual": 1001,
+                      "expected": null,
+                      "reason": "approved group criterion pending"
+                    }
+                  ],
+                  "policy_approval_status": "approved",
+                  "status": "needs_review"
+                }
+              ]
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "target_id": "file01-MOCK",
+        "os": "ubuntu-24.04",
+        "check_id": "FILE-01",
+        "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+        "schema_version": "1.2"
+      },
+      "state": {
+        "files": {
+          "/mock/secureops-file01/fixture.txt": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          }
+        },
+        "root_login": "yes",
+        "file01_context": {
+          "original_snapshot": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          },
+          "expected_identity": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          },
+          "snapshot_digest": "6b9ae3b3f7c9fa73feb941ac8489f8191a65aec1117d7e69a918e09b856246e6",
+          "target_mode": "0644",
+          "target_id": "file01-MOCK",
+          "os": "ubuntu-24.04",
+          "check_id": "FILE-01",
+          "plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+          "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+          "policy_version": "file01-offline-mock-20261123",
+          "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+          "approval_id": "q09-approval-MOCK",
+          "approved_plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+          "approved_target_id": "file01-MOCK",
+          "approved_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+          "approved_check_id": "FILE-01",
+          "permission_subcheck_id": "permissions",
+          "before_report": {
+            "schema_version": "1.2",
+            "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+            "target_id": "file01-MOCK",
+            "os": "ubuntu-24.04",
+            "scanned_at": "2026-11-27T05:45:58.335226+00:00",
+            "results": [
+              {
+                "check_id": "FILE-01",
+                "status": "vulnerable",
+                "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+                "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+                "details": {
+                  "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+                  "environment": {
+                    "system": "MOCK",
+                    "reason": "synthetic metadata only"
+                  },
+                  "files": [
+                    {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "actual": {
+                        "path": "/mock/secureops-file01/fixture.txt",
+                        "uid": 1001,
+                        "gid": 1001,
+                        "mode": "0666",
+                        "file_type": "regular",
+                        "acl": {
+                          "state": "collected",
+                          "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                        }
+                      },
+                      "expected": {
+                        "path": "/mock/secureops-file01/fixture.txt",
+                        "expected_uid": 1001,
+                        "reference_gid": null,
+                        "allowed_permission_bits": "0644",
+                        "approval_status": "approved"
+                      },
+                      "checks": [
+                        {
+                          "name": "owner",
+                          "status": "pass",
+                          "actual": 1001,
+                          "expected": 1001,
+                          "reason": "compare numeric UID"
+                        },
+                        {
+                          "name": "permissions",
+                          "status": "vulnerable",
+                          "actual": "0666",
+                          "expected": {
+                            "allowed_permission_bits": "0644",
+                            "unexpected_bits": "0022"
+                          },
+                          "reason": "actual & ~allowed within 07777; special bits included"
+                        },
+                        {
+                          "name": "acl",
+                          "status": "pass",
+                          "actual": {
+                            "state": "collected",
+                            "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                            "effective_entries": [
+                              {
+                                "kind": "user",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              },
+                              {
+                                "kind": "group",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              },
+                              {
+                                "kind": "other",
+                                "qualifier": "",
+                                "declared_bits": 6,
+                                "effective_bits": 6
+                              }
+                            ]
+                          },
+                          "expected": "base ACL consistent with mode",
+                          "reason": "no extended ACL; access represented by mode bits"
+                        },
+                        {
+                          "name": "group",
+                          "status": "needs_review",
+                          "actual": 1001,
+                          "expected": null,
+                          "reason": "approved group criterion pending"
+                        }
+                      ],
+                      "policy_approval_status": "approved",
+                      "status": "vulnerable"
+                    }
+                  ]
+                },
+                "cvss": {
+                  "assessment_status": "pending",
+                  "version": null,
+                  "vector": null,
+                  "base_score": null,
+                  "rating": null,
+                  "source": null,
+                  "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+                }
+              }
+            ]
+          },
+          "before_report_digest": "1d89485a31f5e9f78eef213bff6d2910a8c208d651cfcd12b5f878a466165381",
+          "approval_evidence": {
+            "approved": true,
+            "approval_id": "q09-approval-MOCK",
+            "approved_by": "admin-MOCK",
+            "target_id": "file01-MOCK",
+            "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+            "plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+            "expires_at": "2099-01-01T00:00:00Z",
+            "verified_at": "2026-11-27T05:45:58.395267+00:00",
+            "verification": "e_verify_approval_callback"
+          },
+          "backup_token": "mock-backup-4f387e0f-ce1b-4334-81a5-c5866ff12aed",
+          "phase": "post_restore"
+        }
+      },
+      "report": {
+        "schema_version": "1.2",
+        "scan_id": "2290a7d3-08b4-4040-b186-0ad6adcfc268",
+        "target_id": "file01-MOCK",
+        "os": "ubuntu-24.04",
+        "scanned_at": "2026-11-27T05:45:58.420209+00:00",
+        "results": [
+          {
+            "check_id": "FILE-01",
+            "status": "vulnerable",
+            "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+            "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+            "details": {
+              "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+              "environment": {
+                "system": "MOCK",
+                "reason": "synthetic metadata only"
+              },
+              "files": [
+                {
+                  "path": "/mock/secureops-file01/fixture.txt",
+                  "actual": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "uid": 1001,
+                    "gid": 1001,
+                    "mode": "0666",
+                    "file_type": "regular",
+                    "acl": {
+                      "state": "collected",
+                      "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                    }
+                  },
+                  "expected": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "expected_uid": 1001,
+                    "reference_gid": null,
+                    "allowed_permission_bits": "0644",
+                    "approval_status": "approved"
+                  },
+                  "checks": [
+                    {
+                      "name": "owner",
+                      "status": "pass",
+                      "actual": 1001,
+                      "expected": 1001,
+                      "reason": "compare numeric UID"
+                    },
+                    {
+                      "name": "permissions",
+                      "status": "vulnerable",
+                      "actual": "0666",
+                      "expected": {
+                        "allowed_permission_bits": "0644",
+                        "unexpected_bits": "0022"
+                      },
+                      "reason": "actual & ~allowed within 07777; special bits included"
+                    },
+                    {
+                      "name": "acl",
+                      "status": "pass",
+                      "actual": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                        "effective_entries": [
+                          {
+                            "kind": "user",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "group",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "other",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          }
+                        ]
+                      },
+                      "expected": "base ACL consistent with mode",
+                      "reason": "no extended ACL; access represented by mode bits"
+                    },
+                    {
+                      "name": "group",
+                      "status": "needs_review",
+                      "actual": 1001,
+                      "expected": null,
+                      "reason": "approved group criterion pending"
+                    }
+                  ],
+                  "policy_approval_status": "approved",
+                  "status": "vulnerable"
+                }
+              ]
+            },
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "target_id": "file01-MOCK",
+      "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+      "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+      "after_scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+      "outcome": "success",
+      "recheck_attempts": [
+        {
+          "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+          "phase": "after",
+          "target_id": "file01-MOCK",
+          "check_id": "FILE-01",
+          "scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+          "scanned_at": "2026-11-27T05:45:58.399607+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        },
+        {
+          "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+          "phase": "post_restore",
+          "target_id": "file01-MOCK",
+          "check_id": "FILE-01",
+          "scan_id": "2290a7d3-08b4-4040-b186-0ad6adcfc268",
+          "scanned_at": "2026-11-27T05:45:58.420209+00:00",
+          "save_status": "success",
+          "load_status": "success",
+          "report_verified": true,
+          "failure_stage": null,
+          "failure_reason": null
+        }
+      ],
+      "e_result": {
+        "mode": "mock",
+        "plan_id": "403419eb2f60b5ec583a335f57516a9ec4b1879bcea61743ea95c7dc2fe0e9c3",
+        "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+        "target_id": "file01-MOCK",
+        "check_id": "FILE-01",
+        "outcome": "success",
+        "backup": "success",
+        "backup_id": "mock-backup-4f387e0f-ce1b-4334-81a5-c5866ff12aed",
+        "rollback": "not_needed",
+        "approval": {
+          "approval_id": "q09-approval-MOCK",
+          "approved_by": "admin-MOCK",
+          "scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b"
+        },
+        "before_status": "vulnerable",
+        "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+        "completed_steps": [
+          "plan",
+          "approval",
+          "preflight",
+          "backup",
+          "apply",
+          "validate",
+          "recheck",
+          "compare"
+        ],
+        "after_report": {
+          "schema_version": "1.2",
+          "scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+          "target_id": "file01-MOCK",
+          "os": "ubuntu-24.04",
+          "scanned_at": "2026-11-27T05:45:58.399607+00:00",
+          "results": [
+            {
+              "check_id": "FILE-01",
+              "status": "needs_review",
+              "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=needs_review. 세부 오류 0건, 검토 필요 1건.",
+              "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+              "details": {
+                "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+                "environment": {
+                  "system": "MOCK",
+                  "reason": "synthetic metadata only"
+                },
+                "files": [
+                  {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "actual": {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "uid": 1001,
+                      "gid": 1001,
+                      "mode": "0644",
+                      "file_type": "regular",
+                      "acl": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::r--\nother::r--"
+                      }
+                    },
+                    "expected": {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "expected_uid": 1001,
+                      "reference_gid": null,
+                      "allowed_permission_bits": "0644",
+                      "approval_status": "approved"
+                    },
+                    "checks": [
+                      {
+                        "name": "owner",
+                        "status": "pass",
+                        "actual": 1001,
+                        "expected": 1001,
+                        "reason": "compare numeric UID"
+                      },
+                      {
+                        "name": "permissions",
+                        "status": "pass",
+                        "actual": "0644",
+                        "expected": {
+                          "allowed_permission_bits": "0644",
+                          "unexpected_bits": "0000"
+                        },
+                        "reason": "actual & ~allowed within 07777; special bits included"
+                      },
+                      {
+                        "name": "acl",
+                        "status": "pass",
+                        "actual": {
+                          "state": "collected",
+                          "raw": "user::rw-\ngroup::r--\nother::r--",
+                          "effective_entries": [
+                            {
+                              "kind": "user",
+                              "qualifier": "",
+                              "declared_bits": 6,
+                              "effective_bits": 6
+                            },
+                            {
+                              "kind": "group",
+                              "qualifier": "",
+                              "declared_bits": 4,
+                              "effective_bits": 4
+                            },
+                            {
+                              "kind": "other",
+                              "qualifier": "",
+                              "declared_bits": 4,
+                              "effective_bits": 4
+                            }
+                          ]
+                        },
+                        "expected": "base ACL consistent with mode",
+                        "reason": "no extended ACL; access represented by mode bits"
+                      },
+                      {
+                        "name": "group",
+                        "status": "needs_review",
+                        "actual": 1001,
+                        "expected": null,
+                        "reason": "approved group criterion pending"
+                      }
+                    ],
+                    "policy_approval_status": "approved",
+                    "status": "needs_review"
+                  }
+                ]
+              },
+              "cvss": {
+                "assessment_status": "not_applicable",
+                "version": null,
+                "vector": null,
+                "base_score": null,
+                "rating": null,
+                "source": null,
+                "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+              }
+            }
+          ]
+        },
+        "comparison": {
+          "target_id": "file01-MOCK",
+          "check_id": "FILE-01",
+          "before_scan_id": "84411137-0df5-46eb-8f5d-69d706f2095b",
+          "after_scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+          "before": {
+            "check_id": "FILE-01",
+            "status": "vulnerable",
+            "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+            "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+            "details": {
+              "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+              "environment": {
+                "system": "MOCK",
+                "reason": "synthetic metadata only"
+              },
+              "files": [
+                {
+                  "path": "/mock/secureops-file01/fixture.txt",
+                  "actual": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "uid": 1001,
+                    "gid": 1001,
+                    "mode": "0666",
+                    "file_type": "regular",
+                    "acl": {
+                      "state": "collected",
+                      "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                    }
+                  },
+                  "expected": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "expected_uid": 1001,
+                    "reference_gid": null,
+                    "allowed_permission_bits": "0644",
+                    "approval_status": "approved"
+                  },
+                  "checks": [
+                    {
+                      "name": "owner",
+                      "status": "pass",
+                      "actual": 1001,
+                      "expected": 1001,
+                      "reason": "compare numeric UID"
+                    },
+                    {
+                      "name": "permissions",
+                      "status": "vulnerable",
+                      "actual": "0666",
+                      "expected": {
+                        "allowed_permission_bits": "0644",
+                        "unexpected_bits": "0022"
+                      },
+                      "reason": "actual & ~allowed within 07777; special bits included"
+                    },
+                    {
+                      "name": "acl",
+                      "status": "pass",
+                      "actual": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                        "effective_entries": [
+                          {
+                            "kind": "user",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "group",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "other",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          }
+                        ]
+                      },
+                      "expected": "base ACL consistent with mode",
+                      "reason": "no extended ACL; access represented by mode bits"
+                    },
+                    {
+                      "name": "group",
+                      "status": "needs_review",
+                      "actual": 1001,
+                      "expected": null,
+                      "reason": "approved group criterion pending"
+                    }
+                  ],
+                  "policy_approval_status": "approved",
+                  "status": "vulnerable"
+                }
+              ]
+            },
+            "cvss": {
+              "assessment_status": "pending",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+            }
+          },
+          "after": {
+            "check_id": "FILE-01",
+            "status": "needs_review",
+            "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=needs_review. 세부 오류 0건, 검토 필요 1건.",
+            "recommendation": "정책 승인 상태·예외 및 상세 근거를 검토한 뒤 재판정하세요.",
+            "details": {
+              "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+              "environment": {
+                "system": "MOCK",
+                "reason": "synthetic metadata only"
+              },
+              "files": [
+                {
+                  "path": "/mock/secureops-file01/fixture.txt",
+                  "actual": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "uid": 1001,
+                    "gid": 1001,
+                    "mode": "0644",
+                    "file_type": "regular",
+                    "acl": {
+                      "state": "collected",
+                      "raw": "user::rw-\ngroup::r--\nother::r--"
+                    }
+                  },
+                  "expected": {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "expected_uid": 1001,
+                    "reference_gid": null,
+                    "allowed_permission_bits": "0644",
+                    "approval_status": "approved"
+                  },
+                  "checks": [
+                    {
+                      "name": "owner",
+                      "status": "pass",
+                      "actual": 1001,
+                      "expected": 1001,
+                      "reason": "compare numeric UID"
+                    },
+                    {
+                      "name": "permissions",
+                      "status": "pass",
+                      "actual": "0644",
+                      "expected": {
+                        "allowed_permission_bits": "0644",
+                        "unexpected_bits": "0000"
+                      },
+                      "reason": "actual & ~allowed within 07777; special bits included"
+                    },
+                    {
+                      "name": "acl",
+                      "status": "pass",
+                      "actual": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::r--\nother::r--",
+                        "effective_entries": [
+                          {
+                            "kind": "user",
+                            "qualifier": "",
+                            "declared_bits": 6,
+                            "effective_bits": 6
+                          },
+                          {
+                            "kind": "group",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          },
+                          {
+                            "kind": "other",
+                            "qualifier": "",
+                            "declared_bits": 4,
+                            "effective_bits": 4
+                          }
+                        ]
+                      },
+                      "expected": "base ACL consistent with mode",
+                      "reason": "no extended ACL; access represented by mode bits"
+                    },
+                    {
+                      "name": "group",
+                      "status": "needs_review",
+                      "actual": 1001,
+                      "expected": null,
+                      "reason": "approved group criterion pending"
+                    }
+                  ],
+                  "policy_approval_status": "approved",
+                  "status": "needs_review"
+                }
+              ]
+            },
+            "cvss": {
+              "assessment_status": "not_applicable",
+              "version": null,
+              "vector": null,
+              "base_score": null,
+              "rating": null,
+              "source": null,
+              "rationale": "v1.1 needs_review. 정책 판정 또는 근거 확인이 남아 있어 CVSS 평가 대상이 아닙니다."
+            }
+          },
+          "improved": false
+        },
+        "after_scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+        "permission_improved": true,
+        "normal_restore_result": {
+          "status": "verified",
+          "before_snapshot": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0644",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          },
+          "after_snapshot": {
+            "file_id": "mock-file-001",
+            "path": "/mock/secureops-file01/fixture.txt",
+            "uid": 1001,
+            "gid": 1001,
+            "mode": "0666",
+            "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "file_type": "regular",
+            "extended_acl": false,
+            "device": 1,
+            "inode": 101
+          }
+        },
+        "failure_rollback_result": {
+          "status": "not_attempted"
+        },
+        "normal_restore_scan_id": "2290a7d3-08b4-4040-b186-0ad6adcfc268",
+        "normal_restore_report": {
+          "schema_version": "1.2",
+          "scan_id": "2290a7d3-08b4-4040-b186-0ad6adcfc268",
+          "target_id": "file01-MOCK",
+          "os": "ubuntu-24.04",
+          "scanned_at": "2026-11-27T05:45:58.420209+00:00",
+          "results": [
+            {
+              "check_id": "FILE-01",
+              "status": "vulnerable",
+              "evidence": "FILE-01: /mock/secureops-file01/fixture.txt=vulnerable. 세부 오류 0건, 검토 필요 1건.",
+              "recommendation": "위반 근거를 검토하고 관리자 승인·백업 후 별도 조치 절차를 진행하세요.",
+              "details": {
+                "scope": "per-file approval gates; bounded link inspection; explicit ACL and link approvals required",
+                "environment": {
+                  "system": "MOCK",
+                  "reason": "synthetic metadata only"
+                },
+                "files": [
+                  {
+                    "path": "/mock/secureops-file01/fixture.txt",
+                    "actual": {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "uid": 1001,
+                      "gid": 1001,
+                      "mode": "0666",
+                      "file_type": "regular",
+                      "acl": {
+                        "state": "collected",
+                        "raw": "user::rw-\ngroup::rw-\nother::rw-"
+                      }
+                    },
+                    "expected": {
+                      "path": "/mock/secureops-file01/fixture.txt",
+                      "expected_uid": 1001,
+                      "reference_gid": null,
+                      "allowed_permission_bits": "0644",
+                      "approval_status": "approved"
+                    },
+                    "checks": [
+                      {
+                        "name": "owner",
+                        "status": "pass",
+                        "actual": 1001,
+                        "expected": 1001,
+                        "reason": "compare numeric UID"
+                      },
+                      {
+                        "name": "permissions",
+                        "status": "vulnerable",
+                        "actual": "0666",
+                        "expected": {
+                          "allowed_permission_bits": "0644",
+                          "unexpected_bits": "0022"
+                        },
+                        "reason": "actual & ~allowed within 07777; special bits included"
+                      },
+                      {
+                        "name": "acl",
+                        "status": "pass",
+                        "actual": {
+                          "state": "collected",
+                          "raw": "user::rw-\ngroup::rw-\nother::rw-",
+                          "effective_entries": [
+                            {
+                              "kind": "user",
+                              "qualifier": "",
+                              "declared_bits": 6,
+                              "effective_bits": 6
+                            },
+                            {
+                              "kind": "group",
+                              "qualifier": "",
+                              "declared_bits": 6,
+                              "effective_bits": 6
+                            },
+                            {
+                              "kind": "other",
+                              "qualifier": "",
+                              "declared_bits": 6,
+                              "effective_bits": 6
+                            }
+                          ]
+                        },
+                        "expected": "base ACL consistent with mode",
+                        "reason": "no extended ACL; access represented by mode bits"
+                      },
+                      {
+                        "name": "group",
+                        "status": "needs_review",
+                        "actual": 1001,
+                        "expected": null,
+                        "reason": "approved group criterion pending"
+                      }
+                    ],
+                    "policy_approval_status": "approved",
+                    "status": "vulnerable"
+                  }
+                ]
+              },
+              "cvss": {
+                "assessment_status": "pending",
+                "version": null,
+                "vector": null,
+                "base_score": null,
+                "rating": null,
+                "source": null,
+                "rationale": "v1.1 vulnerable. CVSS 적용 가능성과 공격 조건·영향 검토가 필요합니다."
+              }
+            }
+          ]
+        },
+        "post_rollback_scan_id": null,
+        "post_rollback_report": null,
+        "final_security_status": "vulnerable",
+        "final_security_verified": true,
+        "final_state_verified": true,
+        "action_result": {
+          "apply_status": "success",
+          "permission_improved": true
+        },
+        "recheck_attempts": [
+          {
+            "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+            "phase": "after",
+            "target_id": "file01-MOCK",
+            "check_id": "FILE-01",
+            "scan_id": "2bcde5f4-9c10-480b-94b2-78a0fec85e01",
+            "scanned_at": "2026-11-27T05:45:58.399607+00:00",
+            "save_status": "success",
+            "load_status": "success",
+            "report_verified": true,
+            "failure_stage": null,
+            "failure_reason": null
+          },
+          {
+            "execution_id": "15829e4d-01ef-4e5b-bca6-3a26a4c3d909",
+            "phase": "post_restore",
+            "target_id": "file01-MOCK",
+            "check_id": "FILE-01",
+            "scan_id": "2290a7d3-08b4-4040-b186-0ad6adcfc268",
+            "scanned_at": "2026-11-27T05:45:58.420209+00:00",
+            "save_status": "success",
+            "load_status": "success",
+            "report_verified": true,
+            "failure_stage": null,
+            "failure_reason": null
+          }
+        ],
+        "schema_version": "1.0",
+        "diagnosis_schema_version": "1.2",
+        "approval_id": "q09-approval-MOCK",
+        "started_at": "2026-11-27T05:45:58.394977+00:00",
+        "finished_at": "2026-11-27T05:45:58.440941+00:00"
+      },
+      "integration_success": true,
+      "history_saved": true,
+      "history_verified": true,
+      "error_stage": null,
+      "errors": [],
+      "manual_recovery_required": false,
+      "history_probe": {
+        "state": "present_equal"
+      }
+    }
+  ]
+}
