@@ -1,0 +1,102 @@
+{
+  "kind": "new receipt-wrapper isolated MOCK, not the prior 21 tests",
+  "started_utc": "2026-11-27T05:21:27.739818+00:00",
+  "finished_utc": "2026-11-27T05:21:28.579805+00:00",
+  "command": "python -B -X utf8 tests/offline_abd/run_tests.py",
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "jsonschema": "4.25.1",
+  "tests_run": 19,
+  "PASS": 19,
+  "FAIL": 0,
+  "ERROR": 0,
+  "SKIP": 0,
+  "exit_code": 0,
+  "tests": [
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W01_normal_v12_full_dict_roundtrip",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W02_valid_error_result_is_preserved",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W03_needs_review_and_null_are_preserved",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W04_vulnerable_pending_is_not_zero",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W05_A_failure_reasons_block_B_and_D",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W06_A_timeout_blocks_B_and_D",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W07_A_truncated_output_blocks_B_and_D",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W08_actual_B_trust_stage_reason_preserved",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W09_bad_JSON_and_UTF8_block_storage",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W10_observed_context_and_OS_mismatch_STOP",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W11_profile_must_match_A_fixed_approval_context",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W12_save_failure_keeps_scan_and_not_success",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W13_load_failure_keeps_saved_data_and_IDs",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W14_load_mismatch_is_not_success",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W15_A_gate_then_single_D_and_B_delegation",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W16_IDs_are_extracted_not_created_by_wrapper",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W17_no_transport_execution_or_metadata_writer",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W18_fault_injected_v12_severity_is_rejected_not_removed",
+      "result": "PASS"
+    },
+    {
+      "id": "test_abd_diagnosis.ABDOperatingWrapperTests.test_W19_fault_injected_missing_and_duplicate_result_rejected",
+      "result": "PASS"
+    }
+  ],
+  "imports": {
+    "orchestration.abd_diagnosis": "<WORKTREE>\\orchestration\\abd_diagnosis.py",
+    "integration.a_ssh_transport": "<FROZEN_DEPS>\\integration\\a_ssh_transport.py",
+    "integration.bd_collector_adapter": "<FROZEN_DEPS>\\integration\\bd_collector_adapter.py",
+    "collector_entry": "<FROZEN_DEPS>\\checks\\account\\collector_entry.py",
+    "core.main": "<WORKTREE>\\core\\main.py",
+    "core.storage": "<WORKTREE>\\core\\storage.py"
+  },
+  "network_or_SSH_used": false,
+  "metadata_writer_implemented": false
+}

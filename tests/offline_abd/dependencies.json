@@ -1,0 +1,103 @@
+{
+  "D_core": "0cab3a247d2143fc5556e37f6651440e109eef70",
+  "A_v2": "dda9f8a",
+  "B": "20805d2c5fbdfcd46cbd19d1ac1d3efc03fbeb0f",
+  "files": {
+    "checks/account/.gitkeep": {
+      "raw_sha256_of_accepted_copy": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "lf_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "checks/account/acc_lockout_check.py": {
+      "raw_sha256_of_accepted_copy": "1847e4b050b69655c8ca381725838a6cdf89680bbb5719a6ef21159466f241dd",
+      "lf_sha256": "b5d93b524899e593430d954ac1ed9a23f84e0c896e58a7b11a4583a2dfca743f"
+    },
+    "checks/account/acc_password_check.py": {
+      "raw_sha256_of_accepted_copy": "0b0f2875de8714ca2df8a0a3d7e18f64794c8a6437a9b7f11def74b97be1a0d6",
+      "lf_sha256": "da895f2d4291ac7c9792bb2d08799fa7e42c24e66b80611abc4adb7d8b607e20"
+    },
+    "checks/account/account_common.py": {
+      "raw_sha256_of_accepted_copy": "3ddc843959ec1de8cdda9039b043afcc57a3af2148a9c4692f67ea4a663af360",
+      "lf_sha256": "e32ae8f6949eb6585e6da13f59e4a2be5847b06899619109c318231b2207cb8e"
+    },
+    "checks/account/b_collector.py": {
+      "raw_sha256_of_accepted_copy": "6462f4356d6e11da7b7975ba36f59c1886dae8cb827a0680ab194de6997c6c40",
+      "lf_sha256": "ae93deb0dce17c0270c299d163837c47e757a20dee6bfa7473e436001259a044"
+    },
+    "checks/account/central_adapter.py": {
+      "raw_sha256_of_accepted_copy": "522bde7dfc61b714be881bfab678794a9a8476961afa80c88fc01a12b6b66f76",
+      "lf_sha256": "f77dfb963bd5de5486826e5d6055c2bd94909943c2f121a29d0f337bcb7cbf8b"
+    },
+    "checks/account/collector_entry.py": {
+      "raw_sha256_of_accepted_copy": "45760c1a84726d398009d39adcd0b39ec12957129f5cbea25f5c0477bc4af4d9",
+      "lf_sha256": "fd87bf768807727be0e44b18001a18af0ef766040423db5dcb64e149df464bf1"
+    },
+    "checks/account/policies/account_policy.json": {
+      "raw_sha256_of_accepted_copy": "23771c6bcdf4cecca8fc207868169a4a5db5677a2155e461aa6a5cf29133ae4a",
+      "lf_sha256": "f3754fb6cb5b8d99b6f178a87d084ccaff65bde891a76bc448809bf914a1fd70"
+    },
+    "checks/account/policies/ssh_auth_policy.json": {
+      "raw_sha256_of_accepted_copy": "176aa7aefdadd64974434c632edccd3133369b4919efe6df5bb09e8f7878d04e",
+      "lf_sha256": "82470551cc0efe8b40f4d55d7efb19df217699ba60149d2151afeff50af4ce65"
+    },
+    "checks/account/policies/ssh_policy.json": {
+      "raw_sha256_of_accepted_copy": "1a8abd4f5277883cd9021df298a2df7a6b2323154c79a54062c96ccaebb380fe",
+      "lf_sha256": "d45d94043584f2cf080f33abb014dbe90a8e819b2cf2fc4a729e1f0b85b5db68"
+    },
+    "checks/account/ssh_auth_check.py": {
+      "raw_sha256_of_accepted_copy": "0fe21b277ef2a2bb44aa50a95a1640a91a59f81900812b4440fac90e79b1ee9d",
+      "lf_sha256": "a2c4ce5f3ed155adb28cc9ff83c20c7bfbbed2c3175d10ec1ead06e2e377f77e"
+    },
+    "checks/account/ssh_check.py": {
+      "raw_sha256_of_accepted_copy": "e1038859a8afcbf5ad5958ef4fdefa749f91688fbdbf83a54de7c6f282111024",
+      "lf_sha256": "22025954e4905c5c1229106e6d5167991655c0f27ca63adee6b0515c484c767c"
+    },
+    "checks/account/test_account_checks.py": {
+      "raw_sha256_of_accepted_copy": "76c7d98217b1e50486e1459a2f8a4de892f1875cb876f9e57d254608e7c9c251",
+      "lf_sha256": "6144abf946ce325a89628a657601197e6b678950dc4093936bb662c52d4f3b7a"
+    },
+    "checks/account/test_b_collector.py": {
+      "raw_sha256_of_accepted_copy": "5ee0d3822060293bf6c34421c6be56e074a767758ef8a8b53043864ffe6bd42f",
+      "lf_sha256": "eec360937c197cbef17788ee83ccfbdc3d326869313ead87abb9e0712f3af6a7"
+    },
+    "checks/account/test_central_adapter.py": {
+      "raw_sha256_of_accepted_copy": "79b40de3165767aa1473b495e5f03f29480fbd1c78e2d55068dddd889a9c7488",
+      "lf_sha256": "e4a0349533c87d47d10634cd6ef1dd741601734932d83e41d0d0da2df7679547"
+    },
+    "checks/account/test_collector_entry.py": {
+      "raw_sha256_of_accepted_copy": "7a0bc0df719b9b7d9da8175fde177be28604e76d812a513010a08b2afd6b124d",
+      "lf_sha256": "879e085f058925032405c061b3e88e4b3cbfe7ac18a0e0c0660ee52344410955"
+    },
+    "checks/account/test_ssh_auth_check.py": {
+      "raw_sha256_of_accepted_copy": "963fc9ea26f293bd0643fd28f0f7885883549bb42267cf93a8b525faff4e30e2",
+      "lf_sha256": "4390572d2bf33334153ec35c09eb050680a0d5d0fa19e848748446e7df80ff69"
+    },
+    "checks/account/test_ssh_check.py": {
+      "raw_sha256_of_accepted_copy": "978fad4b24f9ad6a31fba423d3b7061fd448e9ae66b1bdb29cd3521f00dc454d",
+      "lf_sha256": "87dae1ed5edded187d5f52112ec20c01c6127b200d368eee0daf35b5221ef495"
+    },
+    "integration/__init__.py": {
+      "raw_sha256_of_accepted_copy": "0dc52b3f4e384b5193daf497015bb4476263028d312a8f7060463c702f78e8b9",
+      "lf_sha256": "0dc52b3f4e384b5193daf497015bb4476263028d312a8f7060463c702f78e8b9"
+    },
+    "integration/a_file01_cli.py": {
+      "raw_sha256_of_accepted_copy": "b095a3619a3ca1a59a730f8ed1851726f561556ac2091a6aeb0f57d5fde1ecf8",
+      "lf_sha256": "b095a3619a3ca1a59a730f8ed1851726f561556ac2091a6aeb0f57d5fde1ecf8"
+    },
+    "integration/a_ssh_transport.py": {
+      "raw_sha256_of_accepted_copy": "6d5103bbfb7f3dc0e675a7bedbc1c4ec59cbb98513f10559f21a5e1e435338b8",
+      "lf_sha256": "6d5103bbfb7f3dc0e675a7bedbc1c4ec59cbb98513f10559f21a5e1e435338b8"
+    },
+    "integration/bd_collector_adapter.py": {
+      "raw_sha256_of_accepted_copy": "2b41af01a55c9a8ce7703219798b8e73ac22ac3e753f4cf287c01df118065b2f",
+      "lf_sha256": "2b41af01a55c9a8ce7703219798b8e73ac22ac3e753f4cf287c01df118065b2f"
+    }
+  },
+  "core_lf_sha256": {
+    "core/main.py": "ef50fc34837c3ce3b4e817cd7f9af8f6fb881ae3589f9c2d6e71defdfd500e00",
+    "core/storage.py": "5cc3599b5c00c0ae54fa595c9531429863f703e2738e7821a66d8528cbe22b78",
+    "core/remote_result.py": "ef181bbe203a2c68e9bf91a33e02f8e8e7f1d4c64f8f05b854babe02605b206e",
+    "core/cvss.py": "392907644acadf34d24d3690fb227be40e0fce53c472e52d5d0ce963a8ec9be6",
+    "core/cvss_validation.py": "f9e67b616b5ecff121930f113850e7f969f5f3176d26edd4187ceff01e2aa56b",
+    "docs/architecture/json-result-schema-v1.2.schema.json": "673f26a546040ec173d828decd2314819e17a963db8b2667deb36663a7b5d3b1"
+  }
+}
