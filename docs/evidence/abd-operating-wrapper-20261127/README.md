@@ -1,6 +1,6 @@
 # A/B/D 최소 운영 연결 wrapper — Draft 검토 자료
 
-현재 제출 의존성은 **A v3 0072355(미push)**다. 아래 기존 v2 결과·보존 증거는 과거 이력이며, v3 Windows 원문 테스트 19건 결과와 Linux 담당자 보고·D 미실행 범위는 마지막 절에서 구분한다.
+현재 제출 의존성은 **A v3 `0072355c76040042345f3179d6e84d2c67b0d0c0` (로컬 미push)**다. 아래 기존 v2 결과·보존 증거는 과거 이력이며, v3 Windows 원문 테스트 19건 결과와 Linux 담당자 보고·D 미실행 범위는 마지막 절에서 구분한다.
 
 2026-11-27 승인 범위: 신규 연결 wrapper와 격리 MOCK 시험. 실제 SSH/VM/중앙 실행·B 설치·metadata writer는 포함하지 않는다.
 
@@ -23,7 +23,7 @@
 | 대상 | 기준 |
 |---|---|
 | D Core | 0cab3a247d2143fc5556e37f6651440e109eef70 |
-| A v3 (현재 로컬 기준) | 승인된 0072355 제공 LF 소스, 로컬 미push. 기존 v2 dda9f8a 기록은 과거 이력 |
+| A v3 (현재 로컬 기준) | `0072355c76040042345f3179d6e84d2c67b0d0c0`의 제공 LF 소스, 로컬 미push |
 | B 입구 | 20805d2c5fbdfcd46cbd19d1ac1d3efc03fbeb0f |
 | 기존 D adapter | 미커밋 검증본 SHA-256 2b41af01a55c9a8ce7703219798b8e73ac22ac3e753f4cf287c01df118065b2f |
 | A transport 파일 SHA-256 (현재 v3) | a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d |
@@ -93,9 +93,9 @@ D/E FILE-01 호출부·E 정책·C Bridge·기존 Ubuntu/Rocky 성공본은 이�
 
 ### 과거 A v2 로컬 미push 의존성 조사 이력
 
-- A v2 기준은 `dda9f8a`이며 민우님의 `feature/a-b-read-v1-kmw` 로컬 미push 소스다. 공유 README와 2026-11-27 원격 브랜치 목록에서 이를 대조했다. **A 전체 40자리 commit SHA는 현재 확보하지 못했으며 추정해 확장하지 않는다.**
+- A v2 기준은 `dda9f8af26bb81680791c68858b1feac1b19b79d`이며 민우님의 `feature/a-b-read-v1-kmw` 로컬 소스다. 당시 공유 README에는 단축 SHA가 기록돼 있었으며, 전체 SHA는 민우님이 후속 공유했다.
 - 검증 근거는 `a-b-read-v1-share-v2-261127.zip`의 Git 원본 LF 제공 파일과 SHA256SUMS다. ZIP SHA-256은 `0d81fa5192468eec083a01baee9c4a62ab6c557e12fb11ca7a4442b3f1d53689`. 내부 해시 6개와 압축 무결성을 확인했고 실제 사용한 integration 파일 3개는 검증 작업본과 byte 단위로 일치했다. 이 대조는 민우님 PC의 로컬 Git commit 객체 자체를 독립 검증한 것은 아니다.
-- A 브랜치 원격 push 및 선행 병합은 팀장 승인 대기다. 현재 PR #40 HEAD `0b95a12bc4b260199cef35b1c8828dd9463a0522`는 FILE-01 전송 기준이며 A v2와 동일하지 않다. A 공유 README의 계보는 `0b95a12 → 84042d4 → f5ea7bd → dda9f8a`로, 뒤 세 개의 전체 commit 객체는 미확보다.
+- A 브랜치 원격 push 및 선행 병합은 팀장 승인 대기다. PR #40 HEAD `0b95a12bc4b260199cef35b1c8828dd9463a0522`는 FILE-01 전송 기준이다. A 공유 README에는 v2까지의 계보가 `0b95a12 → 84042d4 → f5ea7bd → dda9f8a`로 기록돼 있다.
 - **PR #45 단독으로 전체 의존성을 재현하거나 병합할 수 없다.** 파일 간 Git 병합 충돌 유무와 별개로 A v2, B 공식 입구, 별도 D adapter의 공식 공급·선행 반영·검토가 필요하다. 실제 병합 가능 승인을 의미하지 않는다.
 - wrapper는 기존 A execution을 수신하는 `diagnose_abd_execution()` 전용 함수이며 실제 SSH나 `run_b_read()`를 호출하지 않는다. 민우님의 A STOP·trusted context 정상 확인은 담당자 회신으로 기록하며 추가 실환경 시험 결과로 표시하지 않는다.
 
@@ -148,7 +148,7 @@ B 측 제시 순서 `#33 → #36 → #39 → #44 → B 공식 입구`를 우선 
 
 새 패키지 생성·배포는 이번 범위가 아니다. 승인 후 PR #45 고정 checkout, 승인된 A LF ZIP, B 20805d2 checkout/ZIP, 별도 고정 D adapter·대응 테스트, 기존 dependencies.json, 파일별 raw/LF SHA, 재현 README와 기존·신규 결과를 구분한 로그를 묶는 방안이다. ZIP SHA/내부 해시·필수 파일·import 경로를 사전 확인하고 누락 시 명시적 실패한다. 승인된 MOCK만 사용하고 비공개 자료·실서버 설정을 공개하지 않는다. 온라인 fetch 없이 해시 확인 가능한 폴더를 구성하되 이번 작업에서는 만들지 않는다.
 
-- 민우님: A 전체 commit SHA·원격 반영 승인·B STOP/trusted context 동결 기준·중앙 배포 경로 확인. A STOP·context 정상 의견은 수령했으나 실제 중앙 실행 승인과 구분한다.
+- 민우님: A 전체 commit SHA와 A STOP·context 정상 의견을 공유했다. A 원격 반영 승인·B STOP/trusted context 동결 기준·중앙 배포 경로 확인이 남아 있다.
 - 종욱님: B 공식 입구, CollectorTrustError stage/reason, 원본 bytes 전달, B 판정 단일 호출 검토 회신 대기. **기존 ABD13~18 실패 계층 분류는 합의 전까지 변경하지 않는다.** #39/#36 결합·B 입구 정식 PR 및 source 공급 검토 필요.
 - D/팀장님: 별도 D adapter Draft PR의 정확한 파일 범위와 검증 승인, A/B 선행 반영 순서, 비공개 패키지 공유 범위 결정 필요.
 - B S2 설치, 실제 Central VM/A-B-D E2E, 운영 metadata writer·영속 ID 연결, Ready 전환·main 병합은 별도 승인 대기다. 이번에는 의존성 문서 1개만 Commit·일반 Push한다.
@@ -156,7 +156,7 @@ B 측 제시 순서 `#33 → #36 → #39 → #44 → B 공식 입구`를 우선 
 ## 2026-11-27 A v3 최종 반영 및 원문 테스트 검증
 
 - 기준 PR #45 HEAD: 90b5c561a9dccf7fc541e13ca7b7c5b0a99fba11. 최종 변경은 dependencies.json과 이 README 두 파일뿐이다. test_abd_diagnosis.py는 기준 HEAD 원문과 byte 단위로 동일하다. wrapper·D Core·B·기존 A v2 원본·과거 증거는 변경하지 않는다.
-- A v3 제공 기준: 0072355 ← d39a549 ← dda9f8a. 공유 README에 명시된 로컬 미push 계보이며 전체 commit 객체는 미확보다.
+- 민우님이 A v3 최종 커밋 `0072355c76040042345f3179d6e84d2c67b0d0c0`, 부모 `d39a549c393c0c532ac6dc1dd1b3bdc13866d750`, 기존 A v2 `dda9f8af26bb81680791c68858b1feac1b19b79d`의 전체 SHA를 공유했다. A v3 브랜치 `feature/a-b-read-v1-kmw`는 로컬 미push 상태이며, 소스 바이트의 검증 근거는 아래 공유 ZIP과 파일 SHA-256이다.
 - 입력 ZIP: a-b-read-v1-share-v3-261127.zip. SHA-256: 3ca8c79a5e95845ba1f0a8b2124066fb365fcc8a48ba4a3dc28aa2d0cf9ffe9a. 내부 명세 7개 해시·압축 무결성 통과.
 - 새 transport SHA-256: a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d. ZIP 원본 바이트 그대로 별도 격리 의존 경로에 배치했다. A CLI·패키지 표시 파일, B 및 D adapter는 기존 고정 바이트 그대로다. D adapter는 공식 PR #47 commit 2d82e685a4a97d25330fb2ff98f79abde6e389ca의 파일과 일치한다.
 - 요청대로 dependencies.json에서는 transport의 raw/LF 해시 두 값만 갱신했다. 기존 `A_v2: dda9f8a` 필드는 과거 기준 메타데이터로 보존하며 현재 v3 선택 근거로 해석하지 않는다. 키·commit 표기를 일반화하는 변경은 이번 범위에서 수행하지 않는다. 현재 기준은 이 절과 새 transport 해시로 명시한다.
