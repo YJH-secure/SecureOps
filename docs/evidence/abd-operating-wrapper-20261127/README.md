@@ -1,5 +1,7 @@
 # A/B/D 최소 운영 연결 wrapper — Draft 검토 자료
 
+현재 제출 의존성은 **A v3 0072355(미push)**다. 아래 기존 v2 결과·보존 증거는 과거 이력이며, v3 Windows 원문 테스트 19건 결과와 Linux 담당자 보고·D 미실행 범위는 마지막 절에서 구분한다.
+
 2026-11-27 승인 범위: 신규 연결 wrapper와 격리 MOCK 시험. 실제 SSH/VM/중앙 실행·B 설치·metadata writer는 포함하지 않는다.
 
 ## 구현과 소유 범위
@@ -21,10 +23,10 @@
 | 대상 | 기준 |
 |---|---|
 | D Core | 0cab3a247d2143fc5556e37f6651440e109eef70 |
-| A v2 | 승인된 dda9f8a 제공 LF 소스 |
+| A v3 (현재 로컬 기준) | 승인된 0072355 제공 LF 소스, 로컬 미push. 기존 v2 dda9f8a 기록은 과거 이력 |
 | B 입구 | 20805d2c5fbdfcd46cbd19d1ac1d3efc03fbeb0f |
 | 기존 D adapter | 미커밋 검증본 SHA-256 2b41af01a55c9a8ce7703219798b8e73ac22ac3e753f4cf287c01df118065b2f |
-| A transport 파일 SHA-256 | 6d5103bbfb7f3dc0e675a7bedbc1c4ec59cbb98513f10559f21a5e1e435338b8 |
+| A transport 파일 SHA-256 (현재 v3) | a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d |
 | B collector_entry LF SHA-256 | fd87bf768807727be0e44b18001a18af0ef766040423db5dcb64e149df464bf1 |
 
 파일별 raw/LF 해시는 `tests/offline_abd/dependencies.json`에 있다. B ZIP CRLF 사본은 LF 환산 비교만 하고 원본을 변경하지 않는다.
@@ -89,7 +91,7 @@ D/E FILE-01 호출부·E 정책·C Bridge·기존 Ubuntu/Rocky 성공본은 이�
 
 위 19 PASS·173 PASS·과거 21 PASS는 기존 기록이다. 이번에는 테스트를 재실행하지 않았고 소스·테스트·dependencies.json·실행 증거를 변경하지 않았다. 아래 내용은 원격 상태, 공유 ZIP과 기존 파일의 읽기 전용 대조 및 향후 공식 반영 제안이다.
 
-### A v2 로컬 미push 의존성
+### 과거 A v2 로컬 미push 의존성 조사 이력
 
 - A v2 기준은 `dda9f8a`이며 민우님의 `feature/a-b-read-v1-kmw` 로컬 미push 소스다. 공유 README와 2026-11-27 원격 브랜치 목록에서 이를 대조했다. **A 전체 40자리 commit SHA는 현재 확보하지 못했으며 추정해 확장하지 않는다.**
 - 검증 근거는 `a-b-read-v1-share-v2-261127.zip`의 Git 원본 LF 제공 파일과 SHA256SUMS다. ZIP SHA-256은 `0d81fa5192468eec083a01baee9c4a62ab6c557e12fb11ca7a4442b3f1d53689`. 내부 해시 6개와 압축 무결성을 확인했고 실제 사용한 integration 파일 3개는 검증 작업본과 byte 단위로 일치했다. 이 대조는 민우님 PC의 로컬 Git commit 객체 자체를 독립 검증한 것은 아니다.
@@ -150,3 +152,39 @@ B 측 제시 순서 `#33 → #36 → #39 → #44 → B 공식 입구`를 우선 
 - 종욱님: B 공식 입구, CollectorTrustError stage/reason, 원본 bytes 전달, B 판정 단일 호출 검토 회신 대기. **기존 ABD13~18 실패 계층 분류는 합의 전까지 변경하지 않는다.** #39/#36 결합·B 입구 정식 PR 및 source 공급 검토 필요.
 - D/팀장님: 별도 D adapter Draft PR의 정확한 파일 범위와 검증 승인, A/B 선행 반영 순서, 비공개 패키지 공유 범위 결정 필요.
 - B S2 설치, 실제 Central VM/A-B-D E2E, 운영 metadata writer·영속 ID 연결, Ready 전환·main 병합은 별도 승인 대기다. 이번에는 의존성 문서 1개만 Commit·일반 Push한다.
+
+## 2026-11-27 A v3 최종 반영 및 원문 테스트 검증
+
+- 기준 PR #45 HEAD: 90b5c561a9dccf7fc541e13ca7b7c5b0a99fba11. 최종 변경은 dependencies.json과 이 README 두 파일뿐이다. test_abd_diagnosis.py는 기준 HEAD 원문과 byte 단위로 동일하다. wrapper·D Core·B·기존 A v2 원본·과거 증거는 변경하지 않는다.
+- A v3 제공 기준: 0072355 ← d39a549 ← dda9f8a. 공유 README에 명시된 로컬 미push 계보이며 전체 commit 객체는 미확보다.
+- 입력 ZIP: a-b-read-v1-share-v3-261127.zip. SHA-256: 3ca8c79a5e95845ba1f0a8b2124066fb365fcc8a48ba4a3dc28aa2d0cf9ffe9a. 내부 명세 7개 해시·압축 무결성 통과.
+- 새 transport SHA-256: a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d. ZIP 원본 바이트 그대로 별도 격리 의존 경로에 배치했다. A CLI·패키지 표시 파일, B 및 D adapter는 기존 고정 바이트 그대로다. D adapter는 공식 PR #47 commit 2d82e685a4a97d25330fb2ff98f79abde6e389ca의 파일과 일치한다.
+- 요청대로 dependencies.json에서는 transport의 raw/LF 해시 두 값만 갱신했다. 기존 `A_v2: dda9f8a` 필드는 과거 기준 메타데이터로 보존하며 현재 v3 선택 근거로 해석하지 않는다. 키·commit 표기를 일반화하는 변경은 이번 범위에서 수행하지 않는다. 현재 기준은 이 절과 새 transport 해시로 명시한다.
+
+### 종료 처리와 안전 경계
+
+v2는 POSIX 종료 시 proc.pid를 killpg에 바로 넘겼다. v3는 정수 pid > 1, 독립 그룹 리더, 호출자 그룹이 아님을 확인한 경우만 killpg를 사용하며, 그렇지 않으면 proc.kill()로 종료한다. 가짜 pid=0은 실제 프로세스 그룹 API에 도달하지 않는다. A STOP·trusted context 계약은 변경되지 않았다.
+
+W06·W07 원문에는 이미 실제 os.killpg 호출 시 실패하는 guard와 A STOP 및 B/D/save/load 0회 단언이 있다. A v3 자체가 pid=0을 안전하게 처리하고 기존 테스트만으로 Linux 19 PASS가 확인됐다는 팀장 전달 결과에 따라 테스트 수정은 필수적이지 않다고 판단했다. 최종 제출에서는 원문을 유지하며 SHA-256은 ee1fb069b66f33f1ea0785f80e960198d8a6d89a8110dc07de86399be02424ce다. 기대값 완화·Skip 추가는 없다.
+
+이전에 로컬에서 시험한 kill/wait 각 1회·killpg 0회 관측 보완본은 Windows 19 PASS 기록과 함께 별도 보존했다. 해당 보완은 최종 Commit에 포함하지 않는다. 이 관측은 실제 Linux 프로세스·손자 종료 완료 증거가 아니다.
+
+### 이번 실행과 과거 결과의 구분
+
+| 구분 | PASS | FAIL | ERROR | SKIP | exit | 근거 |
+|---|---:|---:|---:|---:|---|---|
+| 기존 Linux 검토 보고 | 17 | 2 | 미확인 | 미확인 | 미확인 | 사용자 전달 보고. W06·W07 실패 원본 로그는 이번 로컬 자료에서 미확보 |
+| 이전 A v3 Windows 보완본 실행 | 19 | 0 | 0 | 0 | 0 | 별도 windows-v3-run1 결과·로그, 미제출 보완본 |
+| A v3 기존 테스트 Linux 보고 | 19 | 미확인 | 미확인 | 미확인 | 미확인 | 이번 사용자 지시의 확인 보고. 원본 실행 로그·환경·종료 코드는 미확보 |
+| 최종 A v3 Windows 원문 W01~W19 실행 | 19 | 0 | 0 | 0 | 0 | 별도 windows-original-tests-final 결과·원본 stdout/stderr |
+| D 담당 A v3 Linux 재실행 | 미실행 | 미실행 | 미실행 | 미실행 | 미실행 | 담당자 보고와 D 직접 검증을 구분 |
+
+Windows / Python 3.14.2 / jsonschema 4.25.1, 패키지 설치 없음. 현재 worktree 루트에서 새 격리 의존 경로를 지정하고 실행했다.
+
+```powershell
+$env:SECUREOPS_ABD_DEPS_ROOT = '<new isolated A-v3/B/D dependency root>'
+$env:SECUREOPS_ABD_RESULTS_DIR = '<new evidence directory>'
+python -B -X utf8 tests/offline_abd/run_tests.py
+```
+
+이전 보완본과 관측 결과는 기존 SecureOps_ABD_Av3_W06_W07_20261127/evidence/windows-v3-run1에 그대로 보존했다. 보완 소스의 사본도 새 SecureOps_PR45_Av3_Finalize_20261127/previous-local-work에 남겼다. 최종 원문 테스트의 새 결과 JSON·원본 stdout/stderr는 SecureOps_PR45_Av3_Finalize_20261127/evidence/windows-original-tests-final에 별도 보존한다. 반복 실행·기존 19 PASS·기존 21 PASS를 합산하지 않는다. D 담당은 Linux를 직접 재실행하지 않았으며 실제 SSH/VM·운영 저장소·중앙 실행도 수행하지 않았다. Ready 전환·main 병합은 하지 않는다.

@@ -84,8 +84,8 @@
       "lf_sha256": "b095a3619a3ca1a59a730f8ed1851726f561556ac2091a6aeb0f57d5fde1ecf8"
     },
     "integration/a_ssh_transport.py": {
-      "raw_sha256_of_accepted_copy": "6d5103bbfb7f3dc0e675a7bedbc1c4ec59cbb98513f10559f21a5e1e435338b8",
-      "lf_sha256": "6d5103bbfb7f3dc0e675a7bedbc1c4ec59cbb98513f10559f21a5e1e435338b8"
+      "raw_sha256_of_accepted_copy": "a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d",
+      "lf_sha256": "a848494c58e84374570764b25b0d0719123e60980dff3d154fcc3ff01b58a05d"
     },
     "integration/bd_collector_adapter.py": {
       "raw_sha256_of_accepted_copy": "2b41af01a55c9a8ce7703219798b8e73ac22ac3e753f4cf287c01df118065b2f",
