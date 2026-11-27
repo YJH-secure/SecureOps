@@ -1,0 +1,15 @@
+{
+  "tests_run": 173,
+  "PASS": 173,
+  "FAIL": 0,
+  "ERROR": 0,
+  "SKIP": 0,
+  "exit_code": 0,
+  "started_utc": "2026-11-27T05:18:03.675038+00:00",
+  "finished_utc": "2026-11-27T05:18:09.128516+00:00",
+  "selection": "python -B -X utf8 -m unittest discover -s tests -v",
+  "SECUREOPS_D_SOURCE": "<WORKTREE>",
+  "network_guard": true,
+  "actual_python_code": "import unittest; from unittest.mock import patch; suite=unittest.defaultTestLoader.discover('tests');\nwith patch('socket.socket',side_effect=AssertionError('no network')), patch('socket.create_connection',side_effect=AssertionError('no network')):\n result=unittest.TextTestRunner(verbosity=2).run(suite)\nimport json; print(json.dumps({'tests_run':result.testsRun,'PASS':result.testsRun-len(result.failures)-len(result.errors)-len(result.skipped),'FAIL':len(result.failures),'ERROR':len(result.errors),'SKIP':len(result.skipped)})); raise SystemExit(0 if result.wasSuccessful() else 1)",
+  "git_config": "command-scoped safe.directory=<WORKTREE>"
+}

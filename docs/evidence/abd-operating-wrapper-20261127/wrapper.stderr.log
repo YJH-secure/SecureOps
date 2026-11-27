@@ -1,0 +1,24 @@
+test_W01_normal_v12_full_dict_roundtrip (test_abd_diagnosis.ABDOperatingWrapperTests.test_W01_normal_v12_full_dict_roundtrip) ... ok
+test_W02_valid_error_result_is_preserved (test_abd_diagnosis.ABDOperatingWrapperTests.test_W02_valid_error_result_is_preserved) ... ok
+test_W03_needs_review_and_null_are_preserved (test_abd_diagnosis.ABDOperatingWrapperTests.test_W03_needs_review_and_null_are_preserved) ... ok
+test_W04_vulnerable_pending_is_not_zero (test_abd_diagnosis.ABDOperatingWrapperTests.test_W04_vulnerable_pending_is_not_zero) ... ok
+test_W05_A_failure_reasons_block_B_and_D (test_abd_diagnosis.ABDOperatingWrapperTests.test_W05_A_failure_reasons_block_B_and_D) ... ok
+test_W06_A_timeout_blocks_B_and_D (test_abd_diagnosis.ABDOperatingWrapperTests.test_W06_A_timeout_blocks_B_and_D) ... ok
+test_W07_A_truncated_output_blocks_B_and_D (test_abd_diagnosis.ABDOperatingWrapperTests.test_W07_A_truncated_output_blocks_B_and_D) ... ok
+test_W08_actual_B_trust_stage_reason_preserved (test_abd_diagnosis.ABDOperatingWrapperTests.test_W08_actual_B_trust_stage_reason_preserved) ... ok
+test_W09_bad_JSON_and_UTF8_block_storage (test_abd_diagnosis.ABDOperatingWrapperTests.test_W09_bad_JSON_and_UTF8_block_storage) ... ok
+test_W10_observed_context_and_OS_mismatch_STOP (test_abd_diagnosis.ABDOperatingWrapperTests.test_W10_observed_context_and_OS_mismatch_STOP) ... ok
+test_W11_profile_must_match_A_fixed_approval_context (test_abd_diagnosis.ABDOperatingWrapperTests.test_W11_profile_must_match_A_fixed_approval_context) ... ok
+test_W12_save_failure_keeps_scan_and_not_success (test_abd_diagnosis.ABDOperatingWrapperTests.test_W12_save_failure_keeps_scan_and_not_success) ... ok
+test_W13_load_failure_keeps_saved_data_and_IDs (test_abd_diagnosis.ABDOperatingWrapperTests.test_W13_load_failure_keeps_saved_data_and_IDs) ... ok
+test_W14_load_mismatch_is_not_success (test_abd_diagnosis.ABDOperatingWrapperTests.test_W14_load_mismatch_is_not_success) ... ok
+test_W15_A_gate_then_single_D_and_B_delegation (test_abd_diagnosis.ABDOperatingWrapperTests.test_W15_A_gate_then_single_D_and_B_delegation) ... ok
+test_W16_IDs_are_extracted_not_created_by_wrapper (test_abd_diagnosis.ABDOperatingWrapperTests.test_W16_IDs_are_extracted_not_created_by_wrapper) ... ok
+test_W17_no_transport_execution_or_metadata_writer (test_abd_diagnosis.ABDOperatingWrapperTests.test_W17_no_transport_execution_or_metadata_writer) ... ok
+test_W18_fault_injected_v12_severity_is_rejected_not_removed (test_abd_diagnosis.ABDOperatingWrapperTests.test_W18_fault_injected_v12_severity_is_rejected_not_removed) ... ok
+test_W19_fault_injected_missing_and_duplicate_result_rejected (test_abd_diagnosis.ABDOperatingWrapperTests.test_W19_fault_injected_missing_and_duplicate_result_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.616s
+
+OK

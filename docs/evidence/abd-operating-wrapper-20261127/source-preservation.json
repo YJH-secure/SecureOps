@@ -1,0 +1,17 @@
+{
+  "unchanged_base_files": 194,
+  "unchanged_frozen_dependency_files": 212,
+  "accepted_21_manifest_verified_entries": 341,
+  "existing_source_modified": false,
+  "old_evidence_modified": false,
+  "original_git_status_unchanged": true,
+  "wrapper_sha256": "03e6818c593141d818db586554e703d259b81d14240ce704d880427bf9eeda81",
+  "new_source_sha256": {
+    "orchestration/abd_diagnosis.py": "03e6818c593141d818db586554e703d259b81d14240ce704d880427bf9eeda81",
+    "tests/offline_abd/dependencies.json": "b17be7a81bb7d0c2fa01174897ff0a06832e41087f86499c55a10788694c1945",
+    "tests/offline_abd/run_tests.py": "2cca69d79fe459b3a9421fc52898416d30005e8ada24cdc7fa5a6587ee64fb60",
+    "tests/offline_abd/test_abd_diagnosis.py": "ee1fb069b66f33f1ea0785f80e960198d8a6d89a8110dc07de86399be02424ce"
+  },
+  "real_SSH_VM": false,
+  "metadata_writer": false
+}
