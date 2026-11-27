@@ -1,0 +1,63 @@
+{
+  "d_base": "0cab3a247d2143fc5556e37f6651440e109eef70",
+  "original_orchestration_sha256": "8f12f8361bbc0a6155ddb8307000f03f2a2a9eb651de57226d098ddf159c1a9c",
+  "submitted_orchestration_sha256": "24c2885d53e3f1096e74f8fad008e9d67158cfadc81465536ca3d2c86f14bd1c",
+  "executable_ast_equal_to_approved_original": true,
+  "original_test_sha256": "a37b49f74a01f28e7ea2a5377c799e75d5432c718324caae26601c5263aa4dc0",
+  "submitted_test_sha256": "4f75fab80d94ce6ccda9d2ed63c8d12b087f966f9c4a7e342fb11b982f37773c",
+  "P13_source_exact": true,
+  "nonsemantic_EOF_cleanup": "Trailing empty EOF line removed from submitted caller and generic test copy only; original files unchanged.",
+  "P03_change": "Unsupported synthetic check fixture FILE-01 -> SVC-01; assertions unchanged. E43 supports FILE-01.",
+  "tracked_files_modified": [],
+  "publication_provenance": [
+    {
+      "source": "q09-final/unittest.log",
+      "submitted": "docs/evidence/de-mock-q09-20261127/unittest.log",
+      "original_sha256": "c4b08bd2fe3f3cd9dacf76ee9423c1c986b64d8e37fea4f69e74acf091b4d4aa",
+      "submitted_sha256": "b43c7a5b39c64b80fb2da5b7a1de77303249b59ba5b9585f62f7bb3f4cb40a6b",
+      "change": "CRLF to LF only"
+    },
+    {
+      "source": "q09-final/results.json",
+      "submitted": "docs/evidence/de-mock-q09-20261127/results.json",
+      "original_sha256": "0f2b1cdd17dab459dbee0ebc2da557fb5443969dfd6722420a159c33f1fc05fa",
+      "submitted_sha256": "3d6323d116aa0bb108718911e59afd6dc9b88d2259617b88d0557f721db9181c",
+      "change": "CRLF to LF only"
+    },
+    {
+      "source": "q09-final/observations/test_Q01_normal_restore_phase_counts_roundtrip_and_immutable_before.json",
+      "submitted": "docs/evidence/de-mock-q09-20261127/Q01-observations.json",
+      "original_sha256": "ac1a25af4c692a6f65e1999d8fd3165e89c15b8700de17f1e0f2ed7a991619ba",
+      "submitted_sha256": "bf8a7dce67a0fdd8665db38f6b60a0f33463b4b27e2584f8af1545b27da89303",
+      "change": "CRLF to LF only"
+    },
+    {
+      "source": "q09-final/observations/test_Q02_failed_apply_verified_rollback_rechecks_despite_generic_false.json",
+      "submitted": "docs/evidence/de-mock-q09-20261127/Q02-observations.json",
+      "original_sha256": "b061af2106313bf476fccebcbf4f216b78d1de0dd6852bc1a5ca2061123ab65c",
+      "submitted_sha256": "99168a9403c8e50e94568371a5ecd3decc69008e56b1b49e9aaab08873232566",
+      "change": "CRLF to LF only"
+    }
+  ],
+  "dependencies": {
+    "jsonschema": "4.25.1",
+    "attrs": "25.4.0",
+    "jsonschema-specifications": "2025.9.1",
+    "referencing": "0.37.0",
+    "rpds-py": "0.30.0"
+  },
+  "original_stop_sha256": "fb4f9905bc60db63bd2373da2370bcc5a85763a2109a378cae5adc86d959671a",
+  "original_stop_preserved": true,
+  "past_results_not_reused_as_current": [
+    "P01-P13 13 PASS",
+    "combined 297 PASS",
+    "E 266 PASS",
+    "D callback 38 PASS",
+    "ABD 21 PASS"
+  ],
+  "earlier_new_attempts": {
+    "run1": "Source checks passed; runner import precedence failed before tests; no tests executed.",
+    "run2": "23 methods; five failed assertions (including three subtest failures). Original log retained locally. P03 obsolete unsupported fixture; Q04 valid post_rollback after invalid after; Q05 reused approval state.",
+    "run3": "23 PASS; superseded by final expanded 26 PASS run; not added to final unique count."
+  }
+}
